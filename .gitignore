@@ -1,0 +1,20 @@
+
+### OSX
+.DS_Store
+
+### Python
+*.pyc
+
+### Juputer/Ipython Notebook
+.ipynb_checkpoints
+
+### R
+.Rhistory
+
+################## Data files ##################
+
+### 
+
+
+### R
+

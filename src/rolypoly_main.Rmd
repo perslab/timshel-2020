@@ -1,0 +1,263 @@
+---
+### YAML section (use # for comments)
+title: "Sc-genetics: RolyPoly main"
+author: "Pascal N. Timshel, Pers Lab"
+date: "`r Sys.time()`" # Sys.Date()
+output:
+  html_notebook: 
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  html_document:
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+# Setup
+
+```{r, message = FALSE, results='hide', warning=FALSE}
+library(rolypoly)
+library(tidyverse)
+library(ggplot2)
+```
+
+
+# PARAMETERS
+
+```{r}
+dir.ldfiles <- "/Users/djw472/data/rolypoly/EUR_LD_FILTERED_NONAN_R" # Linkage disequilibrium files
+```
+
+
+# GWAS
+
+REQUIRED COLUMNS IN DATA FRAME: c('chrom', 'pos', 'rsid', 'beta', 'se', 'maf')
+
+```{r}
+file.gwas <- "../data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz"
+df.gwas <- read_delim(file.gwas, delim="\t") # suppressMessages or use "col_types=cols()"
+
+# TODO: check that chr is always integer
+```
+
+Rename columns
+```{r}
+df.gwas.rp <- df.gwas %>% 
+  rename(
+    rsid = rsID,
+    chrom = chr,
+    maf = snp_maf) 
+  
+# must be data frame for RolyPoly to run
+
+df.gwas.rp %>% head
+```
+
+
+
+# Gene annotation
+
+```{r}
+file.gene_annot <- "../data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
+df.gene_annot <- read_delim(file.gene_annot, col_types=cols(), delim="\t") # suppressMessages or use "col_types=cols()"
+```
+
+
+```{r}
+df.gene_annot %>% head
+```
+
+## Filter genes: filter out non-autosomal genes (discard X, Y, contigs etc)
+```{r}
+n.discarded <- df.gene_annot %>% filter(!chromosome_name %in% 1:22) %>% nrow()
+print(sprintf("Number of non-autosomal genes discarded: %s", n.discarded))
+
+df.gene_annot.filtered <- df.gene_annot %>% filter(chromosome_name %in% 1:22)
+```
+
+
+# Expression data
+
+REQUIRED COLUMNS IN DATA FRAME: none (just cell-type/tissue names); rownames is genes
+
+```{r}
+file.expr <- "../data/expression/arc_lira-celltype_expr_ttest.hsapiens_orthologs.csv"
+df.expr <- read.csv(file.expr)
+```
+
+```{r}
+# sim_expression_data_normalized %>% head
+df.expr %>% head
+```
+
+
+## Filter genes (based on `df.gene_annot.filtered`, e.g. autosomal)
+
+
+```{r}
+bool.expr_genes_filtered <- rownames(df.expr) %in% df.gene_annot.filtered$ensembl_gene_id
+df.expr.filtered <- df.expr[bool.expr_genes_filtered, ]
+```
+
+
+
+
+# Numerical transformation of expression data (square values)
+
+1. [only for non-ttest value]: Z-score (R scale)
+    1. z-scores for each gene (across cells) "cell’s relative expression of each gene, in comparison to all other cells:
+2. Square to avoid negative values.
+
+```{r}
+### Square values
+df.expr.filtered.rp <- df.expr.filtered^2
+```
+
+
+
+# Block annotation: window size, etc
+
+REQUIRED COLUMNS IN DATA FRAME: c('chrom', 'start', 'end', 'label')
+
+Set the parameter for the "gene window" size of the gene annotation by dplyr::transmute() the column names:
+  1. label=ensembl_gene_id HUMAN
+  2. chrom=chr
+  3. start={gene_start-10kb; gene_start-10kb}
+  4. end={gene_start+10kb; gene_end-10kb}
+
+```{r}
+WINDOW_SIZE <- 10*10^3 # 10kb
+
+df.block_annotation <- df.gene_annot.filtered %>% transmute(
+  label=ensembl_gene_id,
+  chrom=chromosome_name,
+  start=start_position,
+  end=end_position
+)
+
+df.block_annotation %>% head
+```
+
+
+# Rolling rolypoly
+
+We include all the previously described data into the main rolypoly function call. This function has many parameters to tinker with, however, should run fine with the defaults. Most importantly consider the number of bootstrap iterations to get accurate standard errors. We usually use at least 200.
+
+```{r}
+
+df.gwas.rp.test <- df.gwas.rp %>% slice(1:10000)
+
+
+```
+
+
+
+
+
+
+```{r}
+library(doParallel)
+registerDoParallel() # half of the number of cores 
+getDoParWorkers()
+```
+
+
+
+
+```{r, results='hide'}
+# message = FALSE
+rp <- rolypoly_roll(
+  gwas_data = as.data.frame(df.gwas.rp.test),
+  block_annotation = as.data.frame(df.block_annotation),
+  block_data = as.data.frame (df.expr.filtered.rp),
+  ld_folder = dir.ldfiles,
+  bootstrap_iters = 50,
+  gwas_link_parallel = T,
+  bootstrap_parallel = T
+)
+```
+
+# Parallelization: Inference on other expression data set
+
+Without any parallelization rolypoly could take a couple hours to run. Much of the computation is spent linking SNPs to genes and reading in LD information. If one provides the a rolypoly object to the rolypoly parameter of the `rolypoly_roll` function call and a new object of block data, then only inference is performed. For example with the previous rolypoly object we would run inference on a new expression data set with the following call (assuming that the gene labels did not change between datasets).
+
+```{r, eval = FALSE}
+rp.new <- rolypoly_roll(
+  # some new set of expression data
+  rolypoly = rp,
+  block_data = new_sim_expression_data_normalized
+)
+```
+
+Thus, one can run precomputation (slow) once and then rerun inference (faster) on various expression matrices more quickly.
+
+
+## Results
+
+Once rolypoly is finished we can access all the results within the returned rolypoly object. We generated the GWAS under the model with effects of 0.02 and 0.01 for the Liver and Blood tissues. To take a look at the inferred parameters use:
+
+```{r}
+rp$full_results$parameters %>% sort
+```
+
+Better yet, there's a data frame with results from the bootstrap runs that calculates standard errors for these paramter estimates, p-values, and 95\% confidence intervals.
+
+```{r}
+rp$bootstrap_results %>% arrange(-bt_value) %>% head
+```
+
+For visualization, one can use the following function which plots the estimate with 95\% confidence intervals,
+
+```{r, fig.show='asis', fig.width=6, fig.height=3.5}
+plot_rolypoly_annotation_estimates(rp)
+```
+
+Additionally, we plot the $-log10(p)$ to rank tissues by the strength of their association
+
+```{r, fig.show='asis', fig.width=6, fig.height=3.5}
+plot_rolypoly_annotation_ranking(rp)
+```
+
+These functions return ggplot2 objects so free to manipulate them as such.
+
+
+
+
+
+
+
+
+
+```{r}
+########################################################################################################################
+########################################################################################################################
+################################################## LEFTOVER ############################################################
+
+Check that all genes are found in the gene annotation file
+Ortherwise we would have to filter out genes not in the gene annotation file...
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

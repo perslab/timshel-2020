@@ -7,19 +7,26 @@ import time
 
 import glob
 
+import multiprocessing
+
+import pdb
+
+###################################### USAGE ######################################
+
+# time python gwas_to_rolypoly_fmt-map_chrpos.py |& tee log.alkes_group_UKBB.gwas_to_rolypoly_fmt-map_chrpos.txt
 
 ###################################### FUNCTIONS ######################################
 
 ### Read chrpos mapping file
 def read_collection(file_collection):
     """Function that reads tab seperated gzip collection file"""
-    print ( "START: reading CSV file PRIM..." )
+    print "START: reading CSV file PRIM..."
     start_time = time.time()
     f_tab = open(file_collection, 'r')
     df_collection = pd.read_csv(f_tab, index_col=False, header=0, delimiter="\t", compression="gzip") # index is snpID. # production_v2 - NEW March 2015. *REMEMBER TO correct "locate_collection_file()" as well*
     f_tab.close()
     elapsed_time = time.time() - start_time
-    print( "END: read CSV file PRIM into DataFrame in %s s (%s min)" % (elapsed_time, elapsed_time/60) )
+    print "END: read CSV file PRIM into DataFrame in %s s (%s min)" % (elapsed_time, elapsed_time/60)
 
     # df_collection.head()
     #     rsID    snp_maf chr pos
@@ -32,19 +39,44 @@ def read_collection(file_collection):
 
     
 
-def read_and_process_gwas_file(file_gwas, GWAS_COL_SPECS):
+def read_and_process_gwas_file(file_gwas, GWAS_COL_SPECS, file_out_prefix, log_transform_beta):
     df_gwas = pd.read_csv(file_gwas, usecols=GWAS_COL_SPECS.keys(), index_col=False, header=0, delimiter="\t") # read
     df_gwas = df_gwas.rename(columns=GWAS_COL_SPECS) # rename cols. REF: https://pandas.pydata.org/pandas-docs/stable/basics.html#basics-rename
+    
+    ### check if all betas are positive. If they are, it is a odds ratio (OR).
+    flag_beta_is_odds_ratio = (df_gwas.loc[:,"beta"] > 0).all()
+
+    if log_transform_beta: # do log transformation
+        print "************ DOING LOG OF BETA COLUMN TRANSFORMATION *************"
+        df_gwas.loc[:,"beta"] = np.log(df_gwas.loc[:,"beta"]) # we know that the column is named "beta" now
+    elif flag_beta_is_odds_ratio:
+        print "************ AUTOMATIC DETECTION - DOING LOG OF BETA COLUMN TRANSFORMATION *************"
+        df_gwas.loc[:,"beta"] = np.log(df_gwas.loc[:,"beta"]) # we know that the column is named "beta" now
+        file_out_tmp = "log.beta_log_transformed.{}.txt".format(file_out_prefix)
+        with open(file_out_tmp, 'w') as fh_out:
+            fh_out.write("{}: beta was log transformed (case control trait?).\n".format(file_out_prefix))
+    
+    ### Check if there is any NaN values
+    n_nan_beta_values = df_gwas.loc[:,"beta"].isnull().sum()
+    if n_nan_beta_values > 0:
+        tmp_string = "{}: beta column contains N={} NaN values.".format(file_out_prefix, n_nan_beta_values)
+        print tmp_string
+        file_out_tmp = "log.beta_contains_nan.{}.txt".format(file_out_prefix)
+        with open(file_out_tmp, 'w') as fh_out:
+            fh_out.write(tmp_string+"\n")
+    else:
+        print "Phfff, no NaN values found the beta column"
+    
     return df_gwas
 
 
 ###################################### SCRIPT ######################################
 
-def main(file_collection, file_out_prefix):
+def main(file_gwas, file_out_prefix):
 
     ### Read GWAS data
     print "START: reading GWAS..."
-    df_gwas = read_and_process_gwas_file(file_gwas, GWAS_COL_SPECS)
+    df_gwas = read_and_process_gwas_file(file_gwas, GWAS_COL_SPECS, file_out_prefix, log_transform_beta=LOG_TRANSFORM_BETA)
     print "END: reading GWAS..."
     # df_gwas.head()
     #     rsID    beta    se  pval
@@ -84,11 +116,60 @@ def main(file_collection, file_out_prefix):
     print "END: exported file: {}".format(file_out)
 
 
+def main_parallel(file_gwas):
+    file_out_prefix = os.path.basename(file_gwas).split(".")[0] # e.g. disease_RESPIRATORY_ENT.sumstats.gz --> disease_RESPIRATORY_ENT
+    print "RUNNING {}".format(file_out_prefix)
+    main(file_gwas, file_out_prefix)
 
 
 ########################################################################################
 ###################################### GWAS PARAMETERS ######################################
 ########################################################################################
+
+
+# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHR_COMBINED_AllAncestries.txt.gz"
+# file_out_prefix = "body_WHR_Shungin2015"
+
+# COL_rsID = "MarkerName"
+# COL_beta = "b"
+# COL_se = "se"
+# COL_pval = "p"
+# LOG_TRANSFORM_BETA=False
+
+################## Lipids ##################
+# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_HDL.txt.gz"
+# file_out_prefix = "lipids_HDL_Willer2013"
+# Number of SNPs in GWAS data: 2437751
+# Number of SNPs in GWAS data *NOT found* in SNP chr pos mapping file: 63826
+# Percent SNPs not found: 2.62 %
+
+# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_LDL.txt.gz"
+# file_out_prefix = "lipids_LDL_Willer2013"
+# Number of SNPs in GWAS data: 2447441
+# Number of SNPs in GWAS data *NOT found* in SNP chr pos mapping file: 66167
+# Percent SNPs not found: 2.70 %
+
+# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_TC.txt.gz"
+# file_out_prefix = "lipids_TC_Willer2013"
+
+# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_TG.txt.gz"
+# file_out_prefix = "lipids_TG_Willer2013"
+
+# mv jointGwasMc_HDL.gwassumstats.rolypoly_fmt.tab.gz lipids_HDL_Willer2013.gwassumstats.rolypoly_fmt.tab.gz
+# mv jointGwasMc_LDL.gwassumstats.rolypoly_fmt.tab.gz lipids_LDL_Willer2013.gwassumstats.rolypoly_fmt.tab.gz
+# mv jointGwasMc_TC.gwassumstats.rolypoly_fmt.tab.gz lipids_TC_Willer2013.gwassumstats.rolypoly_fmt.tab.gz
+# mv jointGwasMc_TG.gwassumstats.rolypoly_fmt.tab.gz lipids_TG_Willer2013.gwassumstats.rolypoly_fmt.tab.gz
+
+# list_files = glob.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_*.txt.gz")
+# print list_files
+#     # /Users/djw472/data/GWAS-sumstats/alkesgroup-collection/UKBB/body_BMIz.sumstats.gz
+#     # /Users/djw472/data/GWAS-sumstats/alkesgroup-collection/UKBB/body_HEIGHTz.sumstats.gz
+# # file_out_prefix = <NOT DEFINED FOR ALKES / LOOP MODE>
+
+# COL_rsID = "rsid"
+# COL_beta = "beta"
+# COL_se = "se"
+# COL_pval = "P-value"
 
 ################## SCZ_Ripke2014 ##################
 # hg19chrc        snpid   a1      a2      bp      info    or      se      p       ngt
@@ -96,13 +177,22 @@ def main(file_collection, file_out_prefix):
 # chr1    rs142557973     T       C       731718  0.665   1.01949 0.0198  0.3298  0
 # chr1    rs141242758     T       C       734349  0.666   1.02071 0.02    0.3055  0
 
-file_gwas = "/Users/djw472/data/GWAS-sumstats/timshel-collection/SCZ_Ripke2014/ckqny.scz2snpres.gz"
-file_out_prefix = "SCZ.Ripke2014"
+# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/ckqny.scz2snpres.gz"
+# file_out_prefix = "mental_SCZ_Ripke2014"
 
-COL_rsID = "snpid"
-COL_beta = "or"
-COL_se = "se"
-COL_pval = "p"
+# COL_rsID = "snpid"
+# COL_beta = "or"
+# COL_se = "se"
+# COL_pval = "p"
+# LOG_TRANSFORM_BETA=True # do logtransformation
+
+
+# Number of SNPs in GWAS data: 9444230
+# Number of SNPs in GWAS data *NOT found* in SNP chr pos mapping file: 1788142
+# Percent SNPs not found: 18.93 %
+# Joining data frames...
+
+
 
 ################## alkes_lo_UKBB ##################
 
@@ -115,22 +205,24 @@ COL_pval = "p"
 # rs2462495       1       79033   A       G       A       0.00129115      0.00321513      0.00929391      7.7E-01 459324  0.536566
 # rs114608975     1       86028   T       C       T       0.896384        0.000549046     0.00115835      5.8E-01 459324  0.340885
 
-# list_files = glob.glob("/Users/djw472/data/GWAS-sumstats/alkesgroup-collection/UKBB/*sumstats.gz")
-# print list_files
+list_files = ["/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/cov_SMOKING_STATUS.sumstats.gz"] # SINGLE-TEST
+# list_files = glob.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/*sumstats.gz") # get all files
+print list_files
+
 #     # /Users/djw472/data/GWAS-sumstats/alkesgroup-collection/UKBB/body_BMIz.sumstats.gz
 #     # /Users/djw472/data/GWAS-sumstats/alkesgroup-collection/UKBB/body_HEIGHTz.sumstats.gz
-## file_out_prefix = <NOT DEFINED FOR ALKES FIELS>
+## file_out_prefix = <NOT DEFINED FOR ALKES / LOOP MODE>
 
-# COL_rsID = "SNP"
-# COL_beta = "Beta"
-# COL_se = "se"
-# COL_pval = "P"
-
+COL_rsID = "SNP"
+COL_beta = "Beta"
+COL_se = "se"
+COL_pval = "P"
+LOG_TRANSFORM_BETA=False # do logtransformation
 
 ################## BMI_Locke2015 ##################
 
 # file_gwas = "/Users/djw472/data/GWAS-sumstats/timshel-collection/BMI_Locke2015/All_ancestries_SNP_gwas_mc_merge_nogc.tbl.uniq" # (cannot read .zip from GUI OSX zipped file)
-# file_out_prefix = "BMI.Locke2015"
+# file_out_prefix = "body_BMI_Locke2015"
 
 # COL_rsID = "SNP"
 # COL_beta = "b"
@@ -156,7 +248,8 @@ COL_pval = "p"
 #####################################################################################
 
 
-file_collection = "/Users/djw472/Dropbox/0_Projects/p_sc_genetics/analysis/src/snpsnap_EUR_1KG_phase3-chrpos_mapping.tab.gz"
+# file_collection = "/Users/djw472/Dropbox/0_Projects/p_sc_genetics/analysis/src/snpsnap_EUR_1KG_phase3-chrpos_mapping.tab.gz" # OSX
+file_collection = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/snp_mapping/snpsnap_EUR_1KG_phase3-chrpos_mapping.tab.gz" # Ygg
 
 GWAS_COL_SPECS = {COL_rsID:"rsID",COL_beta:"beta",COL_se:"se",COL_pval:"pval"} # do not change this. This "direction" of the dict is most convenient for pandas col rename
 
@@ -168,14 +261,18 @@ GWAS_COL_SPECS = {COL_rsID:"rsID",COL_beta:"beta",COL_se:"se",COL_pval:"pval"} #
 df_collection = read_collection(file_collection)
 
 ### Normal mode
-main(file_gwas, file_out_prefix)
+# main(file_gwas, file_out_prefix)
 
-## Alkes mode
-# for file_gwas in list_files:
-#     file_out_prefix = os.path.basename(file_gwas).split(".")[0]
-#     print "RUNNING {}".format(file_out_prefix)
-#     main(file_gwas, file_out_prefix)
+### Alkes/loop mode
+for file_gwas in list_files:
+    file_out_prefix = os.path.basename(file_gwas).split(".")[0]
+    print "RUNNING {}".format(file_out_prefix)
+    main(file_gwas, file_out_prefix)
 
+### Alkes/loop mode - parallel
+# print "Starting pool..."
+# pool = multiprocessing.Pool(10)
+# pool.map(main_parallel, list_files)
 
 
 

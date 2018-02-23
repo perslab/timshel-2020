@@ -1,0 +1,215 @@
+---
+### YAML section (use # for comments)
+title: "Load GTEx data"
+author: "Pascal N. Timshel, Pers Lab"
+date: "`r Sys.time()`" # Sys.Date()
+output:
+  html_notebook: 
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  html_document:
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+
+```{r, include=F}
+# Here is the command to knit/render the notebook to HTML using commandline [requires pandoc installed on the system]
+# Rscript -e 'library(rmarkdown); rmarkdown::render("/path/to/test.Rmd", "html_document")'
+# Rscript -e 'library(rmarkdown); rmarkdown::render("/raid5/projects/timshel/sc-arc_lira/src/nb-poster_keystone/nb-poster_keystone.Rmd", "html_document")'
+```
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(cache.lazy=FALSE, cache=FALSE)
+```
+
+
+# Introduction
+
+....
+
+# Setup
+
+Set working directory
+```{r working_directory}
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-gtex/"
+setwd(wd)
+```
+
+
+```{r load_libraries, warning=FALSE, message=FALSE, cache=FALSE}
+library(Seurat)
+library(tidyverse)
+```
+
+
+# Read expression data
+
+```{r}
+dir.data <- "/data/rna-seq/gtex/v7"
+file.data <- file.path(dir.data, "GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct.gz")
+```
+
+
+```{r}
+df.data_raw <- read_delim(file.data, delim="\t", skip=2) # OBS: skip 2 first lines
+```
+
+```{r}
+head(df.data_raw)
+```
+
+
+## Prepare for Seurat import
+
+
+```{r}
+### make data frame containing only gene expression values
+df.expression <- df.data_raw %>% select(-Name, -Description) %>% as.data.frame()
+```
+
+```{r}
+## REMOVE ENSEMBL VERSION NUMBER FROM GENE ID.
+gene_names <- sapply(str_split(df.data_raw$Name, pattern=fixed(".")), '[[', 1)
+rownames(df.expression) <- gene_names # gene rownames. the rownames() are used by Seurat as gene names. 
+```
+
+
+
+# Read meta data:
+
+```{r}
+file.annotations <- "/data/rna-seq/gtex/v7/GTEx_v7_Annotations_SampleAttributesDS.txt"
+df.annot <- read_delim(file.annotations, delim="\t")
+```
+
+```{r}
+head(df.annot)
+```
+
+
+## view the meta data
+SMTS: tissue
+SMTSD: sub-tissue
+
+```{r}
+df.annot %>% count(SMTSD) %>% arrange(desc(n))
+```
+
+```{r}
+df.annot %>% count(SMTS) %>% arrange(desc(n))
+```
+
+
+## Filtering sample annotations to keep only SAMPID in the expression data
+
+```{r}
+df.annot.filtered <- df.annot %>% filter(SAMPID %in% colnames(df.expression))
+
+```
+
+
+# Seurat: create object and normalize
+
+```{r}
+seurat_obj <- CreateSeuratObject(df.expression, min.cells=0, min.genes=0, is.expr=0)
+  # seurat takes as input a data frame or matrix.
+  # the rownames() are used as gene names
+  # the colnames()/names() are used as cell id
+
+# seurat_obj@meta.data is 'born with' the meta data columns: "nGene", "nUMI", "orig.ident"
+# we could change the name of nUMI to "total_expr"...
+```
+
+```{r}
+seurat_obj <- NormalizeData(seurat_obj, normalization.method = "LogNormalize", scale.factor = 1e4)
+```
+
+
+# Add meta data to Seurat
+
+```{r}
+df.tmp.metadata <- data.frame(df.annot.filtered, row.names=df.annot.filtered$SAMPID)
+# NB: the ORDER of the metadata rownames and expression data colnames does NOT need to be the same. Seurat indexes the metadata via rownames: "meta.add <- metadata[rownames(x = object@meta.data), cols.add]"
+seurat_obj <- AddMetaData(seurat_obj, df.tmp.metadata)
+str(seurat_obj@meta.data)
+```
+
+# EXPORT: save Seurat object
+
+```{r}
+# save(seurat_obj, file="gtex.seurat_obj.gene_tpm.RData")
+```
+
+
+
+
+
+```{r}
+########################################################################################################################
+################################################## gene_median_tpm ############################################################
+########################################################################################################################
+```
+
+# Expr data
+```{r}
+file.data <- "/data/rna-seq/gtex/v7/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct.gz"
+df.data_raw <- read_delim(file.data, delim="\t", skip=2) # OBS: skip 2 first lines
+head(df.data_raw)
+```
+
+```{r}
+### make data frame containing only gene expression values
+df.expression <- df.data_raw %>% select(-gene_id, -Description) %>% as.data.frame()
+## REMOVE ENSEMBL VERSION NUMBER FROM GENE ID.
+gene_names <- sapply(str_split(df.data_raw$gene_id, pattern=fixed(".")), '[[', 1)
+rownames(df.expression) <- gene_names # gene rownames. the rownames() are used by Seurat as gene names. 
+head(df.expression)
+```
+
+# Create Seurat
+```{r}
+seurat_obj <- CreateSeuratObject(df.expression, min.cells=0, min.genes=0, is.expr=0)
+seurat_obj <- NormalizeData(seurat_obj, normalization.method = "LogNormalize", scale.factor = 1e4)
+```
+
+
+# Metadata
+
+```{r}
+df.annot %>% distinct(SMTS,SMTSD) %>% filter(!SMTSD %in% colnames(df.expression)) # "Bone Marrow	Cells - Leukemia cell line (CML)" is not present in the expression data
+```
+
+
+```{r}
+# SMTS: tissue
+# SMTSD: sub-tissue
+### Create a metadata frame with tissue and sub-tissue annotation
+df.annot.tissues <- df.annot %>% distinct(SMTS,SMTSD) %>% filter(SMTSD %in% colnames(df.expression)) %>% as.data.frame() %>% column_to_rownames(var="SMTSD") 
+df.annot.tissues
+
+```
+
+
+```{r}
+df.tmp.metadata <- df.annot.tissues
+# NB: the ORDER of the metadata rownames and expression data colnames does NOT need to be the same. Seurat indexes the metadata via rownames: "meta.add <- metadata[rownames(x = object@meta.data), cols.add]"
+seurat_obj <- AddMetaData(seurat_obj, df.tmp.metadata)
+str(seurat_obj@meta.data)
+```
+
+# EXPORT: save Seurat object
+
+```{r}
+# save(seurat_obj, file="gtex.seurat_obj.gene_median_tpm.RData")
+```
+
+
+

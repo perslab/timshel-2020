@@ -1,0 +1,81 @@
+Loading required package: ggplot2
+Loading required package: cowplot
+
+Attaching package: ‘cowplot’
+
+The following object is masked from ‘package:ggplot2’:
+
+    ggsave
+
+Loading required package: Matrix
+── Attaching packages ─────────────────────────────────────── tidyverse 1.2.1 ──
+✔ tibble  1.4.2     ✔ purrr   0.2.4
+✔ tidyr   0.8.0     ✔ dplyr   0.7.4
+✔ readr   1.1.1     ✔ stringr 1.2.0
+✔ tibble  1.4.2     ✔ forcats 0.2.0
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::combine()         masks Biobase::combine(), BiocGenerics::combine()
+✖ tidyr::expand()          masks Matrix::expand()
+✖ dplyr::filter()          masks stats::filter()
+✖ cowplot::ggsave()        masks ggplot2::ggsave()
+✖ dplyr::lag()             masks stats::lag()
+✖ BiocGenerics::Position() masks ggplot2::Position(), base::Position()
+[1] "Started loading Pers lab Seurat functions..."
+[1] "Seurat function dir: /raid5/projects/timshel/git/perslab-sc-library/seurat_functions"
+[1] "Sourced file: /raid5/projects/timshel/git/perslab-sc-library/seurat_functions/analyze_and_export_to_excel.R"
+[1] "Sourced file: /raid5/projects/timshel/git/perslab-sc-library/seurat_functions/plot_dotplot_celltype_highlight.R"
+[1] "Sourced file: /raid5/projects/timshel/git/perslab-sc-library/seurat_functions/plot_seurat.R"
+[1] "Sourced file: /raid5/projects/timshel/git/perslab-sc-library/seurat_functions/utils_seurat.R"
+[1] "Done loading Pers lab Seurat functions"
+[1] "Started loading functions via load_functions.R..."
+[1] "Lib function dir: /raid5/projects/timshel/sc-genetics/sc-genetics/src/lib"
+[1] "Sourced file: /raid5/projects/timshel/sc-genetics/sc-genetics/src/lib/gene_expression_preprocessing.R"
+
+Attaching package: ‘rlang’
+
+The following objects are masked from ‘package:purrr’:
+
+    %@%, %||%, as_function, flatten, flatten_chr, flatten_dbl,
+    flatten_int, flatten_lgl, invoke, list_along, modify, prepend,
+    rep_along, splice
+
+The following object is masked from ‘package:Biobase’:
+
+    exprs
+
+[1] "Sourced file: /raid5/projects/timshel/sc-genetics/sc-genetics/src/lib/rolypoly_utils.R"
+[1] "Done loading functions"
+[1] "Reading Seurat data object..."
+[1] "Running average expression"
+[1] "Running average expression for colname_ident=annotation"
+[1] "Finished averaging RNA for cluster Adipose Tissue"
+[1] "Finished averaging RNA for cluster Adrenal Gland"
+[1] "Finished averaging RNA for cluster Bladder"
+[1] "Finished averaging RNA for cluster Blood"
+[1] "Finished averaging RNA for cluster Blood Vessel"
+[1] "Finished averaging RNA for cluster Brain"
+[1] "Finished averaging RNA for cluster Breast"
+[1] "Finished averaging RNA for cluster Cervix Uteri"
+[1] "Finished averaging RNA for cluster Colon"
+[1] "Finished averaging RNA for cluster Esophagus"
+[1] "Finished averaging RNA for cluster Fallopian Tube"
+[1] "Finished averaging RNA for cluster Heart"
+[1] "Finished averaging RNA for cluster Kidney"
+[1] "Finished averaging RNA for cluster Liver"
+[1] "Finished averaging RNA for cluster Lung"
+[1] "Finished averaging RNA for cluster Muscle"
+[1] "Finished averaging RNA for cluster Nerve"
+[1] "Finished averaging RNA for cluster Ovary"
+[1] "Finished averaging RNA for cluster Pancreas"
+[1] "Finished averaging RNA for cluster Pituitary"
+[1] "Finished averaging RNA for cluster Prostate"
+[1] "Finished averaging RNA for cluster Salivary Gland"
+[1] "Finished averaging RNA for cluster Skin"
+[1] "Finished averaging RNA for cluster Small Intestine"
+[1] "Finished averaging RNA for cluster Spleen"
+[1] "Finished averaging RNA for cluster Stomach"
+[1] "Finished averaging RNA for cluster Testis"
+[1] "Finished averaging RNA for cluster Thyroid"
+[1] "Finished averaging RNA for cluster Uterus"
+[1] "Finished averaging RNA for cluster Vagina"
+[1] "Script done!"

@@ -104,6 +104,21 @@ file.out.avg_expr <- sprintf("%s.celltype_expr.avg_expr.csv.gz", DATA_SET_NAME)
 file.out.avg_expr.human <- sprintf("%s.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz", DATA_SET_NAME)
 
 
+# ======================================================================= #
+# =======================  Average expression  ========================== #
+# ======================================================================= #
+
+print("Running average expression")
+
+### Average
+df.avg.expr <- anno_specific_expr.avg_expr(colname_ident, genes, seurat_obj) # data frame with columnnames=annotations, rownames=genes 
+write_csv(df.avg.expr %>% rownames_to_column(var="gene"), path=file.out.avg_expr) # write_* automatically deals with .gz, .bz2 or .xz output filenames
+
+
+### Ortholog
+df.avg.expr.human <- mouse_to_human_ortholog_gene_expression_mapping(df.avg.expr)
+write_csv(df.avg.expr.human %>% rownames_to_column(var="gene"), path=file.out.avg_expr.human) # write_* automatically deals with .gz, .bz2 or .xz output filenames
+
 
 # ======================================================================= #
 # ================================  t-test  ============================= #
@@ -120,21 +135,6 @@ write_csv(df.celltype_expr_ttest %>% rownames_to_column(var="gene"), path=file.o
 df.celltype_expr_ttest.human <- mouse_to_human_ortholog_gene_expression_mapping(df.celltype_expr_ttest)
 write_csv(df.celltype_expr_ttest.human %>% rownames_to_column(var="gene"), path=file.out.tstat.human) # write_* automatically deals with .gz, .bz2 or .xz output filenames
 
-
-# ======================================================================= #
-# =======================  Average expression  ========================== #
-# ======================================================================= #
-
-print("Running average expression")
-
-### Average
-df.avg.expr <- anno_specific_expr.avg_expr(colname_ident, genes, seurat_obj) # data frame with columnnames=annotations, rownames=genes 
-write_csv(df.avg.expr %>% rownames_to_column(var="gene"), path=file.out.avg_expr) # write_* automatically deals with .gz, .bz2 or .xz output filenames
-
-
-### Ortholog
-df.avg.expr.human <- mouse_to_human_ortholog_gene_expression_mapping(df.avg.expr)
-write_csv(df.avg.expr.human %>% rownames_to_column(var="gene"), path=file.out.avg_expr.human) # write_* automatically deals with .gz, .bz2 or .xz output filenames
 
 # ======================================================================= #
 # =======================      FINISH       ========================== #

@@ -20,6 +20,12 @@ library(Matrix)
 library(parallel)
 
 
+######################################################################################################
+#################################### PRECOMPUTE T-STAT PARAMS ########################################
+######################################################################################################
+# --> write file
+# cols: annotation, key=[other, annotation], value_var, value_mean, value_n
+
 
 
 ######################################################################################################
@@ -97,7 +103,8 @@ anno_specific_expr.tstat.per_ident <- function(colname_ident, ident, genes, seur
   # genes <- rownames(data.test)
   
   ### Apply Welch two-sided t-test over genes
-  t_stats <- sapply(genes, function(gene) {t.test(x = data.test[gene, cells.1], y = data.test[gene, cells.2], alternative="two.sided", var.equal=F)$statistic})
+  # t_stats <- sapply(genes, function(gene) {t.test(x = data.test[gene, cells.1], y = data.test[gene, cells.2], alternative="two.sided", var.equal=F)$statistic}) # var.equal=F was used before March 29th 2018
+  t_stats <- sapply(genes, function(gene) {t.test(x = data.test[gene, cells.1], y = data.test[gene, cells.2], alternative="two.sided", var.equal=T)$statistic}) 
   # lapply: lapply(X, FUN, ...) - returns a list (unnamed)
   # sapply: sapply(X, FUN, ...) - returns a vector (named with gene names)
   # TODO: consider using pblapply/pbsapply for status bar
@@ -228,11 +235,15 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr) {
                   not_mapped_to_human_ortholog.n_genes,
                   length(rownames(df.expr.ens)),
                   not_mapped_to_human_ortholog.n_genes/length(rownames(df.expr.ens))*100)
+  str3 <- sprintf("Output dimension of final data table (ortholog mapped): n_genes=%s x n_features=%s", 
+                  nrow(df.expr.ens.human),
+                  ncol(df.expr.ens.human))
   print(str1)
   print(str2)
-  print("Genes not mapped from MGI to Ensembl ID:")
+  print(str3)
+  print("List of genes not mapped from MGI to Ensembl ID:")
   print(not_mapped_from_MGI_to_ensembl.genes)
-  print("Genes not mapped to human ortholog:")
+  print("List of genes not mapped to human ortholog:")
   print(not_mapped_to_human_ortholog.genes)
   
   return(df.expr.ens.human)

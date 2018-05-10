@@ -1,0 +1,208 @@
+---
+title: "Effect of the number of RolyPoly bootstrap iterations"
+author: "Pascal N. Timshel, Pers Lab"
+date: "`r Sys.time()`" # Sys.Date()
+output:
+  html_document:
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  html_notebook: 
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+
+```{r}
+### Extract the code from the notebook
+# knitr::purl("nb-rolypoly_functions.Rmd", output = "rolypoly_functions.R", documentation = 1)
+```
+
+# Intro
+
+This notebook tests the effect of running the dataset `gtex.sub_tissue_gene_tpm.avg_expr` with `n=100`, `n=500` and `n=1000` bootstrap iterations for the phenotype `body_BMI_Yengo2018-tss.10kb.pos_only.all_genes`.
+RolyPoly with run with `intercept` and `maf_poly_1` as 'covariates'.
+
+# TL;DR (conclusion)
+
+We find that using `n=100` or `n=1000` bootstrap iterations does not affect the inference. Hence, we can save a 10-fold computation by running with `n=100` instead of `n=1000`.
+
+# Setup
+```{r, message = FALSE, results='hide', warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+```
+
+# Notebook specific parameters
+```{r}
+setwd("/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-effect_of_rolypoly_n_bootstrap_iterations/")
+```
+
+
+# Function to extract data
+This is a clumsy function to allow for data extraction from different "organization" of the save RolyPoly output.
+```{r}
+# ======================= FUNCTION ======================= #
+extract_data <- function(list.res, obj_type) {
+  
+  # list.res <- list.rp_inference # TESTING
+  # name.expr_data <- "gtex.sub_tissue_gene_tpm.avg_expr" # TESTING
+  # name.anno <- "Adipose - Subcutaneous" # TESTING
+  # obj_type="full_rp"
+  
+  list.bootstrap <- list()
+  list.gamma <- list()
+  for (name.expr_data in names(list.res)) {
+    print(name.expr_data)
+    list.bootstrap[[name.expr_data]] <- list()
+    list.gamma[[name.expr_data]] <- list()
+    for (name.anno in names(list.res[[name.expr_data]])) {
+      print(sprintf("annot=%s", name.anno))
+      if (obj_type=="full_rp") {
+        list.bootstrap[[name.expr_data]][[name.anno]] <- list.res[[name.expr_data]][[name.anno]][["rp"]][["bootstrap_results"]][3,] # 1 row data.frame with the annotation results
+        list.gamma[[name.expr_data]][[name.anno]] <- list.res[[name.expr_data]][[name.anno]][["rp"]]$full_results$parameters %>% # named numeric
+          as_tibble() %>% # as_tibble/as.tibble/as_data_frame are aliases.
+          rownames_to_column(var = "annotation") %>% # for some reason, you must call rownames_to_column() before calling arrange() - else you loose the rownames.
+          spread(key=annotation, value=value) %>% # returns a single-row dataframe
+          select(intercept, maf_poly_1, everything()) # making the 'annotation' column go last
+        colnames(list.gamma[[name.expr_data]][[name.anno]]) <- c("intercept", "maf_poly_1", "gamma")
+      } else if (obj_type=="reduced") {
+        list.bootstrap[[name.expr_data]][[name.anno]] <- list.res[[name.expr_data]][[name.anno]][["bootstrap_results"]][3,] # 1 row data.frame with the annotation results
+        list.gamma[[name.expr_data]][[name.anno]] <- list.res[[name.expr_data]][[name.anno]][["tau"]] %>% # named numeric
+          as_tibble() %>% # as_tibble/as.tibble/as_data_frame are aliases.
+          rownames_to_column(var = "annotation") %>% # for some reason, you must call rownames_to_column() before calling arrange() - else you loose the rownames.
+          spread(key=annotation, value=value) %>% # returns a single-row dataframe
+          select(intercept, maf_poly_1, everything()) # making the 'annotation' column go last
+        colnames(list.gamma[[name.expr_data]][[name.anno]]) <- c("intercept", "maf_poly_1", "gamma")
+          # rename(annotation := UQ(rlang::sym(name.anno)) ) # does not work because e.g. "Adipose - Subcutaneous" is transformed into Adipose...Subcutaneous
+      }
+    } # end foreach anno
+    list.bootstrap[[name.expr_data]] <- bind_rows(list.bootstrap[[name.expr_data]]) %>% arrange(annotation)
+    list.gamma[[name.expr_data]] <- bind_rows(list.gamma[[name.expr_data]], .id="annotation") %>% arrange(annotation)
+  }
+  list.return <- list("bootstrap"=list.bootstrap[[name.expr_data]], "gamma"=list.gamma[[name.expr_data]]) # *OBS*: because we only have one dataset!!!!
+  return(list.return)
+}
+```
+
+
+
+# Load data
+```{r}
+# # ======================= INIT ======================= #
+# list.cmp <- list() # init
+# 
+# # ======================= nboot1000 ======================= #
+# ### 1000
+# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.gtex_sub.nboot1000.RData")
+# names(list.rp_inference)
+# list.cmp[["n1000"]] <- extract_data(list.res=list.rp_inference, obj_type="full_rp")
+# 
+# 
+# # ======================= nboot100 ======================= #
+# ### 100
+# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData")
+# list.rp_inference <- list.rp_inference["gtex.sub_tissue_gene_tpm.avg_expr"] # obs: single-bracket. SUBSETTING.
+# names(list.rp_inference)
+# list.cmp[["n100"]] <- extract_data(list.res=list.rp_inference, obj_type="full_rp")
+# 
+# # ======================= nboot500 ======================= #
+# ### 500
+# load("/scratch/sc-genetics/out.rolypoly_objs-v3.univariate-nboot500/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.tmp_red.RData") # list.res
+# names(list.res)
+# list.res <- list.res["gtex.sub_tissue_gene_tpm.avg_expr"] # obs: single-bracket. SUBSETTING.
+# list.cmp[["n500"]] <- extract_data(list.res=list.res, obj_type="reduced")
+# 
+
+```
+
+
+# Save list.cmp
+```{r}
+# ======================= SAVE list.cmp ======================= #
+
+### POST EDITING (should not be needed after correction)
+# list.cmp[['n100']][["bootstrap"]] <- list.cmp[['n100']][["bootstap"]]$gtex.sub_tissue_gene_tpm.avg_expr
+# list.cmp[['n500']][["bootstrap"]] <- list.cmp[['n500']][["bootstap"]]$gtex.sub_tissue_gene_tpm.avg_expr
+# list.cmp[['n1000']][["bootstrap"]] <- list.cmp[['n1000']][["bootstap"]]$gtex.sub_tissue_gene_tpm.avg_expr
+# 
+# list.cmp[['n100']][["bootstap"]] <- NULL
+# list.cmp[['n500']][["bootstap"]] <- NULL
+# list.cmp[['n1000']][["bootstap"]] <- NULL
+# 
+# list.cmp[['n100']][["gamma"]] <- list.cmp[['n100']][["gamma"]]$gtex.sub_tissue_gene_tpm.avg_expr
+# list.cmp[['n500']][["gamma"]] <- list.cmp[['n500']][["gamma"]]$gtex.sub_tissue_gene_tpm.avg_expr
+# list.cmp[['n1000']][["gamma"]] <- list.cmp[['n1000']][["gamma"]]$gtex.sub_tissue_gene_tpm.avg_expr
+
+
+# save(list.cmp, file="analysis-effect_of_nboot.list_cmp.RData")
+```
+
+# Load pre-computed R-object
+```{r}
+load(file="analysis-effect_of_nboot.list_cmp.RData") # list.cmp
+```
+
+
+# Aggregate data
+```{r}
+# ======================= Aggregate ======================= #
+# ALTERNATIVE: do TWO "_join()" with a suffix.
+
+df.bootstrap <- bind_rows(lapply(list.cmp, '[[', 'bootstrap'), .id="n_bootstrap")
+df.gamma <- bind_rows(lapply(list.cmp, '[[', 'gamma'), .id="n_bootstrap")
+
+df.bootstrap.plot <- df.bootstrap %>% 
+  gather(key="key", value="value", -n_bootstrap, -annotation) %>% 
+  spread(key="n_bootstrap", value="value")
+
+df.gamma.plot <- df.gamma %>% 
+  gather(key="key", value="value", -n_bootstrap, -annotation) %>% 
+  spread(key="n_bootstrap", value="value")
+```
+
+
+# Plot BOOTSTRAP
+```{r, fig.height=15, fig.width=15}
+### 1000 vs 100
+ggplot(df.bootstrap.plot, aes(x=n1000, y=n100)) + geom_point() + geom_abline() + facet_wrap(~key, scales="free") + labs(title="n 1000 vs 100")
+```
+
+```{r, fig.height=8, fig.width=8}
+# log-space 
+ggplot(df.bootstrap.plot %>% filter(key=="bp_value"), aes(x=-log10(n1000), y=-log10(n100))) + geom_point() + geom_abline() + labs(title="pval - n 1000 vs 100")
+```
+
+
+```{r, fig.height=15, fig.width=15}
+### 1000 vs 500
+ggplot(df.bootstrap.plot, aes(x=n1000, y=n500)) + geom_point() + geom_abline() + facet_wrap(~key, scales="free")
+```
+
+```{r, fig.height=8, fig.width=8}
+# log-space 
+ggplot(df.bootstrap.plot %>% filter(key=="bp_value"), aes(x=-log10(n1000), y=-log10(n500))) + geom_point() + geom_abline() + labs(title="pval - n 1000 vs 500")
+```
+
+
+
+
+# Plot GAMMA
+Conclusion: gamma estimates are NOT affected by the bootstrap - which makes perfect sense.
+```{r, fig.height=8, fig.width=8}
+# ======================= Plot GAMMA ======================= #
+
+### 1000 vs 100
+ggplot(df.gamma.plot, aes(x=n1000, y=n100)) + geom_point() + geom_abline() + facet_wrap(~key, scales="free")
+
+### 1000 vs 500
+ggplot(df.gamma.plot, aes(x=n1000, y=n500)) + geom_point() + geom_abline() + facet_wrap(~key, scales="free")
+
+
+```
+

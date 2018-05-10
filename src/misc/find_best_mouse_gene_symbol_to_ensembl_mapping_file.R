@@ -187,5 +187,12 @@ for (ensembl_id in unique(df.ncbi_raw.tidy$ensembl_id)) {
     }
   }
 }
-length(multimapping_gene_symbol) # 
-length(multimapping_synonyms) # many multimapping
+# ....
+# [1] "N multimapping_synonyms = 1111"
+# [1] "Processing 24610/24610"
+# [1] "N multimapping_synonyms = 1111"
+
+length(multimapping_gene_symbol) #  ---> 0
+length(multimapping_synonyms) # ---> 1111 (many multimapping synonyms)
+
+

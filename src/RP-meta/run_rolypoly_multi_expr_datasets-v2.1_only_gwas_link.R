@@ -1,14 +1,11 @@
 ############### SYNOPSIS ###################
 # Running RolyPoly
 
-### v2 change log: many things! Here is a selection:
-# NB: v2 is still a *multiple regression* over all cell-types.
-# NB: "loading pre-computed GWAS data" does NOT work (--gwas_linked_file)
-# maf as covariate to model add_poly = T, n_degree = 1
-# run_rolypoly.multi_attempt() function does both GWAS 'pre-computation' and per-data set calculation
-# added rolypoly_add_ld_corrected_gwas_block_scores()
-# change output file and variables names (to e.g. list.gwas_linked, list.rp_inference.run)
-
+### v3 change log: 
+# change FROM *multiple regression* over all cell-types TO *multiple "univariate"* regressions. I.e. each cell-type is run seperately to avoid colinarity issues.
+# [NOT complete] Restructure RolyPoly code: split into 1) linked_gwas [rolypoly_load_gwas()] WITH snp_annotation arguments; 2) rolypoly_perform_inference. 
+#   ^ This was done to allow support of loading snp_annotations.
+# [NOT complete] made loading of pre-computed GWAS data work (--gwas_linked_file)
 
 ### OUTPUT: 
 # ....
@@ -72,6 +69,8 @@ option_list <- list(
               help = "Full pathname for the output directory (will be created if it does not exists). Default is current working directory."),
   make_option("--gwas_linked_file", type="character", default=NULL,
               help = "[OPTIONAL] Full pathname to a pre-computed 'gwas linked' RolyPoly object. If argument is passed, then the gwas linked file will be loaded. OBS: This option overwrites loading a gwas_file with the same name ('caching' function)"),
+  make_option("--expr_data_list", type="character", default=NULL,
+              help = "[OPTIONAL] Full pathname to a tab delimited file specifying what expression datasets to analyse. No header. Use '#' for outcommenting lines. Col1=expr. dataset name; Col2=full path to expr. dataset"),
   make_option("--window_position", type="character", default="tss",
               help = "Set the position of the window. Choose from 'tss' (transcription start site) and 'gene' (gene start and end)"),
   make_option("--window_size_kb", type="integer", default=10,
@@ -99,6 +98,7 @@ GWAS_NAME <- opt$gwas_name
 RUN_NAME <- opt$run_name
 OUTDIR <- opt$outdir
 GWAS_LINKED_FILE <- opt$gwas_linked_file
+EXPR_DATA_LIST <- opt$expr_data_list
 FLAG_TEST_RUN <- opt$test_run 
 N_CORES <- opt$n_cores
 N_BOOTSTRAP_ITERS <- 500 # number of bootstrap iterations
@@ -110,9 +110,16 @@ PARAM.POS_TRANSFORMATION <- opt$pos_transformation
 PARAM.PROTEIN_CODING_ONLY <- opt$protein_coding_only
 
 ### Validate parameters 
-if (is.null(GWAS_FILE)) { # if no argument given
-  stop("Error: no gwas_file given")
+if (is.null(GWAS_FILE) & is.null(GWAS_LINKED_FILE)) { # if no argument given
+  stop("Error: no gwas_file provided. --gwas_file argument is required unless --gwas_linked_file is provided")
+} else {
+  stopifnot(file.exists(GWAS_FILE)) # check that file exists
 }
+
+if (!is.null(GWAS_FILE) & !is.null(GWAS_LINKED_FILE)) {
+  stop("Error: arguments provided to both --gwas_file and --gwas_linked_file. The script requires that only one of these arguments are provided.")
+}
+
 
 if (is.null(GWAS_NAME)) { # if no argument given
   stop("Error: no gwas_name given")
@@ -129,6 +136,13 @@ if (!is.null(GWAS_LINKED_FILE)) {
   stopifnot(file.exists(GWAS_LINKED_FILE)) # check that file exists
 }
 
+if (!is.null(GWAS_LINKED_FILE) & FLAG_TEST_RUN) {
+  stop("Error: test mode does not work with --gwas_linked_file")
+}
+
+if (!is.null(EXPR_DATA_LIST)) {
+  stopifnot(file.exists(EXPR_DATA_LIST)) # check that file exists
+}
 
 if (!PARAM.WINDOW_POSITION %in% c("tss", "gene")) { #
   stop(sprintf("Error: wrong argument for window_position given: %s", PARAM.WINDOW_POSITION))
@@ -151,6 +165,7 @@ list.run_parameters <- list(PARAM.WINDOW_POSITION = PARAM.WINDOW_POSITION,
                             GWAS_NAME=GWAS_NAME,
                             RUN_NAME=RUN_NAME,
                             GWAS_LINKED_FILE=GWAS_LINKED_FILE,
+                            EXPR_DATA_LIST=EXPR_DATA_LIST,
                             FLAG_TEST_RUN=FLAG_TEST_RUN,
                             N_CORES=N_CORES)
 
@@ -164,16 +179,19 @@ print(list.run_parameters)
 
 # GWAS_FILE <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz"
 # GWAS_NAME <- "body_BMI_Locke2015"
-# RUN_NAME <- "gene.10kb.squared.protein_coding_only"# or "gene.10kb.squared.all_genes"
+# RUN_NAME <- "TMPTMPTMP_debug.gene.10kb.squared.protein_coding_only"# or "gene.10kb.squared.all_genes"
+# OUTDIR <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v2-tmp_test"
+# GWAS_LINKED_FILE <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.rolypoly_objs-v2.pos_only/rolypoly_objs.body_BMI_Locke2015.gene.10kb.squared.protein_coding_only.gwas_linked.RData"
+# EXPR_DATA_LIST <- NULL # or XXXX
 # N_BOOTSTRAP_ITERS <- 500 # number of bootstrap iterations
 # N_CORES <- 3 # number of cores for parallel
 # FLAG_TEST_RUN = FALSE
-
+# 
 # PARAM.WINDOW_POSITION = "gene"
 # PARAM.WINDOW_SIZE_KB = 10
-# #PARAM.POS_TRANSFORMATION = "square"
-# PARAM.POS_TRANSFORMATION = "none"
-# PARAM.PROTEIN_CODING_ONLY = FALSE
+# PARAM.POS_TRANSFORMATION = "square"
+# ###PARAM.POS_TRANSFORMATION = "none"
+# PARAM.PROTEIN_CODING_ONLY = TRUE
 
 # ======================================================================================================= #
 # ==========================================       SETUP      =========================================== #
@@ -209,14 +227,14 @@ flag.loaded_inference_rdata <- FALSE # default value
 if (!is.null(GWAS_LINKED_FILE)) { 
   print(sprintf("*Will load existing *gwas_linked* data file specified in the commend line argument: %s", GWAS_LINKED_FILE))
   load(GWAS_LINKED_FILE) # list.gwas_linked, list.run_parameters
-    # list.gwas_linked ---> list("rp"=list(rp.gwas_linked), "runtime"=list(runtime.gwas_linked))
+  # list.gwas_linked ---> list("rp"=rp.gwas_linked, "runtime"=runtime.gwas_linked)
   rp.gwas_linked <- list.gwas_linked[["rp"]] # *OBS*: extract pre-computed object
   flag.loaded_gwas_linked_rdata <- TRUE
   print("Done...")
 } else if (file.exists(file.out.gwas_linked)) {
   print(sprintf("*Will load existing *gwas_linked* data file WITH the same GWAS_NAME and RUN_NAME*: %s", file.out.gwas_linked))
   load(file.out.gwas_linked) # list.gwas_linked, list.run_parameters
-    # list.gwas_linked ---> list("rp"=list(rp.gwas_linked), "runtime"=list(runtime.gwas_linked))
+  # list.gwas_linked ---> list("rp"=list(rp.gwas_linked), "runtime"=list(runtime.gwas_linked))
   rp.gwas_linked <- list.gwas_linked[["rp"]] # *OBS*: extract pre-computed object
   flag.loaded_gwas_linked_rdata <- TRUE
   print("Done...")
@@ -239,13 +257,17 @@ if (file.exists(file.out.inference)) {
 # file.gwas <- file.path(dir.sc_genetics.data, "gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz") # BMI
 # file.gwas <- file.path(dir.sc_genetics.data, "gwas_sumstats/mental_SCZ_Ripke2014.gwassumstats.rolypoly_fmt.tab.gz") # SCZ
 
-df.gwas.rp <- read_gwas(GWAS_FILE, exlcude.HLA=T, do.log_odds=F)
-
-
-if (FLAG_TEST_RUN) {
-  print("RUNNING IN GWAS TEST MODE!")
-  df.gwas.rp <- df.gwas.rp %>% slice(1:1000)
+if (!flag.loaded_gwas_linked_rdata) { # only load GWAS data if not already loaded precomputed object.
+  
+  if (FLAG_TEST_RUN) {
+    print("RUNNING IN GWAS TEST MODE!")
+    df.gwas.rp <- df.gwas.rp %>% slice(1:1000)
+  } else {
+    df.gwas.rp <- read_gwas(GWAS_FILE, exlcude.HLA=T, do.log_odds=F)
+  }
+  
 }
+
 
 # ======================================================================================================= #
 # ====================================== EXPRESSION DATA FILES  ========================================= #
@@ -261,17 +283,27 @@ if (FLAG_TEST_RUN) {
 # file.expr <- file.path(dir.sc_genetics.data, "expression/maca/maca.per_tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz") # maca per_tissue_celltype
 
 
-#files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*avg_expr.hsapiens_orthologs*") # matching on avg_expr
-files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*.hsapiens_orthologs*") # matching on all data sets
-files.paths <- file.path(dir.sc_genetics.data, "expression", files)
-names(files.paths) <- files # named vector
+if (is.null(EXPR_DATA_LIST)) {
+  #files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*avg_expr.hsapiens_orthologs*") # matching on avg_expr
+  files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*.hsapiens_orthologs*") # matching on all data sets
+  files.paths <- file.path(dir.sc_genetics.data, "expression", files)
+  names(files.paths) <- files # named vector
+  
+  # example:
+  # arc_lira/arc_lira.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz 
+  # "/projects/timshel/sc-genetics/sc-genetics/data/expression/arc_lira/arc_lira.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" 
+  # gtex/gtex.sub_tissue.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz 
+  # "/projects/timshel/sc-genetics/sc-genetics/data/expression/gtex/gtex.sub_tissue.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" 
+} else {
+  df.expr_data_list <- read_tsv(EXPR_DATA_LIST, col_names=FALSE, comment="#") # no header. Use "#" for commenting out lines.
+  # print(sprintf("Received n=%s expression data from file %s", nrow(df.expr_data_list), EXPR_DATA_LIST))
+  #print(df.expr_data_list)
+  files.paths <- df.expr_data_list %>% pull(2) # extract second column as vector
+  names(files.paths) <- df.expr_data_list %>% pull(1) # set names 
+}
 
+print(sprintf("Will read the following n=%s expression data files:", length(files.paths)))
 print(files.paths)
-# example:
-# arc_lira/arc_lira.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz 
-# "/projects/timshel/sc-genetics/sc-genetics/data/expression/arc_lira/arc_lira.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" 
-# gtex/gtex.sub_tissue.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz 
-# "/projects/timshel/sc-genetics/sc-genetics/data/expression/gtex/gtex.sub_tissue.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" 
 
 # ======================================================================================================= #
 # ========================================== GENE ANNOTATION =========================================== #
@@ -290,12 +322,16 @@ df.gene_annot <- read_gene_annotation(file.gene_annot, protein_coding_only=PARAM
 
 wrapper.read_expression_data <- function(file.expr) {
   if (grepl("ttest.hsapiens_orthologs", file.expr)) {
-    method_specific_expr="tstat"
+    scale_genes=FALSE
   } else if (grepl("avg_expr.hsapiens_orthologs", file.expr)) {
-    method_specific_expr="average"
+    scale_genes=TRUE
+  } else if (grepl("kme.hsapiens_orthologs", file.expr)) {
+    scale_genes=FALSE
+  } else {
+    stop(sprintf("Error: detected unexpected data processing pattern stamp in expression data set file %s. Accepted patterns are 'tstat', 'avg_expr', 'kme'.", file.expr))
   }
   df.expr <- read_expression_data(file.expr=file.expr,
-                                  method_specific_expr=method_specific_expr, 
+                                  scale_genes=scale_genes, 
                                   pos_transformation=PARAM.POS_TRANSFORMATION, 
                                   genes.filter=df.gene_annot$ensembl_gene_id,  
                                   col_genes="gene", 
@@ -380,11 +416,11 @@ run_rolypoly.multi_attempt <- function(rp.precomputed,
         message(sprintf("Attempt = %s | *Error block* | Will run function again...", n_attempts))
         ### Calling the function with the SAME arguments as it was called the first time.
         run_rolypoly.multi_attempt(rp.precomputed = rp.precomputed,
-                                  gwas_data = gwas_data, 
-                                  block_annotation = block_annotation,
-                                  block_data = block_data,
-                                  ld_folder = ld_folder,
-                                  n_attempts = n_attempts) # *OBS*: calling with updated variable
+                                   gwas_data = gwas_data, 
+                                   block_annotation = block_annotation,
+                                   block_data = block_data,
+                                   ld_folder = ld_folder,
+                                   n_attempts = n_attempts) # *OBS*: calling with updated variable
       } else {
         message(sprintf("Attempt = %s | *Error block* | REACHED MAX ATTEMPTS - will return 'NULL'", n_attempts))
         return(NULL) # return value if everything keeps failing
@@ -415,11 +451,11 @@ if (!flag.loaded_gwas_linked_rdata) {
   ### Run RolyPoly
   runtime.gwas_linked <- system.time(
     rp.gwas_linked <- run_rolypoly.multi_attempt(rp.precomputed = NULL, # no object parsed, so it will be created.
-                                               gwas_data = as.data.frame(df.gwas.rp), 
-                                               block_annotation = as.data.frame(df.block_annotation),
-                                               block_data = as.data.frame(list.df_expr[[1]]), # first expression data set
-                                               ld_folder = dir.ldfiles,
-                                               n_attempts = 0) # *OBS*: important to make first call with n_attempts=0
+                                                 gwas_data = as.data.frame(df.gwas.rp), 
+                                                 block_annotation = as.data.frame(df.block_annotation),
+                                                 block_data = as.data.frame(list.df_expr[[1]]), # first expression data set
+                                                 ld_folder = dir.ldfiles,
+                                                 n_attempts = 0) # *OBS*: important to make first call with n_attempts=0
   )
   print("Done with RolyPoly first run. Runtime:")
   print(runtime.gwas_linked)
@@ -429,159 +465,19 @@ if (!flag.loaded_gwas_linked_rdata) {
   ### Gene scores
   print("Calculating gene scores...")
   rp.gwas_linked <- rolypoly_add_ld_corrected_gwas_block_scores(rolypoly=rp.gwas_linked, fast_calculation=T) # returns RolyPoly object | this takes time - it is calculated per gene
-    # sets the slot rp$data$<BLOCK/GENE>$corrected_gwas_block_score_pval
+  # sets the slot rp$data$<BLOCK/GENE>$corrected_gwas_block_score_pval
   ### You might get the warning:
   # In CompQuadForm::imhof(raw_score, lambda = lambda, epsabs = 1e-15,  ... :
   #                          Note that Qq + abserr is positive.
   print("Done calculating gene scores")
   
   ### Combine into list object
-  list.gwas_linked <- list("rp"=list(rp.gwas_linked), "runtime"=list(runtime.gwas_linked))
+  list.gwas_linked <- list("rp"=rp.gwas_linked, "runtime"=runtime.gwas_linked)
   
   ### Save
   print("Saving...")
   save(list.gwas_linked, list.run_parameters, file=file.out.gwas_linked)
+  print("Done saving.")
 }
 
-
-### Error
-# starting bootstrap iteration: 492
-# Attempt = 1 | *Error block* | An error happend! Here's the original error message:
-# task 4 failed - "variable lengths differ (found for 'vectorized_rolypoly_data$x')"
-# Attempt = 1 | *Error block* | Will run function again...
-# Attempt = 2 | *Try block* | running attempt...
-# adding gwas
-# filtering out SNPs with MAF < 1%
-# adding block annotations
-# beginning processs of linking gwas a
-
-# Attempt = 1 | *Error block* | An error happend! Here's the original error message:
-# task 394 failed - "variable lengths differ (found for 'vectorized_rolypoly_data$x')"
-# Attempt = 1 | *Error block* | Will run function again...
-# Attempt = 2 | *Try block* | running attempt...
-# adding gwas
-# filtering out SNPs with MAF < 1%
-# adding block annotations
-
-
-# ======================================================================================================= #
-# ======================================= WRAPPER FUNCTION ============================================== #
-# ======================================================================================================= #
-
-wrapper.run_rolypoly_over_expr_datasets <- function(idx.list, list, rp.precomputed) {
-  ### INPUT
-  # idx.list     a integer specifying the index of the list to run the function on.
-  # list         a list that contains the index provided by "idx.list". (Preferably the list is named)
-  
-  n.elements <- length(list)
-  if (is.null(names(list))) { # list is unnamed
-    name.list <- "<UNNAMED LIST ELEMENT>"
-  } else {
-    name.list <- names(list)[idx.list] # get list element name
-  }
-  print(sprintf("========== #%s/#%s | Status = START RUNNING | wrapper.run_rolypoly_over_expr_datasets | list element = %s ==========", idx.list, n.elements, name.list)) # prints "character(0)" if list has no names (i.e. names(list) is NULL)
-  df.expr <- list[[idx.list]] # get expression data frame
-  runtime <- system.time(
-    rp <- run_rolypoly.multi_attempt(rp.precomputed = rp.precomputed,
-                                     gwas_data = NULL, # set to NULL to avoid GWAS-linking computation
-                                     block_annotation = NULL, # set to NULL to avoid GWAS-linking computation
-                                     block_data = as.data.frame(df.expr), # *VARIABLE*
-                                     ld_folder = NULL, # set to NULL to avoid GWAS-linking computation
-                                     n_attempts = 0) # *OBS*: important to make first call with n_attempts=0
-  )
-  
-  ### Deleting data slots from RolyPoly object
-  # We do this to reduce later load times and save space (storage and memory).
-  rp$data <- "REMOVED" # gene level information (GWAS-linked) [takes up 98% of the size of the object]
-  # rp$blocks <- "REMOVED" # gene==block annotation
-  # rp$raw_block_data <- "REMOVED" # gene==block expression data
-  
-  # system.time(): returns a names numerical vector of class "proc_time"
-  res <- c("rp"=list(rp), "runtime"=list(runtime), "name"=name.list) # elements must be enclosed in list() to keep their native data structure/'integrity' (unless they are 'atomic')
-  print(sprintf("========== #%s/#%s | Status = DONE | wrapper.run_rolypoly_over_expr_datasets | list element = %s ==========", idx.list, n.elements, name.list)) # prints "character(0)" if list has no names (i.e. names(list) is NULL)
-  return(res)
-}
-
-
-# ======================================================================================================= #
-# =================================== FILTER EXPRESSION DATA SETS TO RUN ================================ #
-# ======================================================================================================= #
-
-list.df_expr.run <- list.df_expr # default value
-if (flag.loaded_inference_rdata) { # if we have loaded inference data
-  # ASSUMPTION: list.rp_inference and list.df_expr share the same name for inference on expression datasets that have analyzed
-  # > names(list.df_expr)
-  # [1] "arc_lira/arc_lira.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz"            
-  # [2] "gtex/gtex.sub_tissue.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz"  
-  
-  names.expr_datasets_already_run <- names(list.df_expr) %in% list.rp_inference # return TRUE for dataset names already analyzed
-  list.df_expr.run <- list.df_expr[!names.expr_datasets_already_run]
-}
-
-# ======================================================================================================= #
-# ========================================== RUN WRAPPER ================================================ #
-# ======================================================================================================= #
-
-print("Running wrapper.run_rolypoly_over_expr_datasets with the following (new) expression data sets:")
-print(names(list.df_expr.run))
-
-### Run wrapper
-list.rp_inference.run <- lapply(seq_along(list.df_expr.run), wrapper.run_rolypoly_over_expr_datasets, list=list.df_expr.run, rp.precomputed=rp.gwas_linked) # "list" is here the extra (named) argument to wrapper.run_rolypoly_over_expr_datasets()
-names(list.rp_inference.run) <- names(list.df_expr.run) # set names of list
-print("Done with RolyPoly wrapper loop")
-print("Printing any warnings:")
-print(warnings())
-
-# ======================================================================================================= #
-# ========================================== ADDING NEW DATA TO OLD ===================================== #
-# ======================================================================================================= #
-
-if (flag.loaded_inference_rdata) { # if we have loaded inference data
-  print("Adding new run data to previous inference data...")
-  list.rp_inference <- modifyList(list.rp_inference, list.rp_inference.run) # combining lists using modifyList(). 
-  # c() operator should also do the trick, but this is nicer if there - for some reason - are elements with the same name in both lists.
-  # modifyList(x,y): elements from y will be added to the list; any elements in x which is also in y will be replaced by the y elements..
-} else {
-  list.rp_inference <- list.rp_inference.run
-}
-
-# ======================================================================================================= #
-# ============================================ EXPORT ================================================== #
-# ======================================================================================================= #
-
-print("Saving inference object...")
-save(list.rp_inference, list.run_parameters, file=file.out.inference)
-
-# ======================================================================================================= #
-# ============================================== FINISH ================================================== #
-# ======================================================================================================= #
-
-print("SCRIPT DONE!")
-
-# ======================================================================================================= #
-# ============================================== PLOTS ================================================== #
-# ======================================================================================================= #
-
-### Plot the log10(p) to rank tissues by the strength of their association
-# p.pval_ranking <- plot_rolypoly_annotation_ranking(rp)
-# p.pval_ranking
-
-
-### Plot gamma estimate with 95% confidence intervals
-### gamma: influence of cell-type-specific gene expression on the variance of GWAS effect sizes
-# p.gamma_est <- plot_rolypoly_annotation_estimates(rp)
-# p.gamma_est
-
-
-# ======================================================================================================= #
-# ============================================== MISC ================================================== #
-# ======================================================================================================= #
-
-# rp$full_results$parameters %>% sort
-# rp$bootstrap_results %>% arrange(-bt_value) %>% head
-
-
-
-# ======================================================================================================= #
-# ==========================================   LEFT OVERS   ============================================ #
-# ======================================================================================================= #
+print("R SCRIPT DONE")

@@ -211,7 +211,7 @@ LOG_TRANSFORM_BETA=False #
 
 
 
-################## cov_INSOMNIA_Hammerschlag2017 ##################
+################## mental_AD_Lambert2013 ##################
 
 # file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/AD_Lambert2013/IGAP_stage_1.txt"
 # file_out_prefix = "mental_AD_Lambert2013"
@@ -229,7 +229,7 @@ LOG_TRANSFORM_BETA=False #
 # LOG_TRANSFORM_BETA=False # OBS --> some values are alrealy negative?
 
 
-################## cov_INSOMNIA_Hammerschlag2017 ##################
+################## disease_RA_Okada2014 ##################
 
 # file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/RA_Okada2014/RA_GWASmeta_European_v2.txt.gz"
 # file_out_prefix = "disease_RA_Okada2014"

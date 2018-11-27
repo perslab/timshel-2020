@@ -1,4 +1,6 @@
 
+library(tidyverse)
+
 
 ### cov_SMOKING_STATUS (example of a binary trait) : checking if all betas are > 0, meaning OR
 df.alkes_ukbb <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/cov_SMOKING_STATUS.sumstats.gz")
@@ -25,9 +27,11 @@ is.na(df.fmt$se[1])
 
 # ======================= GWAS beta vs Z correlation ======================= #
 
+
+
 df.gwas <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SWB_Neuroticism_DS_Okbay2016/SWB_Full.txt.gz")
-plot(df.gwas$Beta, -log10(df.gwas$Pval))
-     
+plot(abs(df.gwas$Beta), -log10(df.gwas$Pval))
+
 
 ### Edu
 df.edu.raw <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA2_Okbay2016/EduYears_Main.txt.gz")

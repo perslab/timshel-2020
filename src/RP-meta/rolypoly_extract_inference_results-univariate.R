@@ -19,8 +19,6 @@
 #=============================================== USAGE ================================================== #
 # ======================================================================================================= #
 
-
-
 # ======================================================================================================= #
 # ==========================================       CONFIG      =========================================== #
 # ======================================================================================================= #
@@ -53,12 +51,17 @@ source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics l
 # DIR_OUT.COMBINED_TAR <- "export-combined.v3.nboot100"
 # list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
 
+### Main (HM3)
+DIR.DATA_INFERENCE <- "/scratch/sc-genetics/out.rolypoly_objs-v3.hm3_protein_coding_only.univariate-nboot100/"
+DIR_OUT.PREFIX <- "inference_rp_hm3"
+DIR_OUT.COMBINED_TAR <- "export-combined.rp_hm3.v3.nboot100"
+list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
+
 ### LDSC gwas
 # DIR.DATA_INFERENCE <- "/scratch/sc-genetics/out.rolypoly_objs-v3.ldsc.univariate-nboot100/"
 # DIR_OUT.PREFIX <- "inference_ldsc"
 # DIR_OUT.COMBINED_TAR <- "export-combined.ldsc.v3.nboot100"
 # list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
-
 
 ### NULL gwas
 # DIR.DATA_INFERENCE <- "/scratch/sc-genetics/out.rolypoly_objs-v3.NULL_GWAS/"
@@ -66,12 +69,11 @@ source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics l
 # DIR_OUT.COMBINED_TAR <- "export-combined.null_gwas.v3.nboot100"
 # list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.tmp_red.RData") # NULL GWAS
 
-list.inference_files
+
 
 
 ### Source annotations
 source("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.R")
-
 
 do.parallel_annotations <- TRUE
 # do.parallel_annotations <- FALSE
@@ -123,8 +125,12 @@ add_annotations <- function(df, name.expr_data) {
     df.category <- df.category.maca
   } else if (grepl("depict", name.expr_data)) {
     df.category <- df.category.depict
+  } else if (grepl("mousebrain", name.expr_data)) {
+    df.category <- df.category.mousebrain
   } else {
-    stop("Got unexpected name for name.expr_data")
+    print("WARNING: add_annotations() got unknown pattern for name.expr_data. Will do dummy operation. Plot might not have meaningful coloring.")
+    df.category <- df %>% transmute(name_r=annotation, name_clean=annotation) # 'dummy' operation, but to make it work for ANY dataset (i.e that does not match the 'grepl' pattern)
+    # stop("Got unexpected name for name.expr_data")
   }
   df.res <- left_join(df, df.category, by=c("annotation"="name_r"))
   return(df.res)

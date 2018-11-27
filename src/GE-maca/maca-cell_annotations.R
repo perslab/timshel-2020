@@ -9,10 +9,6 @@
 
 ### REFERENCE:
 
-# ======================================================================= #
-# ==============================  USAGE  =============================== #
-# ======================================================================= #
-
 
 # ======================================================================= #
 # ==============================  SETUP  =============================== #
@@ -32,26 +28,29 @@ setwd(wd)
 # ======================================================================= #
 
 ### Load data
-# file.RData.cell_atlas <- "/projects/timshel/maca/data/figshare/180126-facs/maca.seurat_obj.facs.figshare_180126.RData" # 6.1 GB | seurat_obj
-# load(file.RData.cell_atlas) 
+file.RData.cell_atlas <- "/data/pub-others/tabula_muris/figshare/180126-facs/maca.seurat_obj.facs.figshare_180126.RData" # 6.1 GB | seurat_obj
+load(file.RData.cell_atlas) 
 
 # ======================================================================= #
-# ============================  MAIN  ============================== #
+# =========================  MAKE METADATA FILE  ========================== #
+# ======================================================================= #
+
+
+df.metadata <- seurat_obj@meta.data %>% group_by(tissue_celltype) %>% summarise(n_cells = n()) # count
+df.metadata <- df.metadata %>% separate(tissue_celltype, into=c("tissue", "cell_type"), sep="\\.", remove=F, extra="merge")# split
+df.metadata %>% write_csv(path="tabula_muris_facs.tissue_celltype.metadata.csv")
+
+# ======================================================================= #
+# ============================  XXXX  ============================== #
 # ======================================================================= #
 
 # df.annotation <- read_csv("/data/pub-others/tabula_muris/figshare/180126-facs/metadata_FACS.csv")
-df.annotation <- read_csv("/data/pub-others/tabula_muris/figshare/180126-facs/annotations_FACS.csv")
+# df.annotation <- read_csv("/data/pub-others/tabula_muris/figshare/180126-facs/annotations_FACS.csv")
+# df.summary <- df.annotation %>% distinct(tissue, cell_ontology_class)
 
-df.summary <- df.annotation %>% distinct(tissue, cell_ontology_class)
 
 
-# ======================================================================= #
-# ============================  GTEX (tmp)  ============================== #
-# ======================================================================= #
 
-file.annotations <- "/data/rna-seq/gtex/v7/GTEx_v7_Annotations_SampleAttributesDS.txt"
-df.annot <- read_delim(file.annotations, delim="\t")
-df.summary <- df.annot %>% distinct(SMTS, SMTSD)
 
 
 

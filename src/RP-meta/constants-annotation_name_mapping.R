@@ -1,9 +1,42 @@
 
+# ======================= ***INFO*** ======================= #
+# Each data frame MUST set the columns 'name_r', 'name_clean' and 'category'
+
+
+
+
+# ======================= MOUSEBRAIN ======================= #
+
+
+### PREP
+# df.tmp.meta <- read_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv")
+# df.tmp.meta <- df.tmp.meta %>% select(c("ClusterName",
+#                                         "NCells",
+#                                         "Description",
+#                                         "Class",
+#                                         "TaxonomyRank2",
+#                                         "Neurotransmitter",
+#                                         "Region",
+#                                         "Probable_location",
+#                                         "Comment"))
+# df.tmp.meta %>% write_csv("constants-annotation_name_mapping.mousebrain.csv")
+
+### 
+df.category.mousebrain <- read_csv("constants-annotation_name_mapping.mousebrain.csv") # *OBS*: file must be in current directory.
+
+### Set new names
+df.category.mousebrain <- df.category.mousebrain %>% 
+  mutate(
+    name_r = ClusterName,
+    name_clean = paste0(Class, "-", ClusterName),
+    category = Region
+  ) 
+
 
 # ======================= MACA ======================= #
 
 df.category.maca <- read_tsv("tissue	cell_type	category
-Aorta	fibroblast	Cardiovascular
+                             Aorta	fibroblast	Cardiovascular
                              Aorta	unknown	Cardiovascular
                              Aorta	epicardial adipocyte	Cardiovascular
                              Aorta	smooth muscle cell	Cardiovascular
@@ -124,7 +157,7 @@ Aorta	fibroblast	Cardiovascular
 ### Set new names
 df.category.maca <- df.category.maca %>% 
   mutate(
-    name_r = make.names(paste0(tissue, "-", cell_type)), # set name_r
+    name_r = make.names(paste0(tissue, "-", cell_type)), # set name_r | *OBS* only valid for 'per-tissue-celltype' version of MACA
     name_clean = paste0(tissue, "-", cell_type)
   ) 
 

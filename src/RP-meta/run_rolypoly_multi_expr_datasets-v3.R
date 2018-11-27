@@ -351,7 +351,8 @@ wrapper.read_expression_data <- function(file.expr) {
   } else if (grepl("depict_152tissues", file.expr)) { # *OBS*: semi-hack
     scale_genes=FALSE
   } else {
-    stop(sprintf("Error: detected unexpected data processing pattern stamp in expression data set file %s. Accepted patterns are 'tstat', 'avg_expr', 'kme'.", file.expr))
+    scale_genes=FALSE
+    # stop(sprintf("Error: detected unexpected data processing pattern stamp in expression data set file %s. Accepted patterns are 'tstat', 'avg_expr', 'kme'.", file.expr))
   }
   df.expr <- read_expression_data(file.expr=file.expr,
                                   scale_genes=scale_genes, 

@@ -152,6 +152,7 @@ def map_ensembl_genes_mouse_to_human(df, args):
         We assume the file_mapping contains only 1-1 mapping (which is true for gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz).
         Otherwise the .map() function might fail
     """
+    print("Mapping from mouse to human genes")
     file_out_mapping_stats = "{}/log.{}.make_annotation_mapping_stats.txt".format(args.out_dir, args.out_prefix)
     
     file_mapping = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
@@ -189,7 +190,7 @@ def read_multi_gene_set_file(args):
         # ^ 'module' = first column; will later be renamed to 'annotation'
         # ^ 'ensembl' = second column; will later be renamed to 'gene'
     else:
-        df_multi_gene_set = pd.read_csv(file_multi_gene_set, header=None)
+        df_multi_gene_set = pd.read_csv(file_multi_gene_set, sep=None, header=None) # sep=None: automatically detect the separator
         if args.flag_encode_as_binary_annotation:
             df_multi_gene_set.columns = ["annotation", "gene_input"]
         else:

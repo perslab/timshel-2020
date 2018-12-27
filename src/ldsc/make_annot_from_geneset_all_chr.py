@@ -20,6 +20,8 @@ from pybedtools import BedTool
 # os.environ["PATH"] += os.pathsep + "/tools/bedtools/2.27.1/bin/"
 # os.environ["PATH"] += os.pathsep + "/tools/htslib/1.6/bin/"
 
+import psutil
+
 import pdb
 
 # import gzip
@@ -106,11 +108,17 @@ import pdb
 
 ###################################### DOCUMENTATION ######################################
 
+### General remarks:
+# - any whitespace in annotation_name column in file_multi_gene_set will be converted to underscore ('_'). 
+#   This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
+
 ### For continuous annotations:
 # - When a variant is spanned by multiple genes with the XXX kb window, we assign the maximum annotation_value.
 
-### For binary annotations
+### For binary annotations:
 # - The SNPs within the genomic regions spanned by the genes within a given annotation gets the annotation value 1. All other SNPs get the annotation value 0
+
+
 
 ###################################### FILE SNIPPETS ######################################
 
@@ -190,18 +198,26 @@ def read_multi_gene_set_file(args):
         # ^ 'module' = first column; will later be renamed to 'annotation'
         # ^ 'ensembl' = second column; will later be renamed to 'gene'
     else:
-        df_multi_gene_set = pd.read_csv(file_multi_gene_set, sep=None, header=None) # sep=None: automatically detect the separator
+        df_multi_gene_set = pd.read_csv(file_multi_gene_set, sep=None, header=None, engine='python') # sep=None: automatically detect the separator
+        df_multi_gene_set.columns = df_multi_gene_set.columns.map(str) # because header=None, the .columns is of type integer (Int64Index(.., dtype='int64')). We need to map array to string before we can rename the columns below
         if args.flag_encode_as_binary_annotation:
-            df_multi_gene_set.columns = ["annotation", "gene_input"]
+            df_multi_gene_set.columns.values[[0,1]] = ["annotation", "gene_input"] # .values() is needed to avoid TypeError
+            # ALTERNATIVE ---> https://stackoverflow.com/a/43759994/6639640: df.rename(columns={ df.columns[1]: "your value" })
         else:
-            df_multi_gene_set.columns = ["annotation", "gene_input", "annotation_value"]
-    
+            df_multi_gene_set.columns.values[[0,1,2]] = ["annotation", "gene_input", "annotation_value"]
     if args.flag_encode_as_binary_annotation:
         print("Converting to binary encoding")
         df_multi_gene_set["annotation_value"] = 1 # binary encoding. All genes get the value 1.
     else:
+        if not np.issubdtype(df_multi_gene_set["annotation_value"].dtype, np.number): # REF: https://stackoverflow.com/a/38185759/6639640
+            raise Exception("ERROR: your df_multi_gene_set contains non-numeric annotation values. Will not create annotation files.")
         if (df_multi_gene_set["annotation_value"] < 0).any():
             raise Exception("ERROR: your df_multi_gene_set contains negative annotation values. Will not create annotation files.")
+    df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"\s+", "_",regex=True) 
+    # ^ any whitespace in annotation_name column in file_multi_gene_set will be converted to underscore ('_').  
+    # ^ This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
+    print("Read file_multi_gene_set. Header of the parsed/processed file:")
+    print(df_multi_gene_set.head(10))
     print("Annotation value summary stats:")
     df_annot_value_sumstats = df_multi_gene_set.groupby("annotation")["annotation_value"].agg(["mean", "std", "max", "min", "count"])
     print(df_annot_value_sumstats)
@@ -496,8 +512,25 @@ if __name__ == "__main__":
     ### make beds
     dict_of_beds = multi_gene_sets_to_dict_of_beds(df_multi_gene_set, df_gene_coord, args.windowsize)
 
-    print("Starting pool...")
-    pool = multiprocessing.Pool(processes=args.n_parallel_jobs)
+    ### estimate number of jobs we can run
+    memomory_free_gb = psutil.virtual_memory().available / 1024.0 ** 3 # 1024^3 = Byte to Gigabyte
+    n_annotations = df_multi_gene_set["annotation"].nunique()
+    ### Memory usage benchmarked Dec 27, 2018
+    ### Here we only estimate the memory usage of list_df_annot, which holds n_snps*n_annotations elements
+    ### 6000 annotations = 34.8 gb for chr1 (~780k SNPs, float encoded)
+    ### 3000 annotations = 17.5 gb for chr1 (~780k SNPs, float encoded)
+    ### 1500 annotations = 8.7 gb for chr1 (~780k SNPs, float encoded)
+    ### 750 annotations = 4.3 gb for chr1 (~780k SNPs, float encoded)
+    ### ---> 5.8 MB per annotation
+    memory_needed_per_chromosome_gb = (5.8/1024)*n_annotations # 5.8 MB * n_annotations
+    n_processes_with_enough_memory = memomory_free_gb/memory_needed_per_chromosome_gb # this is the amount of processes we have enough free memory for
+    n_processes_with_enough_memory_incl_buffer = n_processes_with_enough_memory/2.0 # we reserve each process x2 the amount of memory to account for the doubling of memory usage during pandas/numpy concatenation. READ here about concatenation https://github.com/pandas-dev/pandas/issues/14282#issue-178674951
+    print("RESOURCES: memomory_free_gb={} | n_processes_with_enough_memory={} | n_processes_with_enough_memory_incl_buffer={}".format(memomory_free_gb, n_processes_with_enough_memory, n_processes_with_enough_memory_incl_buffer))
+    n_parallel_jobs_auto_configured = max(1, min(22 , n_processes_with_enough_memory_incl_buffer))
+    n_parallel_jobs_auto_configured
+
+    print("Starting pool with processes={}".format(n_parallel_jobs_auto_configured))
+    pool = multiprocessing.Pool(processes=n_parallel_jobs_auto_configured)
     pool.map(functools.partial(make_annot_file_per_chromosome, dict_of_beds=dict_of_beds, args=args), list_chromosomes_to_run)
     # ^ this works for Python 2.7+. (Only Python 3.3+ includes pool.starmap() which makes it easier)
     # ^ Partial creates a new simplified version of a function with part of the arguments fixed to specific values.
@@ -508,4 +541,13 @@ if __name__ == "__main__":
     print("Script is done!")
 
 
+###################################### Memory usage ######################################
+
+### Code for estimating memory usage of list_df_annot
+# n_snps = 780000 # average number of SNPs in .bim files is 450k (150k-780k)
+# n_annotations = 750
+# x_array = np.arange(n_snps).astype(float)
+# df = pd.DataFrame(np.array([x_array]*n_annotations).T)
+# mem_usage_gb = df.memory_usage(index=True, deep=True).sum()/(1024.0**3) # deep=If True, introspect the data deeply by interrogating object dtypes for system-level memory consumption, and include it in the returned values.
+# mem_usage_gb
 

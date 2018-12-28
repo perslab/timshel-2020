@@ -213,9 +213,13 @@ def read_multi_gene_set_file(args):
             raise Exception("ERROR: your df_multi_gene_set contains non-numeric annotation values. Will not create annotation files.")
         if (df_multi_gene_set["annotation_value"] < 0).any():
             raise Exception("ERROR: your df_multi_gene_set contains negative annotation values. Will not create annotation files.")
+    ### Make filepath and LDSC 'valid' annotation name (read: clean up the names!)
     df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"\s+", "_",regex=True) 
     # ^ any whitespace in annotation_name column in file_multi_gene_set will be converted to underscore ('_').  
     # ^ This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
+    df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"/", "-",regex=True) 
+    # ^ We need to avoid forward slash (/) in the filenames when files are split per annotation (/per_annot dir). 
+    # ^ If forward slashes are not replaced, we would get an error when looking for or writing files such as "celltypes.campbell_lvl1.all.campbell_lvl1.a06.NG2/OPC.ges.21.l2.M" when the annotation name is "a06.NG2/OPC.ges"
     print("Read file_multi_gene_set. Header of the parsed/processed file:")
     print(df_multi_gene_set.head(10))
     print("Annotation value summary stats:")

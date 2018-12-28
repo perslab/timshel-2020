@@ -190,6 +190,10 @@ FLAG_WGCNA = False
 dict_genomic_annot = {"celltypes.mousebrain.all.binary":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/multi_geneset.mousebrain_all.txt",
 					  "celltypes.tabula_muris.all.binary":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/multi_geneset.tabula_muris.txt"}
 
+# dict_genomic_annot = {"celltypes.campbell_lvl1.all":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/multi_geneset.campbell_lvl1.txt",
+#					   "celltypes.campbell_lvl2.all":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/multi_geneset.campbell_lvl2.txt"}
+
+
 ################## WGCNA ##################
 # FLAG_WGCNA = True
 ### Tabula muris
@@ -213,8 +217,8 @@ for prefix_genomic_annot in dict_genomic_annot:
 	ldsc_ref_ld_chr_name = get_all_genes_ref_ld_chr_name(prefix_genomic_annot)
 	for gwas in list_gwas:
 		fileout_prefix = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}.{gwas}.baseline_v1.1_all_genes".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot)
-		if os.path.exists("{}.cell_type_results.txt".format(fileout_existing)):
-			print("GWAS={}, prefix_genomic_annot={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, prefix_genomic_annot, fileout_existing))
+		if os.path.exists("{}.cell_type_results.txt".format(fileout_prefix)):
+			print("GWAS={}, prefix_genomic_annot={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, prefix_genomic_annot, fileout_prefix))
 			continue
 		cmd = """{PYTHON_EXEC} {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
 		--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_ref_ld_chr_name} \

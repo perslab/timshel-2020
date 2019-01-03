@@ -77,13 +77,14 @@ for prefix_genomic_annot in ldscore_check_dict.keys():
 		print("*WARNING*: prefix_genomic_annot={} did not have ldscore files for all chromosomes: {}. It will be dropped".format(prefix_genomic_annot, ",".join(map(str, chromosomes_missing))))
 		dict_genomic_annot.pop(prefix_genomic_annot, None) # drop key from dict. REF: https://stackoverflow.com/a/11277439/6639640
 
-### filter out 'all_genes' annotation
-ANNOT_NAME_ALL_GENES="all_genes_in_dataset"
-for prefix_genomic_annot in dict_genomic_annot.keys():
-	# m = re.search(r".*%s.*" % ANNOT_NAME_ALL_GENES, os.path.basename(prefix_genomic_annot)) # REF 'using a variable inside a regex' https://stackoverflow.com/a/6931048/6639640
-	if ANNOT_NAME_ALL_GENES in os.path.basename(prefix_genomic_annot): # check if string 'contains' substring
-		print("*OBS*: prefix_genomic_annot={} matched ANNOT_NAME_ALL_GENES={}: It will be dropped to avoid colinearity in LDSC regression.".format(prefix_genomic_annot, ANNOT_NAME_ALL_GENES))
-		dict_genomic_annot.pop(prefix_genomic_annot, None) # drop key from dict. REF: https://stackoverflow.com/a/11277439/6639640
+# ### filter out 'all_genes' annotation
+# ANNOT_NAME_ALL_GENES="all_genes_in_dataset"
+# for prefix_genomic_annot in dict_genomic_annot.keys():
+# 	# m = re.search(r".*%s.*" % ANNOT_NAME_ALL_GENES, os.path.basename(prefix_genomic_annot)) # REF 'using a variable inside a regex' https://stackoverflow.com/a/6931048/6639640
+# 	if ANNOT_NAME_ALL_GENES in os.path.basename(prefix_genomic_annot): # check if string 'contains' substring
+# 		print("*OBS*: prefix_genomic_annot={} matched ANNOT_NAME_ALL_GENES={}: It will be dropped to avoid colinearity in LDSC regression.".format(prefix_genomic_annot, ANNOT_NAME_ALL_GENES))
+# 		dict_genomic_annot.pop(prefix_genomic_annot, None) # drop key from dict. REF: https://stackoverflow.com/a/11277439/6639640
+
 
 with open(args.cts_outfile, "w") as fh_out:
 	print("Writing output cts file: {}".format(args.cts_outfile))

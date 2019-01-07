@@ -157,7 +157,7 @@ if not ((list_np_version[0] >= 1) and (list_np_version[1] >= 13)):
 # brain_hypothlamus,ENSMUSG00000032997, 0.87
 
 
-def map_ensembl_genes_mouse_to_human(df, args):
+def map_ensembl_genes_mouse_to_human(df, out_dir, out_prefix, print_log_files=True):
 	"""
 	DESCRIPTION
 		function to map mouse ensembl genes to human ortholog genes.
@@ -172,37 +172,33 @@ def map_ensembl_genes_mouse_to_human(df, args):
 		Otherwise the .map() function might fail
 	"""
 	print("Mapping from mouse to human genes")
-	file_out_mapping_stats = "{}/log.{}.make_annotation_mapping_stats.txt".format(args.out_dir, args.out_prefix)
-	
 	file_mapping = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
 	### SNIPPET
 	# ensembl_gene_id chromosome_name start_position  end_position    mmusculus_homolog_ensembl_gene  mmusculus_homolog_orthology_confidence
 	# ENSG00000138593 15      49280673        49338760        ENSMUSG00000035093      1
 	# ENSG00000166351 21      14982498        15013906        ENSMUSG00000095294      0
 	# ENSG00000168675 18      13217497        13652754        ENSMUSG00000024544      1
-	
 	df_mapping = pd.read_csv(file_mapping, delim_whitespace=True, usecols=["ensembl_gene_id", "mmusculus_homolog_ensembl_gene"], index_col=1) # index is MOUSE genes
-	
 	### map ortholog genes
 	df["gene"] = df["gene_input"].map(df_mapping["ensembl_gene_id"]) # df["gene_input"] is mouse genes. df_mapping["ensembl_gene_id"] is human.
 	# ^ .map() returns NaN values for genes not mapped. 
-
 	### make summary of mapping
-	df_summary = df.groupby("annotation")["gene"].agg({'n_genes_input': lambda x: len(x),
-														 'n_genes_output': lambda x: len(x)-sum(pd.isnull(x)), 
-														'n_genes_not_mapped' : lambda x: sum(pd.isnull(x)),
-														'pct_genes_not_mapped': lambda x: "{:.2f}".format(sum(pd.isnull(x))/float(len(x))*100)})
-	# ^ we use pd.isnull() instead of np.isnan() because of the issue described here: https://stackoverflow.com/a/36001191/6639640
-	df_summary.sort_values(by=['n_genes_output'], inplace=True) 
-	df_summary.to_csv(file_out_mapping_stats, sep="\t")
-	
+	file_out_mapping_stats = "{}/log.{}.make_annotation_mapping_stats.txt".format(out_dir, out_prefix)
+	if print_log_files and not os.path.exists(file_out_mapping_stats):
+		df_summary = df.groupby("annotation")["gene"].agg({'n_genes_input': lambda x: len(x),
+															 'n_genes_output': lambda x: len(x)-sum(pd.isnull(x)), 
+															'n_genes_not_mapped' : lambda x: sum(pd.isnull(x)),
+															'pct_genes_not_mapped': lambda x: "{:.2f}".format(sum(pd.isnull(x))/float(len(x))*100)})
+		# ^ we use pd.isnull() instead of np.isnan() because of the issue described here: https://stackoverflow.com/a/36001191/6639640
+		df_summary.sort_values(by=['n_genes_output'], inplace=True) 
+		df_summary.to_csv(file_out_mapping_stats, sep="\t")
 	### final processing
 	df.dropna(axis=0, inplace=True) # remove non-mapped genes
 	return df
 
 
 
-def write_multi_geneset_file(df_multi_gene_set, args):
+def write_multi_geneset_file(df_multi_gene_set, out_dir, out_prefix):
 	"""
 	Write output multi geneset file. 
 	Function checks for existing outfile and check if the data in df_multi_gene_set matches the existing.
@@ -214,7 +210,7 @@ def write_multi_geneset_file(df_multi_gene_set, args):
 		- any existing file_out_multi_geneset should NEVER change. 
 		- all annotations in the .annot/.ldscore files should be contained in file_out_multi_geneset.
 	"""
-	file_out_multi_geneset = "{}/log.{}.multi_geneset.txt".format(args.out_dir, args.out_prefix)
+	file_out_multi_geneset = "{}/log.{}.multi_geneset.txt".format(out_dir, out_prefix)
 	if os.path.exists(file_out_multi_geneset):
 		print("file_out_multi_geneset={} exists. Check that all of df_multi_gene_set matches (a subset) of its content.".format(file_out_multi_geneset))
 		df_existing = pd.read_csv(file_out_multi_geneset, sep="\t", index_col=False)
@@ -246,7 +242,7 @@ def write_multi_geneset_file(df_multi_gene_set, args):
 		df_multi_gene_set.to_csv(file_out_multi_geneset, sep="\t", index=False)
 
 
-def _write_multi_geneset_file_DEPRECATED_UPDATE_EXISTING_FILE(df_multi_gene_set, args):
+def _write_multi_geneset_file_DEPRECATED_UPDATE_EXISTING_FILE(df_multi_gene_set, out_dir, out_prefix):
 	"""
 	FUNCTION WORKS BUT ITS USE IS DEPRECATED. 
 	DEPRECATION NOTES: We do not want to add/update any existing file_out_multi_geneset, because we do not recalculate annot/ldscore files if they already exists.
@@ -257,7 +253,7 @@ def _write_multi_geneset_file_DEPRECATED_UPDATE_EXISTING_FILE(df_multi_gene_set,
 	The purpose of outputting this file, is to keep track of what annotation and annotation values were used to generate the ldscore/annot files in the out_dir
 	Function checks for existing outfile and updates it if it exists.
 	"""
-	file_out_multi_geneset = "{}/log.{}.multi_geneset.txt".format(args.out_dir, args.out_prefix)
+	file_out_multi_geneset = "{}/log.{}.multi_geneset.txt".format(out_dir, out_prefix)
 	if os.path.exists(file_out_multi_geneset):
 		print("file_out_multi_geneset={} exists. Will merge df_multi_gene_set with its content.".format(file_out_multi_geneset))
 		df_existing = pd.read_csv(file_out_multi_geneset, sep="\t", index_col=False)
@@ -295,9 +291,8 @@ def _write_multi_geneset_file_DEPRECATED_UPDATE_EXISTING_FILE(df_multi_gene_set,
 		df_multi_gene_set.to_csv(file_out_multi_geneset, sep="\t", index=False)
 
 
-def read_multi_gene_set_file(args):
-	file_multi_gene_set = args.file_multi_gene_set
-	if args.flag_wgcna:
+def read_multi_gene_set_file(file_multi_gene_set, out_dir, out_prefix, flag_encode_as_binary_annotation, flag_mouse, flag_wgcna, print_log_files=True):
+	if flag_wgcna:
 		df_multi_gene_set = pd.read_csv(file_multi_gene_set) # compression='infer' default
 		dict_rename_columns = {"module":"annotation", "ensembl":"gene_input", "pkME":"annotation_value"}
 		### Check if all the necessary column names are in the header. 
@@ -312,12 +307,12 @@ def read_multi_gene_set_file(args):
 	else:
 		df_multi_gene_set = pd.read_csv(file_multi_gene_set, sep=None, header=None, engine='python') # sep=None: automatically detect the separator
 		df_multi_gene_set.columns = df_multi_gene_set.columns.map(str) # because header=None, the .columns is of type integer (Int64Index(.., dtype='int64')). We need to map array to string before we can rename the columns below
-		if args.flag_encode_as_binary_annotation:
+		if flag_encode_as_binary_annotation:
 			df_multi_gene_set.columns.values[[0,1]] = ["annotation", "gene_input"] # .values() is needed to avoid TypeError
 			# ALTERNATIVE ---> https://stackoverflow.com/a/43759994/6639640: df.rename(columns={ df.columns[1]: "your value" })
 		else:
 			df_multi_gene_set.columns.values[[0,1,2]] = ["annotation", "gene_input", "annotation_value"]
-	if args.flag_encode_as_binary_annotation:
+	if flag_encode_as_binary_annotation:
 		print("Converting to binary encoding")
 		df_multi_gene_set["annotation_value"] = 1 # binary encoding. All genes get the value 1.
 	else:
@@ -327,11 +322,11 @@ def read_multi_gene_set_file(args):
 			raise Exception("ERROR: your df_multi_gene_set contains negative annotation values. Will not create annotation files.")
 	
 	### Check if annotation names are 'valid'
-	bool_invalid_annotation_names = df_multi_gene_set["annotation"].str.contains(r"[\s/]",regex=True) # character class of whitespace and forward slash
+	bool_invalid_annotation_names = df_multi_gene_set["annotation"].str.contains(r"[\s/]|__",regex=True) # character class of whitespace, forward slash and double underscore
 	if bool_invalid_annotation_names.any():
 		print("file_multi_gene_set header of invalid annotation names:")
 		print(df_multi_gene_set[bool_invalid_annotation_names].head(10))
-		raise ValueError("The 'annotation' column file_multi_gene_set contains whitespace or forward slash (/). Please remove them before running this script.")
+		raise ValueError("The 'annotation' column file_multi_gene_set contains whitespace, forward slash (/) or double underscore (__). Please remove them before running this script.")
 		# df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"\s+", "_",regex=True) 
 		# ^ any whitespace in annotation_name column in file_multi_gene_set will be converted to underscore ('_').  
 		# ^ This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
@@ -347,26 +342,24 @@ def read_multi_gene_set_file(args):
 	print("Annotation value summary stats:")
 	df_annot_value_sumstats = df_multi_gene_set.groupby("annotation")["annotation_value"].agg(["mean", "std", "max", "min", "count"])
 	print(df_annot_value_sumstats)
-	file_out_annot_value_sumstatsstats = "{}/log.{}.make_annotation_value_sumstats.txt".format(args.out_dir, args.out_prefix)
-	df_annot_value_sumstats.to_csv(file_out_annot_value_sumstatsstats, sep="\t")
-
-
+	file_out_annot_value_sumstatsstats = "{}/log.{}.make_annotation_value_sumstats.txt".format(out_dir, out_prefix)
+	if print_log_files and not os.path.exists(file_out_annot_value_sumstatsstats):
+		df_annot_value_sumstats.to_csv(file_out_annot_value_sumstatsstats, sep="\t")
+	### Ortholog mapping
+	if flag_mouse:
+		df_multi_gene_set = map_ensembl_genes_mouse_to_human(df_multi_gene_set, out_dir, out_prefix, print_log_files) # adds "gene" column
+	else:
+		df_multi_gene_set["gene"] = df_multi_gene_set["gene_input"] # copy
 	print("========================== STATS file_multi_gene_set ====================")
 	print("Number of gene sets: {}".format(df_multi_gene_set["annotation"].nunique()))
 	print("=========================================================================")
-	if args.flag_mouse:
-		df_multi_gene_set = map_ensembl_genes_mouse_to_human(df_multi_gene_set, args) # adds "gene" column
-	else:
-		df_multi_gene_set["gene"] = df_multi_gene_set["gene_input"] # copy
 	### re-arrange column orders (to make output consistent). 
-	### Here we ensure that "annotation", "gene", "annotation_value" columns are always in the same positions.
-	### df_multi_gene_set can have any number of columns after these three columns.
+	# Here we ensure that "annotation", "gene", "annotation_value" columns are always in the same positions.
+	# df_multi_gene_set can have any number of columns after these three columns.
 	cols = df_multi_gene_set.columns.tolist()
 	cols_first = [cols.pop(cols.index(x)) for x in ["annotation", "gene", "annotation_value"]] # OBS: this modifies cols.
 	cols = cols_first + cols # extend list
 	df_multi_gene_set = df_multi_gene_set[cols] # ALT df.reindex(columns=cols)
-	### write_multi_geneset_file
-	write_multi_geneset_file(df_multi_gene_set, args)
 	return df_multi_gene_set
 
 
@@ -608,14 +601,14 @@ if __name__ == "__main__":
 	parser.add_argument('--flag_encode_as_binary_annotation', action='store_true', help='set flag if LDSC annotations should be encoded as binary annotations {0,1}. The default is to use the continuous annotations, which require an appropriate field in the file_multi_gene_set')
 	parser.add_argument('--flag_wgcna', action='store_true', help='set flag if file_multi_gene_set input is from WGCNA pipeline')
 	parser.add_argument('--flag_mouse', action='store_true', help='set flag if ile_multi_gene_set input has mouse genes (instead of human)')
-	parser.add_argument('--n_parallel_jobs', type=int, help='Number of processes. Default 22 (the number of chromosomes)')
+	parser.add_argument('--n_parallel_jobs', type=int, help='Number of processes. Will at most use 22 parallel processes (the number of chromosomes)')
 
 	#parser.add_argument('--annot-file', type=str, help='the name of the annot file to output.')
 
 
 	args = parser.parse_args()
 
-	list_chromosomes = range(1,23) # 1...22
+	LIST_CHROMOSOMES = range(1,23) # 1...22
 
 	### Make out_dir
 	if not os.path.exists(args.out_dir):
@@ -623,18 +616,20 @@ if __name__ == "__main__":
 		os.makedirs(args.out_dir)
 
 	### check that all bim files exists
-	bim_files = ["{}.{}.bim".format(args.bimfile_basename, chromosome) for chromosome in list_chromosomes] # e.g. <LONGPATH/1000G.EUR.QC>.15.bim for chromosome 15
+	bim_files = ["{}.{}.bim".format(args.bimfile_basename, chromosome) for chromosome in LIST_CHROMOSOMES] # e.g. <LONGPATH/1000G.EUR.QC>.15.bim for chromosome 15
 	if not all([os.path.exists(bim_file) for bim_file in bim_files]):
 		raise ValueError("Could not find bim files for all/any chromosomes matching bimfile_basename={}".format(args.bimfile_basename))
 
 	### read coord file
 	df_gene_coord = pd.read_csv(args.file_gene_coord, delim_whitespace = True)
 	### read gene list file (a list of gene list files)
-	df_multi_gene_set = read_multi_gene_set_file(args)
+	df_multi_gene_set = read_multi_gene_set_file(args.file_multi_gene_set, args.out_dir, args.out_prefix, args.flag_encode_as_binary_annotation, args.flag_mouse, args.flag_wgcna)
+	### write multi_geneset_file
+	write_multi_geneset_file(df_multi_gene_set, args.out_dir, args.out_prefix)
 
 	### Check for existing annot files
-	pool = multiprocessing.Pool(processes=len(list_chromosomes))
-	list_chromosomes_to_run = pool.map(functools.partial(check_annot_file, args=args), list_chromosomes) # check_annot_file returns None if annot file exists and is ok
+	pool = multiprocessing.Pool(processes=len(LIST_CHROMOSOMES))
+	list_chromosomes_to_run = pool.map(functools.partial(check_annot_file, args=args), LIST_CHROMOSOMES) # check_annot_file returns None if annot file exists and is ok
 	list_chromosomes_to_run = [x for x in list_chromosomes_to_run if x is not None] # filter away None
 
 	print("========================== CHROMOSOMES TO RUN ====================")

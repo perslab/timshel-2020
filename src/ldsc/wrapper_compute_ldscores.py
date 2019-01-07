@@ -64,7 +64,7 @@ import subprocess
 
 
 python_exec = "/tools/anaconda/2-4.4.0/bin/python2" # runs on python2
-path_ldsc_script = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc/ldsc_timshel.py" # important to use this version of the script, that will not compute the 'Annotation Correlation Matrix' to the log file
+path_ldsc_script = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" # important to use this version of the script, that will not compute the 'Annotation Correlation Matrix' to the log file
 prefix_file_plink_per_chr = "/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC" # e.g. full file name will be <1000G.EUR.QC>.22.<bed,bim,fam>
 # dir_file_print_snps = "/raid5/projects/timshel/sc-genetics/ldsc/data/hapmap3_snps" # full name will be <dir_file_print_snps>/hm.22.snp the LD scores are calculated/reported only for HapMap3 SNPs (--print-snps flag)
 file_print_snps = "/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/print_snps.txt" # THIS is the file used for the "--print-snps" for ALL the baseline models. The files hm.1.snp, hm.2.snp, ..., does NOT contain all SNPs.

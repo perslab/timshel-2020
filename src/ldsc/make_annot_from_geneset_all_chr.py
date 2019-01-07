@@ -26,8 +26,17 @@ import pdb
 
 # import gzip
 
-
-
+### check Numpy version
+list_np_version = [int(x) for x in np.__version__.split(".")] # np.__version__ returns a string, e.g. '1.13.0'. Note that not all modules come with a __version__ attribute.
+if not ((list_np_version[0] >= 1) and (list_np_version[1] >= 13)):
+	raise Exception("This script require Numpy version >= 1.13.0 because of the use of numpy.isin(). Current Numpy version: {}".format(np.__version__))
+### ALTERNATIVE
+# try:
+# 	x = np.array(["A", "B", "C"])
+# 	y = np.array(["B"])
+# 	np.isin(x, y)
+# except AttributeError:
+# 	raise ImportError('This script requires Numpy version >= 1.13.0 because of the use of numpy.isin()')
 
 ###################################### USAGE ######################################
 
@@ -190,15 +199,61 @@ def map_ensembl_genes_mouse_to_human(df, args):
 	return df
 
 
+def write_multi_geneset_file(df_multi_gene_set, args):
+	"""
+	Write output multi geneset file. 
+	The purpose of outputting this file, is to keep track of what annotation and annotation values were used to generate the ldscore/annot files in the out_dir
+	Function checks for existing outfile and updates it if it exists.
+	"""
+	file_out_multi_geneset = "{}/log.{}.multi_geneset.txt".format(args.out_dir, args.out_prefix)
+	if os.path.exists(file_out_multi_geneset):
+		print("file_out_multi_geneset={} exists. Will merge df_multi_gene_set with its content.".format(file_out_multi_geneset))
+		df_existing = pd.read_csv(file_out_multi_geneset, sep="\t", index_col=False)
+		### 'Update' existing information. 
+		df_combine = df_existing.set_index(["annotation", "gene_input"], verify_integrity=True).combine_first(df_multi_gene_set.set_index(["annotation", "gene_input"])) # Row indexes are used for the 'join', so both data frames needs to have meaningful indexes. The 'calling' df values are the default. 
+		# REF 1 (specific): https://stackoverflow.com/questions/45575165/how-to-merge-overlapping-columns
+		# REF 2 (long and good): https://stackoverflow.com/questions/53645882/pandas-merging-101
+		# ^.combine_first() DOCS: Combine two DataFrame objects and default to non-null values in frame calling the method. Result index columns will be the **UNION** of the respective indexes and columns
+		# ^ we use combine_first() instead of .merge() because we want to MERGE OVERLAPPING COLUMNS between the data frames. .merge() will give us annotation_value_x or annotation_value_y, etc. 
+		# ^ .set_index(): we do verify_integrity to be extractra careful. It is not strictly needed
+
+		### Check if the any annotation values differ between annotations found in both new and existing df_multi_gene_set.
+		df_merge = pd.merge(df_existing, df_multi_gene_set, on=["annotation", "gene"]) 
+		### SNIPPET (example). We only care about annotation_value_x and annotation_value_y
+		# annotation	gene_input_x	gene	annotation_value_x	cell_cluster_x	hgcn_x	annotation_value_y	cell_cluster_y	gene_input_y	hgcn_y
+		# 0	antiquewhite3	ENSMUSG00000017639	ENSG00000131242	0.888954	Aorta_endothelial cell	Rab11fip4	0.888954	Aorta_endothelial cell	ENSMUSG00000017639	Rab11fip4
+		# 1	antiquewhite3	ENSMUSG00000004233	ENSG00000116874	0.860975	Aorta_endothelial cell	Wars2	0.860975	Aorta_endothelial cell	ENSMUSG00000004233	Wars2
+		df_merge.dropna(axis=0, subset=["annotation_value_x", "annotation_value_y"], inplace=True) # keep only rows that where found in both existing and new data frame
+		if len(df_merge) > 0: # we might not have any overlap between the new and existing df_multi_gene_set, so this if statement is necessary.
+			bool_is_close = np.isclose(df_merge["annotation_value_x"].values, df_merge["annotation_value_y"].values)
+			if not bool_is_close.all():
+				print("Existing file_out_multi_geneset={} contains overlapping annotations with df_multi_gene_set that differ in their annotation_value column. These should be identical to avoid confusion of what gene annotations where used to generate the ldscore files in the --out-dir. Solutions: 1) make a completely new --out_dir for your new/updated annotations; or 2) change the --file_multi_gene_set to not have overlapping annotations".format(file_out_multi_geneset))
+				print("Printinh overlapping and differing annotations: _x is existing values; _y is new values from df_multi_gene_set")
+				print(df_merge.loc[~bool_is_close, :])
+				raise Exception("df_multi_gene_set contain annotation values that differ between annotations found in both 'new' df_multi_gene_set and existing df_multi_gene_set.")
+		df_combine.to_csv(file_out_multi_geneset, sep="\t", index=False)
+		print("Done merging new and existing file.")
+		### Print some additional info
+		bool_idx_new = ~df_multi_gene_set.set_index(["annotation", "gene_input"]).index.isin(df_existing.set_index(["annotation", "gene_input"]).index) # could also use MultiIndex.from_arrays() to create index, which would be faster (because we did not have to return whole data frame).
+		bool_idx_new
+		print("Added n={} new annotation-gene entries to existing file_out_multi_geneset.".format(sum(bool_idx_new)))
+		print("Unique new annotation names are:")
+		print("\n".join(df_multi_gene_set.loc[bool_idx_new, "annotation"].unique()))
+	else:
+		df_multi_gene_set.to_csv(file_out_multi_geneset, sep="\t", index=False)
+
+
 def read_multi_gene_set_file(args):
 	file_multi_gene_set = args.file_multi_gene_set
 	if args.flag_wgcna:
 		df_multi_gene_set = pd.read_csv(file_multi_gene_set) # compression='infer' default
 		dict_rename_columns = {"module":"annotation", "ensembl":"gene_input", "pkME":"annotation_value"}
-		if not np.all(np.isin(dict_rename_columns.keys(), df_multi_gene_set.columns.values)):  # we do this to generate a more helpful error message because pandas .rename() does not throw an error if the keys of the 'rename dict' are not in the column names of the data frame. So the script will fail downstream.
+		### Check if all the necessary column names are in the header. 
+		### We do this to generate a more helpful error message because pandas .rename() does not throw an error if the keys of the 'rename dict' are not in the column names of the data frame. So the script will fail downstream.
+		if not np.all(np.isin(list(dict_rename_columns.keys()), df_multi_gene_set.columns.values)): # list(dict.keys()) needed for py3 compatibility
 			print("File_multi_gene_set header:")
 			print(df_multi_gene_set.head(10))
-			raise ValueError("Could not find all of the expected header names in file_multi_gene_set={}. The following column headers must be in the file: {}".format(file_multi_gene_set, dict_rename_columns.keys()))
+			raise ValueError("Could not find all of the expected header names in file_multi_gene_set={}. The following column headers must be in the file: {}. Found the following headers in the file:\n{}".format(file_multi_gene_set, list(dict_rename_columns.keys()), "\n".join([str(x) for x in df_multi_gene_set.columns.tolist()])))
 		df_multi_gene_set.rename(columns=dict_rename_columns, inplace=True) # df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'})
 		# ^ 'module' = first column; will later be renamed to 'annotation'
 		# ^ 'ensembl' = second column; will later be renamed to 'gene'
@@ -218,13 +273,23 @@ def read_multi_gene_set_file(args):
 			raise Exception("ERROR: your df_multi_gene_set contains non-numeric annotation values. Will not create annotation files.")
 		if (df_multi_gene_set["annotation_value"] < 0).any():
 			raise Exception("ERROR: your df_multi_gene_set contains negative annotation values. Will not create annotation files.")
-	### Make filepath and LDSC 'valid' annotation name (read: clean up the names!)
-	df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"\s+", "_",regex=True) 
-	# ^ any whitespace in annotation_name column in file_multi_gene_set will be converted to underscore ('_').  
-	# ^ This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
-	df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"/", "-",regex=True) 
-	# ^ We need to avoid forward slash (/) in the filenames when files are split per annotation (/per_annot dir). 
-	# ^ If forward slashes are not replaced, we would get an error when looking for or writing files such as "celltypes.campbell_lvl1.all.campbell_lvl1.a06.NG2/OPC.ges.21.l2.M" when the annotation name is "a06.NG2/OPC.ges"
+	
+	### Check if annotation names are 'valid'
+	bool_invalid_annotation_names = df_multi_gene_set["annotation"].str.contains(r"[\s/]",regex=True) # character class of whitespace and forward slash
+	if bool_invalid_annotation_names.any():
+		print("file_multi_gene_set header of invalid annotation names:")
+		print(df_multi_gene_set[bool_invalid_annotation_names].head(10))
+		raise ValueError("The 'annotation' column file_multi_gene_set contains whitespace or forward slash (/). Please remove them before running this script.")
+		# df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"\s+", "_",regex=True) 
+		# ^ any whitespace in annotation_name column in file_multi_gene_set will be converted to underscore ('_').  
+		# ^ This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
+		# df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"/", "-",regex=True) 
+		# ^ We need to avoid forward slash (/) in the filenames when files are split per annotation (/per_annot dir). 
+		# ^ If forward slashes are not replaced, we would get an error when looking for or writing files such as "celltypes.campbell_lvl1.all.campbell_lvl1.a06.NG2/OPC.ges.21.l2.M" when the annotation name is "a06.NG2/OPC.ges"
+	### Check for duplicated entries
+	bool_duplicated = df_multi_gene_set.duplicated(subset=["annotation", "gene_input"])
+	if bool_duplicated.any():
+		raise ValueError("file_multi_gene_set contains duplicated genes within an annotation (i.e. non-unique combinations of 'annotation' and 'gene_input' columns). Fix and rerun.")
 	print("Read file_multi_gene_set. Header of the parsed/processed file:")
 	print(df_multi_gene_set.head(10))
 	print("Annotation value summary stats:")
@@ -241,9 +306,15 @@ def read_multi_gene_set_file(args):
 		df_multi_gene_set = map_ensembl_genes_mouse_to_human(df_multi_gene_set, args) # adds "gene" column
 	else:
 		df_multi_gene_set["gene"] = df_multi_gene_set["gene_input"] # copy
+	### re-arrange column orders (to make output consistent). 
+	### Here we ensure that "annotation", "gene", "annotation_value" columns are always in the same positions.
+	### df_multi_gene_set can have any number of columns after these three columns.
+	cols = df_multi_gene_set.columns.tolist()
+	cols_first = [cols.pop(cols.index(x)) for x in ["annotation", "gene", "annotation_value"]] # OBS: this modifies cols.
+	cols = cols_first + cols # extend list
+	df_multi_gene_set = df_multi_gene_set[cols] # ALT df.reindex(columns=cols)
 	### write_multi_geneset_file
-	file_out_multi_geneset = "{}/log.{}.multi_geneset.txt".format(args.out_dir, args.out_prefix)
-	df_multi_gene_set.to_csv(file_out_multi_geneset, sep="\t", index=False)
+	# write_multi_geneset_file(df_multi_gene_set, args)
 	return df_multi_gene_set
 
 
@@ -302,8 +373,12 @@ def get_annot_file_path(chromosome, args):
 
 
 def check_annot_file(chromosome, args):
-	### check for existing annot file (and it's integrity)
+	""" 
+	Function to check for existing annot file (and it's integrity)
+	Returns None if no new annotation file should be created; else returns chromosome variable.
+	"""
 	file_out_annot_combined = get_annot_file_path(chromosome, args)
+	flag_annotation_file_pass_check = False # default value is that file is not ok.
 	if os.path.exists(file_out_annot_combined):
 		print("CHR={} | file_out_annot_combined exists: {}. Will check for integrity...".format(chromosome, file_out_annot_combined))
 		cmd_gzip_test = "gzip -t {}".format(file_out_annot_combined)
@@ -313,11 +388,12 @@ def check_annot_file(chromosome, args):
 			# CORRUPT FILE --> gzip -t Neurons_ClusterName.COMBINED_ANNOT.17.annot.gz --> "gzip: Neurons_ClusterName.COMBINED_ANNOT.17.annot.gz: unexpected end of file"
 			p.wait()
 		if p.returncode == 0: # gz file ok
-			print("CHR={} | file_out_annot_combined integrity OK: {}. Will not make new file".format(chromosome, file_out_annot_combined))
-			return None
-		else: # file not ok.
-			return chromosome
-	else: # file does not exist
+			print("CHR={} | file_out_annot_combined integrity OK: {}. [NB: we assume the annot file contains all annotations in the file_multi_gene_set]".format(chromosome, file_out_annot_combined))
+			# TODO POTENTIAL: open the file_out_annot_combined and check that it contains all file_multi_gene_set. Requires parsing df_multi_gene_set to this function.
+			flag_annotation_file_pass_check = True
+	if flag_annotation_file_pass_check:
+		return None # None is filtered out later.
+	else:
 		return chromosome
 
 
@@ -487,20 +563,23 @@ if __name__ == "__main__":
 
 	args = parser.parse_args()
 
-	### TODO
-	# [ ] check that ALL bim files exist. (so pool of workers does not fail)
-
-	# out_prefix = args.out_prefix
-	# out_dir = args.out_dir
-
+	list_chromosomes = range(1,23) # 1...22
 
 	### Make out_dir
 	if not os.path.exists(args.out_dir):
 		print("Making output dir {}".format(args.out_dir))
 		os.makedirs(args.out_dir)
 
+	### check that all bim files exists
+	bim_files = ["{}.{}.bim".format(args.bimfile_basename, chromosome) for chromosome in list_chromosomes] # e.g. <LONGPATH/1000G.EUR.QC>.15.bim for chromosome 15
+	if not all([os.path.exists(bim_file) for bim_file in bim_files]):
+		raise ValueError("Could not find bim files for all/any chromosomes matching bimfile_basename={}".format(args.bimfile_basename))
 
-	list_chromosomes = range(1,23) # 1...22
+	### read coord file
+	df_gene_coord = pd.read_csv(args.file_gene_coord, delim_whitespace = True)
+	### read gene list file (a list of gene list files)
+	df_multi_gene_set = read_multi_gene_set_file(args)
+
 	### Check for existing annot files
 	pool = multiprocessing.Pool(processes=len(list_chromosomes))
 	list_chromosomes_to_run = pool.map(functools.partial(check_annot_file, args=args), list_chromosomes) # check_annot_file returns None if annot file exists and is ok
@@ -514,10 +593,6 @@ if __name__ == "__main__":
 		print("Quitting...")
 		sys.exit()
 
-	### read coord file
-	df_gene_coord = pd.read_csv(args.file_gene_coord, delim_whitespace = True)
-	### read gene list file (a list of gene list files)
-	df_multi_gene_set = read_multi_gene_set_file(args)
 
 	### Determine number of parallel processes to run (must be done after we have read df_multi_gene_set)
 	if args.n_parallel_jobs is None: # no argument given

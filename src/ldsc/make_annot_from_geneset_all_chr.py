@@ -118,8 +118,9 @@ if not ((list_np_version[0] >= 1) and (list_np_version[1] >= 13)):
 ###################################### DOCUMENTATION ######################################
 
 ### General remarks:
-# - any whitespace in annotation_name column in file_multi_gene_set will be converted to underscore ('_'). 
+# - whitespace or forward slash are not allowed in annotation_name column in file_multi_gene_set.
 #   This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
+# - If a log.<out_prefix>.multi_geneset.txt file exists, the file_multi_gene_set/df_multi_gene_set must contain the same annotations (or a subset of them) with the same annotation values.
 
 ### For continuous annotations:
 # - When a variant is spanned by multiple genes with the XXX kb window, we assign the maximum annotation_value.
@@ -133,7 +134,6 @@ if not ((list_np_version[0] >= 1) and (list_np_version[1] >= 13)):
 
 
 # @@@@@@@@@@@@@@@@@@ file_multi_gene_set @@@@@@@@@@@@@@@@@@
-
 ### WGCNA input (flag_wgcna = True). 
 ### We use the 'module' column as annotation name, since they should be unique
 ### See read_multi_gene_set_file() for what columns are used in the file.
@@ -145,8 +145,10 @@ if not ((list_np_version[0] >= 1) and (list_np_version[1] >= 13)):
 
 ### non WGCNA input.
 ### NO HEADER. Delim=csv. 
-### Col1=annotation_name, Col2=EnsemblID (mouse or human), Col3
-### Col3 is not required (and not used) if --flag_encode_as_binary_annotation is set
+### Col1: annotation_name. Must not contain whitespace or forward slash.
+### Col2: EnsemblID (mouse or human)
+### Col3: is not required (and not used) if --flag_encode_as_binary_annotation is set
+### ColN: any number of additional columns are allowed.
 # brain_cortex,ENSMUSG00000017639,0.34
 # brain_cortex,ENSMUSG00000004233,0.01
 # brain_cortex,ENSMUSG00000031487,0.22
@@ -199,8 +201,58 @@ def map_ensembl_genes_mouse_to_human(df, args):
 	return df
 
 
+
 def write_multi_geneset_file(df_multi_gene_set, args):
 	"""
+	Write output multi geneset file. 
+	Function checks for existing outfile and check if the data in df_multi_gene_set matches the existing.
+	If a file_out_multi_geneset file exists, the df_multi_gene_set must contain the same annotations (or a subset of them) with the SAME annotation values.
+	
+	OUR DESIGN CHOICE 
+		- the workflow is intended to ONCE AND FOR ALL calculate combined .annot and .ldscore files. 
+			- These combined files should not be modfifed (appended to) afterwards because the overhead of such 'add hoc' computations are too high compared to initiating a new out_dir.
+		- any existing file_out_multi_geneset should NEVER change. 
+		- all annotations in the .annot/.ldscore files should be contained in file_out_multi_geneset.
+	"""
+	file_out_multi_geneset = "{}/log.{}.multi_geneset.txt".format(args.out_dir, args.out_prefix)
+	if os.path.exists(file_out_multi_geneset):
+		print("file_out_multi_geneset={} exists. Check that all of df_multi_gene_set matches (a subset) of its content.".format(file_out_multi_geneset))
+		df_existing = pd.read_csv(file_out_multi_geneset, sep="\t", index_col=False)
+		### Check that all annotations in df_multi_gene_set are found in the existing file 
+		bool_idx_exists = df_multi_gene_set.set_index(["annotation", "gene_input"]).index.isin(df_existing.set_index(["annotation", "gene_input"]).index) # returns NumPy array of boolean values.
+		if not bool_idx_exists.all():
+			print("df_multi_gene_set contains n={} annotation-gene combinations not found in existing file_out_multi_geneset.".format(sum(~bool_idx_exists)))
+			print("Annotation names with annotation-gene combinations not in existing file are:")
+			print("\n".join(df_multi_gene_set.loc[~bool_idx_exists, "annotation"].unique()))
+			print("Header of df_multi_gene_set not in existing file:")
+			print(df_multi_gene_set.loc[~bool_idx_exists].head())
+			raise ValueError("df_multi_gene_set contains new annotation-gene combinations")
+		### Check if the any annotation values differ between annotations found in both new and existing df_multi_gene_set.
+		df_merge = pd.merge(df_existing, df_multi_gene_set, on=["annotation", "gene"]) 
+		### SNIPPET (example). We only care about annotation_value_x and annotation_value_y
+		# annotation	gene_input_x	gene	annotation_value_x	cell_cluster_x	hgcn_x	annotation_value_y	cell_cluster_y	gene_input_y	hgcn_y
+		# 0	antiquewhite3	ENSMUSG00000017639	ENSG00000131242	0.888954	Aorta_endothelial cell	Rab11fip4	0.888954	Aorta_endothelial cell	ENSMUSG00000017639	Rab11fip4
+		# 1	antiquewhite3	ENSMUSG00000004233	ENSG00000116874	0.860975	Aorta_endothelial cell	Wars2	0.860975	Aorta_endothelial cell	ENSMUSG00000004233	Wars2
+		df_merge.dropna(axis=0, subset=["annotation_value_x", "annotation_value_y"], inplace=True) # keep only rows that where found in both existing and new data frame
+		if len(df_merge) > 0: # we might not have any overlap between the new and existing df_multi_gene_set, so this if statement is necessary.
+			bool_is_close = np.isclose(df_merge["annotation_value_x"].values, df_merge["annotation_value_y"].values)
+			if not bool_is_close.all():
+				print("Existing file_out_multi_geneset={} contains overlapping annotations with df_multi_gene_set that differ in their annotation_value column. These should be identical to avoid confusion of what gene annotations where used to generate the ldscore files in the --out-dir. Solutions: 1) make a completely new --out_dir for your new/updated annotations; or 2) change the --file_multi_gene_set to not have overlapping annotations".format(file_out_multi_geneset))
+				print("Printing overlapping and differing annotations: _x is existing values; _y is new values from df_multi_gene_set")
+				print(df_merge.loc[~bool_is_close, :])
+				raise Exception("df_multi_gene_set contain annotation values that differ between annotations found in both 'new' df_multi_gene_set and existing df_multi_gene_set.")
+		print("Ok, df_multi_gene_set and file_out_multi_geneset matches.")
+	else:
+		df_multi_gene_set.to_csv(file_out_multi_geneset, sep="\t", index=False)
+
+
+def _write_multi_geneset_file_DEPRECATED_UPDATE_EXISTING_FILE(df_multi_gene_set, args):
+	"""
+	FUNCTION WORKS BUT ITS USE IS DEPRECATED. 
+	DEPRECATION NOTES: We do not want to add/update any existing file_out_multi_geneset, because we do not recalculate annot/ldscore files if they already exists.
+	It only makes sense to update the existing file, if we also update the annot/ldscore files.
+
+
 	Write output multi geneset file. 
 	The purpose of outputting this file, is to keep track of what annotation and annotation values were used to generate the ldscore/annot files in the out_dir
 	Function checks for existing outfile and updates it if it exists.
@@ -228,7 +280,7 @@ def write_multi_geneset_file(df_multi_gene_set, args):
 			bool_is_close = np.isclose(df_merge["annotation_value_x"].values, df_merge["annotation_value_y"].values)
 			if not bool_is_close.all():
 				print("Existing file_out_multi_geneset={} contains overlapping annotations with df_multi_gene_set that differ in their annotation_value column. These should be identical to avoid confusion of what gene annotations where used to generate the ldscore files in the --out-dir. Solutions: 1) make a completely new --out_dir for your new/updated annotations; or 2) change the --file_multi_gene_set to not have overlapping annotations".format(file_out_multi_geneset))
-				print("Printinh overlapping and differing annotations: _x is existing values; _y is new values from df_multi_gene_set")
+				print("Printing overlapping and differing annotations: _x is existing values; _y is new values from df_multi_gene_set")
 				print(df_merge.loc[~bool_is_close, :])
 				raise Exception("df_multi_gene_set contain annotation values that differ between annotations found in both 'new' df_multi_gene_set and existing df_multi_gene_set.")
 		df_combine.to_csv(file_out_multi_geneset, sep="\t", index=False)
@@ -314,7 +366,7 @@ def read_multi_gene_set_file(args):
 	cols = cols_first + cols # extend list
 	df_multi_gene_set = df_multi_gene_set[cols] # ALT df.reindex(columns=cols)
 	### write_multi_geneset_file
-	# write_multi_geneset_file(df_multi_gene_set, args)
+	write_multi_geneset_file(df_multi_gene_set, args)
 	return df_multi_gene_set
 
 

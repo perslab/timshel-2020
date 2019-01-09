@@ -125,8 +125,8 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 		raise Exception("Got non zero return code running command:\n{}".format(cmd))
 
 	### split LD scores
-	### This script will read 1 ".COMBINED_ANNOT.$CHR.l2.ldscore.gz" file  (N_SNPs x N_Modules) per parallel process.
-	###  *RESOURCE NOTES*: this script may use quiet a lot of memory for many modules? Not sure
+	### This script will read 1 ".COMBINED_ANNOT.$CHR.l2.ldscore.gz" file  (N_SNPs x N_ANNOTATION) per parallel process.
+	###  *RESOURCE NOTES*: this script does not use much memory (it uses < 10-50GB?) and can easy be run with full parallelization (n=22)
 	cmd="{PYTHON3_EXEC} split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 22".format(PYTHON3_EXEC=PYTHON3_EXEC, prefix_genomic_annot=prefix_genomic_annot)
 	print("Running command: {}".format(cmd))
 	p = subprocess.Popen(cmd, shell=True)
@@ -160,9 +160,9 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 def get_all_genes_ref_ld_chr_name(dataset):
 	""" Function to get the ref_ld_chr_name for 'all genes annotation' for ldsc.py --h2/--h2-cts command """
 	# *IMPORTANT*: ldsc_all_genes_ref_ld_chr_name MUST be full file path PLUS trailing "."
-	dict_dataset_all_genes_path_prefix = {"mousebrain":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset.all_genes_in_dataset.mousebrain.",
-						 				"tabula_muris":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset.all_genes_in_dataset.tabula_muris.",
-						 				"campbell":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset.all_genes_in_dataset.campbell.",
+	dict_dataset_all_genes_path_prefix = {"mousebrain":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset__all_genes_in_dataset.mousebrain.",
+						 				"tabula_muris":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset__all_genes_in_dataset.tabula_muris.",
+						 				"campbell":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset__all_genes_in_dataset.campbell.",
 						 				 }
 	if not dataset in dict_dataset_all_genes_path_prefix:
 		raise KeyError("dataset={} is not found in dict_dataset_all_genes_path_prefix.".format(dataset))
@@ -234,28 +234,28 @@ PYTHON3_EXEC = "/tools/anaconda/3-4.4.0/envs/py3_anaconda3_PT180510/bin/python3"
 PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2"
 
 PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
-N_PARALLEL_LDSC_REGRESSION_JOBS = 4
+N_PARALLEL_LDSC_REGRESSION_JOBS = 2
 # FLAG_BINARY = True
 FLAG_BINARY = False
 
-list_gwas = ["BMI_Yengo2018"]
+# list_gwas = ["BMI_Yengo2018"]
 
-# list_gwas = [
-# "BMI_Yengo2018",
-# "ADHD_PGC_Demontis2017",
-# "AN_PGC_Duncan2017",
-# "ASD_iPSYCH_PGC_Grove2018",
-# "blood_EOSINOPHIL_COUNT",
-# "EA3_Lee2018",
-# "HEIGHT_Yengo2018",
-# "LIPIDS_HDL_Willer2013",
-# "MDD_PGC_Wray2018",
-# "RA_Okada2014",
-# "SCZ_Ripke2014",
-# "WHR_adjBMI_Shungin2015",
-# "WHR_Shungin2015",
-# "INSOMNIA_Jansen2018",
-# ]
+list_gwas = [
+"ADHD_PGC_Demontis2017",
+"AN_PGC_Duncan2017",
+"ASD_iPSYCH_PGC_Grove2018",
+"blood_EOSINOPHIL_COUNT",
+"EA3_Lee2018",
+"HEIGHT_Yengo2018",
+"LIPIDS_HDL_Willer2013",
+"MDD_PGC_Wray2018",
+"RA_Okada2014",
+"SCZ_Ripke2014",
+"WHR_adjBMI_Shungin2015",
+"WHR_Shungin2015",
+"INSOMNIA_Jansen2018",
+"BMI_Yengo2018",
+]
 
 
 
@@ -288,7 +288,7 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 ################## WGCNA ##################
 # FLAG_WGCNA = True
 
-# ### FDR significant modules
+# # ### FDR significant modules
 # dict_genomic_annot = {"wgcna.tabula_muris-181214.fdr_sign_celltypes.continuous": 
 # 						{"dataset":"tabula_muris", 
 # 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/tabula_muris-181214.tabula_muris_2_cell_cluster_module_genes.fdr_sign_celltypes.csv"},

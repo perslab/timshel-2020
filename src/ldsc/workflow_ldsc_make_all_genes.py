@@ -13,7 +13,7 @@ import re
 
 
 PYTHON_EXEC = "/tools/anaconda/2-4.4.0/bin/python2" # runs on python2
-PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc/ldsc.py" 
+PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 
 
 ################## CONTROL GENE SET ##################
@@ -75,7 +75,7 @@ if not p.returncode == 0:
 ### split LD scores
 ### This script will read 1 ".COMBINED_ANNOT.$CHR.l2.ldscore.gz" file  (N_SNPs x N_Modules) per parallel process.
 ###  *RESOURCE NOTES*: this script may use quiet a lot of memory for many modules? Not sure
-cmd="{PYTHON_EXEC} split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 4".format(PYTHON_EXEC=PYTHON_EXEC, prefix_genomic_annot=prefix_genomic_annot)
+cmd="{PYTHON_EXEC} split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 22".format(PYTHON_EXEC=PYTHON_EXEC, prefix_genomic_annot=prefix_genomic_annot)
 print("Running command: {}".format(cmd))
 p = subprocess.Popen(cmd, shell=True)
 p.wait()

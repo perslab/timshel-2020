@@ -16,7 +16,7 @@ import make_annot_from_geneset_all_chr
 # Compatibility: Python 2 and 3
 
 ### Run in unbuffered mode
-# time python -u workflow_ldsc_cts.py | tee workflow_ldsc_cts.UNNAMED.out.txt
+# time python workflow_ldsc_cts.py |& tee workflow_ldsc_cts.UNNAMED.out.txt
 
 ###################################### DOCS ######################################
 
@@ -110,19 +110,19 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	p.wait()
 	print("Return code: {}".format(p.returncode))
 	if not p.returncode == 0:
-		raise Exception("Got non zero return code running command:\n{}".format(cmd))
+		raise Exception("make_annot_from_geneset_all_chr.py: Got non zero return code running command:\n{}".format(cmd))
 
 
 	### compute LD scores
 	### *RESOURCE NOTES*: this script uses a lot of CPU. Never run more than 4 parallel jobs. 4 parallel jobs will use ~220% CPU
-	cmd="{PYTHON3_EXEC} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 4".format(PYTHON3_EXEC=PYTHON3_EXEC, prefix_genomic_annot=prefix_genomic_annot)
+	cmd="{PYTHON3_EXEC} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 2".format(PYTHON3_EXEC=PYTHON3_EXEC, prefix_genomic_annot=prefix_genomic_annot)
 	print("Running command: {}".format(cmd))
 	p = subprocess.Popen(cmd, shell=True)
 	p.wait()
 	print("Return code: {}".format(p.returncode))
 	# RUNTIME ----> ~6 h for ~500 modules with --n_parallel_jobs=4
 	if not p.returncode == 0:
-		raise Exception("Got non zero return code running command:\n{}".format(cmd))
+		raise Exception("wrapper_compute_ldscores.py: Got non zero return code running command:\n{}".format(cmd))
 
 	### split LD scores
 	### This script will read 1 ".COMBINED_ANNOT.$CHR.l2.ldscore.gz" file  (N_SNPs x N_ANNOTATION) per parallel process.
@@ -134,7 +134,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	print("Return code: {}".format(p.returncode))
 	# RUNTIME ----> ~10 min
 	if not p.returncode == 0:
-		raise Exception("Got non zero return code running command:\n{}".format(cmd))
+		raise Exception("split_ldscores.py: Got non zero return code running command:\n{}".format(cmd))
 
 	### Write CTS filter
 	file_cts_annotation_filter = write_cts_file_filter(prefix_genomic_annot, file_multi_gene_set)
@@ -152,7 +152,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	print("Return code: {}".format(p.returncode))
 	# RUNTIME ----> 0 min
 	if not p.returncode == 0:
-		raise Exception("Got non zero return code running command:\n{}".format(cmd))
+		raise Exception("make_cts_file.py: Got non zero return code running command:\n{}".format(cmd))
 
 ###################################### UTILS - ALL GENES ######################################
 
@@ -238,24 +238,24 @@ N_PARALLEL_LDSC_REGRESSION_JOBS = 2
 # FLAG_BINARY = True
 FLAG_BINARY = False
 
-# list_gwas = ["BMI_Yengo2018"]
+list_gwas = ["BMI_Yengo2018"]
 
-list_gwas = [
-"ADHD_PGC_Demontis2017",
-"AN_PGC_Duncan2017",
-"ASD_iPSYCH_PGC_Grove2018",
-"blood_EOSINOPHIL_COUNT",
-"EA3_Lee2018",
-"HEIGHT_Yengo2018",
-"LIPIDS_HDL_Willer2013",
-"MDD_PGC_Wray2018",
-"RA_Okada2014",
-"SCZ_Ripke2014",
-"WHR_adjBMI_Shungin2015",
-"WHR_Shungin2015",
-"INSOMNIA_Jansen2018",
-"BMI_Yengo2018",
-]
+# list_gwas = [
+# "ADHD_PGC_Demontis2017",
+# "AN_PGC_Duncan2017",
+# "ASD_iPSYCH_PGC_Grove2018",
+# "blood_EOSINOPHIL_COUNT",
+# "EA3_Lee2018",
+# "HEIGHT_Yengo2018",
+# "LIPIDS_HDL_Willer2013",
+# "MDD_PGC_Wray2018",
+# "RA_Okada2014",
+# "SCZ_Ripke2014",
+# "WHR_adjBMI_Shungin2015",
+# "WHR_Shungin2015",
+# "INSOMNIA_Jansen2018",
+# "BMI_Yengo2018",
+# ]
 
 
 
@@ -263,13 +263,30 @@ list_gwas = [
 ################## Cell-types ##################
 FLAG_WGCNA = False
 
-dict_genomic_annot = {"celltypes.mousebrain.all":
+
+### mousebrain hierarchical_fdr_sign_only_190114
+dict_genomic_annot = {"celltypes.mousebrain.hierarchical_fdr_sign_only_190114":
 						{"dataset":"mousebrain",
-						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
- 					 "celltypes.tabula_muris.all":
- 					  	{"dataset":"tabula_muris",
- 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_fdr_sign_only_190114.txt.gz"},
  					 }
+
+
+### Raw SEMs
+# dict_genomic_annot = {"celltypes.mousebrain_raw_sems.all":
+# 						{"dataset":"mousebrain",
+# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_raw_sems.txt.gz"},
+#  					 "celltypes.tabula_muris_raw_sems.all":
+#  					  	{"dataset":"tabula_muris",
+#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_raw_sems.txt.gz"}
+#  					 }
+
+# dict_genomic_annot = {"celltypes.mousebrain.all":
+# 						{"dataset":"mousebrain",
+# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+#  					 "celltypes.tabula_muris.all":
+#  					  	{"dataset":"tabula_muris",
+#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+#  					 }
 
 
 # dict_genomic_annot = {"celltypes.campbell_lvl1.all":
@@ -281,6 +298,7 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 # 					  }
 
 
+
 ### CMD find . -name "multi_geneset.*.txt" | xargs -I {} sh -c "basename {} .txt" | xargs -I {} sh -c "egrep 'sem_mean|all_genes_in_dataset' {}.txt > {}.sem_mean.txt"
 ### CMD [simple, creates double .txt]: find . -name "multi_geneset.*.txt" | xargs -I {} sh -c "egrep 'sem_mean|all_genes_in_dataset' {} > {}.sem_mean.txt"
 
@@ -288,7 +306,20 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 ################## WGCNA ##################
 # FLAG_WGCNA = True
 
-# # ### FDR significant modules
+# ### Modules from FDR significant cell-types [v2, 190111]
+# ### NOTES kME reassign disabled; deepSplit = 2
+# dict_genomic_annot = {"wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous": 
+# 						{"dataset":"tabula_muris", 
+# 						"file_multi_gene_set":"/projects/jonatan/tabula_muris_3/tables/tabula_muris_3_cell_cluster_module_genes.csv.gz"},
+# 					  "wgcna.mousebrain-190111.fdr_sign_celltypes.continuous": 
+# 					  	{"dataset":"mousebrain", 
+# 					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/mb_Neurons_ClusterName_7_cell_cluster_module_genes.csv.gz"}
+# 					 }
+
+
+
+# ### Modules from FDR significant cell-types [v1, 181214]
+# ### NOTES: too many modules generated. ~50 modules per cell-type
 # dict_genomic_annot = {"wgcna.tabula_muris-181214.fdr_sign_celltypes.continuous": 
 # 						{"dataset":"tabula_muris", 
 # 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/tabula_muris-181214.tabula_muris_2_cell_cluster_module_genes.fdr_sign_celltypes.csv"},

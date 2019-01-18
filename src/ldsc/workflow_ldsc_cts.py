@@ -16,7 +16,7 @@ import make_annot_from_geneset_all_chr
 # Compatibility: Python 2 and 3
 
 ### Run in unbuffered mode
-# time python workflow_ldsc_cts.py |& tee workflow_ldsc_cts.UNNAMED.out.txt
+# time python -u workflow_ldsc_cts.py |& tee workflow_ldsc_cts.UNNAMED.out.txt
 
 ###################################### DOCS ######################################
 
@@ -88,7 +88,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 
 	### Make annot
 	###  *RESOURCE NOTES*: if you have many modules (~3000-6000) then set --n_parallel_jobs to ~2-5 (instead of 22). Otherwise the script will up all the MEMORY on yggdrasil and fail.
-	cmd = """{PYTHON3_EXEC} make_annot_from_geneset_all_chr.py \
+	cmd = """{PYTHON3_EXEC} {flag_unbuffered} make_annot_from_geneset_all_chr.py \
 	--file_multi_gene_set {file_multi_gene_set} \
 	--file_gene_coord /raid5/projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
 	--windowsize 100000 \
@@ -97,7 +97,8 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	{flag_wgcna} \
 	--out_dir /scratch/sc-ldsc/{prefix_genomic_annot} \
 	--out_prefix {prefix_genomic_annot}
-	""".format(PYTHON3_EXEC=PYTHON3_EXEC, 
+	""".format(PYTHON3_EXEC=PYTHON3_EXEC,
+		flag_unbuffered="-u" if FLAG_UNBUFFERED else "", 
 		file_multi_gene_set=file_multi_gene_set, 
 		prefix_genomic_annot=prefix_genomic_annot, 
 		flag_wgcna="--flag_wgcna --flag_mouse" if FLAG_WGCNA else "",
@@ -106,7 +107,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	# --n_parallel_jobs 11
 	
 	print("Running command: {}".format(cmd))
-	p = subprocess.Popen(cmd, shell=True)
+	p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1)
 	p.wait()
 	print("Return code: {}".format(p.returncode))
 	if not p.returncode == 0:
@@ -115,9 +116,11 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 
 	### compute LD scores
 	### *RESOURCE NOTES*: this script uses a lot of CPU. Never run more than 4 parallel jobs. 4 parallel jobs will use ~220% CPU
-	cmd="{PYTHON3_EXEC} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 2".format(PYTHON3_EXEC=PYTHON3_EXEC, prefix_genomic_annot=prefix_genomic_annot)
+	cmd="{PYTHON3_EXEC} {flag_unbuffered} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 2".format(PYTHON3_EXEC=PYTHON3_EXEC,
+																																								flag_unbuffered="-u" if FLAG_UNBUFFERED else "", 
+																																								prefix_genomic_annot=prefix_genomic_annot)
 	print("Running command: {}".format(cmd))
-	p = subprocess.Popen(cmd, shell=True)
+	p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1)
 	p.wait()
 	print("Return code: {}".format(p.returncode))
 	# RUNTIME ----> ~6 h for ~500 modules with --n_parallel_jobs=4
@@ -127,9 +130,11 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	### split LD scores
 	### This script will read 1 ".COMBINED_ANNOT.$CHR.l2.ldscore.gz" file  (N_SNPs x N_ANNOTATION) per parallel process.
 	###  *RESOURCE NOTES*: this script does not use much memory (it uses < 10-50GB?) and can easy be run with full parallelization (n=22)
-	cmd="{PYTHON3_EXEC} split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 22".format(PYTHON3_EXEC=PYTHON3_EXEC, prefix_genomic_annot=prefix_genomic_annot)
+	cmd="{PYTHON3_EXEC} {flag_unbuffered} split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 22".format(PYTHON3_EXEC=PYTHON3_EXEC,
+																																								flag_unbuffered="-u" if FLAG_UNBUFFERED else "", 
+																																								prefix_genomic_annot=prefix_genomic_annot)
 	print("Running command: {}".format(cmd))
-	p = subprocess.Popen(cmd, shell=True)
+	p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1)
 	p.wait()
 	print("Return code: {}".format(p.returncode))
 	# RUNTIME ----> ~10 min
@@ -142,12 +147,13 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 
 	### make cts file
 	###  *RESOURCE NOTES*: this script is light-weight and uses no computational resources
-	cmd="{PYTHON3_EXEC} make_cts_file.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/per_annotation/ --cts_outfile /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt --annotation_filter {file_cts_annotation_filter}".format(PYTHON3_EXEC=PYTHON3_EXEC, 
+	cmd="{PYTHON3_EXEC} {flag_unbuffered} make_cts_file.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/per_annotation/ --cts_outfile /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt --annotation_filter {file_cts_annotation_filter}".format(PYTHON3_EXEC=PYTHON3_EXEC,
+																																																																								  flag_unbuffered="-u" if FLAG_UNBUFFERED else "", 
 																																																																								  prefix_genomic_annot=prefix_genomic_annot,
 																																																																								  file_cts_annotation_filter=file_cts_annotation_filter)
 	# ^*OBS***:DIRTY USING  as prefix in  {prefix_genomic_annot}.ldcts.txt. FIX THIS.
 	print("Running command: {}".format(cmd))
-	p = subprocess.Popen(cmd, shell=True)
+	p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1)
 	p.wait()
 	print("Return code: {}".format(p.returncode))
 	# RUNTIME ----> 0 min
@@ -201,10 +207,10 @@ def job_scheduler(list_cmds, n_parallel_jobs):
 	batch = 1
 	for i, cmd in enumerate(list_cmds, start=1):
 		print("job schedule batch = {} | i = {} | Running command: {}".format(batch, i, cmd))
-		## p = subprocess.Popen(cmd, shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
+		## p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1, stdout=FNULL, stderr=subprocess.STDOUT)
 		### You need to keep devnull open for the entire life of the Popen object, not just its construction. 
 		### FNULL = open(os.devnull, 'w') # devnull filehandle does not need to be closed?
-		p = subprocess.Popen(cmd, shell=True)
+		p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1)
 		list_of_processes.append(p)
 		print("job schedule batch = {} | i = {} | PIDs of running jobs (list_of_processes):".format(batch, i))
 		print(" ".join([str(p.pid) for p in list_of_processes])) # print PIDs
@@ -234,6 +240,7 @@ PYTHON3_EXEC = "/tools/anaconda/3-4.4.0/envs/py3_anaconda3_PT180510/bin/python3"
 PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2"
 
 PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
+FLAG_UNBUFFERED = True
 N_PARALLEL_LDSC_REGRESSION_JOBS = 2
 # FLAG_BINARY = True
 FLAG_BINARY = False
@@ -264,14 +271,23 @@ list_gwas = ["BMI_Yengo2018"]
 FLAG_WGCNA = False
 
 
-### mousebrain hierarchical_fdr_sign_only_190114
-dict_genomic_annot = {"celltypes.mousebrain.hierarchical_fdr_sign_only_190114":
+# ### mousebrain hierarchical_fdr_sign_only_190114
+# dict_genomic_annot = {"TMP_TEST.celltypes.mousebrain.hierarchical_fdr_sign_only_190114":
+# 						{"dataset":"mousebrain",
+# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_fdr_sign_only_190114.txt.gz"},
+#  					 }
+
+
+### top10pct (Skene and Hillary)
+dict_genomic_annot = {"celltypes.mousebrain_top10pct.all":
 						{"dataset":"mousebrain",
-						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_fdr_sign_only_190114.txt.gz"},
+						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_top10pct_binary.txt.gz"},
+ 					 "celltypes.tabula_muris_top10pct.all":
+ 					  	{"dataset":"tabula_muris",
+ 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_top10pct_binary.txt.gz"}
  					 }
 
-
-### Raw SEMs
+# ### Raw SEMs
 # dict_genomic_annot = {"celltypes.mousebrain_raw_sems.all":
 # 						{"dataset":"mousebrain",
 # 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_raw_sems.txt.gz"},
@@ -377,12 +393,13 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 		### *OBS*: we are runnin ldsc python script with UNBUFFERED stdout and stderr
 		### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 		### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
-		cmd = """{PYTHON2_EXEC} -u {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
+		cmd = """{PYTHON2_EXEC} {flag_unbuffered} {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
 		--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name} \
 		--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
 		--ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
 		--out {fileout_prefix}""".format(
 			PYTHON2_EXEC=PYTHON2_EXEC,
+			flag_unbuffered="-u" if FLAG_UNBUFFERED else "",
 			script=PATH_LDSC_SCRIPT,
 			gwas=gwas,
 			prefix_genomic_annot=prefix_genomic_annot,

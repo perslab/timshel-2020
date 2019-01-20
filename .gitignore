@@ -10,10 +10,8 @@
 
 ### R
 .Rhistory
-
-################## Directories ##################
-
-data/
+*.nb.html
+*.Rmd.html
 
 ################## Data files ##################
 
@@ -23,3 +21,33 @@ data/
 ### R
 *.RData
 .Rproj.user
+
+
+################## Directories ##################
+
+data/
+
+
+################## PROJECT SPECIFC ##################
+src/nb-magma_celltyping/data-*
+src/nb-magma_celltyping/export.out.*
+src/ldsc-tutorial/tutorial-james/*
+
+
+*.csv
+*.pdf
+
+################## TMP ##################
+src/ldsc/experiments/test.BMI_Yengo2018.*
+
+
+src/magma-fit_models/BMI_Yengo2018.resid.correct_all.*
+src/ldsc-tutorial/BMI1.GTEx*
+
+### DIRs
+src/GE-novo_bulk/out.magma_geneset/
+src/leftover_code/
+src/magma-fit_models/data-effect_of_magma_internal_covariates.13985_homolog_genes/
+src/magma-geneset/out.maca/
+src/magma-geneset/out.mousebrain_neurons/
+

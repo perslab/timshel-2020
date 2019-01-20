@@ -1,0 +1,227 @@
+gene	phenotypic_details	technique	ref
+ACADVL	Adult-onset fat mass gain	Knock-out	Exil, VJ. 2003. Circ Res
+ADAR2	Obesity under HFD*	Transgenic	Singh, M. 2007. J Biol Chem
+ADRA1B	Accelerated weight gain on HFD	Knock-out	Burcelin, R. 2004. J Biol Chem
+ADRA2A	Obesity in homozygous mutation	Transgenic	Valet, P. 2000. J Biol Chem
+ADRB1	Obesity	Knock-out	Bachman, ES. 2002. Science
+ADRB2	Obesity	Knock-out	Soloveva, V. 1997. Mol Endocrinol
+ADRB3	Obesity on HFD	Knock-out	Susulic, VS. 1995. J Biol Chem
+AEBP1	Obesity in females	Transgenic	Zhang, L. 2005. Mol Med
+AGRP	Elevated weight gain & obesity	Transgenic	Ollman, MM. 1997. Science
+ALMS1	Obesity	Knock-out	Collin, GB. 2005. Hum Mol Genet
+ALP1	Accelerated weight gain on HFD	Knock-out	Narisawa, S. 2003. Mol Cell Biol
+ANGPTL6	Obesity and insulin resistance	Knock-out	Oike, Y. 2005. Nat Med
+ANKRD26	Obesity in homozygotes	Transgenic	Bera, TK. 2008. Acad Sci USA
+APOB	Increased BW*	Knock-out	Siri, P. 2009. J Biol Chem
+APOC3	Obesity on HFD	Transgenic	Jong, MC. 2001. J Lipid Res
+APOE	Obesity	Knock-out	Zhang, T. 2013. Reproduction
+AQP7	Adult-onset obesity	Knock-out	Hibuse, T. 2005. Proc Natl Acad Sci USA
+AR	Obesity, decreased energy expenditure	Cre/LoxP	Fan, W. 2005. Diabetes
+ASIP	Increased BW & Fat mass – Obesity	Transgenic	Mynatt, RL. 1997. Natl Acad Sci USA
+AT2R	Increase in BW in females only	Knock-out	Samuel, P. 2013. PLoS One
+ATX	Increase in adiposity in fat-specific knockout under HFD	Cre/LoxP	Dusaulcy, R. 2011. J Lipid Res
+ATXN2	Obesity under HFD	Knock-out	Kiehl, T. 2006. Biochem Biophys Res Commun
+BBS1	Adult-onset obesity in 10% of mutants	Knock-out	Kulaga, HM. 2004. Nat Genet
+BBS2	Adult-onset fat mass gain	Knock-out	Nishimura, DY. 2004. Proc Natl Acad Sci USA
+BBS4	Adult-onset obesity	Knock-out	Mykytyn, K. 2004. Proc Natl Acad Sci USA
+BBS7	Obesity	Knock-out	Zhang, Q. 2013. J Cell Sci
+BDNF	Adult-onset obesity in heterozygotes	Knock-out	Coppola, V. 2004. Neuroreport
+BRD2	Obesity	Knock-out	Wang, F. 2009. Biochem J
+BRS3	Obesity	Knock-out	Ohki-Hamazaki, H. 1997. Nature
+CAPN10	Increase in body weight	Knock-out	Cheverud, JM. 2010. J Lipid Res
+CART	Adult-onset obesity	Knock-out	Wierup, N. 2005. Regul Pept
+CAV3	Increased adiposity	Knock-out	Capozza, F. 2005. Am J Physiol Cell Physiol
+CB2R	Increase in body weight and hyperphagia	Knock-out	Agudo, J. 2010. Diabetologia
+CCKBR	Obesity	Knock-out	Lavine, J. 2010. Endocrinol
+CDH2	Increased adiposity	Transgenic	Castro, CH. 2004. J Cell Sci
+CDKN1A	Increased adiposity	Knock-out	Naaz, A. 2004. FASEB J
+CDKN1B	Increased adiposity	Knock-out	Naaz, A. 2004. FASEB J
+CEP19	Obesity	Knock-out	Shalata, A. 2013. Am J Hum Genet
+CHEMR23	Adult-onset obesity	Knock-out	Rouger, L. 2013. J Endocrinol
+CHGA	Increased adiposity	Knock-out	Bandyopadhyay, G. 2012. J Biol Chem
+CHOP	Obesity under HFD	Knock-out	Grant, RW. 2014. J Biol Chem
+CLOCK	Obesity	Knock-out	Turek, F. 2005. Science
+CORIN	Increased bodyweight	Knock-out	Chan, JC. 2005. Proc Natl Acad Sci USA
+CPE	Obesity	Knock-out	Cawley, NX. 2004. Endocrinology
+CPT1	Obesity under HFD	Knock-out	Gao, FX. 2009. Diabetologia
+CRH	Excess fat accumulation & muscle atrophy	Transgenic	Stenzel-Poore, MP. 1992. Endocrinology
+CRY1	Obesity under HFD	Knock-out	Barclay, JL. 2013. Am J Physiol Endorinol Metab
+CRY2	Obesity under HFD	Knock-out	Barclay, JL. 2013. Am J Physiol Endorinol Metab
+CSF2	Adult-onset obesity	Knock-out	Reed, JA. 2005. J Clin Invest
+CTRP9	Increased bodyweight & adiposity	Knock-out	Wei, Z. 2014. Am J Physiol Endocrinol Metab
+CYP19A1	Elevated gonadal fat pad weight	Knock-out	Misso, ML. 2005. Horm Metab Res
+D2	Increased BW & adiposity	Knock-out	Marsili, A. 2011. PLoS One
+DGAT1	Increased gonadal but not subcutaneous fat	over-expression	Yamazaki, T. 2005. J Biol Chem
+DPT	Increased subcutaneous fat	Knock-out	Takeda, U. 2002. J Invest Dermatol
+DRD3	Increased adiposity and obesity	Knock-out	McQuade, JA. 2004. Behav Brain Res
+CDT1	Obesity	Transgenic	Walz, K. 2003. Mol Cell Biol
+dup(17)	Obesity	Transgenic	Walz, K. 2003. Mol Cell Biol
+ECSCR	Obesity under HFD	Transgenic	Akakabe, Y. 2013. Nat Commun
+ESR1	Obesity	Knock-out	Heine, PA. 2000. Proc Natl Acad Sci USA
+FABP4	Obesity in homozygotes under HFD	Knock-out	Hotamisligil, GS. 1996. Science
+FATP4	Obesity in homozygotes under HFD	Knock-out	Lenz, LS. 2011. J Biol Chem
+FKBP51	Increase in body weight under HFD	Transgenic	Yang, L. 2012. Am J Physiol Endocrinol Metab
+FOXA2	Heterozygotes develop obesity under HFD	Knock-out	Wolfrum, C. 2003. J Clin Invest
+FOXO1	Obesity	Transgenic	Kamei, Y. 2004. J Biol Chem
+FOXO3A	Obesity	Knock-out	Fang, C. 2008. Am J Physiol
+FSHR	Obesity	Knock-out	Danilovich, N. 2000. Endocrinology
+FTO	Obesity	Over-expression	Church, C. 2010. Nat Genet
+GAL3	Late-onset obesity	Knock-out	Pang, J. 2013. PLoS One
+GAST	Obesity	Knock-out	Cowey, SL. 2005. Cancer
+GCK	Increased BW under HFD	Transgenic	Ferre, T. 2003. Diabetologia
+GDF3	Increased BW under HFD	Over-expression	Wang, W. 2004. Biochem Biophys Res Commun
+GFPT1	Increased adiposity	Transgenic	McClain, DA. 2005. Am J Physiol Endocrinol Metab
+GH	Obesity	Transgenic	Pomp, D. 1996. Transgenic Res
+GHR	Increased adiposity in males	Knock-in	Rowland, JE. 2005. Mol Cell Bio
+GHRH	Increased adiposity	Transgenic	Cai, A. 1999. Endocrinology
+GIRK4	Increased BW & adiposity	Knock-out	Perry, CA. 2008. Proc Natl Acad Sci USA
+GNAS	Maternal inheritance of mutant allele leads to obesity	Knock-out	Germain-Lee, EL. 2005. Endocrinology
+GNB3	Increased BW and adiposity	Transgenic	Goldlust, S. 2013. Proc Natl Acad Sci USA
+GPD2	Increased BW & adiposity in females	Knock-out	Alfadda, A. 2004. Am J Physiol Regul Integr Comp Physiol
+GPR10	Adult-onset obesity	Knock-out	Ishii, M. 2003. Proc Natl Acad Sci USA
+GPR120	Obesity under HFD	Knock-out	Hirasawa, A. 2005. Nat Med
+GPR26	Obesity	Knock-out	Chen, D. 2012. PLoS One
+GPR39	Obesity	Knock-out	Moechars, D. 2006. Gastroenterology
+GPR7	Adult-onset obesity	Knock-out	Gu, W. 2004. J Mol Neurosci
+GPX1	Increased BW & adiposity	Transgenic	McClung, JP. 2004. Proc Natl Acad Sci USA
+GRM8	Increased adiposity	Knock-out	Duvoisin, RM. 2005. Eur J Neurosci
+GRP	Resistant to diet-induced obesity	Knock-out	Ye, R. 2010. Diabetes
+GRPR	Reduced food intake	Knock-out	Hampton, LL. 1998. Proc Natl Acad Sci USA
+GSK3B	Increased BW & adiposity in males	Transgenic	Pearce, NJ. 2004. Metabolism
+HDC	Increased BW & adiposity	Knock-out	Hara, J. 2001. Neuron
+HIF1α	Obesity	Transgenic	Zhang, X. 2010. J Biol Chem
+HRH1	Late onset obesity	Knock-out	Masaki, T. 2004. Diabetes
+HRH3	Increased BW & adiposity	Knock-out	Takahashi, K. 2002. J Clin Invest
+HSD111B	Obesity	Transgenic	Zhang, L. 2012. Transgenic Res
+HSD11β2	Increased adiposity	Transgenic	Masuzaki, H. 2001. Science
+HTR2C	Late onset obesity	Knock-out	Nonogaki, K. 2003. Diabetes
+ICAM1	Late onset obesity/accelerated under HFD	Knock-out	Gregiore, FM. 2002. AM J Physiol Endocrinol Metab
+IDH1	Obesity	Transgenic	Koh, HJ. 2004. J Biol Chem
+IFRD1	Increased adiposity	Transgenic	Wang, Y. 2005. J Biol Chem
+IL18	Increased BW	Knock-out	Netea, M. 2006. Nature Medicine
+IL18R	Increased BW	Transgenic	Netea, M. 2006. Nature Medicine
+IL1RI	Adult-onset obesity	Knock-out	McGillicuddy, FC. 2013. Am J Physiol Endocrinol Metab
+IL6	Increased BW & adiposity	Knock-out	Wallenius, V. 2002. Nat Med
+INSR	Increased adiposity & obesity	Cre/LoxP	Cariou, B. 2004. Endocrinol
+IRS1	Increase weight gain	Knock-out	Shirakami, A. 2002. J Endocrinol
+IRS2	Increased adiposity	Cre/LoxP	Lin, X. 2004. J Clin Invest
+JAK2	Increased adiposity	Cre/LoxP	Sy, S. 2014. Diabetalogia
+KCNJ11	Increased BW & adiposity	Knock-out	Kanezaki, Y. 2004. Endocr J
+KDM3A	Obesity	Knock-out	Okada, Y. 2010. J Androl
+KRAS	Obesity under HFD	Transgenic	Dawson, DW. 2013. Cancer Prev Res
+KSR2	Obesity	Knock-out	Revelli, JP. 2011. Obesity
+LEP	Obesity	Knock-out	D’Souza, AM. 2014. Endocrinol
+LEPR	Obesity	Knock-in	Bates, SH. 2003. Nature
+LHB	Obesity in females	Transgenic	Kero, JT. 2003. Am J Physiol Endocrinol Metab
+LIPC	Increased adiposity	Knock-out	Farahani, P. 2004. Obes Res
+LPIN1	Obesity due to increased fat storage	Transgenic	Phan, J. 2005. Cell Metab
+LRH1	Mild obesity	Knock-out	Hattori, T. 2014. Endocr J
+LSR	Obesity in heterozygotes	Transgenic	Yen, FT. 2008. J Biol Chem
+MAGEL2	Increased BW & adiposity	Knock-out	Bischof, JM. 2007. Hum Mol Genet
+MAGP1	Increased BW & adiposity	Knock-out	Weinbaum, JS. 2008. J Biol Chem
+MAS	Increased adiposity	Knock-out	Santos, SH. 2008. Diabetes
+MC3R	Obesity	Knock-out	Butler, AA. 2000. Endocrinolopgy
+MC4R	Obesity	Knock-out	Huszar, D. 1997. Cell
+MED13	Obesity	Cre/LoxP	Grueter, C. 2012. Cell
+MEST	Increased adiposity	Transgenic	Takahashi, M. 2005. Am J Physiol Endocrinol Metab
+MKKS	Obesity	Knock-out	Fath, MA. 2005. Hum Mol Genet
+MMP11	Obesity	Knock-out	Andarawewa, KL. 2005. Cancer Res
+MMP19	Accelerated weight gain on HFD	Knock-out	Pendas, AM. 2004. Mol Cell Biol
+MPO	Increased BW	Transgenic	Castellani, LW. 2006. J Lipid Res
+MRAP2	Obesity	Knock-out	Asai, M. 2013. Science
+MT1A	Adult-onset obesity	Knock-out	Beattie, JH. 1998. Proc Natl Acad Sci USA
+MT1B	Adult-onset obesity	Knock-out	Beattie, JH. 1998. Proc Natl Acad Sci USA
+MTHGH	Obesity	Transgenic	Wolf, E. 1991. Growth Dev Aging
+NBEA	Increased BW & adiposity in heterozygotes	Knock-out	Olszewski, P. 2012. PLoS Genet
+NEIL1	Obesity	Knock-out	Sampath, H. 2011. Am J Physiol Endocrinol Metab
+NEP	Adult-onset obesity	Knock-out	Becker, M. 2010. PLoS One
+NGN3	Obesity	Knock-out	Anthwal, N. 2013. Dis Model Mech
+NHLH2	Adult-onset obesity	Knock-out	Jing, E. 2004. Endocrinology
+NMU	Increased BW & adiposity	Knock-out	Handa, R. 2004. Nat Med
+NPB	Mild obesity	Knock-out	Kelly, MA. 2005. Proc Natl Acad Sci USA
+NPC1	Dose-dependent weight gain under HFD	Knock-out	Jelinek, D. 2010. Obesity
+NPY	Obesity under high-sucrose diet	Transgenic	Kaga, T. 2001. Diabetes
+NPY1R	Obesity	Knock-out	Kushi, A. 1998. Proc Natl Acad Sci USA
+NPY2R	Obesity	Knock-out	Lin, D. 2006. Endocrinol
+NPY5R	Increased adiposity	Knock-out	Marsh, DJ. 1998. Nat Med
+NR5A1	Adult-onset obesity	Knock-out	Majdic, G. 2002. Endocrinol
+NTSR1	Adult-onset obesity	Knock-out	Remaury, A. 2002. Brain Res
+OGG1	Increased adiposity in HFD	Knock-out	Sampath, H. 2012. PLoS One
+OMA1	Obesity	Knock-out	Quiros, PM. 2012. EMBO
+OSMR	Increase in BW and hyperphagia	Knock-out	Gotardo, EM. 2013. J Nutr Sci Vitaminol
+OXT	Obesity	Knock-out	Nishimori, K. 2008. Prog Brain Res
+P62	Adult-onset obesity and hyperphagia	Knock-out	Harada, H. 2013. J Neurosci
+PARP1	Adult-onset obesity	Knock-out	Devalaraja-Narashimha, K. 2010. J Endocrinol
+PC1	Increased adiposity in heterozygotes	Knock-out	Zhu, X. 2002. Proc Natl Acad Sci USA
+PC3	Increased adiposity in heterozygotes	Knock-out	Zhu, X. 2002. Proc Natl Acad Sci USA
+PCK1	Obesity	Transgenic	Franckhauser, S. 2002. Diabetes
+PCSKIN	Adult-onset obesity	Transgenic	Wei, S. 2004. J Endocrinol
+PCYT2	Obesity	Knock-out	Fullerton, MD. 2009. J Biol Chem
+PEG3	Obesity	Knock-out	Curley, JP. 2005. FASEB J
+PPARGC1A	Obesity	Knock-out	Leone, TC. 2005. PLoS Biol
+PGDS	Obesity	Knock-out	Tanaka, R. 2009. Biochem Biophys Res Commun
+PGP	Increased BW & adiposity	Knock-out	Foucaud-Vignault, M. 2011. PLoS One
+PHB	Obesity	Transgenic	Ande, SR. 2014. Diabetes
+PI3K	Increased adiposity, hyperphagia	Knock-in	Foukas, L. 2006. Nature
+PLAC8	Increase in adiposity	Knock-out	Jimenez-Preitner, M. 2011. Cell Metab
+PLSCR1	Increased adiposity	Knock-out	Zhou, Q. 2002. Blood
+PLSCR3	Increased BW & adiposity	gene-trap	Wiedmer, T. 2004. Proc Natl Acad Sci USA
+POMC	Obesity under HFD	Knock-out	Challis, BG. 2004. Proc Natl Acad Sci USA
+PPARA	Increase in adiposity	Knock-out	Miyazaki, M. 2004. J Biol Chem
+PPARG2	Obesity under HFD	Knock-in	Heikkinen, S. 2009. Cell Metab
+PPARGC1A	Increased adiposity in young females & old males	Knock-out	Leone, TC. 2005. PLoS Biol
+PPARδ	Obesity under HFD	Knock-out	Kocalis, H. 2012. PLoS One
+PPIF	Late-onset obesity	Knock-out	Luvisetto, S. 2008. Neurosci
+PPIR3A	Increased BW & adiposity	Knock-out	Delibegovic, M. 2003. Diabetes
+PPKAA2	Increased adiposity	Knock-out	Villena, JA. 2004. Diabetes
+PREF1	Obesity	Knock-out	Moon, YS. 2002. Mol Cell Biol
+PRKCQ	Obesity	Transgenic	Serra, C. 2003. J Cell Physiol
+PRL	Increased BW	Knock-out	Perez-Villamil, B. 1992. J Endocrinol
+PROX1	Obesity in heterozygotes	Knock-out	Harvey, NL. 2005. Nat Genet
+PRRP	Increased BW	Knock-out	Lawrence, C. 2002. Endocrinol
+PTPN11	Obesity	Knock-out	Zhang, EE. 2004. Proc Natl Acad Sci USA
+PYY	Obesity	Knock-out	Batterham, R. 2002. Nature
+RAGE	Increased BW	Knock-out	Leuner, B. 2012. Z Gerentol Geriatr
+RAI1	Obesity in heterozygotes	Knock-out	Bi, W. 2005. Hum Mol Genet
+REN	Adult-onset obesity	Transgenic	Uehara, S. 2003. Int J Mol Med
+RETN	Increased adiposity	Transgenic	Kim, KH. 2004. Proc Natl Acad Sci USA
+RPGRIP1L	Obesity	Knock-out	Vadnais, C. 2013. BMC Genomics
+RSC1A1	Obesity	Knock-out	Osswald, C. 2005. Mol Cell Biol
+RSL1	Females prone to diet-induced obesity	Transgenic	Krebs, CJ. 2014. Mol Cell Biol
+SAR1B	Obesity under HFD	Transgenic	Levy, E. 2014. J Nutr Biochem
+SDC1	Adult-onset obesity	Transgenic	Reizes, O. 2001. Cell
+SELM	Increased BW & adiposity	Transgenic	Pitts, MW. 2013. J Biol Chem
+SFRP1	Increase in BW and adiposity under HFD	Knock-out	Gauger, KJ. 2013. PLoS One
+SH2B	Obesity	Knock-out	Ren, D. 2005. Cell Metab
+SHP	Obesity and increased adiposity	Transgenic	Tabbi-Anneni, I. 2010. Am J Physiol Endocrinol Metab
+SIM1	Obesity in heterozygotes	Knock-out	Michaud, JL. 2001. Hum Mol Genet
+SIRT6	Adult-onset obesity	Transgenic	Schwer, B. 2010. PNAS
+SLC2A4	Increased adiposity	Transgenic	Carvalho, E. 2005. Am J Physiol Endocrinol Metab
+SLC6A1	Obesity	Transgenic	Ma, YH. 2000. Cell Res
+SOCS1	Liver degeneration, obesity	Knock-out	Starr, R. 1998. Proc Natl Acad Sci USA
+SOCS3	Obesity under HFD	Knock-out	Sachithanandan, N. 2010. Hepatology
+SPARC	Increased adiposity	Knock-out	Bradshaw, AD. 2003. Proc Natl Acad Sci USA
+SPONDIN 2	Obesity	Knock-out	Zhu, LH. 2014. J Hepatol
+SRC1	Obesity	Knock-out	Picard, F. 2002. Cell
+STAT3	Obesity	Cre/LoxP	Cui, Y. 2004. Mol Cell Biol
+STAT5B	Increased adiposity	Knock-out	Gao, Q. 2004. Proc Natl Acad Sci USA
+TAp63	Obesity	Knock-out	Su, X. 2012. Cell Metab
+TBX21	Obesity	Knock-out	Kim, K. 2013. J Nutr Biochem
+THRA	Increased BW & adiposity	Knock-out	Udy, GB. 1997. Proc Natl Acad Sci USA
+TIMP2	Obesity and hyperphagia	Knock-out	Stradecki, HM. 2011. J Neuroendocrinol
+TIS7	Increased BW & adiposity	Transgenic	Wang, Y. 2005. J Biol Chem
+TNF	Increased BW & adiposity	Transgenic	Liu, YY. 2003. J Biol Chem
+TNF	Increased BW & adiposity	Knock-out	Salles, J. 2012. J Nutr Biochem
+TrkB	Increased BW & adiposity	Knock-in	Byerly, MS. 2013. PLoS One
+TRPV4	Increased BW & adiposity	Knock-out	O’Conor, J. 2013. Ann Rheum Dis
+TUB	Adult-onset obesity	Knock-out	Voros, G. 2004. J Thromb Haemost
+TW	Obesity in heterozygotes	Knock-out	Kurima, K. 2011. PLoS Genet
+TXNIP	Increased fat to muscle ratio	Knock-out	Stubdal, H. 2000. Mol Cell Biol
+UCP1	Late-onset obesity with HFD	Knock-out	Kontani, Y. 2005. Aging Cell
+VDR	Obesity	Transgenic	Wong, KE. 2011. J Biol Chem
+WDTC1	Obesity in heterozygotes	Knock-out	Hader, T. 2003. EMBO
+XOR	Increased BW & adiposity	Knock-out	Murakami, N. 2014. Arterioscler Thromb Vasc Biol
+ZEB1	Obesity	Knock-out	Saykally, JN. 2009. PLoS One
+ZFP90	Obesity	Transgenic	Schadt, EE. 2005. Nat Gen
+ZNT7	Obesity in males only	Knock-out	Huang, L. 2012. J Biol Chem
+ZNT8	Obesity under HFD	Knock-out	Lemaire. K, 2009. Proc Natl Acad Sci USA

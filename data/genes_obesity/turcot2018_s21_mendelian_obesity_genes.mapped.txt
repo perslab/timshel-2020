@@ -1,0 +1,40 @@
+location	gene_symbol	gene_description	condition	omim	ensembl_gene_id
+chr2:73612885-73837046	Alms1	Centrosome and basal body associated protein	Alstrom syndrome	606844	ENSG00000116127
+chr3:97483364-97520086	Arl6	ADP-ribosylation factor (ARF)-like-6	Bardet-Biedl syndrome 3	608845	ENSG00000113966
+chr11:66278118-66301084	Bbs1	Bardet-Biedl syndrome 1	Bardet-Biedl syndrome 1	209901	ENSG00000174483
+chr12:76738265-76742222	Bbs10	Bardet-Biedl syndrome 10	Bardet-Biedl syndrome 10	610148	ENSG00000179941
+chr4:123653856-123666098	Bbs12	Bardet-Biedl syndrome 12	Bardet-Biedl syndrome 12	610683	ENSG00000181004
+chr16:56518258-56554008	Bbs2	Bardet-Biedl syndrome 2	Bardet-Biedl syndrome 2	606151	ENSG00000125124
+chr15:72978519-73030817	Bbs4	Bardet-Biedl syndrome 4	Bardet-Biedl syndrome 4	600374	ENSG00000140463
+chr2:170336005-170363165	Bbs5	Bardet-Biedl syndrome 5	Bardet-Biedl syndrome 5	603650	ENSG00000163093
+chr4:122745483-122791652	Bbs7	Bardet-Biedl syndrome 7	Bardet-Biedl syndrome 7	607590	ENSG00000138686
+chr7:33169151-33645680	Bbs9	Bardet-Biedl syndrome 9	Bardet-Biedl syndrome 9	607968	ENSG00000122507
+chr11:27676441-27743605	Bdnf	Brain-Derived Neurotrophic Factor	WAGRO (Wilm’s tumor, aniridia, genitourinary anomalies, mental retardation,obesity) syndrome	612469	ENSG00000176697
+chr3:196433148-196439123	Cep19	Centrosomal protein 19	Morbid obesity	615703	ENSG00000174007
+chr12:88442790-88535993	Cep290	Centrosomal protein 290	Bardet-Biedl syndrome 14	610142	ENSG00000198707
+chr26:26hr20:57414794-57486250chr20:57414794-57486250	Gnas	Guanine nucleotide binding protein, alpha stimulating)complex locus	AHO-like syndrome (Pseudopseudohypoparathyroidism)	603233	ENSG00000087460
+chrX:132669775-133119673	Gpc3	Gene encoding glypican-3	Simpson Golabi Behmel	312870	ENSG00000147257
+chr12:117890817-118406028	Ksr2	Kinase suppressor of Ras 2	Extreme obesity	610737	ENSG00000171435
+chr7:127881330-127897682	Lep	Leptin	Monogenic obesity	164160	ENSG00000174697
+chr1:65886334-66103176	Lepr	Leptin Receptor	Monogenic obesity	601007	ENSG00000116678
+chr3:45864809-45957216	Lztfl1	Leucine zipper transcription factor like 1	Bardet-Biedl syndrome 17	615994	ENSG00000163818
+chr18:58038563-58040001	Mc4r	Melanocortin Receptor 4	Monogenic obesity	155541	ENSG00000166603
+chr20:10385427-10414887	Mkks	McKusick-Kaufman syndrome 	Bardet-Biedl syndrome 6	604896	ENSG00000125863
+chr17:56282796-56296966	Mks1	Meckel syndrome, type 1 	Bardet-Biedl syndrome 13	615990	ENSG00000011143
+chr9:87283372-87641985	Ntrk2	Neurotrophic Tyrosine Kinase Receptor Type 2	Monogenic obesity	613886	ENSG00000148053
+chrX:13752831-13787480	Ofd1	Centriole and centriolar satellite protein	Simpson Golabi Behmel)	300170	ENSG00000046651
+chr5:95726039-95768985	Pcsk1	Proprotein convertase-1	Monogenic obesity	162150	ENSG00000175426
+chrX:133507341-133562822	Phf6	PHD finger protein 6	Borjeson-Forssman-Lehmann Syndrome	301900	ENSG00000156531
+chr2:25383721-25391559	Pomc	Pro-opiomelanocortin	Monogenic obesity	176830	ENSG00000115138
+chr17:66409763-66547457	Prkar1a	Protein kinase cAMP-dependent type I regulatory subunit alpha	skeletal dysplasia, hormone resistance with obesity Carney complex with primary pigmented nodular adrenocortical disease and Cushing's syndrome	188830	ENSG00000108946
+chr6:57051790-57087112	Rab23	Member RAS oncogene family	Carpenter syndrome	201000	ENSG00000112210
+chr17:17584787-17714765	Rai1	Retinoic acid induced 1	Smith-Magenis Syndrome	182290	ENSG00000108557
+chr1:243419306-243663393	Sdccag8	Serologically defined colon cancer antigen 8	Bardet-Biedl syndrome 16	615993	ENSG00000054282
+chr16:28875078-28885534	Sh2b1	SH2B adaptor protein 1	Extreme obesity	608937	ENSG00000178188
+chr6:100836749-100911551	Sim1	Single-minded homolog 1	Monogenic obesity, Prader-Willi-like syndrome (chromosome 6q)	176270	ENSG00000112246
+chr12:115108058-115121969	Tbx3	T-box 3	Ulnar-Mammary (Schinzel) syndrome	181450	ENSG00000135111
+chr9:119449580-119463579	Trim32	Tripartite motif containing 32	Bardet-Biedl syndrome 11	615988	ENSG00000119401
+chr14:89290496-89344340	Ttc8	Tetratricopeptide repeat domain 8 	Bardet-Biedl syndrome 8	615985	ENSG00000165533
+chr8:100025493-100889814	Vps13b	Vacuolar protein sorting 13 homolog B	Cohen syndrome (Pepper syndrome)	216550	ENSG00000132549
+chr2:63348535-63815867	Wdpcp	WD repeat containing planar cell polarity effector	Bardet-Biedl syndrome 15	615992	ENSG00000143951
+chr12:49359123-49365641	Wnt10b	Wingless-Type MMTV Integration Site Family, Member 10B	Extreme obesity	601906	ENSG00000169884

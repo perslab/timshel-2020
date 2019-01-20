@@ -21,14 +21,14 @@ library(tidyverse)
 ######################################## Binning ############################################
 ######################################################################################################
 
-# wrapper_binning <- function(df, n_bins=101, threshold_bin_zero=0){
-#   print(sprintf("Binning data frame with n_bins=%s", n_bins))
-#   df.binned <- df %>% transmute_all(funs(bin_vector), n_bins, threshold_bin_zero) # *OBS* output tibble looses rownames
-#   # rownames(df.binned) <- rownames(df) # set rownmaes *IMPORTANT*
-#   return(df.binned)
-# }
+wrapper_binning <- function(df, n_bins=101, threshold_bin_zero=0){
+  print(sprintf("Binning data frame with n_bins=%s", n_bins))
+  df.binned <- df %>% transmute_all(funs(bin_vector), n_bins, threshold_bin_zero) # *OBS* output tibble looses rownames
+  # rownames(df.binned) <- rownames(df) # set rownmaes *IMPORTANT*
+  return(df.binned)
+}
 
-bin_vector <- function(vector_in, n_bins, threshold_bin_zero=0){
+bin_vector <- function(vector_in, n_bins, threshold_bin_zero){
   # Function to compute bins 
   # INPUT: a vector of numeric values to bin
   # OUTPUT: a numeric vector with values {0 ... n_bins-1?}
@@ -50,34 +50,23 @@ bin_vector <- function(vector_in, n_bins, threshold_bin_zero=0){
   return(bin_values)
 }
 
-rank_normalize_vecor <- function(vector_in, threshold_bin_zero=0){
-  # INPUT: a vector of numeric values to rank normalize
-  # OUTPUT: a numeric vector with values {0 ... 1}
-  # *REMARK #1*: note that vector_in <= threshold_bin_zero will be given the value 0.
-  # *REMARK #2*: note that NA values in vector_in will be given the value 0.
-  values <- rep(0,length(vector_in))
-  bool.not_bin_zero <- (vector_in > threshold_bin_zero) & (!is.na(vector_in)) # bool index for elements that should not be assigned value 0
-  values[bool.not_bin_zero] <- base::rank(vector_in[bool.not_bin_zero])/length(vector_in[bool.not_bin_zero])
-  return(values)
-}
-
 
 ######################################################################################################
 ############################# SKENE expression functions ################################
 ######################################################################################################
 
 
-# wrapper_specificity_quantiles <- function(df.avg_expr, dataset_prefix) {
+# wrapper_specificity_quantiles <- function(df.avg_expr, name.dataset) {
 #   ### INPUT: data frame or matrix of average expression. genes x celltypes. with rownames and columnnames.
 #   # SEE calculate_specificity() for notes on sensitivity to log_transformation.
 #   ### OUTPUT: data frame with specificity quantiles.
 #   
 #   df.specificity <- calculate_specificity(df.avg_expr)
-#   write_csv(df.specificity %>% rownames_to_column(var="gene"), sprintf("%s.specificity.sem.csv.gz", dataset_prefix))
+#   write_csv(df.specificity %>% rownames_to_column(var="gene"), sprintf("%s.specificity.sem.csv.gz", name.dataset))
 #   
 #   df.specificity.quantiles <- df.specificity %>% transmute_all(funs(transform_to_quantiles), threshold_bin_zero=0) # *OBS* output tibble looses rownames
 #   rownames(df.specificity.quantiles) <- rownames(df.specificity) # set rownmaes *IMPORTANT*
-#   write_csv(df.specificity.quantiles %>% rownames_to_column(var="gene"), sprintf("%s.specificity_quantiles.sem.csv.gz", dataset_prefix))
+#   write_csv(df.specificity.quantiles %>% rownames_to_column(var="gene"), sprintf("%s.specificity_quantiles.sem.csv.gz", name.dataset))
 # }
 
 
@@ -124,7 +113,7 @@ calculate_specificity <- function(df.avg_expr){
 
 
 ######################################################################################################
-############################################# SI ##############################################
+############################################# SI ORIGINAL ##############################################
 ######################################################################################################
 
 normalized_specificity_index <- function (df) {
@@ -134,9 +123,9 @@ normalized_specificity_index <- function (df) {
   ### Improvements of nSI (normalized specificity index) compared to the original SI
   # Summary: modified for single-cell data.
   # 1) Normalized ranks: if a gene is only expressed in one cell-type it will get nSI = 1
-  # 2) Added epsilon to ratio: relevant for single-cell data with many zeroes.
+  # 2) Added epsilon to ratio: important for de
   
-  print("Calculating nSI")
+  print("Calculating SI")
   epsilon <- 1e-100
   df <- as.data.frame(df) # make sure the input is a data frame.
   n_annotations <- ncol(df) 
@@ -144,7 +133,7 @@ normalized_specificity_index <- function (df) {
   colnames(df.SI) <- colnames(df) 
   # rownames(df.SI) <- rownames(df) # PT note: rownames are used
   for (j in 1:n_annotations) { # j: index cell-types (columns of input)
-    print(sprintf("Calculating nSI: #%s/#%s", j, n_annotations))
+    print(sprintf("Calculating SI: #%s/#%s", j, n_annotations))
     notme <- c(1:n_annotations)[-j] # exclude self index
     ### Calculate fold-change
     # fc <- df[, j]/df[, notme] # without epsilon
@@ -162,7 +151,7 @@ normalized_specificity_index <- function (df) {
     # ^ na.last="keep": NA values are kept with rank NA. That is, NA values are ignored during ranking and 'propagated' to the result vector.
     # ^ ties.method="min" : tied genes get the minimum rank. We do this to add maximal penalty to genes with fc = 0. We are awere that it will also effect genes with fc >>, but they are unlikely to have tied values 
     # ALT FASTER: fc_ranks <- apply(fc, 2, data.table::frank, ...) # identical but faster solution using data.table::frank
-    ### Normalize ranks: divide each column by the number of genes and calculate the mean.
+    ### Normalize ranks: divide each column by the number of genes
     fc_ranks_normalized <- rowMeans(fc_ranks/nrow(fc_ranks))
     df.SI[,j] <- fc_ranks_normalized 
   }
@@ -259,9 +248,9 @@ calculate_pem <- function(df.avg_expr){
 ################################## SEM CALC that takes SEM as input  ##################################
 ######################################################################################################
 
-zscore_sem <- function(object_data) {
+zscore_sem <- function(sem) {
   print("Calculating z-score")
-  df.zscores.gene_wise <- as.data.frame(t(scale(t(as.data.frame(object_data[["mean"]])), center = TRUE, scale = TRUE))) # returns a DATA FRAME with columns=annotations, rownames=genes.
+  df.zscores.gene_wise <- as.data.frame(t(scale(t(as.data.frame(sem[["mean"]])), center = TRUE, scale = TRUE))) # returns a DATA FRAME with columns=annotations, rownames=genes.
   df.zscores.gene_wise.na <- df.zscores.gene_wise %>% filter_all(any_vars(is.na(.))) # we (sometimes) have NA values. Don't know why. It could be because some genes have zero-variance
   if (nrow(df.zscores.gene_wise.na) > 0) {
     print(sprintf("OBS: N=%s genes contained NA values after zscore calculation. ", nrow(df.zscores.gene_wise.na)))
@@ -269,33 +258,27 @@ zscore_sem <- function(object_data) {
   return(df.zscores.gene_wise)
 }
 
-tstat_sem <- function(object_data, df.ncells) {
+tstat_sem <- function(sem) {
   ### vectorized calculation of pooled variance for each gene
   # formula: sum_i{var[i]*(n[i]-1)}/sum_i{n[i]-1}, where i is the group.
   print("Calculating t-stat")
-  
-  annotations <- colnames(object_data[["mean"]])
-  n_genes <- dim(object_data[["mean"]])[1]
-  
-  df.n <- df.ncells %>% slice(rep(1:n(), each=n_genes )) # df, 1 x annotations | replicate row in ncells. REF rep(): https://stackoverflow.com/a/47780537/6639640
-  var.pooled <- rowSums(object_data[["var"]] * (df.n-1))/rowSums(df.n - 1) # numeric vector, genes x 1 | unbiased least squares estimate (n-1) of pooled variance.
+  df.n <- sem[["ncells"]] %>% slice(rep(1:n(), each=length(sem[["genes"]]) )) # df, 1 x annotations | replicate row in ncells. REF rep(): https://stackoverflow.com/a/47780537/6639640
+  var.pooled <- rowSums(sem[["var"]] * (df.n-1))/rowSums(df.n - 1) # numeric vector, genes x 1 | unbiased least squares estimate (n-1) of pooled variance.
   list.tstat <- list()
-  counter <- 1
-  for (annotation in annotations) {
-    print(sprintf("#%s/#%s | Calculating tstat for annotation=%s", counter, length(annotations), annotation))
+  for (annotation in sem[["annotations"]]) {
+    print(annotation)
     annotation_sym <- rlang::sym(annotation)
-    x <- object_data[["mean"]] %>% pull(!!annotation_sym) # numeric vector, genes x 1 | mean self
+    x <- sem[["mean"]] %>% pull(!!annotation_sym) # numeric vector, genes x 1 | mean self
     ### Calculate mean for 'other' using ncells as weights to recover the true mean of the 'other' group.
     # formula: sum_i{mean[i]*n[i]}/sum_i{n[i]}
-    df.n_other <- df.ncells %>% select(-!!annotation_sym) %>% slice(rep(1:n(), each=n_genes )) # df, genes x annotations. Each row contains the number of cells and each row is identical.
-    y <- rowSums(object_data[["mean"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
+    df.n_other <- sem[["ncells"]] %>% select(-!!annotation_sym) %>% slice(rep(1:n(), each=length(sem[["genes"]]) )) # df, genes x annotations. Each row contains the number of cells and each row is identical.
+    y <- rowSums(sem[["mean"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
     # ^ df.mean_other * df.n_other: column-wise multiplication. 
     # ^ rowSums(df.n %>% slice(1)) gives the same as rowSums(df.n) because all rows are identical
     tstat <- (x-y)/var.pooled # numeric, genes x 1
     # pt(tstat, df=sum(df.n)-2, lower.tail=T) # numeric vector, genes x 1 | one-sided ttest for higher expression. Each gene as the same number of degree of freedom (dof). Dof is total number of observations (cells) minus 2.
     list.tstat[[annotation]] <- tstat
     # if (annotation=="ENT1") {break}
-    counter <- counter + 1
   }
   df.tstat <- bind_cols(list.tstat) # df/tbl, genes x annotation | binds by position
   return(df.tstat)
@@ -303,7 +286,7 @@ tstat_sem <- function(object_data, df.ncells) {
 
 
 
-ges_sem <- function(object_data, df.ncells) {
+ges_sem <- function(sem) {
   ### Calculate Gene Enrichment Score
   ### Ref: Zeisel, Cell 2018
   ### formula: (mean[celltype]+epsilon_1)/(mean[other]+epsilon_1) * (frac[celltype]+epsilon_2)/(frac[other]+epsilon_2)
@@ -311,185 +294,26 @@ ges_sem <- function(object_data, df.ncells) {
   print("Calculating GES")
   epsilon_1 <-  1e-100 # or .Machine$double.eps
   epsilon_2 <- 0.01
-  
-  annotations <- colnames(object_data[["mean"]])
-  n_genes <- dim(object_data[["mean"]])[1]
-  
   ### vectorized calculation of pooled variance for each gene
   # formula: sum_i{var[i]*(n[i]-1)}/sum_i{n[i]-1}, where i is the group.
-  df.n <- df.ncells %>% slice(rep(1:n(), each=n_genes )) # df, 1 x annotations | replicate row in ncells. REF rep(): https://stackoverflow.com/a/47780537/6639640
+  df.n <- sem[["ncells"]] %>% slice(rep(1:n(), each=length(sem[["genes"]]) )) # df, 1 x annotations | replicate row in ncells. REF rep(): https://stackoverflow.com/a/47780537/6639640
   list.ges <- list()
-  counter <- 1
-  for (annotation in annotations) {
-    print(sprintf("#%s/#%s | Calculating GES for annotation=%s", counter, length(annotations), annotation))
+  for (annotation in sem[["annotations"]]) {
+    print(annotation)
     annotation_sym <- rlang::sym(annotation)
-    mean.self <- object_data[["mean"]] %>% pull(!!annotation_sym) # numeric vector, genes x 1
-    frac.self <- object_data[["frac_expr"]] %>% pull(!!annotation_sym) # numeric vector, genes x 1
+    mean.self <- sem[["mean"]] %>% pull(!!annotation_sym) # numeric vector, genes x 1
+    frac.self <- sem[["frac_expr"]] %>% pull(!!annotation_sym) # numeric vector, genes x 1
     ### Calculate mean and frac for 'other' using ncells as weights
-    df.n_other <- df.ncells %>% select(-!!annotation_sym) %>% slice(rep(1:n(), each=n_genes )) # df, genes x annotations. Each row contains the number of cells and each row is identical.
-    mean.other <- rowSums(object_data[["mean"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
-    frac.other <- rowSums(object_data[["frac_expr"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
+    df.n_other <- sem[["ncells"]] %>% select(-!!annotation_sym) %>% slice(rep(1:n(), each=length(sem[["genes"]]) )) # df, genes x annotations. Each row contains the number of cells and each row is identical.
+    mean.other <- rowSums(sem[["mean"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
+    frac.other <- rowSums(sem[["frac_expr"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
     ### Calculate GES
     ges <- (mean.self+epsilon_1)/(mean.other+epsilon_1) * (frac.other+epsilon_2)/(frac.other+epsilon_2) # numeric, genes x 1
     ges[dplyr::near(ges, 0)] <- 0 # assigning ges values 'near equal to' zero to zero.
     list.ges[[annotation]] <- ges
-    counter <- counter + 1
   }
   df.ges <- bind_cols(list.ges) # df/tbl, genes x annotation | binds by position
   return(df.ges)
-}
-
-
-######################################################################################################
-############################################# MULTI_GENESET ##############################################
-######################################################################################################
-
-clean_annotation_name <- function(annotation_name) {
-  ### Function to clean annotation name to use for LDSC pipeline
-  ### Works on both both 'scalar' and vector input
-  return(stringr::str_replace_all(annotation_name, c("/"="-", "\\s+"="_")))
-}
-
-write_multi_geneset_file <- function(object, dataset_prefix, use_raw_sem_values=F, make_clean_annotation_names=T, add_all_genes_in_dataset=F) {
-  ### OUTPUT
-  ### a file with filename multi_geneset.<dataset_prefix>.txt
-  ### the file (no header) with the following columns:
-  # col 1 "geneset name"  : <dataset_prefix>.<annotation=celltype>.<sem_name> or <dataset_prefix>.all_genes_in_dataset.dummy
-  # col 2                       : human ensembl gene ID
-  # col 3                       : value/score for the given gene. For .all_genes_in_dataset it will be all 1's.
-  ### we prefix with <dataset_prefix> to allow for multiple multi_geneset files to be concatenatted together (e.g. hierarchical SEMs) and still have unique values in col1 (geneset name).
-  ### only genes with sem_transformed > 0 will be written to file. This makes the LDSC make_annot.py pipeline more effective.
-  if (is.null(object[["sem_transformed"]])) { # ensure that slots exists
-    stop("Object has no sem_transformed slot. Calculate before running this function")
-  }
-  
-  check_annotation_names(object)
-  print(sprintf("Running with make_clean_annotation_names=%s", make_clean_annotation_names))
-  
-  if (use_raw_sem_values) {
-    print("OBS: use_raw_sem_values enabled. Will use object[['sem']] as sem value slot")
-    SEM_SLOT <- "sem"
-  } else {
-    SEM_SLOT <- "sem_transformed"
-  }
-  
-  list_res <- list()
-  i <- 1
-  ### loop over individual sem_transformed
-  for (sem_name in names(object[[SEM_SLOT]])) { 
-    for (annotation in names(object[[SEM_SLOT]][[sem_name]])) {
-      print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
-      df.tmp <- object[[SEM_SLOT]][[sem_name]] %>% 
-        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-        mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-               .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-               gene=object[["genes"]]) # add geneset annotation and gene names 
-      ### NB: this simpler (no as_string() and .annotation) but less explicit version also works.
-      # df.tmp <- object[[SEM_SLOT]][[sem_name]] %>% 
-      #   select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-      #   mutate(annotation = annotation, # LHS is the name of the column we create; RHS is a string
-      #          sem_name = sem_name, # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-      #          gene=object[["genes"]]) # add geneset annotation and gene names 
-      if (!use_raw_sem_values) {
-        df.tmp <- df.tmp %>% filter(value > 0) # keep only sem_transformed > 0. Do this AFTER adding gene names
-      }
-      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-      i <- i + 1
-    }
-  }
-  ### add tstat_top10pct_binary [works for both conditions of use_raw_sem_values]
-  ### this SEM was used in Finucane2018 (LDSC-SEG)
-  sem_dependency <- "tstat"
-  sem_name <- "tstat_top10pct_binary"
-  if (is.null(object[[SEM_SLOT]][[sem_dependency]])) {
-    stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given SEM is calculated before running this function...", SEM_SLOT, sem_dependency))
-  }
-  for (annotation in names(object[[SEM_SLOT]][[sem_dependency]])) {
-    print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
-    df.tmp <- object[[SEM_SLOT]][[sem_dependency]] %>% 
-      select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-      mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-             .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-             gene=object[["genes"]]) # add geneset annotation and gene names 
-    # SPECIFIC STEP
-    df.tmp <- df.tmp %>% 
-      filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
-      mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
-    list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-    i <- i + 1
-  }
-  
-  ### add specificity_top10pct_binary [works for both conditions of use_raw_sem_values]
-  ### this SEM was used in Skene2018
-  sem_dependency <- "specificity"
-  sem_name <- "specificity_top10pct_binary"
-  if (is.null(object[[SEM_SLOT]][[sem_dependency]])) {
-    stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given SEM is calculated before running this function...", SEM_SLOT, sem_dependency))
-  }
-  for (annotation in names(object[[SEM_SLOT]][[sem_dependency]])) {
-    print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
-    df.tmp <- object[[SEM_SLOT]][[sem_dependency]] %>% 
-      select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-      mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-             .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-             gene=object[["genes"]]) # add geneset annotation and gene names 
-    # SPECIFIC STEP
-    df.tmp <- df.tmp %>% 
-      filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
-      mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
-    list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-    i <- i + 1
-  }
-  if (!use_raw_sem_values) {
-    ### loop over sem_meta mean
-    sem_name <- "sem_mean"
-    for (annotation in names(object[["sem_meta"]][["mean"]])) {
-      print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
-      df.tmp <- object[["sem_meta"]][["mean"]] %>% 
-        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-        mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-               .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-               gene=object[["genes"]]) %>% # add geneset annotation and gene names
-        filter(value > 0) # keep only sem_transformed > 0. Do this AFTER adding gene names
-      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-      i <- i + 1
-    }
-  }
-  ### add all genes
-  if (add_all_genes_in_dataset) {
-    print("Adding all genes...")
-    list_res[[i]] <- tibble(value=1, 
-                            gene=object[["genes"]], 
-                            .annotation="all_genes_in_dataset",
-                            .sem_name="dummy")
-    i <- i + 1 # not needed, but good to have if you rearrange the code
-  }
-  print("Doing bind_rows..")
-  # rowbind
-  df.multi_geneset <- bind_rows(list_res) # When row-binding, columns are matched by name
-  # clean annotation name
-  if (make_clean_annotation_names) {
-    print("Cleaning annotation names...")
-    df.multi_geneset <- df.multi_geneset %>% mutate(.annotation = clean_annotation_name(.annotation))
-  }
-  # make geneset_name column
-  df.multi_geneset <- df.multi_geneset %>% mutate(geneset_name=paste(dataset_prefix,
-                                                                     .annotation,
-                                                                     .sem_name, 
-                                                                     sep="."))
-  # check for any NA values
-  if(any(is.na(df.multi_geneset))) {
-    print("Error: df.multi_geneset contains NA values. Investigate the returned data.frame for NA values, resolve the issue and rerun this function. No file will be written.")
-  } else {
-    print("Checked df.multi_geneset for NA values and found nothing. All good to go!")
-    # write file
-    file.out <- sprintf("multi_geneset.%s.txt.gz", dataset_prefix)
-    print(sprintf("writing file: %s", file.out))
-    df.multi_geneset %>% 
-      select(geneset_name, gene, value) %>% # *IMPORTANT*: re-arrange column order to agree with make_annot.py file format
-      write_tsv(file.out, col_names=F) # no header
-  }
-  return(df.multi_geneset)
 }
 
 
@@ -508,13 +332,13 @@ read_file_fast <- function(file_path) {
 }
 
 
-write_sems <- function(object, slot, dataset_prefix) {
-  ### Function: write SEM: "sem" or "sem_transformed"
-  ### We recommend that dataset_prefix contains information about specie
-  stopifnot(slot %in% c("sem", "sem_transformed", "sem_meta"))
-  print(sprintf("Writing slot=%s files for dataset_prefix=%s", slot, dataset_prefix))
+write_sems <- function(object, slot, name.dataset) {
+  ### Function: write SEM: "sem" or "sem_bin"
+  ### We recommend that name.dataset contains information about specie
+  stopifnot(slot %in% c("sem", "sem_bin"))
+  print(sprintf("Writing slot=%s files for name.dataset=%s", slot, name.dataset))
   for (name.sem in names(object[[slot]])) {
-    file.out <- sprintf("%s.%s.csv.gz", dataset_prefix, name.sem)
+    file.out <- sprintf("%s.%s.csv.gz", name.dataset, name.sem)
     print(sprintf("Writing file: %s", file.out))
     object[[slot]][[name.sem]] %>% mutate(gene=object[["genes"]]) %>% select(gene, everything()) %>% write_csv(path=file.out)
     # or use data.table::fwrite() and afterwards R.utils::gzip('filename.csv',destname='filename.csv.gz')
@@ -522,13 +346,13 @@ write_sems <- function(object, slot, dataset_prefix) {
 }
 
 ### OLD
-# write_sem <- function(df, dataset_prefix, name.sem, ortholog_mapping=NULL) {
+# write_sem <- function(df, name.dataset, name.sem, ortholog_mapping=NULL) {
 #   print(sprintf("Writing files for SEM = %s", name.sem))
-#   write_csv(df %>% rownames_to_column(var="gene"), sprintf("%s.%s.sem.csv.gz", dataset_prefix, name.sem))
+#   write_csv(df %>% rownames_to_column(var="gene"), sprintf("%s.%s.sem.csv.gz", name.dataset, name.sem))
 #   
 #   if (!is.null(ortholog_mapping)) {
 #     df.human <- mouse_to_human_ortholog_gene_expression_mapping(df, type_mouse_gene_ids=ortholog_mapping)
-#     write_csv(df.human %>% rownames_to_column(var="gene"), sprintf("%s.%s.hsapiens_orthologs.sem.csv.gz", dataset_prefix, name.sem))
+#     write_csv(df.human %>% rownames_to_column(var="gene"), sprintf("%s.%s.hsapiens_orthologs.sem.csv.gz", name.dataset, name.sem))
 #   }
 # }
 
@@ -536,8 +360,6 @@ identical_value <- function(x,y) {
   # returns NA if any values are not identical
   if (identical(x,y)) x else NA # or x==y instead of identical(). 
 }
-
-
 
 ######################################################################################################
 ############################################# SEM_OBJECT METHODS ##############################################
@@ -552,39 +374,24 @@ identical_value <- function(x,y) {
 # genes --> character
 # annotations --> character
 # sem --> list(sems)
-# sem_transformed --> list(sems)
-# group_by_annotation.sem_transformed --> list of dfs (annotations)
+# sem_bin --> list(sems)
+# group_by_annotation.sem_bin --> list of dfs (annotations)
 # group_by_annotation.sem --> list of dfs (annotations)
-# sem_meta --> list of dfs (mean,median,sd)  made from group_by_annotation.sem_transformed
-# null[mean,var,frac] --> tibbles
-# null[sem] --> list(sems)
+# sem_meta --> list of dfs (mean,median,sd)  made from group_by_annotation.sem_bin
 
-check_annotation_names <- function(object) {
-  bool.white_space <- stringr::str_detect(object[["annotations"]], pattern="\\s+")
-  bool.fwd_slash <- stringr::str_detect(object[["annotations"]], pattern="/")
-  if (any(bool.white_space)) {
-    print(sprintf("*WARNING*: object annotations contains whitespace (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.white_space)))
-  }
-  if (any(bool.fwd_slash)) {
-    print(sprintf("*WARNING*: object annotations contains forward slash ('/') (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.fwd_slash)))
-  }
-  if (!any(bool.white_space,bool.fwd_slash)) {
-    print("Annotation names passed check_annotation_names() with no remarks")
-  }
-}
 
-process_annotations_and_genes <- function(object_data) {
+preprocess_and_set_slots <- function(object) {
   ### check that genes and annotations are identical
-  ### **run only once because 'gene' column is removed.**
+  ### run only once because 'gene' column is removed.
   list_annotations <- list()
   list_genes <- list()
   for (x in c("frac_expr", "mean", "var")) {
-    if (anyNA(object_data[[x]])) {
+    if (anyNA(object[[x]])) {
       stop(sprintf("Input data contains NA values: %s", x))
     }
-    list_genes[[x]] <- object_data[[x]] %>% pull(gene)
-    object_data[[x]] <- object_data[[x]] %>% select(-gene) # *remove gene col*
-    list_annotations[[x]] <- colnames(object_data[[x]]) # set annotations after removing gene col
+    list_genes[[x]] <- object[[x]] %>% pull(gene)
+    object[[x]] <- object[[x]] %>% select(-gene) # remove col
+    list_annotations[[x]] <- colnames(object[[x]]) # set annotations after removing gene col
   }
   if (anyNA(Reduce(f=identical_value, x=list_annotations))) {
     stop("Annotations are not identical for pre-loaded data. Input data must contain identical cell-types in the same order.")
@@ -592,48 +399,28 @@ process_annotations_and_genes <- function(object_data) {
   if (anyNA(Reduce(f=identical_value, x=list_genes))) {
     stop("Genes are not identical for pre-loaded data. Input data must contain identical genes in the same order.")
   }
-  list.res <- list("object_data"=object_data, "genes"=list_genes[[1]], "annotations"=list_annotations[[1]]) # since all elements are identical, we can just pick one of them
-  return(list.res)
-}
-
-preprocess_and_set_slots <- function(object) {
-  # Function check genes and annotation are identical across the different slots.
-  # Gene column is removed.
-  list.res <- process_annotations_and_genes(object[["data"]])
-  object[["data"]] <- list.res[["object_data"]]
   
   ### Set genes and annotations
-  object[["genes"]] <- list.res[["genes"]]
-  object[["annotations"]] <- list.res[["annotations"]]
+  object[["genes"]] <- list_genes[[1]]
+  object[["annotations"]] <- list_annotations[[1]]
   
   ### Last check
   stopifnot(all(object[["annotations"]] == colnames(object[["ncells"]]))) # annotation must match annotations in ncell
-  
-  print("Object passed all checks")
   return(object)
 }
 
-check_null <- function(object) {
-  # Function checks that annotations and genes in the null is identical to the foreground.
-  # Function should be called on object after preprocess_and_set_slots().
-  list.res <- process_annotations_and_genes(object[["null"]][["data"]])
-  object[["null"]][["data"]] <- list.res[["object_data"]]
-  
-  stopifnot(all(list.res[["genes"]] == object[["genes"]])) # null genes must be identical to foreground genes
-  stopifnot(all(list.res[["annotations"]] == object[["annotations"]])) # null genes must be identical to foreground genes
-  print("Object null passed all checks")
-  return(object)
-}
 
 
 create_sem_object <- function(file_prefix) {
   object <- list()
   class(object) <- "sem object"
-  object[["data"]][["var"]] <- read_file_fast(sprintf("%s.pre_calc.var.csv.gz", file_prefix))
-  object[["data"]][["frac_expr"]] <- read_file_fast(sprintf("%s.pre_calc.frac_expr.csv.gz", file_prefix))
-  object[["data"]][["mean"]] <- read_file_fast(sprintf("%s.pre_calc.mean.csv.gz", file_prefix))
+  object[["var"]] <- read_file_fast(sprintf("%s.pre_calc.var.csv.gz", file_prefix))
+  object[["frac_expr"]] <- read_file_fast(sprintf("%s.pre_calc.frac_expr.csv.gz", file_prefix))
+  object[["mean"]] <- read_file_fast(sprintf("%s.pre_calc.mean.csv.gz", file_prefix))
   object[["genes_exclude"]] <- read_file_fast(sprintf("%s.pre_calc.sporadically_expressed_genes.anova.csv.gz", file_prefix))
-  object[["ncells"]] <- read_file_fast(sprintf("%s.pre_calc.ncells.csv.gz", file_prefix))
+  object[["ncells"]] <- read_file_fast(sprintf("%s.pre_calc.ncells.csv.gz", file_prefix)) %>% 
+    rename(annotation=cell_type, n=NCells) %>% # *TMP*
+    distinct() # *TMP* # df, 2 x annotations | cols = {annotation, n}
   
   ### making 'ncells' a one row df.
   object[["ncells"]] <- object[["ncells"]] %>% 
@@ -644,53 +431,14 @@ create_sem_object <- function(file_prefix) {
   # names(n) <- object[["ncells"]] %>% pull(annotation)
   # object[["ncells"]] <- as.tibble(as.list(n))
   
-  ### Read null
-  object[["null"]] <- list()
-  object[["null"]][["data"]][["var"]] <- read_file_fast(sprintf("%s.pre_calc.var.null.csv.gz", file_prefix))
-  object[["null"]][["data"]][["frac_expr"]] <- read_file_fast(sprintf("%s.pre_calc.frac_expr.null.csv.gz", file_prefix))
-  object[["null"]][["data"]][["mean"]] <- read_file_fast(sprintf("%s.pre_calc.mean.null.csv.gz", file_prefix))
-  
   ### create object slots (not needed)
   # object[["sem"]] <- list()
-  # object[["sem_transformed"]] <- list()
-  
-  ### check annotation names 
-  check_annotation_names(object)
+  # object[["sem_bin"]] <- list()
   
   ### pre_process
   object <- preprocess_and_set_slots(object) 
   
-  ### check null
-  object <- check_null(object)
   return(object)
-}
-
-
-clear_sem_data_slots <- function(object) {
-  ### Clear data slots
-  print("Clearning sem data slots: sem, sem_transformed, etc...")
-  object[["sem"]] <- NULL
-  object[["sem_transformed"]] <- NULL
-  object[["group_by_annotation.sem"]] <- NULL
-  object[["group_by_annotation.sem_transformed"]] <- NULL
-  object[["sem_meta"]] <- NULL
-  
-  object[["null"]][["sem"]] <- NULL
-  return(object)
-}
-
-
-subset_annotation_data <- function(object_data, annotations){
-  # PRIVATE FUNCTION
-  list_annotations <- list()
-  for (x in c("frac_expr", "mean", "var")) {
-    object_data[[x]] <- object_data[[x]] %>% select(!!!rlang::syms(annotations)) # Notice !!!syms() because annotations is a vector.
-    list_annotations[[x]] <- colnames(object_data[[x]])
-  }
-  if (anyNA(Reduce(f=identical_value, x=list_annotations))) {
-    stop("Annotations are not identical for pre-loaded data. Input data must contain identical cell-types in the same order.")
-  }
-  return(object_data)
 }
 
 
@@ -699,38 +447,37 @@ subset_annotations <- function(object, annotations) {
   ### annotations: a character vector of annotation names to subset on. 
   ### NB: annotations are re-ordered by the order provided in annotations.
   print(sprintf("Subsetting object: keeping n=%s annotations.", length(annotations)))
-
-  object[["data"]] <- subset_annotation_data(object[["data"]], annotations) # foreground
-  object[["null"]][["data"]] <- subset_annotation_data(object[["null"]][["data"]], annotations) # null
-  object[["ncells"]] <- object[["ncells"]] %>% select(!!!rlang::syms(annotations)) # ncells
-  object[["annotations"]] <- object[["annotations"]][match(annotations,object[["annotations"]])] # subject annoations
-  stopifnot(colnames(object[["ncells"]]) == object[["annotations"]]) # must have same annotations. We also check that the order is the same, just so everything stays in sync
+  
+  list_annotations <- list()
+  for (x in c("frac_expr", "mean", "var", "ncells")) {
+    object[[x]] <- object[[x]] %>% select(!!!rlang::syms(annotations)) # Notice !!!syms() because annotations is a vector.
+    list_annotations[[x]] <- colnames(object[[x]])
+  }
+  if (anyNA(Reduce(f=identical_value, x=list_annotations))) {
+    stop("Annotations are not identical for pre-loaded data. Input data must contain identical cell-types in the same order.")
+  }
+  object[["annotations"]] <- object[["annotations"]][object[["annotations"]] %in% annotations] # subject annoations
   
   ### Excluding zero mean genes (after subsetting on annotations)
-  bool.genes_exclude <- rowMeans(object[["data"]][["mean"]])==0
-  object <- exclude_genes(object, bool.genes_exclude)
-  
-  ### Clear data slots
-  object <- clear_sem_data_slots(object)
-  return(object)
-}
-
-
-exclude_genes <- function(object, bool.genes_exclude){
-  # Function to exclude genes
-  # bool.genes_exclude: a boolean vector of genes to exclude of equal length as the number of genes in object
-  
-  print(sprintf("Total number of genes marked for exclusion: %s", sum(bool.genes_exclude)))
+  bool.genes_exclude <- rowMeans(object[["mean"]])==0
+  print(sprintf("Number of zero-mean genes marked for exclusion: %s", sum(bool.genes_exclude)))
   for (x in c("frac_expr", "mean", "var")) {
-    object[["data"]][[x]] <- object[["data"]][[x]] %>% filter(!bool.genes_exclude)
-    object[["null"]][["data"]][[x]] <- object[["null"]][["data"]][[x]] %>% filter(!bool.genes_exclude)
+    object[[x]] <- object[[x]] %>% filter(!bool.genes_exclude)
   }
   object[["genes"]] <- object[["genes"]][!bool.genes_exclude]
   print(sprintf("Number of genes in object: %s", length(object[["genes"]])))
+  
+  ### Clear data slots
+  print("Clearning sem data slots: sem, sem_bin, etc...")
+  object[["sem"]] <- NULL
+  object[["sem_bin"]] <- NULL
+  object[["group_by_annotation.sem"]] <- NULL
+  object[["group_by_annotation.sem_bin"]] <- NULL
+  object[["sem_meta"]] <- NULL
   return(object)
 }
 
-exclude_sporadic_expressed_genes <- function(object) {
+exclude_genes <- function(object) {
   ### exclude the following genes
   ### 1) genes with insignificant anova test
   ### 2) genes with mean zero expression in ALL annotation groups.
@@ -748,12 +495,16 @@ exclude_sporadic_expressed_genes <- function(object) {
   bool.sporadic_expressed <- object[["genes"]] %in% genes.sporadic_expressed
   
   ### Zero mean genes
-  bool.genes_zero_mean <- rowMeans(object[["data"]][["mean"]])==0
+  bool.genes_zero_mean <- rowMeans(object[["mean"]])==0
   print(sprintf("Number of zero-mean genes: %s", sum(bool.genes_zero_mean)))
+  
   bool.genes_exclude <- bool.genes_zero_mean | bool.sporadic_expressed 
- 
-  ### Exlude genes
-  object <- exclude_genes(object, bool.genes_exclude)
+  print(sprintf("Total number of genes marked for exclusion: %s", sum(bool.genes_exclude)))
+  for (x in c("frac_expr", "mean", "var")) {
+    object[[x]] <- object[[x]] %>% filter(!bool.genes_exclude)
+  }
+  object[["genes"]] <- object[["genes"]][!bool.genes_exclude]
+  print(sprintf("Number of genes in object: %s", length(object[["genes"]])))
   return(object)
 }
 
@@ -761,59 +512,46 @@ exclude_sporadic_expressed_genes <- function(object) {
 map_to_human <- function(object, type_mouse_gene_ids) {
   gene_ids.human <- mouse_to_human_ortholog_gene_mapping(object[["genes"]], type_mouse_gene_ids) # mouse genes that did not map to human are assigned NA value.
   bool.genes_exclude <- is.na(gene_ids.human)
-  object <- exclude_genes(object, bool.genes_exclude)
+  for (x in c("frac_expr", "mean", "var")) {
+    object[[x]] <- object[[x]] %>% filter(!bool.genes_exclude)
+  }
+  for (sem_name in names(object[["sem"]])) { # assumes sem and sem_bin have same elements, which is a fair assumption
+    object[["sem"]][[sem_name]] <- object[["sem"]][[sem_name]] %>% filter(!bool.genes_exclude)
+    object[["sem_bin"]][[sem_name]] <- object[["sem_bin"]][[sem_name]] %>% filter(!bool.genes_exclude)
+  }
   object[["genes"]] <- gene_ids.human[!bool.genes_exclude] # updating genes
-  
-  ### Clear data slots
-  object <- clear_sem_data_slots(object)
-  
-  ### the below code supports keeping SEM calculation data from mouse
-  # for (sem_name in names(object[["sem"]])) { # assumes sem and sem_transformed have same elements, which is a fair assumption
-  #   object[["sem"]][[sem_name]] <- object[["sem"]][[sem_name]] %>% filter(!bool.genes_exclude)
-  #   object[["sem_transformed"]][[sem_name]] <- object[["sem_transformed"]][[sem_name]] %>% filter(!bool.genes_exclude)
-  # }
-  # print("Clearing group_by_annotation.sem and group_by_annotation.sem_transformed slots. This is not important, but we do it to avoid any downstream confusion")
-  # object[["group_by_annotation.sem"]] <- NULL
-  # object[["group_by_annotation.sem_transformed"]] <- NULL
-  # print("Info: sem, sem_bim slot are left 'as is' after mapping to human. The recommended workflow is to recalculate sem_transformed slot")
+  print("Clearing group_by_annotation.sem and group_by_annotation.sem_bin slots. This is not important, but we do it to avoid any downstream confusion")
+  object[["group_by_annotation.sem"]] <- NULL
+  object[["group_by_annotation.sem_bin"]] <- NULL
+  print("Info: sem, sem_bim slot are left 'as is' after mapping to human. The recommended workflow is to recalculate sem_bin slot")
   return(object)
 }
 
 
 calc_sem_wrapper <- function(object) {
   ### Function: wrapper to calculate all SEMs
-  sems <- c("tstat", "ges", "si", "specificity") # "zscore"
+  sems <- c("tstat", "ges", "zscore", "si", "specificity")
   for (sem in sems) {
     object <- calc_sem(object, sem_name=sem)
-    object <- calc_sem(object, sem_name=sem, null=T)
   }
   return(object)
 }
 
-calc_sem <- function(object, sem_name, null=F) {
+calc_sem <- function(object, sem_name) {
   ### Function: Sets sem slot. All sems are tibbles.
-  # if (!is.null(object[["sem"]][[sem_name]])) { # check if slot already exists
-  #   print(sprintf("Warning: %s slot already exists in object. Data will be overwritten", sem_name))
-  # }
-  
-  ### TODO: optimization inefficient to make a copy?
-  if (null) {
-    print("Calculating null SEM")
-    object_data <- object[["null"]][["data"]]
-  } else {
-    object_data <- object[["data"]]
+  if (!is.null(object[["sem"]][[sem_name]])) { # check if slot already exists
+    print(sprintf("Warning: %s slot already exists in object. Data will be overwritten", sem_name))
   }
-  
   if (sem_name == "tstat") {
-    df_sem <- tstat_sem(object_data, object[["ncells"]])
+    df_sem <- tstat_sem(object)
   } else if (sem_name == "ges") {
-    df_sem <- ges_sem(object_data, object[["ncells"]])
+    df_sem <- ges_sem(object)
+  } else if (sem_name == "zscore") {
+    df_sem <- zscore_sem(object)
   } else if (sem_name == "si") {
-    df_sem <- normalized_specificity_index(object_data[["mean"]])
+    df_sem <- normalized_specificity_index(object[["mean"]])
   } else if (sem_name == "specificity") {
-    df_sem <- calculate_specificity(object_data[["mean"]])
-  # } else if (sem_name == "zscore") {
-  #   df_sem <- zscore_sem(object)
+    df_sem <- calculate_specificity(object[["mean"]])
   # } else if (sem_name == "mean") { # makes no sense to include. 
   #   df_sem <- object[["mean"]]
   # } else if (sem_name == "frac_expr") { # makes no sense to include
@@ -828,161 +566,58 @@ calc_sem <- function(object, sem_name, null=F) {
   if (nrow(df_sem.na) > 0) {
     print(sprintf("sem_name=%s | N=%s genes contained NA values after SEM calculation.", sem_name, nrow(df_sem.na)))
   }
-  
-  if (null) {
-    object[["null"]][["sem"]][[sem_name]] <- as.tibble(df_sem)
-  } else {
-    object[["sem"]][[sem_name]] <- as.tibble(df_sem)
-  }
+  object[["sem"]][[sem_name]] <- as.tibble(df_sem)
   return(object)
 }
 
-calc_empirical_pvalues <- function(df.obs, df.null) {
-  
-  ### TMP for debugging
-  # object <- sem_obj.sub
-  # sem_name <- "si"
-  # df.obs <- object[["sem"]][[sem_name]]
-  # df.null <- object[["null"]][["sem"]][[sem_name]]
-  
-  list.pvals <- list()
-  list.qvals <- list()
-  for (annotation in colnames(df.obs)) {
-    ### Formula: pvals = 1-findInterval(obs, null)/nobs: finds the fraction of observations in the null that are larger than the observed values.
-    # step 1: idx.insertions <- findInterval(obs, null): Find indices where elements in OBS should be inserted to maintain order in NULL.  'NULL' must be sorted (weakly) increasingly (low values --> high values)
-    # step 1: idx.insertions with low indicies are OBS with low SEM values (that should be inserted in the top of NULL). idx.insertions with high indicies are OBS with high SEM values (that should be inserted in the bottom of NULL)
-    # step 2: idx.insertions/nobs: finds the fraction of observations in the null that are SMALLER than the observed values
-    # step 3: 1-idx.insertions/nobs: reverses the above --> finds the fraction of observations in the null that are LARGER than the observed values
-    idx.insertions <- findInterval(df.obs %>% pull(!!rlang::sym(annotation)), sort(df.null %>% pull(!!rlang::sym(annotation))))
-    pvals <- 1 - (idx.insertions/nrow(df.obs))
-    ### REF: https://stat.ethz.ch/R-manual/R-devel/library/base/html/findInterval.html
-    # ...This is the same computation as for the empirical distribution function, and indeed, findInterval(t, sort(X)) is identical to n * Fn(t; X[1],..,X[n]) where Fn is the empirical distribution function of X[1],..,X[n].
-    list.pvals[[annotation]] <- pvals
-    list.qvals[[annotation]] <- p.adjust(pvals, method="BH")
+bin_sems <- function(object, n_bins=101, threshold_bin_zero=0) {
+  ### Function sets the slot 'sem_bin' containing binned data for each of the sems in the 'sem' slot
+  if (is.null(object[["sem"]])) { # ensure that sem slot exists
+    stop("object has no sem slot. Calculate SEMs before running this function")
   }
-  df.pvals <- bind_cols(list.pvals) # tibble. colnames will be annotation names
-  df.qvals <- bind_cols(list.qvals) # tibble. colnames will be annotation names
-  list.p_and_qvals <- list("pvals" = df.pvals, "qvals" = df.qvals)
-  return(list.p_and_qvals)
-}
-
-
-calc_empirical_pvalues_wrapper <- function(object) {
-  if (is.null(object[["sem"]])) { # ensure that slots exists
-    stop("Object has no sem slot. Calculate before running this function")
+  if (!is.null(object[["sem_bin"]])) { # check if slot already exists
+    print(sprintf("Warning: %s slot already exists in object. Data will be overwritten", "sem_bin"))
   }
-  for (sem_name in names(object[["sem"]])) {
-    print(sprintf("Calculating emperical p-values and q-values for SEM = %s", sem_name))
-    list.p_and_qvals <- calc_empirical_pvalues(object[["sem"]][[sem_name]], object[["null"]][["sem"]][[sem_name]])
-    object[["sem_pvalues"]][[sem_name]] <- list.p_and_qvals[["pvals"]]
-    object[["sem_qvalues"]][[sem_name]] <- list.p_and_qvals[["qvals"]]
+  object[["sem_bin"]] <- list()
+  for (name.sem in names(object[["sem"]])) {
+    object[["sem_bin"]][[name.sem]] <- wrapper_binning(object[["sem"]][[name.sem]], n_bins=n_bins, threshold_bin_zero=threshold_bin_zero)
   }
   return(object)
 }
-
-
-get_empirical_distribution <- function(object, sem_name, annotation=NULL) {
-  if (is.null(object[["sem"]][[sem_name]]) | is.null(object[["null"]][["sem"]][[sem_name]])) {
-    stop(sprintf("Object has no sem_name = %s slot in either null or sem slot.", sem_name))
-  }
-  if (is.null(annotation)) {
-    annotation <- sample(object[["annotations"]], size=1)
-    print(sprintf("Chose random annotation: %s", annotation))
-  } else if (!annotation %in% object[["annotations"]]) {
-    stop(sprintf("Annotation %s is not in object annotations.", annotation))
-  }
-  # findInterval(df.obs %>% pull(!!rlang::sym(annotation)), sort(df.null %>% pull(!!rlang::sym(annotation))))
-  df <- tibble(obs=object[["sem"]][[sem_name]] %>% pull(!!rlang::sym(annotation)),
-                    null=object[["null"]][["sem"]][[sem_name]] %>% pull(!!rlang::sym(annotation)))
-  print(summary(df))
-  return(df)
-}
-
-get_empirical_pvalues_summary <- function(object, threshold, slot="sem_pvalues") {
-  if (!slot %in% c("sem_pvalues", "sem_qvalues")) { # ensure that we get the correct slot argument
-    stop(sprintf("Got wrong slot argument: %s", slot))
-  }
-  if (is.null(object[[slot]])) { # ensure that slots exists
-    stop(sprintf("Object has no %s slot. Calculate them before running this function", slot))
-  }
-  list.summary <- list()
-  for (sem_name in names(object[[slot]])) {
-    list.summary[[sem_name]] <- apply(object[[slot]][[sem_name]], 2, function(col) {sum(col <= threshold)})
-  }
-  df.summary <- bind_cols(list.summary) # combine to tibble. dim = annotations x sems
-  df.summary <- df.summary %>% mutate(annotation=colnames(object[["sem_transformed"]][[1]])) %>% select(annotation, everything()) # add annotation as column
-  print(sprintf("Per-SEM summery number of genes with %s <= %s", slot, threshold))
-  print(summary(df.summary))
-  return(df.summary)
-}
-
-transform_sems <- function(object, method, n_bins=101, threshold_pval=0.05) {
-  ### Function sets the slot 'sem_transformed' containing binned data for each of the sems in the 'sem' slot
-  # 
-  if (is.null(object[["sem"]]) | is.null(object[["sem_pvalues"]]) ) { # ensure that slots exists
-    stop("Object has no sem or sem_pvalues slot. Calculate them before running this function")
-  }
-  if (!is.null(object[["sem_transformed"]])) { # check if slot already exists
-    print(sprintf("Warning: %s slot already exists in object. Data will be overwritten", "sem_transformed"))
-  }
-  accepted_method_args <- c("binning", "rank_normalize")
-  if (!method %in% accepted_method_args) {
-    stop(sprintf("Got wrong method argument: %s. Accepted arguments is %s", method, paste(accepted_method_args, sep=",")))
-  }
-  for (sem_name in names(object[["sem"]])) {
-    df.sem <- as.data.frame(object[["sem"]][[sem_name]]) # copy
-    df.sem[object[["sem_pvalues"]][[sem_name]] > threshold_pval] <- NA # set SEM values above threshold_pval to NA so these values go in bin zero. | this indexing works because sem_pvalues and sem have same dimensions
-    if (method == "binning") {
-      object[["sem_transformed"]][[sem_name]] <- as.tibble(apply(df.sem, 2, bin_vector, n_bins=n_bins))
-    } else if (method == "rank_normalize") {
-      object[["sem_transformed"]][[sem_name]] <- as.tibble(apply(df.sem, 2, rank_normalize_vecor))
-    }
-    
-  }
-  return(object)
-}
-
-
 
 
 set_group_by_annotation_slots <- function(object) {
   ### Function: returns a list of lists with per annotation.
   ### group sem and sim_bin data by annotations
-  if (is.null(object[["sem"]]) | is.null(object[["sem_transformed"]]) ) { # ensure that slots exists
-    stop("Object has no sem or sem_transformed slot. Calculate them before running this function")
-  }
-  
   object[["group_by_annotation.sem"]] <- list()
-  object[["group_by_annotation.sem_transformed"]] <- list()
+  object[["group_by_annotation.sem_bin"]] <- list()
   for (annotation in object[["annotations"]]) {
-    print(annotation)
     list.tmp.sem <- list()
-    list.tmp.sem_transformed <- list()
-    for (sem_name in names(object[["sem"]])) { # assumes sem and sem_transformed have same elements, which is a fair assumption
+    list.tmp.sem_bin <- list()
+    for (sem_name in names(object[["sem"]])) { # assumes sem and sem_bin have same elements, which is a fair assumption
       list.tmp.sem[[sem_name]] <- object[["sem"]][[sem_name]] %>% select(!!rlang::sym(sem_name) := !!rlang::sym(annotation)) # selecting and renaming
-      list.tmp.sem_transformed[[sem_name]] <- object[["sem_transformed"]][[sem_name]] %>% select(!!rlang::sym(sem_name) := !!rlang::sym(annotation)) # selecting and renaming
+      list.tmp.sem_bin[[sem_name]] <- object[["sem_bin"]][[sem_name]] %>% select(!!rlang::sym(sem_name) := !!rlang::sym(annotation)) # selecting and renaming
     }
     object[["group_by_annotation.sem"]][[annotation]] <- bind_cols(list.tmp.sem) # tibble
-    object[["group_by_annotation.sem_transformed"]][[annotation]] <- bind_cols(list.tmp.sem_transformed) # tibble
+    object[["group_by_annotation.sem_bin"]][[annotation]] <- bind_cols(list.tmp.sem_bin) # tibble
   }
   return(object)
 }
 
-
-calc_sem_meta <- function(object) {
-  if (is.null(object[["group_by_annotation.sem_transformed"]]) || (length(object[["group_by_annotation.sem_transformed"]])==0) ) { # short-circuit OR
-    stop("Calculate 'group_by_annotation.sem_transformed' slot before running this function")
+calc_sem_meta_from_bins <- function(object) {
+  if (is.null(object[["group_by_annotation.sem_bin"]]) || (length(object[["group_by_annotation.sem_bin"]])==0) ) { # short-circuit OR
+    stop("Calculate 'group_by_annotation.sem_bin' slot before running this function")
   }
-  print("Calculating sem_meta based on group_by_annotation.sem_transformed")
+  print("Calculating sem_meta based on group_by_annotation.sem_bin")
   object[["sem_meta"]] <- list()
   list.tmp.median <- list()
   list.tmp.mean <- list()
   list.tmp.sd <- list()
   for (annotation in object[["annotations"]]) {
-    print(sprintf("Calculating sem_meta for annotation = %s", annotation))
-    list.tmp.median[[annotation]] <- apply(object[["group_by_annotation.sem_transformed"]][[annotation]], 1, median)
-    list.tmp.mean[[annotation]] <- apply(object[["group_by_annotation.sem_transformed"]][[annotation]], 1, mean)
-    list.tmp.sd[[annotation]] <- apply(object[["group_by_annotation.sem_transformed"]][[annotation]], 1, sd)
+    print(sprintf("Calculating for annotation = %s", annotation))
+    list.tmp.median[[annotation]] <- apply(object[["group_by_annotation.sem_bin"]][[annotation]], 1, median)
+    list.tmp.mean[[annotation]] <- apply(object[["group_by_annotation.sem_bin"]][[annotation]], 1, mean)
+    list.tmp.sd[[annotation]] <- apply(object[["group_by_annotation.sem_bin"]][[annotation]], 1, sd)
   }
   object[["sem_meta"]][["median"]] <- bind_cols(list.tmp.median)
   object[["sem_meta"]][["mean"]] <- bind_cols(list.tmp.mean)
@@ -1009,10 +644,9 @@ hierarchical_sem <- function(object, list.annotations) {
     annotations <- list.annotations[[name_elem]]
     object.sub <- subset_annotations(object, annotations)
     object.sub <- calc_sem_wrapper(object.sub)
-    object.sub <- calc_empirical_pvalues_wrapper(object.sub)
-    object.sub <- transform_sems(object.sub, method="rank_normalize")
+    object.sub <- bin_sems(object.sub)
     object.sub <- set_group_by_annotation_slots(object.sub)
-    object.sub <- calc_sem_meta(object.sub)
+    object.sub <- calc_sem_meta_from_bins(object.sub)
     list.objects[[name_elem]] <- object.sub
   }
   return(list.objects)
@@ -1027,51 +661,20 @@ hierarchical_sem <- function(object, list.annotations) {
 # source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
 library(broom)
 
-get_sem_meta <- function(object, df.magma) {
+fit_sems <- function(object, df.magma, df.metadata) {
+  ### Add genetic data to sem_meta
   df.sem_meta <- object[["sem_meta"]][["median"]] %>% 
     mutate(gene=object[["genes"]]) %>%  # add genes
     inner_join(df.magma %>% select(gene, ZSTAT), by="gene") %>% # inner join
     select(gene, ZSTAT, everything())
-  return(df.sem_meta)
-}
-
-get_genetic_and_sem_data <- function(object, slot, df.magma) {
-  if (slot %in% names(object[["sem_meta"]])) {
-    df <- object[["sem_meta"]][[slot]]
-  } else if (slot %in% names(object[["sem"]])) {
-    df <- object[["sem"]][[slot]]
-  } else {
-    names_accepted_slots <- c(names(object[["sem_meta"]]), names(object[["sem"]]))
-    stop(sprintf("Got wrong slot name: %s. Accepted slots are: %s", slot, paste(names_accepted_slots, sep=", ")))
-  }
-  ### Add genetic data to df
-  df <- df %>% 
-    mutate(gene=object[["genes"]]) %>%  # add genes
-    inner_join(df.magma %>% select(gene, ZSTAT), by="gene") %>% # inner join
-    select(gene, ZSTAT, everything())
-  return(df)
-}
-
-fit_sems <- function(object, slot, df.magma, df.metadata, exclude_bin_zero=F) {
-
-  df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
   
   ### Run regressions
   print("Running regressions...")
   list.res <- list()
   for (annotation in object[["annotations"]]) {
     print(annotation)
-    df.tmp <- df.regression %>% select(ZSTAT, annotation_vals=!!rlang::sym(annotation)) # two-column. 
-    # ^ We rename <annotation_col_name> to annotation_vals to ensure that the column name is syntaxically correct.
-    # ^ E.g. an annotation name with a forward slash (e.g. 'a06.NG2/OPC') will be severely misinterpretated in as.formula()
-    if (exclude_bin_zero) {
-      # df.tmp <- df.tmp %>% filter(!!rlang::sym(annotation)!=0) # OLD DELTETE
-      df.tmp <- df.tmp %>% filter(annotation_vals !=0 )
-      print(sprintf("Excluding bin zero. %s genes remain in the regression...", nrow(df.tmp)))
-    }
-    # list.res[[annotation]] <- lm(as.formula(paste0("ZSTAT ~", annotation_vals)), data = df.tmp) # OLD DELTETE
-    list.res[[annotation]] <- lm(ZSTAT ~ annotation_vals, data = df.tmp)
-    # "a06.NG2/OPC"
+    df.tmp <- df.sem_meta %>% select(ZSTAT, !!rlang::sym(annotation)) # two-column
+    list.res[[annotation]] <- lm(as.formula(paste0("ZSTAT ~", annotation)), data = df.tmp)
   }
   
   df.res <- tibble::enframe(list.res, name="annotation", value="fit") # REF https://r4ds.had.co.nz/many-models.html#from-a-named-list
@@ -1086,74 +689,14 @@ fit_sems <- function(object, slot, df.magma, df.metadata, exclude_bin_zero=F) {
   df.glance <- df.broom %>% select(-fit, -tidied) %>% unnest(glanced)
   
   ### add beta and se
-  df.model_sumstats <- df.glance %>% left_join(df.tidied %>% select(annotation, estimate, std.error), by="annotation")
-  
-  ### correct pvals: one sided
-  print("Correcting p-values")
-  df.model_sumstats <- df.model_sumstats %>% mutate(p.value.orig = p.value) # save orig colum
-  df.model_sumstats <- df.model_sumstats %>% mutate(p.value = p.value/2) # convert to one-sided test: summary.lm() computed a two-sided p-value; we want the one-sided
-  df.model_sumstats <- df.model_sumstats %>% mutate(p.value = if_else(estimate < 0, 1-p.value, p.value)) # convert to one-sided test: find the complementary p-value for negative beta's
-  df.model_sumstats <- df.model_sumstats %>% mutate(fdr_significant = if_else(p.value <= 0.05/n(), true=T, false=F))
-  
-  ### add metadata
-  df.model_sumstats <- df.model_sumstats %>% left_join(df.metadata, by="annotation")
-  ## sort by pval
-  df.model_sumstats <- df.model_sumstats %>% arrange(p.value)
-  return(df.model_sumstats)
-}
-
-
-fit_sems_tstat <- function(object, slot, df.magma, df.metadata) {
-  ### Add genetic data to sem_meta
-  df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
-  
-  ### Run regressions
-  print("Running regressions...")
-  list.res <- list()
-  for (annotation in object[["annotations"]]) {
-    print(annotation)
-    df.tmp <- df.regression %>% select(ZSTAT, !!rlang::sym(annotation)) # two-column
-    idx.zero <- df.tmp %>% pull(!!rlang::sym(annotation)) == 0
-    non_bin_zero <- df.tmp %>% filter(!idx.zero) %>% pull(ZSTAT)
-    bin_zero <- df.tmp %>% filter(idx.zero) %>% pull(ZSTAT)
-    list.res[[annotation]] <- t.test(non_bin_zero,bin_zero,var.equal=F,alternative="greater")
-  }
-  df.res <- tibble::enframe(list.res, name="annotation", value="fit") # REF https://r4ds.had.co.nz/many-models.html#from-a-named-list
-  
-  print("Running broom...")
-  df.broom <- df.res %>% mutate(
-    tidied = map(fit, tidy)
-    # tidy() and glance() returns exactly the same for t.test()
-  )
-  df.model_sumstats <- df.broom %>% select(-fit) %>% unnest(tidied)
+  df.model_sumstats <- df.glance %>% left_join(df.tidied %>% select(annotation, estimate, std.error), by="annotation") %>% arrange(p.value)
   df.model_sumstats <- df.model_sumstats %>% mutate(fdr_significant = if_else(p.value <= 0.05/n(), true=T, false=F))
   ### add metadata
   df.model_sumstats <- df.model_sumstats %>% left_join(df.metadata, by="annotation")
-  ## sort by pval
-  df.model_sumstats <- df.model_sumstats %>% arrange(p.value)
   
   return(df.model_sumstats)
 }
-
-######################################################################################################
-########################################### PLOTS ####################################################
-######################################################################################################
-
-boxplot_bin_zero <- function(object, slot, df.magma, df.metadata, annotation=NULL) {
-  if (is.null(annotation)) {
-    annotation <- sample(object[["annotations"]], size=1)
-    print(sprintf("Chose random annotation: %s", annotation))
-  }
-  ### Add genetic data to sem_meta
-  df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
-
-  df.tmp <- df.regression %>% select(ZSTAT, !!rlang::sym(annotation)) # two-column
-  idx.zero <- df.tmp %>% pull(!!rlang::sym(annotation)) == 0
-  df.tmp <- df.tmp %>% mutate(group = if_else(idx.zero, "bin_zero", "non_zero_bin"))
-  p <- ggplot(df.tmp, aes(x=group, y=ZSTAT)) + geom_boxplot() + labs(title=annotation)
-  print(p)
-  return(df.tmp)
-}
+  
 
 ######################################################################################################
 ######################## mouse_to_human_ortholog_gene_mapping [VECTOR INPUT] #############################

@@ -1,0 +1,76 @@
+---
+title: "LDSC: effect of including all_genes annotations"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+```
+
+
+# Data
+The analysis was done on Yengo BMI GWAS with the GTEx annotations.
+`all_genes` was run with `baseline` and `all_genes` as 'covariate'.
+`no_all_genes` was run with ONLY `baseline`.
+
+
+
+
+
+```{r}
+df.all_genes <- read_tsv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-cts_effects_of_model_covariates/experiment.gtex_tissues.baseline.all_genes.BMI_Yengo2018.cell_type_results.txt")
+df.no_all_genes <- read_tsv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-cts_effects_of_model_covariates/experiment.gtex_tissues.baseline.BMI_Yengo2018.cell_type_results.txt")
+```
+
+```{r}
+df.all_genes
+```
+
+```{r}
+df.no_all_genes
+```
+
+
+# Wrangle data
+
+```{r}
+df <- full_join(df.all_genes, df.no_all_genes, by="Name", suffix=c(".all_genes", ".no_all_genes"))
+```
+
+
+# Plots
+
+We see that the tau estimates tend to be bigger for the model with no all_genes annotations.
+```{r}
+p <- ggplot(df, aes(x=Coefficient.all_genes,y=Coefficient.no_all_genes, dummy=Name)) + 
+  geom_point() + 
+  geom_abline() +
+  labs(title="Tau estimates")
+ggplotly(p)
+
+```
+
+
+```{r}
+p <- ggplot(df, aes(x=Coefficient_P_value.all_genes,y=Coefficient_P_value.no_all_genes, dummy=Name)) + 
+  geom_point() + 
+  geom_abline() + 
+  labs(title="P-values estimates")
+ggplotly(p)
+
+
+```
+
+
+```{r}
+p <- ggplot(df, aes(x=Coefficient_P_value.all_genes,y=Coefficient_P_value.no_all_genes, dummy=Name)) + 
+  geom_point() + 
+  geom_abline() + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  labs(title="P-values estimates (log-scale)")
+ggplotly(p)
+
+```

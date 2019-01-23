@@ -116,7 +116,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 
 	### compute LD scores
 	### *RESOURCE NOTES*: this script uses a lot of CPU. Never run more than 4 parallel jobs. 4 parallel jobs will use ~220% CPU
-	cmd="{PYTHON3_EXEC} {flag_unbuffered} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 2".format(PYTHON3_EXEC=PYTHON3_EXEC,
+	cmd="{PYTHON3_EXEC} {flag_unbuffered} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 3".format(PYTHON3_EXEC=PYTHON3_EXEC,
 																																								flag_unbuffered="-u" if FLAG_UNBUFFERED else "", 
 																																								prefix_genomic_annot=prefix_genomic_annot)
 	print("Running command: {}".format(cmd))
@@ -241,11 +241,11 @@ PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2
 
 PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 FLAG_UNBUFFERED = True
-N_PARALLEL_LDSC_REGRESSION_JOBS = 2
+N_PARALLEL_LDSC_REGRESSION_JOBS = 3
 # FLAG_BINARY = True
 FLAG_BINARY = False
 
-list_gwas = ["BMI_Yengo2018"]
+# list_gwas = ["BMI_Yengo2018"]
 
 # list_gwas = [
 # "ADHD_PGC_Demontis2017",
@@ -264,7 +264,58 @@ list_gwas = ["BMI_Yengo2018"]
 # "BMI_Yengo2018",
 # ]
 
-
+list_gwas = ["ADHD_PGC_Demontis2017",
+"AD_Jansen2019",
+"AD_Lambert2013",
+"AN_PGC_Duncan2017",
+"ASD_iPSYCH_PGC_Grove2018",
+"BIP_PGC2018",
+"blood_EOSINOPHIL_COUNT",
+"BMI_Locke2015",
+"BMI_Yengo2018",
+"CAD_Schunkert2011",
+"CELIAC_Dubois2010",
+"CROHNS_Jostins2012",
+"DEPRESSED_AFFECT_Nagel2018",
+"DEPRESSION_Nagel2018",
+"DS_Okbay2016",
+"EA2_Okbay2016",
+"EA3_Lee2018",
+"FG_Female_Lagou2018",
+"FG_Male_Lagou2018",
+"FI_Female_Lagou2018",
+"FI_Male_Lagou2018",
+"HBA1C_MAGIC_Wheeler2017",
+"HDL_Teslovich2010",
+"HEIGHT_Wood2014",
+"HEIGHT_Yengo2018",
+"IBD_Jostins2012",
+"INSOMNIA_Jansen2018",
+"INTELLIGENCE_Savage2018",
+"INTELLIGENCE_Sniekers2017",
+"LDL_Teslovich2010",
+"LIPIDS_HDL_Willer2013",
+"LUPUS_2015",
+"MDD_PGC_Wray2018",
+"MS_Patsopoulos2011",
+"NEUROTICISM_Nagel2018",
+"NEUROTICISM_OKBAY2016",
+"PBC_Cordell2015",
+"RA_Okada2014",
+"RB_Linner_2019",
+"SCZ_Pardinas2018",
+"SCZ_Ripke2014",
+"SWB_Okbay2016",
+"T1D_Bradfield2011",
+"T2DadjBMI_DIAMANTE_Mahajan2018",
+"T2D_DIAMANTE_Mahajan2018",
+"T2D_UKBB_DIAMANTE_Mahajan2018",
+"T2D_Xue2018",
+"TG_Teslovich2010",
+"UC_Jostins2012",
+"WHR_adjBMI_Shungin2015",
+"WHR_Shungin2015",
+"WORRY_Nagel2018"]
 
 
 ################## Cell-types ##################
@@ -279,13 +330,13 @@ FLAG_WGCNA = False
 
 
 ### top10pct (Skene and Hillary)
-dict_genomic_annot = {"celltypes.mousebrain_top10pct.all":
-						{"dataset":"mousebrain",
-						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_top10pct_binary.txt.gz"},
- 					 "celltypes.tabula_muris_top10pct.all":
- 					  	{"dataset":"tabula_muris",
- 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_top10pct_binary.txt.gz"}
- 					 }
+# dict_genomic_annot = {"celltypes.mousebrain_top10pct.all":
+# 						{"dataset":"mousebrain",
+# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_top10pct_binary.txt.gz"},
+#  					 "celltypes.tabula_muris_top10pct.all":
+#  					  	{"dataset":"tabula_muris",
+#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_top10pct_binary.txt.gz"}
+#  					 }
 
 # ### Raw SEMs
 # dict_genomic_annot = {"celltypes.mousebrain_raw_sems.all":
@@ -296,13 +347,14 @@ dict_genomic_annot = {"celltypes.mousebrain_top10pct.all":
 #  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_raw_sems.txt.gz"}
 #  					 }
 
-# dict_genomic_annot = {"celltypes.mousebrain.all":
-# 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
-#  					 "celltypes.tabula_muris.all":
-#  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
-#  					 }
+### Mean MB+TB
+dict_genomic_annot = {"celltypes.mousebrain.all":
+						{"dataset":"mousebrain",
+						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+ 					 "celltypes.tabula_muris.all":
+ 					  	{"dataset":"tabula_muris",
+ 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+ 					 }
 
 
 # dict_genomic_annot = {"celltypes.campbell_lvl1.all":
@@ -321,6 +373,24 @@ dict_genomic_annot = {"celltypes.mousebrain_top10pct.all":
 
 ################## WGCNA ##################
 # FLAG_WGCNA = True
+
+
+# ### Modules from FDR significant cell-types [v2, 190111] + KME CUT-OFF
+# ### NOTES kME reassign disabled; deepSplit = 2
+# dict_genomic_annot = {}
+# for cutoff_kme in [0.25, 0.30, 0.40, 0.50]:
+# 	for dataset_name in ["tabula_muris", "mousebrain"]:
+# 		key_name = "wgcna.{}-190111.fdr_sign_celltypes_min_kme_{:.0f}.continuous".format(dataset_name, cutoff_kme*100) # *100 to avoid dots in name
+# 		if dataset_name == "tabula_muris": 
+# 			file_prefix_cluster = "tabula_muris_3_cell_cluster_module_genes"
+# 		elif dataset_name == "mousebrain": 
+# 			file_prefix_cluster = "mb_Neurons_ClusterName_7_cell_cluster_module_genes"
+# 		else:
+# 			raise Exception(".")
+# 		dict_genomic_annot[key_name] = {"dataset":dataset_name, 
+# 									"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/{}.min_kme_{:.2f}.csv.gz".format(file_prefix_cluster, cutoff_kme)
+# 									}
+
 
 # ### Modules from FDR significant cell-types [v2, 190111]
 # ### NOTES kME reassign disabled; deepSplit = 2

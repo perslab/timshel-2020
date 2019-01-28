@@ -90,7 +90,7 @@ if (dataset_prefix == "campbell_lvl1") {
 }
 
 
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_Yengo2018.cell_type_results.txt", genomic_annotation_perfix)
+file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UPDATE_Yengo2018.cell_type_results.txt", genomic_annotation_perfix)
 # file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all__BMI_Yengo2018.cell_type_results.txt"
 # file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris.all__BMI_Yengo2018.cell_type_results.txt"
 # file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl1.all__BMI_Yengo2018.cell_type_results.txt"
@@ -110,8 +110,7 @@ names(list.dfs) <- stringr::str_match(filenames, pattern=sprintf("%s__(.*).cell_
 names(list.dfs)
 df.ldsc_cts <- list.dfs %>% bind_rows(.id="gwas")
 df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
-
-# df.ldsc_cts <- df.ldsc_cts %>% select(gwas, p.value, annotation) %>% spread(key=gwas, value=p.value)
+df.ldsc_cts <- df.ldsc_cts %>% select(gwas, p.value, annotation) %>% spread(key=gwas, value=p.value)
 
 # ======================================================================= #
 # ============================== READ METADATA =============================== #
@@ -159,10 +158,10 @@ df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation") # add met
 # ======================================================================= #
 
 ### Multi GWAS
-# df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.multi_gwas.csv", dataset_prefix))
+df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.multi_gwas.csv", dataset_prefix))
 
 ### Single GWAS
-# df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.%s.csv", dataset_prefix, "BMI_Yengo2018"))
+# df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.%s.csv", dataset_prefix, "BMI_UPDATE_Yengo2018"))
 
 # ======================================================================= #
 # ================================ PLOT: cell priori [SINGLE-GWAS] ================================= #
@@ -180,7 +179,8 @@ p <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) +
   theme_classic() + 
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
-file.out <- sprintf("out.tmp.190103.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "BMI_Yengo2018")
+p
+file.out <- sprintf("out.tmp.190103.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "BMI_UPDATE_Yengo2018")
 ggsave(p, filename=file.out, width=20, height=8)
 
 

@@ -53,6 +53,13 @@ python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --a2 Other_Allele \
 --out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018
 
+### BMI_UPDATE_Yengo2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018_UPDATED.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--a1 Tested_Allele \
+--a2 Other_Allele \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_UPDATE_Yengo2018
 
 ### HEIGHT_Yengo2018
 python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
@@ -70,19 +77,12 @@ python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/EA3_Lee2018
 
 
-### SCZ_Ripke2014
+### SCZ_EUR_Ripke2014 (EUR ONLY)
 python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
---sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/ckqny.scz2snpres.gz \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/daner_PGC_SCZ49.sh2_mds10_1000G-frq_2.OR-FILTER.gz \
 --merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
---N 150064 \
---out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/SCZ_Ripke2014
-
-
-### LIPIDS_HDL_Willer2013
-python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
---sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_HDL.txt.gz \
---merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
---out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/LIPIDS_HDL_Willer2013
+--N 77096 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/SCZ_EUR_Ripke2014
 
 
 ### RA_Okada2014
@@ -333,7 +333,7 @@ GWAS=HBA1C_MAGIC_Wheeler2017
 python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/HBA1C_MAGIC_Wheeler2017/HbA1c_METAL_European.txt.gz \
 --merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
---N 159940 \
+--N 123665 \
 --out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
 
 GWAS=FG_Male_Lagou2018
@@ -382,7 +382,135 @@ python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
 
 
+GWAS=WHRadjBMI_Pulit2019
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Pulit2019/whradjbmi.giant-ukbb.meta-analysis.combined.23May2018.rs_snps_clean.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--a1 Tested_Allele \
+--a2 Other_Allele \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
 
+
+GWAS=WHR_Pulit2019
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Pulit2019/whr.giant-ukbb.meta-analysis.combined.23May2018.rs_snps_clean.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--a1 Tested_Allele \
+--a2 Other_Allele \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=BMI_Pulit2019
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Pulit2019/bmi.giant-ukbb.meta-analysis.combined.23May2018.rs_snps_clean.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--a1 Tested_Allele \
+--a2 Other_Allele \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=BMI_female_Pulit2019
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Pulit2019/bmi.giant-ukbb.meta-analysis.females.23May2018.rs_snps_clean.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--a1 Tested_Allele \
+--a2 Other_Allele \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=BMI_male_Pulit2019
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Pulit2019/bmi.giant-ukbb.meta-analysis.males.23May2018.rs_snps_clean.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--a1 Tested_Allele \
+--a2 Other_Allele \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=MDD_Howard2019
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/MDD_Howard2019/PGC_UKB_depression_genome-wide.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 500199 \
+--signed-sumstats LogOR,0 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+###################################### alkesgroup_UKBB/UKBB_460k ######################################
+### OBS: Neff used for N
+
+
+GWAS=BMI_UKBB_Loh2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/UKBB_460k/body_BMIz.sumstats.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 532396 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+GWAS=HEIGHT_UKBB_Loh2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/UKBB_460k/body_HEIGHTz.sumstats.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 673879 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+
+GWAS=WHRadjBMI_UKBB_Loh2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/UKBB_460k/body_WHRadjBMIz.sumstats.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 502773 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=DIASTOLICadjMED_UKBB_Loh2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/UKBB_460k/bp_DIASTOLICadjMEDz.sumstats.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 490470 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=SYSTOLICadjMED_UKBB_Loh2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/UKBB_460k/bp_SYSTOLICadjMEDz.sumstats.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 469767 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=CARDIOVASCULAR_UKBB_Loh2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/UKBB_460k/disease_CARDIOVASCULAR.sumstats.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 477807 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=LIPIDS_HDL_Willer2013
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_HDL.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+GWAS=LIPIDS_LDL_Willer2013
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_LDL.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+GWAS=LIPIDS_TC_Willer2013
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_TC.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+GWAS=LIPIDS_TG_Willer2013
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_TG.txt.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
 
 
 
@@ -391,9 +519,9 @@ python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 PATH_SOURCE=/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/alkesgroup/sumstats_formatted
 PATH_DEST=/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection
 ln -s $PATH_SOURCE/Type_1_Diabetes.sumstats.gz $PATH_DEST/T1D_Bradfield2011.sumstats.gz
-ln -s $PATH_SOURCE/HDL.sumstats.gz $PATH_DEST/HDL_Teslovich2010.sumstats.gz
-ln -s $PATH_SOURCE/LDL.sumstats.gz $PATH_DEST/LDL_Teslovich2010.sumstats.gz
-ln -s $PATH_SOURCE/Triglycerides.sumstats.gz $PATH_DEST/TG_Teslovich2010.sumstats.gz
+ln -s $PATH_SOURCE/HDL.sumstats.gz $PATH_DEST/LIPIDS_HDL_Teslovich2010.sumstats.gz
+ln -s $PATH_SOURCE/LDL.sumstats.gz $PATH_DEST/LIPIDS_LDL_Teslovich2010.sumstats.gz
+ln -s $PATH_SOURCE/Triglycerides.sumstats.gz $PATH_DEST/LIPIDS_TG_Teslovich2010.sumstats.gz
 ln -s $PATH_SOURCE/Celiac.sumstats.gz $PATH_DEST/CELIAC_Dubois2010.sumstats.gz
 ln -s $PATH_SOURCE/Ulcerative_Colitis.sumstats.gz $PATH_DEST/UC_Jostins2012.sumstats.gz
 ln -s $PATH_SOURCE/Crohns_Disease.sumstats.gz $PATH_DEST/CROHNS_Jostins2012.sumstats.gz

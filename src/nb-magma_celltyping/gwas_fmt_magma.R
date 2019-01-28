@@ -22,8 +22,8 @@ setwd(wd)
 ### Output file
 # SNP     P       N
 
-DIR_OUT <- "/scratch/tmp-magma_gwas"
-
+# DIR_OUT <- "/scratch/tmp-magma_gwas"
+DIR_OUT <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma"
 
 
 
@@ -469,12 +469,12 @@ df %>% write_tsv(file.out)
 # ============================  SCZ  =============================== #
 # ======================================================================= #
 
-file.out <- file.path(DIR_OUT, "SCZ_Ripke2014.txt")
-N_study <- 150064 # MAGMA docs: the total sample size, also when using case-control analysis results
+file.out <- file.path(DIR_OUT, "SCZ_EUR_Ripke2014.txt")
+N_study <- 77096 # EUR only
 
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/ckqny.scz2snpres.gz"
+file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/daner_PGC_SCZ49.sh2_mds10_1000G-frq_2.OR-FILTER.gz"
 df <- read_tsv(file.in)
-df <- df %>% rename(SNP=snpid, P=p) %>% mutate(N=N_study) # modify
+df <- df %>% mutate(N=N_study) # modify
 df <- df %>% select(SNP, P, N) # filter
 df %>% write_tsv(file.out)
 

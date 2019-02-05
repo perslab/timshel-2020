@@ -91,7 +91,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	cmd = """{PYTHON3_EXEC} {flag_unbuffered} make_annot_from_geneset_all_chr.py \
 	--file_multi_gene_set {file_multi_gene_set} \
 	--file_gene_coord /raid5/projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
-	--windowsize 100000 \
+	--windowsize 50000 \
 	--bimfile_basename /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
 	{flag_binary} \
 	{flag_wgcna} \
@@ -104,6 +104,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 		flag_wgcna="--flag_wgcna --flag_mouse" if FLAG_WGCNA else "",
 		flag_binary="--flag_encode_as_binary_annotation" if FLAG_BINARY else "",
 		) 
+	# --windowsize 100000 \ ---> 100 kb defaul
 	# --n_parallel_jobs 11
 	
 	print("Running command: {}".format(cmd))
@@ -116,7 +117,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 
 	### compute LD scores
 	### *RESOURCE NOTES*: this script uses a lot of CPU. Never run more than 4 parallel jobs. 4 parallel jobs will use ~220% CPU
-	cmd="{PYTHON3_EXEC} {flag_unbuffered} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 3".format(PYTHON3_EXEC=PYTHON3_EXEC,
+	cmd="{PYTHON3_EXEC} {flag_unbuffered} wrapper_compute_ldscores.py --prefix_annot_files /scratch/sc-ldsc/{prefix_genomic_annot}/ --n_parallel_jobs 2".format(PYTHON3_EXEC=PYTHON3_EXEC,
 																																								flag_unbuffered="-u" if FLAG_UNBUFFERED else "", 
 																																								prefix_genomic_annot=prefix_genomic_annot)
 	print("Running command: {}".format(cmd))
@@ -246,16 +247,20 @@ N_PARALLEL_LDSC_REGRESSION_JOBS = 2
 FLAG_BINARY = False
 
 
-# list_gwas = ["BMI_UPDATE_Yengo2018"]
+list_gwas = ["BMI_UPDATE_Yengo2018", "BMI_UKBB_Loh2018"]
 
+# list_gwas = ["BMI_UKBB_Loh2018_no_mhc_max_chisq_80",
+# "BMI_UKBB_Loh2018_no_mhc_max_chisq_720",
+# "BMI_UPDATE_Yengo2018_no_mhc_max_chisq_720",
+# "BMI_UPDATE_Yengo2018_no_mhc_max_chisq_80"]
 
-list_gwas = ["LIPIDS_HDL_Teslovich2010",
-"LIPIDS_LDL_Teslovich2010",
-"LIPIDS_TG_Teslovich2010",
-"LIPIDS_HDL_Willer2013",
-"LIPIDS_LDL_Willer2013",
-"LIPIDS_TG_Willer2013",
-"LIPIDS_TC_Willer2013"]
+# list_gwas = ["LIPIDS_HDL_Teslovich2010",
+# "LIPIDS_LDL_Teslovich2010",
+# "LIPIDS_TG_Teslovich2010",
+# "LIPIDS_HDL_Willer2013",
+# "LIPIDS_LDL_Willer2013",
+# "LIPIDS_TG_Willer2013",
+# "LIPIDS_TC_Willer2013"]
 
 # list_gwas = ["ADHD_PGC_Demontis2017",
 # "AD_Jansen2019",
@@ -359,10 +364,10 @@ FLAG_WGCNA = False
 #  					 }
 
 ### Mean MB+TB
-dict_genomic_annot = {"celltypes.mousebrain.all":
+dict_genomic_annot = {"celltypes.mousebrain_50kb.all":
 						{"dataset":"mousebrain",
 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
- 					 "celltypes.tabula_muris.all":
+ 					 "celltypes.tabula_muris_50kb.all":
  					  	{"dataset":"tabula_muris",
  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
  					 }

@@ -548,5 +548,8 @@ ln -s $PATH_SOURCE/Neuroticism.sumstats.gz $PATH_DEST/SWB_Okbay2016.sumstats.gz
 --a2: A2-- second allele (other allele)
 
 
-  --signed-sumstats SIGNED_SUMSTATS : Name of signed sumstat column, comma null value (e.g., Z,0 or OR,1). NB: case insensitive.
+--signed-sumstats SIGNED_SUMSTATS : Name of signed sumstat column, comma null value (e.g., Z,0 or OR,1). NB: case insensitive.
+[REF: https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation#reformatting-summary-statistics]
+Note that some summary statistic files do not have a signed summary statistic, but are coded so that A1 is always the trait- or risk-increasing allele. 
+This is equivalent to providing a signed summary statistic, and munge_sumstats.py will process such files if called with the --a1-inc1 flag
 

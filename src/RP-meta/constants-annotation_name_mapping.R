@@ -28,12 +28,23 @@ df.category.mousebrain <- read_csv("constants-annotation_name_mapping.mousebrain
 df.category.mousebrain <- df.category.mousebrain %>% 
   mutate(
     name_r = ClusterName,
-    name_clean = paste0(Class, "-", ClusterName),
-    category = Region
+    name_clean = ClusterName, # paste0(Class, "-", ClusterName),
+    category = Class
   ) 
 
+# ======================= Tabula Muris (v. 180920 - final release) ======================= #
+# 
+# df.category.tabula_muris <- read_tsv("tissue	cell_type	category
+#                                      .... <NOT COMPLETED>")
+# 
+# ### Set new names
+# df.category.maca <- df.category.maca %>% 
+#   mutate(
+#     name_r = make.names(paste0(tissue, "-", cell_type)), # set name_r | *OBS* only valid for 'per-tissue-celltype' version of MACA
+#     name_clean = paste0(tissue, "-", cell_type)
+#   ) 
 
-# ======================= MACA ======================= #
+# ======================= MACA (v. 180126 - first release) ======================= #
 
 df.category.maca <- read_tsv("tissue	cell_type	category
                              Aorta	fibroblast	Cardiovascular

@@ -45,17 +45,23 @@ source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics l
 # ============================================== GET FILES ============================================== #
 # ======================================================================================================= #
 
+### LDSC munge GWAS | new 2019-01-30
+DIR.DATA_INFERENCE <- "/scratch/rolypoly_out_scratch/out.rolypoly_objs-v3.univariate/"
+DIR_OUT.PREFIX <- "inference_rp_ldscmunge"
+DIR_OUT.COMBINED_TAR <- "export-combined.rp.v3"
+list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
+
 ### Main
 # DIR.DATA_INFERENCE <- "/scratch/sc-genetics/out.rolypoly_objs-v3.univariate-nboot100/"
 # DIR_OUT.PREFIX <- "inference_rp"
 # DIR_OUT.COMBINED_TAR <- "export-combined.v3.nboot100"
 # list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
 
-### Main (HM3)
-DIR.DATA_INFERENCE <- "/scratch/sc-genetics/out.rolypoly_objs-v3.hm3_protein_coding_only.univariate-nboot100/"
-DIR_OUT.PREFIX <- "inference_rp_hm3"
-DIR_OUT.COMBINED_TAR <- "export-combined.rp_hm3.v3.nboot100"
-list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
+### Main (HM3) - used before 190130
+# DIR.DATA_INFERENCE <- "/scratch/sc-genetics/out.rolypoly_objs-v3.hm3_protein_coding_only.univariate-nboot100/"
+# DIR_OUT.PREFIX <- "inference_rp_hm3"
+# DIR_OUT.COMBINED_TAR <- "export-combined.rp_hm3.v3.nboot100"
+# list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
 
 ### LDSC gwas
 # DIR.DATA_INFERENCE <- "/scratch/sc-genetics/out.rolypoly_objs-v3.ldsc.univariate-nboot100/"
@@ -127,6 +133,9 @@ add_annotations <- function(df, name.expr_data) {
     df.category <- df.category.depict
   } else if (grepl("mousebrain", name.expr_data)) {
     df.category <- df.category.mousebrain
+  # } else if (grepl("tabula_muris", name.expr_data)) {
+  #   df.category <- df.category.tabula_muris
+  #  ---> NOT DONE YET
   } else {
     print("WARNING: add_annotations() got unknown pattern for name.expr_data. Will do dummy operation. Plot might not have meaningful coloring.")
     df.category <- df %>% transmute(name_r=annotation, name_clean=annotation) # 'dummy' operation, but to make it work for ANY dataset (i.e that does not match the 'grepl' pattern)
@@ -235,19 +244,19 @@ list.dummy <- foreach (i=seq_along(list.inference_files)) %loop_function% {
   file.out.csv <- sprintf("%s/table.pvals.%s.csv", dir.out, "ALL_DATA")
   write_csv(df.bootstrap.all_expr_data %>% arrange(bp_value), path=file.out.csv)
   
-  ### make hypothalamus plot
-  df.bootstrap.all_expr_data %>% 
-    filter(dataset %in% c("hypothalamus.campbell.avg_expr", 
-                          "hypothalamus.chen.avg_expr", 
-                          "hypothalamus.lira.avg_expr", 
-                          "hypothalamus.romanov.avg_expr")) %>%
-    ggplot(aes(x=annotation, y=-log10(bp_value))) + 
-    geom_col() +
-    geom_hline(yintercept = -log10(0.05), color="red") +
-    theme(axis.text.x =  element_text(angle = 45, hjust = 1)) +
-    labs(title="All hypothalamus data (analyzed individually)")
-  file.out.plot <- sprintf("%s/plot.pvals.%s.pdf", dir.out, "ALL_HYPO_ANALYZED_INDIVIDUALLY")
-  ggsave(filename = file.out.plot, width= 25, height = 10)
+  # ### make hypothalamus plot
+  # df.bootstrap.all_expr_data %>% 
+  #   filter(dataset %in% c("hypothalamus.campbell.avg_expr", 
+  #                         "hypothalamus.chen.avg_expr", 
+  #                         "hypothalamus.lira.avg_expr", 
+  #                         "hypothalamus.romanov.avg_expr")) %>%
+  #   ggplot(aes(x=annotation, y=-log10(bp_value))) + 
+  #   geom_col() +
+  #   geom_hline(yintercept = -log10(0.05), color="red") +
+  #   theme(axis.text.x =  element_text(angle = 45, hjust = 1)) +
+  #   labs(title="All hypothalamus data (analyzed individually)")
+  # file.out.plot <- sprintf("%s/plot.pvals.%s.pdf", dir.out, "ALL_HYPO_ANALYZED_INDIVIDUALLY")
+  # ggsave(filename = file.out.plot, width= 25, height = 10)
   
 }
   

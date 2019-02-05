@@ -22,10 +22,21 @@ import pdb
 # time python split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/maca/
 # time python split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/mousebrain/
 # time python split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/hypothalamus_mette_thesis/
+# time python split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/celltypes.mousebrain_TMP_TEST_H2.all/
+# time python split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/celltypes.mousebrain.all/
+# time python split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/celltypes.tabula_muris.all/
+# time python split_ldscores.py --prefix_ldscore_files /scratch/sc-ldsc/wgcna.mousebrain-190111.fdr_sign_celltypes.continuous/
 
 ###################################### TODO ######################################
 
 # Fix reliance on 'COMBINED_ANNOT' in file name.
+
+###################################### CHANGE LOG ######################################
+
+### Feb 4th 2019: 
+# - added function to split .annot files for h2 analysis. NB: .annot files are ONLY needed for h2 analysis (and not --h2-cts analysis)
+# -*OBS*: now the function will use MUCH more memory because each .annot.gz file is loaded into memory.
+# TODO: read and write .annot file in chunks?
 
 ###################################### DESCRIPTION ######################################
 
@@ -69,6 +80,24 @@ def split_M_files(file_ldscore, chromosome, prefix_genomic_annot, list_annotatio
 			fh_out_M_5_50.write(M_5_50)
 	print("CHR={} | DONE writing .M and .M_5_50 files".format(chromosome))
 
+def split_annot_file(file_ldscore, chromosome, prefix_genomic_annot, list_annotations):
+	""" Split annot file 
+	Because list_annotations is looped over, this function should work for both thin-annot and standard annot.
+	"""
+	print("CHR={} | START splitting annot file".format(chromosome))
+	file_ldscore_base = re.sub(r"\.l2\.ldscore\.gz$", "", file_ldscore) # .e.g /scratch/sc-ldsc/nn_lira_sema/nn_lira_sema.COMBINED_ANNOT.9.
+	file_annot = "{}.annot.gz".format(file_ldscore_base)
+	df_annot = pd.read_csv(file_annot, sep="\t") # no index, compression detected automatically
+	print("CHR={} | Read  annot file: {}".format(chromosome, file_annot))
+	for i in range(len(list_annotations)):
+		if i % 25 == 0:
+			print("CHR={} #{}/#{}| Writing annot files".format(chromosome, i, len(list_annotations)))
+		annotation = list_annotations[i]
+		file_out_annot = "{}/{}__{}.{}.annot.gz".format(out_dir, prefix_genomic_annot, annotation, chromosome)
+		df_annot[[annotation]].to_csv(file_out_annot, sep="\t", index=False, compression="gzip") # df_annot[[annotation]] to return a DataFrame with a header instead of Series with no header (df_annot[annotation] returns this).
+	print("CHR={} | DONE splitting annot file".format(chromosome))
+
+
 def all_files_exist(chromosome, prefix_genomic_annot, annotations_clean):
 	print("CHR={} | Checking if all files already exists...".format(chromosome))
 	# generate filenames for all files to be generated (for this chromosome):
@@ -77,8 +106,9 @@ def all_files_exist(chromosome, prefix_genomic_annot, annotations_clean):
 		# NB: we only generate the basefilename - not the full filepath - because of how os.listdir() works. See below.
 		file_out_M = "{}__{}.{}.l2.M".format(prefix_genomic_annot, annotation, chromosome)
 		file_out_M_5_50 = "{}__{}.{}.l2.M_5_50".format(prefix_genomic_annot, annotation, chromosome)
+		file_out_annot = "{}__{}.{}.annot.gz".format(prefix_genomic_annot, annotation, chromosome)
 		file_out_ldscore = "{}__{}.{}.l2.ldscore.gz".format(prefix_genomic_annot, annotation, chromosome)
-		set_all_files_to_be_generated.update([file_out_M, file_out_M_5_50, file_out_ldscore]) # .update(): add multiple elements to set
+		set_all_files_to_be_generated.update([file_out_M, file_out_M_5_50, file_out_ldscore, file_out_annot]) # .update(): add multiple elements to set
 	# get all/any existing filenames (across all chromosome, but that does not matter - we only loose a bit of speed):
 	bool_all_files_exists = set_all_files_to_be_generated.issubset(os.listdir(out_dir)) # test if set_all_files_to_be_generated is a subset of all files in out_dir. Returns True if it is a subset (i.e. all files already exists)
 	# ^ OBS: os.listdir() only gives the basename of the files in the dirs - not their full paths. E.g. nn_lira_sema.springgreen.1.l2.ldscore.gz.
@@ -98,9 +128,10 @@ def split_ldscore_file_per_annotation(file_ldscore):
 		return None # do nothing
 	else:
 		split_M_files(file_ldscore, chromosome, prefix_genomic_annot, annotations_clean)
+		split_annot_file(file_ldscore, chromosome, prefix_genomic_annot, annotations_clean)
 		for counter, annotation in enumerate(annotations_header):
 			if counter % 25 == 0:
-				print("CHR={} #{}/#{}| Writing annot files".format(chromosome, counter, len(annotations_header)))
+				print("CHR={} #{}/#{}| Writing ldscore files".format(chromosome, counter, len(annotations_header)))
 			annotation_clean = re.sub(r"L2$", "", annotation)
 			file_out_ldscore = "{}/{}__{}.{}.l2.ldscore.gz".format(out_dir, prefix_genomic_annot, annotation_clean, chromosome)
 			df[["CHR", "SNP", "BP", annotation]].to_csv(file_out_ldscore, sep="\t", index=False, compression="gzip") # no index

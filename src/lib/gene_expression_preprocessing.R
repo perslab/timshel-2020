@@ -1052,7 +1052,7 @@ get_genetic_and_sem_data <- function(object, slot, df.magma) {
   return(df)
 }
 
-fit_sems <- function(object, slot, df.magma, df.metadata, exclude_bin_zero=F) {
+fit_sems <- function(object, slot, df.magma, df.metadata=NULL, exclude_bin_zero=F) {
 
   df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
   
@@ -1096,14 +1096,16 @@ fit_sems <- function(object, slot, df.magma, df.metadata, exclude_bin_zero=F) {
   df.model_sumstats <- df.model_sumstats %>% mutate(fdr_significant = if_else(p.value <= 0.05/n(), true=T, false=F))
   
   ### add metadata
-  df.model_sumstats <- df.model_sumstats %>% left_join(df.metadata, by="annotation")
+  if (!is.null(df.metadata)) {
+    df.model_sumstats <- df.model_sumstats %>% left_join(df.metadata, by="annotation")
+  }
   ## sort by pval
   df.model_sumstats <- df.model_sumstats %>% arrange(p.value)
   return(df.model_sumstats)
 }
 
 
-fit_sems_tstat <- function(object, slot, df.magma, df.metadata) {
+fit_sems_tstat <- function(object, slot, df.magma, df.metadata=NULL) {
   ### Add genetic data to sem_meta
   df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
   
@@ -1128,6 +1130,9 @@ fit_sems_tstat <- function(object, slot, df.magma, df.metadata) {
   df.model_sumstats <- df.broom %>% select(-fit) %>% unnest(tidied)
   df.model_sumstats <- df.model_sumstats %>% mutate(fdr_significant = if_else(p.value <= 0.05/n(), true=T, false=F))
   ### add metadata
+  if (!is.null(df.metadata)) {
+    df.model_sumstats <- df.model_sumstats %>% left_join(df.metadata, by="annotation")
+  }
   df.model_sumstats <- df.model_sumstats %>% left_join(df.metadata, by="annotation")
   ## sort by pval
   df.model_sumstats <- df.model_sumstats %>% arrange(p.value)

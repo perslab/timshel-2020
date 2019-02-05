@@ -63,6 +63,8 @@ load_ldsc_cts_results <- function(file.ldsc_cts, dataset_prefix) {
 # =============================== LOAD LDSC CTS RESULTS ================================= #
 # ======================================================================= #
 
+### *UPDATE*: binary result files live in out/out.ldsc/collection.celltypes.before_new_naming_scheme/
+
 ### Mousebrain
 # dataset_prefix <- "mousebrain_all"
 # files.ldsc_cts <- c("binary"="/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all.binary.BMI_Yengo2018.baseline_v1.1_all_genes.cell_type_results.txt",

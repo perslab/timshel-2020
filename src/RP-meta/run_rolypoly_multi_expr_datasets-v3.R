@@ -9,6 +9,9 @@
 # * added --expr_data_list to read specific expression datasets
 # + LIKELY MORE CHANGES
 
+### v3 change log (2019-01-30 update to accomodate new data)
+# * df.gwas.rp <- read_gwas(file.gwas=GWAS_FILE, .. ) --> update colnames
+
 ### OUTPUT: 
 # ....
 
@@ -274,7 +277,20 @@ if (file.exists(file.out.inference)) {
 
 if (!flag.loaded_gwas_linked_rdata) { # only load GWAS data if not already loaded precomputed object.
 
-  df.gwas.rp <- read_gwas(GWAS_FILE, exlcude.HLA=T, do.log_odds=F) # columns c('chrom', 'pos', 'rsid', 'beta', 'se', 'maf')
+  # df.gwas.rp <- read_gwas(GWAS_FILE, exlcude.HLA=T, do.log_odds=F) # columns c('chrom', 'pos', 'rsid', 'beta', 'se', 'maf')
+    # ^ DEFAULT rolypoly format GWAS. 
+  
+  df.gwas.rp <- read_gwas(file.gwas=GWAS_FILE, 
+                        exlcude.HLA=T, 
+                        do.log_odds=F,
+                        delim="\t", # file delimiter
+                        col_chrom="chr",
+                        col_pos="pos",
+                        col_rsid="SNP", # NEW
+                        col_beta="BETA", # NEW
+                        col_se="SE", # NEW
+                        col_maf="snp_maf" 
+                        ) # 2019-01-30 format from LDSC munged GWAS (data/gwas_sumstats_ldsc/timshel-collection/)
 
   if (LDSC_INPUT_MODE) {
     print("RUNNING IN LDSC_INPUT_MODE. Will se values for 'se' column")
@@ -305,6 +321,8 @@ if (!flag.loaded_gwas_linked_rdata) { # only load GWAS data if not already loade
 
 
 if (is.null(EXPR_DATA_LIST)) {
+  stop("2019-01-30 update: --expr_data_list argument must be passed.")
+  
   #files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*avg_expr.hsapiens_orthologs*") # matching on avg_expr
   files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*.hsapiens_orthologs*") # matching on all data sets
   files.paths <- file.path(dir.sc_genetics.data, "expression", files)
@@ -355,11 +373,13 @@ wrapper.read_expression_data <- function(file.expr) {
     # stop(sprintf("Error: detected unexpected data processing pattern stamp in expression data set file %s. Accepted patterns are 'tstat', 'avg_expr', 'kme'.", file.expr))
   }
   df.expr <- read_expression_data(file.expr=file.expr,
-                                  scale_genes=scale_genes, 
-                                  pos_transformation=PARAM.POS_TRANSFORMATION, 
-                                  genes.filter=df.gene_annot$ensembl_gene_id,  
-                                  col_genes="gene", 
-                                  delim=",") 
+                                  scale_genes=scale_genes,
+                                  pos_transformation=PARAM.POS_TRANSFORMATION,
+                                  genes.filter=df.gene_annot$ensembl_gene_id,
+                                  col_genes="gene",
+                                  delim=",")
+
+  
   return(df.expr)
 }
 
@@ -514,10 +534,15 @@ print(names(list.df_expr.run))
 
 
 ### Run wrapper - parallel anno
+# tmp.runtime <- system.time(list.rp_inference.run <- wrapper.run_rolypoly_univariate_over_expr_datasets(list.df_expr = list.df_expr.run, 
+#                                                                                                        rp.precomputed = rp.gwas_linked, 
+#                                                                                                        do.parallel_annotations=TRUE,
+#                                                                                                        do.parallel_bootstrap=TRUE))
 tmp.runtime <- system.time(list.rp_inference.run <- wrapper.run_rolypoly_univariate_over_expr_datasets(list.df_expr = list.df_expr.run, 
                                                                                                        rp.precomputed = rp.gwas_linked, 
-                                                                                                       do.parallel_annotations=TRUE,
-                                                                                                       do.parallel_bootstrap=TRUE))
+                                                                                                       do.parallel_annotations=FALSE,
+                                                                                                       do.parallel_bootstrap=FALSE))
+
 print("Run wrapper - parallel anno")
 print(tmp.runtime)
 

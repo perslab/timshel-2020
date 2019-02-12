@@ -18,6 +18,8 @@ library(here)
 
 library(GGally)
 library(corrr) # devtools::install_github("drsimonj/corrr")
+library(gghighlight)
+
 
 dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
 source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
@@ -113,6 +115,11 @@ ggplot(df, aes(x=annotation, y=-log10(pval), fill=method)) + geom_col(position=p
 # ================================ XXXXX ================================ #
 # ======================================================================= #
 
+# p <- ggplot(df.ldsc_cts.spread, aes(x=continuous__sem_mean, y=raw__specificity_top10pct_binary)) + 
+#   geom_point() +
+#   gghighlight((continuous__sem_mean > 2), max_highlight = 4L, label_key = annotation) +
+#   geom_abline()
+# p
 
 
 

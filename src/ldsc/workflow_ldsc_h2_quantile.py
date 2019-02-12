@@ -103,7 +103,8 @@ N_PARALLEL_H2_RSCRIPT_JOBS = 50
 list_gwas = ["BMI_UKBB_Loh2018",
 			 "BMI_UPDATE_Yengo2018",
 			 "T2D_DIAMANTE_Mahajan2018",
-			 "T2D_UKBB_DIAMANTE_Mahajan2018"
+			 "T2D_UKBB_DIAMANTE_Mahajan2018",
+			 "HEIGHT_Yengo2018"
 			]
 
 

@@ -38,11 +38,15 @@ src/ldsc-tutorial/tutorial-james/*
 *.pdf
 
 ################## TMP ##################
+
 src/ldsc/experiments/test.BMI_Yengo2018.*
 
 
 src/magma-fit_models/BMI_Yengo2018.resid.correct_all.*
 src/ldsc-tutorial/BMI1.GTEx*
+
+### DEPICT
+src/depict/*.cfg
 
 ### DIRs
 src/GE-novo_bulk/out.magma_geneset/

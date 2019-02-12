@@ -108,7 +108,8 @@ PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2
 PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 N_PARALLEL_LDSC_REGRESSION_JOBS = 4
 
-list_gwas = ["BMI_Yengo2018"]
+list_gwas = ["BMI_UKBB_Loh2018"]
+# list_gwas = ["BMI_Yengo2018"]
 
 # list_gwas = [
 # "ADHD_PGC_Demontis2017",
@@ -130,17 +131,24 @@ list_gwas = ["BMI_Yengo2018"]
 
 ################## Cell-types ##################
 
-list_cond_annotations_mb = ["MEGLU10","MEGLU1","DEINH3","TEGLU23","MEINH2","MEGLU11","DEGLU5","TEGLU17"]
-list_cond_annotations_tb = ["Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell"]
+# list_cond_annotations_mb = ["MEGLU10","MEGLU1","DEINH3","TEGLU23","MEINH2","MEGLU11","DEGLU5","TEGLU17"]
+list_cond_annotations_mb = ["TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12"] # BMI_UKBB_Loh2018 FDR sign.
+list_cond_annotations_tm = ["Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell"]
+
+
+# format: annotation_id:cond_ref_ld_chr_name
+dict_addtional_cond_annotations_mb = {"wgcna.mousebrain-190111-dodgerblue":"/scratch/sc-ldsc/wgcna.mousebrain-190111.fdr_sign_celltypes.continuous/per_annotation/wgcna.mousebrain-190111.fdr_sign_celltypes.continuous__dodgerblue.", # must include trailing dot (".")
+									 } 
 
 dict_cts_conditional = {"celltypes.mousebrain.all":
 						{"file_cts":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/celltypes.mousebrain.all.ldcts.txt",
 						"dataset":"mousebrain",
-						"conditional_annotations":list_cond_annotations_mb},
+						"conditional_annotations":list_cond_annotations_mb,
+						"dict_addtional_cond_annotations":dict_addtional_cond_annotations_mb},
  					 "celltypes.tabula_muris.all":
  					  	{"file_cts":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/celltypes.tabula_muris.all.ldcts.txt",
  					  	"dataset":"tabula_muris",
- 					  	"conditional_annotations":list_cond_annotations_tb},
+ 					  	"conditional_annotations":list_cond_annotations_tm},
  					 }
 
 
@@ -169,10 +177,10 @@ for prefix_genomic_annot, param_dict in dict_cts_conditional.items():
 			### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 			### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
 			cmd = """{PYTHON2_EXEC} -u {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
-			--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
-			--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
-			--ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
-			--out {fileout_prefix}""".format(
+            --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
+            --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
+            --ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
+            --out {fileout_prefix}""".format(
 				PYTHON2_EXEC=PYTHON2_EXEC,
 				script=PATH_LDSC_SCRIPT,
 				gwas=gwas,
@@ -182,8 +190,36 @@ for prefix_genomic_annot, param_dict in dict_cts_conditional.items():
 				fileout_prefix=fileout_prefix
 				)
 			list_cmds_ldsc_prim.append(cmd)
+		
+		### NEW 2019-02-05 [*SLIGHTLY HACKY TO COPY/PASTE THE ABOVE CODE*]
+		if "dict_addtional_cond_annotations" in param_dict:
+			for cond_annotation in param_dict["dict_addtional_cond_annotations"]:
+				cond_ref_ld_chr_name = param_dict["dict_addtional_cond_annotations"][cond_annotation]
+				fileout_prefix = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}__CONDITIONAL__{cond_annotation}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot, cond_annotation=cond_annotation)
+				if os.path.exists("{}.cell_type_results.txt".format(fileout_prefix)):
+					print("GWAS={}, prefix_genomic_annot={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, prefix_genomic_annot, fileout_prefix))
+					continue
+				### I'm 90% sure that ldsc.py ONLY runs on python2 - and not python3.
+				### *OBS*: we are runnin ldsc python script with UNBUFFERED stdout and stderr
+				### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
+				### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
+				cmd = """{PYTHON2_EXEC} -u {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
+                --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
+                --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
+                --ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
+                --out {fileout_prefix}""".format(
+					PYTHON2_EXEC=PYTHON2_EXEC,
+					script=PATH_LDSC_SCRIPT,
+					gwas=gwas,
+					prefix_genomic_annot=prefix_genomic_annot,
+					ldsc_all_genes_ref_ld_chr_name=ldsc_all_genes_ref_ld_chr_name,
+					cond_ref_ld_chr_name=cond_ref_ld_chr_name,
+					fileout_prefix=fileout_prefix
+					)
+				list_cmds_ldsc_prim.append(cmd)
 
-
+#print(list_cmds_ldsc_prim)
+# print(len(list_cmds_ldsc_prim))
 ### Call scheduler
 job_scheduler(list_cmds=list_cmds_ldsc_prim, n_parallel_jobs=N_PARALLEL_LDSC_REGRESSION_JOBS)
 

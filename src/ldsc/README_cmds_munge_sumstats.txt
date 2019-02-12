@@ -486,6 +486,15 @@ python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --N 477807 \
 --out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
 
+GWAS=T2D_UKBB_Loh2018
+python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
+--sumstats /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/UKBB_460k/disease_T2D.sumstats.gz \
+--merge-alleles /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
+--N 468298 \
+--out /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
+
 
 GWAS=LIPIDS_HDL_Willer2013
 python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \

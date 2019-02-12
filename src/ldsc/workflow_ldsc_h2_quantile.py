@@ -104,7 +104,11 @@ list_gwas = ["BMI_UKBB_Loh2018",
 			 "BMI_UPDATE_Yengo2018",
 			 "T2D_DIAMANTE_Mahajan2018",
 			 "T2D_UKBB_DIAMANTE_Mahajan2018",
-			 "HEIGHT_Yengo2018"
+			 "T2D_UKBB_Loh2018",
+			 "HEIGHT_UKBB_Loh2018",
+			 "HEIGHT_Yengo2018",
+			 "LIPIDS_LDL_Teslovich2010",
+			 "RA_Okada2014",
 			]
 
 
@@ -123,12 +127,20 @@ for annotation in list_annotations:
 	dict_annotations[annotation]["name_context"] = "mousebrain_all.{}.sem_mean".format(annotation)
 	dict_annotations[annotation]["file_path_prefix"] = "/scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__{}".format(dict_annotations[annotation]["name_context"])
 # ALT using dict comprehension: dict_annotations = {key:{"name_context":"mousebrain_all.{}.sem_mean".format(key)} for key in list_annotations}
+
 dict_annotations_mb = dict_annotations
 
 
 ################## TABULA MURIS ##################
 dict_annotations = collections.defaultdict(dict)
-list_annotations = ["Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell","Brain_Non-Myeloid.oligodendrocyte","Brain_Non-Myeloid.astrocyte","Pancreas.type_B_pancreatic_cell","Pancreas.pancreatic_A_cell","Pancreas.pancreatic_D_cell","Pancreas.pancreatic_PP_cell"]
+list_annotations = ["Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell","Brain_Non-Myeloid.oligodendrocyte","Brain_Non-Myeloid.astrocyte",
+"Pancreas.type_B_pancreatic_cell","Pancreas.pancreatic_A_cell","Pancreas.pancreatic_D_cell","Pancreas.pancreatic_PP_cell",
+"Liver.hepatocyte", # LDL
+"Spleen.T_cell", # RA
+"Trachea.mesenchymal_cell", # Height
+"Limb_Muscle.mesenchymal_stem_cell", # Height
+]
+
 for annotation in list_annotations:
 	dict_annotations[annotation]["name_context"] = "tabula_muris.{}.sem_mean".format(annotation)
 	dict_annotations[annotation]["file_path_prefix"] = "/scratch/sc-ldsc/celltypes.tabula_muris.all/per_annotation/celltypes.tabula_muris.all__{}".format(dict_annotations[annotation]["name_context"])

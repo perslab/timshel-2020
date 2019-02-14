@@ -211,7 +211,6 @@ print(list.run_parameters)
 
 suppressMessages(library(rolypoly))
 suppressMessages(library(tidyverse))
-suppressMessages(library(ggplot2))
 suppressMessages(library(doParallel))
 
 dir.sc_genetics.data <- "/projects/timshel/sc-genetics/sc-genetics/data" # no trailing slash
@@ -219,6 +218,13 @@ dir.ldfiles <- file.path(dir.sc_genetics.data, "rolypoly/EUR_LD_FILTERED_NONAN_R
 
 dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib"
 source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+
+### Check that correct version of RolyPoly is loaded
+if (!exists('is_rolypoly_pascaltimshel_fork', mode='function')) {
+  # 'is_rolypoly_pascaltimshel_fork' function only exists in pascaltimshel fork.
+  # exists() returns TRUE only if function is found.
+  stop("You have not loaded the pascaltimshel forked version of rolypoly. Univariate functionality is only supported in pascaltimshel forked version. Will exit...")
+}
 
 
 # ======================================================================================================= #
@@ -534,14 +540,15 @@ print(names(list.df_expr.run))
 
 
 ### Run wrapper - parallel anno
+tmp.runtime <- system.time(list.rp_inference.run <- wrapper.run_rolypoly_univariate_over_expr_datasets(list.df_expr = list.df_expr.run,
+                                                                                                       rp.precomputed = rp.gwas_linked,
+                                                                                                       do.parallel_annotations=TRUE,
+                                                                                                       do.parallel_bootstrap=TRUE))
+### Run wrapper - NO parallel anno
 # tmp.runtime <- system.time(list.rp_inference.run <- wrapper.run_rolypoly_univariate_over_expr_datasets(list.df_expr = list.df_expr.run, 
 #                                                                                                        rp.precomputed = rp.gwas_linked, 
-#                                                                                                        do.parallel_annotations=TRUE,
-#                                                                                                        do.parallel_bootstrap=TRUE))
-tmp.runtime <- system.time(list.rp_inference.run <- wrapper.run_rolypoly_univariate_over_expr_datasets(list.df_expr = list.df_expr.run, 
-                                                                                                       rp.precomputed = rp.gwas_linked, 
-                                                                                                       do.parallel_annotations=FALSE,
-                                                                                                       do.parallel_bootstrap=FALSE))
+#                                                                                                        do.parallel_annotations=FALSE,
+#                                                                                                        do.parallel_bootstrap=FALSE))
 
 print("Run wrapper - parallel anno")
 print(tmp.runtime)

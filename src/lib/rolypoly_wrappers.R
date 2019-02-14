@@ -87,7 +87,7 @@ run_rolypoly_precomputation.multi_attempt <- function(gwas_data,
     },
     error=function(cond) {
       message(sprintf("Attempt = %s | *Error block* | An error happend! Here's the original error message:", n_attempts))
-      message(cond)
+      message(conditionMessage(cond)) # conditionMessage() needed for message to arrive when running in parallel mode. REF TryCatch messages for parallel R https://stackoverflow.com/a/45783896/6639640
       message() # gives extra space.
       if (n_attempts < N_MAX_ATTEMPTS) {
         message(sprintf("Attempt = %s | *Error block* | Will run function again...", n_attempts))
@@ -138,7 +138,8 @@ run_rolypoly_inference.multi_attempt <- function(rp.precomputed,
     },
     error=function(cond) {
       message(sprintf("Attempt = %s | *Error block* | An error happend! Here's the original error message:", n_attempts))
-      message(cond)
+      # message(cond) # ---> error message does not arrive from parallel workers to 'master'
+      message(conditionMessage(cond)) # conditionMessage() needed for message to arrive when running in parallel mode. REF TryCatch messages for parallel R https://stackoverflow.com/a/45783896/6639640
       message() # gives extra space.
       if (n_attempts < N_MAX_ATTEMPTS) {
         message(sprintf("Attempt = %s | *Error block* | Will run function again...", n_attempts))
@@ -231,6 +232,7 @@ wrapper.run_rolypoly_univariate_over_expr_datasets <- function(list.df_expr,
       name.annotation <- colnames(df.expr)[idx_col.annotation]
       print(sprintf("========== Annotation #%s/#%s | Status = Running inference | Annotation = %s ==========", idx_col.annotation, n_annotations, name.annotation))
       df.annotation <- df.expr %>% select(name.annotation) %>% as.data.frame()
+      # print(head(df.annotation))
       runtime <- system.time( # system.time(): returns a names numerical vector of class "proc_time"
         rp <- run_rolypoly_inference.multi_attempt(rp.precomputed = rp.precomputed,
                                                    block_data = df.annotation, 

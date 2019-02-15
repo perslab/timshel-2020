@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-# Explore and plot espression specificity correlations
+# AIM: Explore and plot espression specificity correlations
 # Dendrogram
 # Correlation heatmap
 
@@ -29,9 +29,13 @@ setwd(here("src/expression_specificity"))
 # ============================ PARAMETERS =============================== #
 # ======================================================================= #
 
-dataset_prefix <- "mousebrain_all"
+### Tabula muris
+dataset_prefix <- "tabula_muris"
+filter.celltypes <- c("Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
 
-filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
+### Mousebrain
+# dataset_prefix <- "mousebrain_all"
+# filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
 
 # ======================================================================= #
 # ============================ LOAD DATA =============================== #
@@ -47,7 +51,7 @@ df.es <- read_csv(file.es) # genes x cell-types
 cormat.es <- cor(df.es %>% select(-gene), method="pearson") 
 
 # ======================================================================= #
-# ============================ Calculate dendrogram =============================== #
+# ============================ [base] Calculate dendrogram =============================== #
 # ======================================================================= #
 
 ### Compute distances and hierarchical clustering
@@ -58,23 +62,59 @@ dend <- as.dendrogram(hc) # Turn the object into a dendrogram.
 plot(dend)
 
 # ======================================================================= #
+# ============================ Export clustering order =============================== #
+# ======================================================================= #
+
+file_out.clustering_order <- here(sprintf("data/genes_cell_type_specific/%s.hclust_order.csv", dataset_prefix))
+df.clustering_order <- tibble(cluster_order=seq_along(labels(dend)), annotation=labels(dend))
+df.clustering_order %>% write_csv(file_out.clustering_order)
+
+# ======================================================================= #
+# ============================ [dendextend] plot dendrogram =============================== #
+# ======================================================================= #
+
+library(dendextend)
+
+dend %>% plot()
+
+n_labels <- length(labels(dend))
+labels_col <- rep("gray", n_labels)
+labels_col[labels(dend) %in% filter.celltypes] <- "red"
+leaves_cex <- rep(0, n_labels)
+leaves_cex[labels(dend) %in% filter.celltypes] <- 1
+leaves_col <- rep("gray", n_labels)
+leaves_col[labels(dend) %in% filter.celltypes] <- "red"
+
+pdf(sprintf("plot.%s.dendrogram.pdf",dataset_prefix), width=45, height=12)
+dend %>% 
+  set("labels_col", labels_col) %>%
+  set("branches_k_color", k=20) %>% # branch color (k-means clustering)
+  set("leaves_pch", 19) %>%  # node point type
+  set("leaves_cex", leaves_cex) %>%  # node point size
+  set("leaves_col", leaves_col) %>% #node point color
+  plot()
+dev.off()
+
+
+# ======================================================================= #
 # ============================ [corrplot] Correlation plots =============================== #
 # ======================================================================= #
 
 ### https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html
 library(corrplot)
 
-pdf("plot.corrplot.mixed.pdf", width=20, height=20)
-corrplot.mixed(cormat.es)
-dev.off()
+### Does not look good for many cell-types - need to adjust text size and more, and I don't want to.
+# pdf("plot.corrplot.mixed.pdf", width=20, height=20)
+# corrplot.mixed(cormat.es)
+# dev.off()
 
-pdf("plot.corrplot.hclust.pdf", width=20, height=20)
+pdf(sprintf("plot.%s.corrplot.hclust.pdf",dataset_prefix), width=20, height=20)
 corrplot(cormat.es, order = "hclust", addrect = 10)
 dev.off()
 
 ### selected FDR using corrplot
 tmp.cor <- cor(df.es %>% select(one_of(filter.celltypes), -gene), method="pearson")  # one_of(): variables in character vector. You need this when mixing unquoted names and character vector
-pdf("plot.corrplot.mixed_hclust_fdr_only.pdf", width=10, height=10)
+pdf(sprintf("plot.%s.corrplot.mixed_hclust_fdr_only.pdf",dataset_prefix), width=15, height=15)
 corrplot.mixed(tmp.cor, order = "hclust")
 dev.off()
 
@@ -92,16 +132,17 @@ dev.off()
 ### Code: https://github.com/drsimonj/corrr/
 ### Blog: https://drsimonj.svbtle.com/exploring-correlations-in-r-with-corrr
 library(corrr)
+# *OBS*: focus() does NOT return a diagonal matrix. That is, it is not 'ordered'.
 
 df.es_cordf <- as_cordf(cormat.es) # instead of calling correlate(df.es %>% select(-gene))
 
 ### selecting cell-types
 # df.es_cordf %>% focus(matches("^MSN"), mirror=T)
-# df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% rearrange(method="HC") %>% shave() %>% rplot(print_cor=T) # shave()
+# df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% rearrange(method="HC") %>% shave() %>% rplot(print_cor=T) # shave() looks weird when the matrix is not diagonal
 df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% rearrange(method="HC") %>% rplot(print_cor=T)
-# *OBS*: focus does NOT return a diagonal matrix. That is, it is not 'ordered'.
+ggsave(sprintf("plot.%s.corrr_hc.pdf",dataset_prefix), w=10, h=10)
 
-# df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% select(sort(current_vars())) # ... trying to order the colnames but then rowname is included
+# df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% select(sort(current_vars())) # ... trying to order the colnames but then rowname is included, so it becomes to much of a mess to solve
 
 ### INDEX
 # as_cordf	Coerce lists and matrices to correlation data frames

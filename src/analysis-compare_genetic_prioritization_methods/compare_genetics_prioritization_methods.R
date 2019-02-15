@@ -74,7 +74,9 @@ df.depict_zscore <- df.depict_zscore %>% select(annotation=`MeSH term`,
 # ================================ ROLYPPOLY ================================ #
 # ======================================================================= #
 # read CSV in this folder
-
+file.rolypoly <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.v3.nboot100/inference_rp.body_BMI_Locke2015.tss.10kb.pos_only.all_genes.nboot100/table.pvals.gtex.sub_tissue_gene_tpm.avg_expr.csv"
+df.rolypoly <- read_csv(file.rolypoly)
+df.rolypoly <- df.rolypoly %>% select(annotation, pval=bp_value)
 
 # ======================================================================= #
 # ================================ Combine data ================================ #
@@ -86,6 +88,15 @@ list.comb <- list("magma"=df.magma,
                   "depict"=df.depict)
 df <- bind_rows(list.comb, .id="method")
 
+# ======================================================================= #
+# ================================ Export data ================================ #
+# ======================================================================= #
+
+df.export <- df %>% spread(key="method", value="pval")
+df.export %>% write_csv("method_comparison.mousebrain.pvals.csv")
+df.export.rank <- df %>% group_by(method) %>% mutate(pval=rank(pval)) %>% spread(key="method", value="pval")
+df.export.rank %>% write_csv("method_comparison.mousebrain.rank.csv")
+
 
 # ======================================================================= #
 # ================================ PLOT CORRELATE / MATRIXPLOT ================================ #
@@ -96,19 +107,24 @@ df.matplot <- df %>% mutate(pval_mlog10 = -log10(pval))
 df.matplot <- df.matplot %>% select(-pval) %>% spread(key="method", value="pval_mlog10")
 ggpairs(df.matplot %>% select(-annotation))
 
-# ggcorr()
-
-ggplot(df, aes(x=annotation, y=-log10(pval), fill=method)) + geom_col(position=position_dodge())
-
-
 
 # ======================================================================= #
 # ================================ PLOT BARPLOT ================================ #
 # ======================================================================= #
 
-# TODO: filter only FDR significant cell-types
+### Barplot - all cell-types
+ggplot(df, aes(x=annotation, y=-log10(pval), fill=method)) + 
+  geom_col(position=position_dodge()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 
-ggplot(df, aes(x=annotation, y=-log10(pval), fill=method)) + geom_col(position=position_dodge())
+### Barplot - only FDR significant cell-types
+filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
+ggplot(df %>% filter(annotation %in%  filter.celltypes), aes(x=annotation, y=-log10(pval), fill=method)) + 
+  geom_col(position=position_dodge()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
+
 
 
 # ======================================================================= #

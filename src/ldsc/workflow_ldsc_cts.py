@@ -247,7 +247,7 @@ N_PARALLEL_LDSC_REGRESSION_JOBS = 3
 FLAG_BINARY = False
 
 
-list_gwas = ["BMI_UPDATE_Yengo2018", "BMI_UKBB_Loh2018", "T2D_UKBB_Loh2018"]
+list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 
 # list_gwas = ["BMI_UKBB_Loh2018_no_mhc_max_chisq_80",
 # "BMI_UKBB_Loh2018_no_mhc_max_chisq_720",
@@ -336,13 +336,15 @@ list_gwas = ["BMI_UPDATE_Yengo2018", "BMI_UKBB_Loh2018", "T2D_UKBB_Loh2018"]
 
 
 ################## Cell-types ##################
-FLAG_WGCNA = False
+# FLAG_WGCNA = False
 
-
-# ### mousebrain hierarchical_fdr_sign_only_190114
-# dict_genomic_annot = {"TMP_TEST.celltypes.mousebrain.hierarchical_fdr_sign_only_190114":
+# ### Mean MB+TB
+# dict_genomic_annot = {"celltypes.mousebrain.all":
 # 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_fdr_sign_only_190114.txt.gz"},
+# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+#  					 "celltypes.tabula_muris.all":
+#  					  	{"dataset":"tabula_muris",
+#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
 #  					 }
 
 
@@ -364,15 +366,6 @@ FLAG_WGCNA = False
 #  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_raw_sems.txt.gz"}
 #  					 }
 
-### Mean MB+TB
-dict_genomic_annot = {"celltypes.mousebrain.all":
-						{"dataset":"mousebrain",
-						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
- 					 "celltypes.tabula_muris.all":
- 					  	{"dataset":"tabula_muris",
- 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
- 					 }
-
 
 # dict_genomic_annot = {"celltypes.campbell_lvl1.all":
 # 						{"dataset":"campbell",
@@ -389,7 +382,24 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 
 
 ################## WGCNA ##################
-# FLAG_WGCNA = True
+FLAG_WGCNA = True
+
+
+### Modules from FDR significant cell-types [v3, 190213] | NEW: WGCNA run on n=11 BMI_UKBB_Loh2018 FDR cell-types 
+# Feb 13 [6:15 PM]
+# Hej Pascal,
+# Nu er den nye mb WGCNA analyse  endelig klar. Jeg gik tilbage til den tidligere udgave af pipelinen fra Januar.
+# Koerslen hedder Neurons_sub_ClusterName_7.2_run1 og den relevante output fil er
+# /projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes.csv.gz
+# Dodgerblue modulet gaar igen uden aendring, nu under navnet “lavenderblush”.
+# (har i senere aendringer i scriptet soerget for at alle random seeds, inklusive navne, er reproducible) 
+dict_genomic_annot = {"wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous": 
+						{"dataset":"tabula_muris", 
+						"file_multi_gene_set":"/projects/jonatan/tabula_muris_3/tables/tabula_muris_3_cell_cluster_module_genes.csv.gz"},
+					  "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous": 
+					  	{"dataset":"mousebrain", 
+					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes.csv.gz"}
+					 }
 
 
 # ### Modules from FDR significant cell-types [v2, 190111] + KME CUT-OFF

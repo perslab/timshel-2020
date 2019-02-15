@@ -25,13 +25,17 @@ setwd(wd)
 # =============================== PARAMS ================================ #
 # ======================================================================= #
 
-# name.dataset <- "mousebrain"
-# prefix_genomic_annot <- "wgcna.mousebrain-190111.fdr_sign_celltypes.continuous"
+gwas <- "BMI_UKBB_Loh2018"
+# gwas <- "BMI_UPDATE_Yengo2018"
+
+name.dataset <- "mousebrain"
+prefix_genomic_annot <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
+### prefix_genomic_annot <- "wgcna.mousebrain-190111.fdr_sign_celltypes.continuous"
 ### prefix_genomic_annot <- "wgcna.mousebrain-181214.fdr_sign_celltypes.continuous"
 
 
-name.dataset <- "tabula_muris"
-prefix_genomic_annot <- "wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous"
+# name.dataset <- "tabula_muris"
+# prefix_genomic_annot <- "wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous"
 ### prefix_genomic_annot <- "wgcna.tabula_muris-181214.fdr_sign_celltypes.continuous"
 
 # ======================================================================= #
@@ -90,7 +94,8 @@ do_gprofiler <- function(df, ordered_query){
 # =============================== FILES INPUT ================================ #
 # ======================================================================= #
 
-file.magma_gwas <- "/scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
+# file.magma_gwas <- "/scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
+file.magma_gwas <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
 # file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.1e-5.depict_tissues_loci.txt" # 1e-5
 file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.5e-8.depict_tissues_loci.txt" # 5e-8
 file.genes_mendelian <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_s21_mendelian_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
@@ -104,7 +109,7 @@ file.ortholog_genes_background <- "/raid5/projects/timshel/sc-genetics/sc-geneti
 # ======================================================================= #
 
 ### Set LDSC specific files
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_Yengo2018.cell_type_results.txt", prefix_genomic_annot)
+file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", prefix_genomic_annot, gwas)
 file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", prefix_genomic_annot, prefix_genomic_annot)
 
 
@@ -304,7 +309,7 @@ do.excel_export(df.gprofiler.ordered.meta, sheet_name="GO analysis - GSEA", xlsx
 do.excel_export(df.gprofiler.unordered.meta, sheet_name="GO analysis", xlsx.workbook)
 do.excel_export(df.bio_genes, sheet_name="Module bio. gene-based", xlsx.workbook)
 do.excel_export(df.bio_modules, sheet_name="Module bio. summary", xlsx.workbook)
-saveWorkbook(xlsx.workbook, file = sprintf("out.module_to_biology.%s-%s.xlsx", name.dataset, prefix_genomic_annot), overwrite = TRUE) # write file
+saveWorkbook(xlsx.workbook, file = sprintf("out.module_to_biology.%s-%s.xlsx", gwas, prefix_genomic_annot), overwrite = TRUE) # write file
 
 
 

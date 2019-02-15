@@ -273,7 +273,7 @@ import subprocess
 
 ###################################### running v3 UNIVARIATE: LDSC MUNGED HAPMAP3 GWAS ######################################
 
-N_CORES=10 
+N_CORES=5
 	# 7 cores: moderate low CPU usage. 
 	# 10 cores: ~20-30% CPU usage on average. (in peaks, it will use up to ~80%)
 LOG_PREFIX="ldsc_munge"
@@ -282,8 +282,8 @@ if not os.path.exists(OUTDIR): # need to make it for the log files to go the sam
 	os.makedirs(OUTDIR)
 
 list_cmds = [
-"Rscript run_rolypoly_multi_expr_datasets-v3.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas_name}.sumstats.gz --gwas_name {gwas_name} --run_name {run_name} --outdir {outdir}/out.rolypoly_objs-v3.univariate --expr_data_list /projects/timshel/sc-genetics/sc-genetics/data/list_expr_data.mb_tm_sem_mean.txt --window_position tss --window_size_kb 100 --pos_transformation none --n_bootstrap 500 --n_cores {n_cores} &> {outdir}/log.{log_prefix}.{gwas_name}-{run_name}.out.txt".format(gwas_name="BMI_UPDATE_Yengo2018_no_mhc", run_name="tss.100kb.none.nboot500", outdir=OUTDIR, n_cores=N_CORES, log_prefix=LOG_PREFIX),
 "Rscript run_rolypoly_multi_expr_datasets-v3.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas_name}.sumstats.gz --gwas_name {gwas_name} --run_name {run_name} --outdir {outdir}/out.rolypoly_objs-v3.univariate --expr_data_list /projects/timshel/sc-genetics/sc-genetics/data/list_expr_data.mb_tm_sem_mean.txt --window_position tss --window_size_kb 100 --pos_transformation none --n_bootstrap 500 --n_cores {n_cores} &> {outdir}/log.{log_prefix}.{gwas_name}-{run_name}.out.txt".format(gwas_name="BMI_UKBB_Loh2018_no_mhc", run_name="tss.100kb.none.nboot500", outdir=OUTDIR, n_cores=N_CORES, log_prefix=LOG_PREFIX),
+"Rscript run_rolypoly_multi_expr_datasets-v3.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas_name}.sumstats.gz --gwas_name {gwas_name} --run_name {run_name} --outdir {outdir}/out.rolypoly_objs-v3.univariate --expr_data_list /projects/timshel/sc-genetics/sc-genetics/data/list_expr_data.mb_tm_sem_mean.txt --window_position tss --window_size_kb 100 --pos_transformation none --n_bootstrap 500 --n_cores {n_cores} &> {outdir}/log.{log_prefix}.{gwas_name}-{run_name}.out.txt".format(gwas_name="BMI_UPDATE_Yengo2018_no_mhc", run_name="tss.100kb.none.nboot500", outdir=OUTDIR, n_cores=N_CORES, log_prefix=LOG_PREFIX),
 ]
 
 # EXAMPLE COMMANMD: Rscript run_rolypoly_multi_expr_datasets-v3.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_UKBB_Loh2018_no_mhc.sumstats.gz --gwas_name BMI_UKBB_Loh2018_no_mhc --run_name tss.100kb.none.nboot500 --outdir /scratch/rolypoly_out_scratch/out.rolypoly_objs-v3.univariate --expr_data_list /projects/timshel/sc-genetics/sc-genetics/data/list_expr_data.mb_tm_sem_mean.txt --window_position tss --window_size_kb 100 --pos_transformation none --n_bootstrap 500 --n_cores 10 &> /scratch/rolypoly_out_scratch/log.ldsc_munge.BMI_UKBB_Loh2018_no_mhc-tss.100kb.none.nboot500.out.txt

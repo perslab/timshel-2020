@@ -89,6 +89,11 @@ df.corrr.long.r_threshold <- df.corrr.long %>% filter(abs(r) >= r_threshold)
 ## TODO: make into a function: prune_modules(df.corr.long, r_threshold)
 ## return list.prunned
 ## ALTERNATIVE ALGORITHM using square correlation matrix as input: https://stackoverflow.com/questions/29294983/how-to-calculate-correlation-between-all-columns-and-remove-highly-correlated-on
+
+### DOCS
+## This is a greedy algorithm, and may give different results for different input orders.
+## E.g. it is possible that moduleA is clumped under moduleB, but could also be clumped under moduleC (and moduleB is not correlated enough to also be clumped under moduleC).
+## The function garantuees that none of the 'lead' modules will have a pairwise correlation >r_threshold.
 list.prunned <- list() # key=lead module; value=prunned modules
 continue_iteration <- T
 iter_counter <- 1
@@ -118,6 +123,18 @@ length(list.prunned)
 list.prunned$lightpink3
 # lightpink3
 # lavenderblush
+
+# ======================================================================= #
+# ============= Check that none of lead modules are correlated ========= #
+# ======================================================================= #
+
+### Plot
+# df.corrr %>% focus(names(list.prunned), mirror=TRUE) %>% rplot()
+### Inspect
+df.safety_check <- df.corrr %>% focus(names(list.prunned), mirror=TRUE) %>% shave() %>% stretch(na.rm = TRUE) %>% arrange(desc(abs(r)))
+head(df.safety_check)
+### Check
+stopifnot(max(abs(df.safety_check$r)) <= r_threshold) # ok
 
 # ======================================================================= #
 # ================================ Finalize ================================ #

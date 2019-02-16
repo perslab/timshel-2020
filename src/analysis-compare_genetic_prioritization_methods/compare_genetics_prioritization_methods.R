@@ -34,9 +34,9 @@ setwd(here("src/analysis-compare_genetic_prioritization_methods"))
 # ONLY MAKE FIGURE FOR BMI_UKBB_Loh2018_no_mhc
 
 gwas_name <- "BMI_UKBB_Loh2018_no_mhc"
-# gwas_name <- "BMI_UPDATE_Yengo2018_no_mhc"
 dataset_prefix <- "mousebrain"
-# dataset_prefix <- "tabula_muris"
+
+flag_include_depict <- FALSE
 
 # ======================================================================= #
 # ================================ LDSC ================================ #
@@ -74,7 +74,7 @@ df.depict_zscore <- df.depict_zscore %>% select(annotation=`MeSH term`,
 # ================================ ROLYPPOLY ================================ #
 # ======================================================================= #
 # read CSV in this folder
-file.rolypoly <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.v3.nboot100/inference_rp.body_BMI_Locke2015.tss.10kb.pos_only.all_genes.nboot100/table.pvals.gtex.sub_tissue_gene_tpm.avg_expr.csv"
+file.rolypoly <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp.v3/inference_rp_ldscmunge.BMI_UPDATE_Yengo2018_no_mhc.tss.100kb.none.nboot500/table.pvals.mousebrain_all.sem_mean.csv"
 df.rolypoly <- read_csv(file.rolypoly)
 df.rolypoly <- df.rolypoly %>% select(annotation, pval=bp_value)
 
@@ -84,8 +84,13 @@ df.rolypoly <- df.rolypoly %>% select(annotation, pval=bp_value)
 
 list.comb <- list("magma"=df.magma,
                   "ldsc"=df.ldsc,
+                  "rolypoly"=df.rolypoly,
                   "depict_zscore"=df.depict_zscore,
                   "depict"=df.depict)
+if (!flag_include_depict) {
+  list.comb[["depict"]] <- NULL
+  list.comb[["depict_zscore"]] <- NULL
+}
 df <- bind_rows(list.comb, .id="method")
 
 # ======================================================================= #
@@ -93,9 +98,13 @@ df <- bind_rows(list.comb, .id="method")
 # ======================================================================= #
 
 df.export <- df %>% spread(key="method", value="pval")
-df.export %>% write_csv("method_comparison.mousebrain.pvals.csv")
+file.out <- sprintf("method_comparison.mousebrain.pvals%s.csv", if_else(flag_include_depict, ".with_depict", ""))
+df.export %>% write_csv(file.out)
+
 df.export.rank <- df %>% group_by(method) %>% mutate(pval=rank(pval)) %>% spread(key="method", value="pval")
-df.export.rank %>% write_csv("method_comparison.mousebrain.rank.csv")
+file.out <- sprintf("method_comparison.mousebrain.rank%s.csv", if_else(flag_include_depict, ".with_depict", ""))
+df.export.rank %>% write_csv(file.out)
+
 
 
 # ======================================================================= #
@@ -106,11 +115,17 @@ df.export.rank %>% write_csv("method_comparison.mousebrain.rank.csv")
 df.matplot <- df %>% mutate(pval_mlog10 = -log10(pval)) 
 df.matplot <- df.matplot %>% select(-pval) %>% spread(key="method", value="pval_mlog10")
 ggpairs(df.matplot %>% select(-annotation))
-
+file.out <- sprintf("method_comparison.mousebrain.matrix_plot%s.pdf", if_else(flag_include_depict, ".with_depict", ""))
+ggsave(file.out, width=12, height=12)
 
 # ======================================================================= #
 # ================================ PLOT BARPLOT ================================ #
 # ======================================================================= #
+
+### Order annotation by LDSC significance
+order.annotation <- df %>% filter(method=="ldsc") %>% arrange(pval) %>% pull(annotation) 
+df <- df %>% mutate(annotation=fct_relevel(annotation, order.annotation))
+df$annotation %>% levels()
 
 ### Barplot - all cell-types
 ggplot(df, aes(x=annotation, y=-log10(pval), fill=method)) + 
@@ -121,9 +136,12 @@ ggplot(df, aes(x=annotation, y=-log10(pval), fill=method)) +
 ### Barplot - only FDR significant cell-types
 filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
 ggplot(df %>% filter(annotation %in%  filter.celltypes), aes(x=annotation, y=-log10(pval), fill=method)) + 
-  geom_col(position=position_dodge()) +
+  geom_col(width=0.4, position=position_dodge(width=0.5)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  coord_flip()
+  coord_flip() +
+  labs(x="Cell-type", y=expression(-log[10](P)))
+file.out <- sprintf("method_comparison.mousebrain.bar_plot_fdr_celltypes%s.pdf", if_else(flag_include_depict, ".with_depict", ""))
+ggsave(file.out, width=10, height=6)
 
 
 

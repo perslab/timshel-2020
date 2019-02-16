@@ -76,8 +76,6 @@ list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inferenc
 # list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.tmp_red.RData") # NULL GWAS
 
 
-
-
 ### Source annotations
 source("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.R")
 
@@ -108,8 +106,8 @@ extract_data <- function(list.rp_inference) {
       print(sprintf("annot=%s", name.anno))
       list.bootstrap[[name.expr_data]][[name.anno]] <- list.rp_inference[[name.expr_data]][[name.anno]][["bootstrap_results"]][3,] # 1 row data.frame with the annotation results
       list.gamma[[name.expr_data]][[name.anno]] <- list.rp_inference[[name.expr_data]][[name.anno]][["gamma"]] %>% # named numeric
-        as_tibble() %>% # as_tibble/as.tibble/as_data_frame are aliases.
-        rownames_to_column(var = "annotation") %>% # for some reason, you must call rownames_to_column() before calling arrange() - else you loose the rownames.
+        tibble::enframe() %>%  # converts named atomic vector to a tibble with two columns: "name" and "value". Here we get three rows: intercept, maf_poly_1, <ANNOTATION_NAME>
+        rename(annotation = name) %>%
         spread(key=annotation, value=value) %>% # returns a single-row dataframe
         select(intercept, maf_poly_1, everything()) # making the 'annotation' column go last
       colnames(list.gamma[[name.expr_data]][[name.anno]]) <- c("intercept", "maf_poly_1", "gamma")
@@ -138,7 +136,7 @@ add_annotations <- function(df, name.expr_data) {
   #  ---> NOT DONE YET
   } else {
     print("WARNING: add_annotations() got unknown pattern for name.expr_data. Will do dummy operation. Plot might not have meaningful coloring.")
-    df.category <- df %>% transmute(name_r=annotation, name_clean=annotation) # 'dummy' operation, but to make it work for ANY dataset (i.e that does not match the 'grepl' pattern)
+    df.category <- df %>% transmute(name_r=annotation, name_clean=annotation, category="dummy_category") # 'dummy' operation, but to make it work for ANY dataset (i.e that does not match the 'grepl' pattern)
     # stop("Got unexpected name for name.expr_data")
   }
   df.res <- left_join(df, df.category, by=c("annotation"="name_r"))

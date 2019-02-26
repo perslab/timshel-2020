@@ -30,8 +30,9 @@ def parse_ldsc_h2_logfile(filepath):
 			
 
 ### Get files
-dir_h2 = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2_baseline"
+dir_h2 = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2_trait"
 list_log_filepaths = glob.glob("{}/*.log".format(dir_h2))
+print("Found {} files in dir_h2={}".format(len(list_log_filepaths), dir_h2))
 
 ### parse 
 list_of_lists_parsed_data = []

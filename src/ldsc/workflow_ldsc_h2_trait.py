@@ -87,35 +87,42 @@ for filepath in list_gwas_filepaths:
 	dict_gwas[gwas] = {"filepath": filepath}
 
 
-### Add extra liability gwas
+######################################  ######################################
 dict_gwas["SCZ_Pardinas2018_liability_scale"] = {"filepath": "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/SCZ_Pardinas2018.sumstats.gz",
 								 "pop-prev":0.01, # from Gandal
 								 "samp-prev":0.39} # CASES = 40,675 | CONTROLS = 64,643 | 40675/105318=.386211284
 
-
+######################################  ######################################
 dict_gwas["MS_Patsopoulos2011_liability_scale"] = {"filepath": "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/MS_Patsopoulos2011.sumstats.gz",
 								 "pop-prev":0.001, # North America and Europe (>100/100,000 inhabitants) REF https://www.ncbi.nlm.nih.gov/pubmed/26718593
 								 "samp-prev":0.31} # 5545/17698 | 5545 cases and 12153 controls | REF https://www.ncbi.nlm.nih.gov/pubmed/22190364 (MS_Patsopoulos2011)
 
-dict_gwas["RA_Okada201_liability_scale4"] = {"filepath": "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/RA_Okada2014.sumstats.gz",
+######################################  ######################################
+dict_gwas["RA_Okada201_liability_scale"] = {"filepath": "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/RA_Okada2014.sumstats.gz",
 								 "pop-prev":0.01, # "The occurrence of RA is relatively constant with a prevalence of between 0.5 and 1.0%, a frequency that has been reported from several European [1-8] and North-American populations [9,10]" REF https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3240153/
 								 "samp-prev":0.29} # 14361/58284=.246396953 | Eurpean RA GWAS meta-analysis (14361 RA cases and 43923 conrols) | N_total = 58284 | REF http://plaza.umin.ac.jp/~yokada/datasource/software.htm
 
 
+######################################  ######################################
+dict_gwas["INSOMNIA_Jansen2018_liability_scale"] = {"filepath": "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/INSOMNIA_Jansen2018.sumstats.gz",
+								 "pop-prev":0.20, # hard to estimate exactly
+								 "samp-prev":0.28} # The prevalence of insomnia was 28.3% in the UKB version 2 sample --> the gwas summary stats used is for UKBB only [N=386533].
 
-# list_gwas = ["BMI_UKBB_Loh2018"]
+### pop-prev
+# REF: https://www.nature.com/articles/s41588-018-0333-3 (Jansen2018) | The diagnostic criteria for insomnia disorder2 (that is, difficulties with initiating or maintaining sleep with accompanying daytime complaints at least three times a week for at least three months, which cannot be attributed to inadequate circumstances for sleep3) are met by 10% of individuals, and up to one-third of older age individuals4.
+# REF: https://www.nature.com/articles/s41380-018-0033-5 | Insomnia is highly prevalent, affecting 10–20% of adults in the United States [1] and worldwide [2].
 
-# list_gwas = ["BMI_UKBB_Loh2018",
-# 			 "BMI_UPDATE_Yengo2018",
-# 			 "T2D_DIAMANTE_Mahajan2018",
-# 			 "T2D_UKBB_DIAMANTE_Mahajan2018",
-# 			 "T2D_UKBB_Loh2018",
-# 			 "HEIGHT_UKBB_Loh2018",
-# 			 "HEIGHT_Yengo2018",
-# 			 "LIPIDS_LDL_Teslovich2010",
-# 			 "RA_Okada2014",
-# 			]
-
+### samp-prev | REF Jansen2018
+# The UKB assessed insomnia complaints (hereafter referred to as ‘insomnia’)
+# with a touchscreen device, whereas 23andMe research participants completed
+# online surveys (Supplementary Tables 1 and 2). The assessment of insomnia in
+# both samples shows high accuracy for insomnia disorder in the UKB and somewhat
+# lower accuracy in 23andMe (sensitivity/specificity: UKB = 98/96%; 23andMe =
+# 84/80%) (see Supplementary Note). The prevalence of insomnia was 28.3% in the
+# UKB version 2 sample, 30.5% in the 23andMe sample, and 29.9% in the combined
+# sample, which is in keeping with previous estimates for people of advanced age
+# in the UK4 and elsewhere13,14.
+######################################  ######################################
 
 
 

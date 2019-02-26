@@ -65,7 +65,7 @@ M_NUMBER_SNPS <- 5961159 # EUR 1000G, MAF>=5%
 ### SEE ALSO EVERNOTE "SOFTWARE | LDSC - understanding | SNPs in LDSC (weights, ldscores, summarystats...)"
 
 ### Load h2 (observed scaled) estimates
-file.h2 <- here("results/h2_observed_scale.multi_gwas.csv")
+file.h2 <- here("results/h2_trait.multi_gwas.csv")
 df.h2 <- read_csv(file.h2)
 
 ### Join
@@ -271,6 +271,17 @@ p.multi_gwas
 # ======================================================================= #
 # ================================ h2 barplot =========================== #
 # ======================================================================= #
+
+filter.gwas <- c("BMI_UKBB_Loh2018",
+                 "EA3_Lee2018",
+                 "INTELLIGENCE_Savage2018",
+                 "SCZ_Pardinas2018_liability_scale", # OBS
+                 "INSOMNIA_Jansen2018_liability_scale", # OBS
+                 "MS_Patsopoulos2011_liability_scale", # OBS
+                 "WHRadjBMI_UKBB_Loh2018",
+                 "HEIGHT_UKBB_Loh2018",
+                 "LIPIDS_LDL_Willer2013",
+                 "RA_Okada2014_liability_scale") # OBS
 
 ### Create 'plotting' data frame
 df.plot.h2 <- df.h2 %>% filter(gwas %in% filter.gwas)

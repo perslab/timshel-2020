@@ -1405,3 +1405,36 @@ add_ensembl_ids_from_entrez <- function(df, colname_geneids_from="entrez", colna
 }
 
 
+# Map: HUMAN ENSEMBL --> GENE SYMBOL
+hs_add_gene_symbol_from_ensembl_ids <- function(df, colname_geneids_from="gene", colname_geneids_to="ensembl_gene_id") {
+  ### INPUT df: a tibble/data.frame with the column 'colname_geneids_from' with human ensembl gene ids.
+  ### OUTOUT df 
+  # returns a tibble with human gene symbols added to the column 'colname_geneids_to'. 
+  # Genes that did not map have NA values in the 'colname_geneids_to' column.
+  # If there are duplicated gene IDs in 'colname_geneids_to', then all but the first of the duplicated elements will be marked as NA.
+  
+  df <- as.data.frame(df) # convert to df to ensure the the below operations work.
+  
+  file.mapping <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz"
+  df.mapping <- suppressMessages(read_tsv(file.mapping))
+  
+  genes_mapped <- df.mapping$gene_name_optimal[match(df[,colname_geneids_from], df.mapping$ensembl_gene_id)]
+  bool_dups <- duplicated(genes_mapped, incomparables=NA) # marks elements with smaller subscripts as duplicates
+  # ^ incomparables=NA: 'excluding' NA when counting duplicated. NA values will not be compared. (That is, duplicated() returns FALSE for NA values)
+  # ^ duplicated(c(1,1,2,NA,NA,NA)) returns FALSE  TRUE FALSE FALSE  TRUE  TRUE.
+  # ^ duplicated(c(1,1,2,NA,NA,NA), incomparables=NA) returns FALSE  TRUE FALSE FALSE FALSE FALSE.
+  print(sprintf("Number of genes mapped: %s",sum(!is.na(genes_mapped))))
+  print(sprintf("Number of genes not mapped: %s",sum(is.na(genes_mapped)))) # number of not mapped genes
+  print(sprintf("Number of genes with a NON-unique mapping (genes with duplicated ensembl gene IDs after mapping): %s",sum(bool_dups)))
+  ### set duplicated rows (with smaller subscripts) as NA
+  genes_mapped[bool_dups] <- NA
+  print(sprintf("Total mapping stats: %s genes have no mapping (not mapped + duplicates) out of %s input genes.", sum(is.na(genes_mapped)), length(genes_mapped)))
+  print(sprintf("Total genes mapped (non NA genes): %s", sum(!is.na(genes_mapped))))
+  df <- df %>% mutate(!!rlang::sym(colname_geneids_to):=genes_mapped) %>% as.tibble()
+  # filter(!is.na(gene)) %>% # remove all rows without mapping
+  # filter(!duplicated(gene)) # keep only one of the duplicated pair (if any)
+  print(sprintf("Returning tibble with the column '%s' added where all gene identifiers unique. Unmapped genes have NA values", colname_geneids_to))
+  return(df)
+}
+
+

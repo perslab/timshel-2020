@@ -17,10 +17,6 @@
 library(tidyverse)
 library(here)
 
-library(GGally)
-library(corrr) # devtools::install_github("drsimonj/corrr")
-library(gghighlight)
-
 
 dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
 source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
@@ -48,9 +44,28 @@ df.ldsc <- df.ldsc %>% separate(col=run_str_full, into=c("run_name", "annotation
 ### Filter
 # df.ldsc <- df.ldsc %>% filter(gwas %in% c("BMI_UKBB_Loh2018", "T2D_DIAMANTE_Mahajan2018"))
 df.ldsc
+
+
+# ======================================================================= #
+# =========================== EXPORT to results ========================= #
+# ======================================================================= #
+
+### Export (selected columns)
+file.out <- here("results/h2-multi_gwas.csv.gz")
+file.out
+# df.ldsc %>% select(-Category) %>% arrange(gwas) %>% write_csv(file.out)
+
+
 # ======================================================================= #
 #============================= COMBINE TABLE ========================== #
 # ======================================================================= #
+
+df.export <- df.ldsc %>% group_by(gwas) %>% 
+  mutate(rank = rank(-`Coefficient_z-score`)) %>% 
+  arrange(gwas, rank) %>%
+  select(-Category)
+df.export
+df.export %>% write_csv("out.h2_trait_annotation_table.all.csv")
 
 df.export <- df.ldsc %>% group_by(gwas) %>% 
   mutate(rank = rank(-`Coefficient_z-score`)) %>% 
@@ -58,7 +73,7 @@ df.export <- df.ldsc %>% group_by(gwas) %>%
   arrange(gwas, rank) %>%
   select(-Category)
 df.export
-df.export %>% write_csv("out.h2_trait_annotation_table.csv")
+df.export %>% write_csv("out.h2_trait_annotation_table.top5.csv")
 
 ### export WGCNA
 df.export <- df.ldsc %>% 

@@ -62,6 +62,17 @@ df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
 ### format file [*not* compatible with multi-GWAS plotting]
 df.ldsc_cts.export <- df.ldsc_cts %>% select(gwas, p.value, annotation) %>% spread(key=gwas, value=p.value) # format file
 
+
+# ======================================================================= #
+# =========================== EXPORT to results ========================= #
+# ======================================================================= #
+
+### Export (selected columns)
+file.out <- here("results", sprintf("primary-%s.multi_gwas.csv.gz", dataset_prefix))
+file.out
+# df.ldsc_cts %>% select(-sem, -dataset, -n_obs_sem, -fdr_significant, -p.value.adj) %>% write_csv(file.out)
+
+
 # ======================================================================= #
 # =============================== METADATA ================================= #
 # ======================================================================= #
@@ -71,11 +82,11 @@ df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation") # add met
 df.ldsc_cts.export <- df.ldsc_cts.export %>% left_join(df.metadata, by="annotation") # add meta data
 
 # ======================================================================= #
-# =============================== EXPORT ================================= #
+# =============================== EXPORT Pval summary ================================= #
 # ======================================================================= #
 
 ### Multi GWAS
-df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.multi_gwas.csv", dataset_prefix))
+# df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.multi_gwas.csv", dataset_prefix))
 
 ### Single GWAS
 # df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.%s.csv", dataset_prefix, "BMI_UPDATE_Yengo2018"))

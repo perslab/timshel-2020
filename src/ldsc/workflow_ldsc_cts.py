@@ -254,13 +254,6 @@ list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 # "BMI_UPDATE_Yengo2018_no_mhc_max_chisq_720",
 # "BMI_UPDATE_Yengo2018_no_mhc_max_chisq_80"]
 
-# list_gwas = ["LIPIDS_HDL_Teslovich2010",
-# "LIPIDS_LDL_Teslovich2010",
-# "LIPIDS_TG_Teslovich2010",
-# "LIPIDS_HDL_Willer2013",
-# "LIPIDS_LDL_Willer2013",
-# "LIPIDS_TG_Willer2013",
-# "LIPIDS_TC_Willer2013"]
 
 # list_gwas = ["ADHD_PGC_Demontis2017",
 # "AD_Jansen2019",
@@ -385,6 +378,27 @@ list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 FLAG_WGCNA = True
 
 
+### Modules from FDR significant cell-types [v4, 190218] | WGCNA med deepSplit 1 + n=11 BMI_UKBB_Loh2018 FDR cell-types 
+# Feb 18 4:22 PM
+# - koerslen hedder Neurons_sub_ClusterName_7.3_run1
+# - data.frame med module genes: /projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_cell_cluster_module_genes.csv.gz
+# - kMEs: /projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_kMs_full_join.csv.gz
+# Nogle observationer:
+# - Baade lavenderblush og lightpink3 er 100% bevarede (nu som henholdsvis ‘palevioletred’ og ‘brown’ - beklager, har ikke ville begynde at rette i det gamle script :S)
+# - antal moduler er faldet til 126
+
+dict_genomic_annot = {"wgcna.mousebrain-190218.fdr_sign_celltypes.continuous": 
+					  	{"dataset":"mousebrain", 
+					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_cell_cluster_module_genes.csv.gz"}
+					 }
+
+
+### Mousebrain - trait specificity for lavenderblush and lightpink3 [190218]
+# dict_genomic_annot = {"wgcna.mousebrain-190213.fdr_sign_celltypes.continuous": 
+# 					  	{"dataset":"mousebrain", 
+# 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes--lavenderblush--lightpink3.csv"}
+# 					 }
+
 ### Modules from FDR significant cell-types [v3, 190213] | NEW: WGCNA run on n=11 BMI_UKBB_Loh2018 FDR cell-types 
 # Feb 13 [6:15 PM]
 # Hej Pascal,
@@ -393,13 +407,13 @@ FLAG_WGCNA = True
 # /projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes.csv.gz
 # Dodgerblue modulet gaar igen uden aendring, nu under navnet “lavenderblush”.
 # (har i senere aendringer i scriptet soerget for at alle random seeds, inklusive navne, er reproducible) 
-dict_genomic_annot = {"wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous": 
-						{"dataset":"tabula_muris", 
-						"file_multi_gene_set":"/projects/jonatan/tabula_muris_3/tables/tabula_muris_3_cell_cluster_module_genes.csv.gz"},
-					  "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous": 
-					  	{"dataset":"mousebrain", 
-					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes.csv.gz"}
-					 }
+# dict_genomic_annot = {"wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous": 
+# 						{"dataset":"tabula_muris", 
+# 						"file_multi_gene_set":"/projects/jonatan/tabula_muris_3/tables/tabula_muris_3_cell_cluster_module_genes.csv.gz"},
+# 					  "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous": 
+# 					  	{"dataset":"mousebrain", 
+# 					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes.csv.gz"}
+# 					 }
 
 
 # ### Modules from FDR significant cell-types [v2, 190111] + KME CUT-OFF

@@ -20,6 +20,8 @@ library(here)
 dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
 source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
 
+
+library(RColorBrewer)
 library(patchwork)
 
 setwd(here("src/publication"))
@@ -28,195 +30,346 @@ setwd(here("src/publication"))
 # ============================ PARAMETERS =============================== #
 # ======================================================================= #
 
-# gwas <- "BMI_UPDATE_Yengo2018"
-gwas <- "BMI_UKBB_Loh2018"
-dataset_prefix <- "mousebrain_all"
-genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 
 
 # ======================================================================= #
-# ============================ LOAD CLUSTER ORDER =============================== #
+# ================== LOAD LDSC CTS RESULTS (multi GWAS) ================ #
 # ======================================================================= #
 
-file.mb_dendrogram <- here("data/expression/mousebrain/mousebrain_table_s3-cluster_dendrogram.csv")
-df.mb_dendrogram <- read_csv(file.mb_dendrogram)
-df.mb_dendrogram <- df.mb_dendrogram %>% select(linnarson_order=`Dendrogram order`, annotation=`Cluster name`) # %>% mutate(linnarson_order = linnarson_order+1)
-
-file.clustering_order <- here(sprintf("data/genes_cell_type_specific/%s.hclust_order.csv", dataset_prefix))
-df.clustering_order <- read_csv(file.clustering_order)
+### Read LDSC results
+file.results <- here("results/primary-mousebrain_all.multi_gwas.csv.gz")
+df.ldsc_cts <- read_csv(file.results)
 
 # ======================================================================= #
-# =============================== LOAD LDSC CTS RESULTS ================================= #
+# ================== LOAD LDSC CTS RESULTS (single GWAS) ================ #
 # ======================================================================= #
 
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
-df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
-df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
+# gwas <- "BMI_UKBB_Loh2018"
+# dataset_prefix <- "mousebrain_all"
+# genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
+# 
+# ### Loading BMI data
+# file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
+# df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
+# df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
+# 
 
 # ======================================================================= #
-# =============================== METADATA ================================= #
+# ============ Calculate tau normalized (LOAD and ADD GWAS h2) ========== #
 # ======================================================================= #
 
-df.metadata <- get_metadata(dataset_prefix)
+M_NUMBER_SNPS <- 5961159 # EUR 1000G, MAF>=5%
+### reference SNPs for European LD score estimation were the set of 9,997,231 SNPs with a minor allele count >= 5 from 489 unrelated European individuals in Phase 3 of 1000 Genomes.  ===> This is the number of SNPs in the annot files and in the .bim/.bed files. These are the SNPs used to calculate the ldscores (only some of the SNPs are written because of the --print-snps argument).
+### Heritability was partitioned for the set of 5,961,159 SNPs with MAF >= 0.05 ===> This is the number of SNPs in the LDSC baseline model (number of SNPs that have written ldscores for)
+### Regression coefficient estimation was performed with 1,217,312 HapMap3 SNPs (SNPs in HapMap3 are used because they are generally well-imputed). ===> regression weights
+### SEE ALSO EVERNOTE "SOFTWARE | LDSC - understanding | SNPs in LDSC (weights, ldscores, summarystats...)"
+
+### Load h2 (observed scaled) estimates
+file.h2 <- here("results/h2_observed_scale.multi_gwas.csv")
+df.h2 <- read_csv(file.h2)
+
+### Join
+df.ldsc_cts <- df.ldsc_cts %>% left_join(df.h2, by="gwas")
+
+### Calculate tau norm
+### normalized tau = tau/(h2g/M), where h2g/M is the"mean per-SNP heritability"
+### [LDSD-SEG]:    The normalized tau can be interpreted as the proportion by which the per-SNP heritability of an average SNP would increase if tau_k were added to it.
+### [Benchmarker]: The normalized tau can be interpreted as the change in heritability associated with the value of the annotation increasing from 0 to 1.
+df.ldsc_cts <- df.ldsc_cts %>% mutate(tau_norm = estimate/(h2/M_NUMBER_SNPS))
+
+
+# ======================================================================= #
+# ========================= LOAD CELL-TYPE METADATA ===================== #
+# ======================================================================= #
+
+### Read annotation metadata
+df.metadata <- get_metadata(dataset_prefix="mousebrain_all")
+
+### Read annotation taxonomy metadata
+source("constants-tmp-taxonomy_mapping.R") 
+df.taxonomy_metadata <- df.taxonomy_metadata %>% select(TaxonomyRank4, TaxonomyRank4_merged1, order_idx_mb_taxonomy_fig1c)
+if ( !(n_distinct(df.taxonomy_metadata$TaxonomyRank4_merged1) == n_distinct(df.taxonomy_metadata$order_idx_mb_taxonomy_fig1c)) ) {
+  stop("Columns 'order_idx_mb_taxonomy_fig1c' and 'TaxonomyRank4_merged1' must have the same number of unique values. Otherwise downstream sorting of factors will fail.")
+}
+
+### Add meta data
 df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation") # add meta data
-df.ldsc_cts <- df.ldsc_cts %>% left_join(df.clustering_order, by="annotation") # add cluster order
-df.ldsc_cts <- df.ldsc_cts %>% left_join(df.mb_dendrogram, by="annotation") # add cluster order
+df.ldsc_cts <- df.ldsc_cts %>% left_join(df.taxonomy_metadata, by="TaxonomyRank4") # add taxonomy meta data
+df.ldsc_cts
 
 # ======================================================================= #
-# ================================ PLOT: cell priori ================================= #
+# ============================ PROCESS DATA =============================== #
 # ======================================================================= #
 
-### Copy
-df.plot <- df.ldsc_cts
+### Order annotations
+df.ldsc_cts <- df.ldsc_cts %>% mutate(annotation=factor(annotation, levels=unique(annotation[order(order_idx_mb_taxonomy_fig1c, as.character(annotation))]))) # order annotations by their taxonomy (from MB Fig1c), and secondary order by their annotation name
+# ^*IMPORTANT*:  we here order annotation factor in the SAME ORDER 'TaxonomyRank4_merged1' is ordered later in df.tax_text_position
+# ^ if df.ldsc_cts only contain 1 gwas, then you don't need the levels=unique().
+df.ldsc_cts$annotation %>% levels()
+
+### Add fdr_significant flag (within GWAS)
+df.ldsc_cts.tmp.summary <- df.ldsc_cts %>% group_by(gwas) %>% summarise(n_obs_gwas=n())
+df.ldsc_cts <- left_join(df.ldsc_cts, df.ldsc_cts.tmp.summary, by="gwas")
+df.ldsc_cts <- df.ldsc_cts %>% mutate(fdr_significant = if_else(p.value <= 0.05/n_obs_gwas, true=T, false=F))
+df.ldsc_cts
+
+# ======================================================================= #
+# ============================ BMI point plot =============================== #
+# ======================================================================= #
+
+### Create 'plotting' data frame
+df.plot.tax_order <- df.ldsc_cts %>%filter(gwas == "BMI_UKBB_Loh2018")  # filter BMI results
 
 ### Rename
-df.plot <- df.plot %>% mutate(Region = case_when(
+df.plot.tax_order <- df.plot.tax_order %>% mutate(Region = case_when(
   Region == "Midbrain dorsal" ~ "Midbrain",
   Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
   Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
   TRUE ~ as.character(Region))
 )
 
-### Reorder
-# df.plot <- df.plot %>% mutate(annotation=factor(annotation, levels=annotation[order(cluster_order)])) # hclust order USE ME!
-# df.plot <- df.plot %>% mutate(annotation=factor(annotation, levels=annotation[order(linnarson_order)])) # linnarson order
-df.plot <- df.plot %>% mutate(annotation=factor(annotation, levels=annotation[order(TaxonomyRank4)])) # linnarson order
+### Create data frame with taxonomy text data
+df.tax_text_position <- df.plot.tax_order %>% 
+  group_by(TaxonomyRank4_merged1) %>% 
+  summarize(n_annotations_in_tax=n()) %>% # count how many annotations in each tax
+  left_join(df.taxonomy_metadata %>% select(TaxonomyRank4_merged1, order_idx_mb_taxonomy_fig1c) %>% distinct(), by="TaxonomyRank4_merged1") %>% # add 'order_idx_mb_taxonomy_fig1c' to be able to sort factor correctly.
+    # ^ OBS: we use 'distinct()' because df.taxonomy_metadata contains (intentional) duplicated rows for some combinations of {TaxonomyRank4_merged1, order_idx_mb_taxonomy_fig1c}.
+  mutate(TaxonomyRank4_merged1 = factor(TaxonomyRank4_merged1, levels=TaxonomyRank4_merged1[order(order_idx_mb_taxonomy_fig1c)])) # IMPORTANT: order factor by the SAME ORDER as 'annotation' column is ordered by in df.plot.tax_order
+### Add information of the text's position in the plot
+df.tax_text_position <- df.tax_text_position %>% 
+  arrange(TaxonomyRank4_merged1) %>%
+  mutate(pos_mid=cumsum(n_annotations_in_tax)-n_annotations_in_tax/2,
+         pos_start=cumsum(n_annotations_in_tax)-n_annotations_in_tax,
+         pos_end=cumsum(n_annotations_in_tax),
+         idx=1:n()) # idx is used for identifying every n'th tax
+df.tax_text_position <- df.tax_text_position %>% mutate(flag_draw_rect=if_else(idx %% 2 == 0, TRUE, FALSE)) 
+
+### Remove some text because they contain too few cell-types
+df.tax_text_position %>% arrange(n_annotations_in_tax) # ---> potentially filter : n_annotations_in_tax >= 5
+df.tax_text_position <- df.tax_text_position %>% mutate(TaxonomyRank4_merged1 = case_when(
+  TaxonomyRank4_merged1 == "Other CNS neurons" ~ "",
+  # TaxonomyRank4_merged1 == "Other glia" ~ "",
+  TRUE ~ as.character(TaxonomyRank4_merged1))
+)
 
 
-fdr_threshold <- 0.05/nrow(df.plot)
-p <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) +
-  geom_point(color="gray") + 
-  geom_point(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region)) +
-  # geom_segment(data=df.plot %>% filter(fdr_significant), aes(x=annotation, xend=annotation, y=0, yend=-log10(p.value)), color="gray", alpha=0.5) + # lollipop
-  ggrepel::geom_text_repel(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5) + # OBS geom_text_repel
-  geom_hline(yintercept=-log10(fdr_threshold), color="red") + 
-  labs(x="Cell Type", y=expression(-log[10](P))) +
-  ggtitle(sprintf("%s - %s", gwas, dataset_prefix)) +
-  coord_flip() +
+### Colors
+n_colors <- 12
+display.brewer.pal(n = n_colors, name = 'Paired') # # View a single RColorBrewer palette by specifying its name
+brewer.pal(n = n_colors, name = "Paired") # # Hexadecimal color specification
+
+# colormap.region <- c("Cortex"="#1B9E77",
+#                      "Thalamus"="#D95F02",
+#                      "Midbrain"="#7570B3",
+#                      "Hypothalamus"="#E7298A",
+#                      "Hippocampus"="#66A61E",
+#                      "Hippocampus/Cortex"="#E6AB02")
+# colormap.region <- c("Cortex"="#1F78B4",
+#                      "Hippocampus/Cortex"="#A6CEE3",
+#                      "Hippocampus"="#33A02C",
+#                      "Thalamus"="#FDBF6F",
+#                      "Midbrain"="#FF7F00",
+#                      "Hypothalamus"="#E31A1C"
+#                      )
+# colormap.region <- c("Cortex"="#1F78B4",
+#                      "Hippocampus/Cortex"="#CAB2D6",
+#                      "Hippocampus"="#6A3D9A",
+#                      "Thalamus"="#B15928",
+#                      "Midbrain"="#FF7F00",
+#                      "Hypothalamus"="#E31A1C"
+# )
+colormap.region <- c("Cortex"="#FF7F00",
+                     "Hippocampus/Cortex"="#B15928",
+                     "Hippocampus"="#E31A1C",
+                     "Thalamus"="#6A3D9A",
+                     "Midbrain"="#1F78B4",
+                     "Hypothalamus"="#33A02C"
+)
+
+fdr_threshold <- 0.05/nrow(df.plot.tax_order)
+p.main <- ggplot() +
+  ### add ggplot 'baselayer'. This makes our 'canvas' and needs to go first (for some reason I don't fully understand...)
+  geom_point(data=df.plot.tax_order, aes(x=annotation, y=-log10(p.value)), color="gray") +
+  ### add tax info and gray rects (add gray rect before the data points, so avoid them 'covering' the points)
+  geom_text(data=df.tax_text_position, aes(x=pos_mid, y=-0.5, label=TaxonomyRank4_merged1), hjust="right", size=rel(3)) +
+  geom_rect(data=df.tax_text_position %>% filter(flag_draw_rect), aes(xmin=pos_start, xmax=pos_end, ymin=-3, ymax=Inf), color="gray", alpha=0.3) +
+  ### cell-types
+  geom_point(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region)) +
+  ggrepel::geom_text_repel(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5, show.legend=F) +
+  ### extra
+  geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
+  ### axes
+  labs(x="", y=expression(-log[10](P))) +
+  # coord
+  coord_flip(ylim = c( 0, max(-log10(df.plot.tax_order$p.value)) ), # This focuses the y-axis on the range of interest
+             clip = 'off') +   # This keeps the labels from disappearing 
+  # ^ clip = 'off': it allows drawing of data points anywhere on the plot, including in the plot margins. If limits are set via xlim and ylim and some data points fall outside those limits, then those data points may show up in places such as the axes, the legend, the plot title, or the plot margins.
+  # ^ clip = 'off': disable cliping so df.tax_text_position text annotation can be outside of plot | REF https://stackoverflow.com/a/51312611/6639640
+  ### guides
+  #...
+  ### color
+  scale_color_manual(values=colormap.region)  +
+  # scale_color_brewer(palette="Dark2") +
+  # scale_color_viridis_d() + # viridis ---> does not work well
+  ### theme
   theme_classic() + 
-  theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank()) + 
+  theme(axis.text.y=element_text(size=rel(0.3))) + # REF: https://stackoverflow.com/a/47144823/6639640
   theme(legend.position="bottom")
-p
-# file.out <- sprintf("fig_1a.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "BMI_UKBB_Loh2018")
-# ggsave(p, filename=file.out, width=20, height=8)
+### Add margin to plot if displaying it directly (without pathwork)
+p.main.margin <- p.main + theme(plot.margin = unit(c(1,1,1,10), "cm")) # (t, r, b, l) widen left margin
+p.main.margin
+
+# file.out <- sprintf("fig_celltypepriori_mb.pdf")
+# ggsave(p, filename=file.out, width=9, height=8)
+
+
 
 # ======================================================================= #
-# ============================ Annotations =============================== #
+# ============================ MULTI-GWAS PLOT =============================== #
 # ======================================================================= #
+
+filter.gwas <- c("BMI_UKBB_Loh2018",
+#"AN_PGC_Duncan2017",
+"EA3_Lee2018",
+"INTELLIGENCE_Savage2018",
+"SCZ_Pardinas2018",
+"INSOMNIA_Jansen2018",
+"MS_Patsopoulos2011",
+"WHRadjBMI_UKBB_Loh2018",
+"HEIGHT_UKBB_Loh2018",
+"LIPIDS_LDL_Willer2013",
+"RA_Okada2014")
+# ALTERNATIVE Immune: LUPUS_2015
+
+### Create 'plotting' data frame
+df.plot.multi_gwas <- df.ldsc_cts %>% filter(gwas %in% filter.gwas)
+df.plot.multi_gwas <- df.plot.multi_gwas %>% mutate(gwas=factor(gwas, levels=filter.gwas)) # Order GWAS
+df.plot.multi_gwas
+
+
+### Plot
+p.multi_gwas <- ggplot(df.plot.multi_gwas, aes(x=gwas, y=annotation, fill=-log10(p.value))) + 
+# p.multi_gwas <- ggplot(df.plot.multi_gwas, aes(x=annotation, y=gwas, fill=tau_norm)) + 
+  geom_tile() + 
+  geom_text(data=df.plot.multi_gwas %>% filter(fdr_significant), label="*", hjust=0.5, vjust=0.75) + # add asterisk if fdr significant
+  # ^ hjust/vjust: https://stackoverflow.com/questions/7263849/what-do-hjust-and-vjust-do-when-making-a-plot-using-ggplot
+  # ^ hjust="center", vjust="middle"
+  # scale_fill_viridis_c(option="magma", direction=-1) + 
+  # scale_fill_distiller(palette="Greys", direction=1) + # "Greys" "Blues" "Greens" "BluGn" "Reds"
+  scale_fill_distiller(palette="Blues", direction=1, limits=c(0,5), oob=scales::squish) + # "Greys" "Blues" "Greens" "BluGn" "Reds"
+  # ^ oob: Function that handles limits outside of the scale limits (out of bounds). scales::squish "squishes" values into the range specified by limits
+  # scale_fill_distiller(palette="Greys", direction=1, limits=c(0,1.8), na.value = "white") + # tau norm plot
+  # coord_flip() + 
+  theme(axis.text.x=element_text(angle=45, hjust=1)) + 
+  theme(legend.position="bottom") +
+  theme(axis.text.y=element_blank(), 
+        axis.ticks.y = element_blank(),
+        axis.title = element_blank())
+p.multi_gwas
+
+
+# ======================================================================= #
+# ================================ h2 barplot =========================== #
+# ======================================================================= #
+
+### Create 'plotting' data frame
+df.plot.h2 <- df.h2 %>% filter(gwas %in% filter.gwas)
+df.plot.h2 <- df.plot.h2 %>% mutate(gwas=factor(gwas, levels=filter.gwas)) # Order GWAS
+df.plot.h2
+
+### Plot
+p.h2 <- ggplot(df.plot.h2, aes(x=gwas, y=h2)) + 
+  geom_col(fill="gray") +
+  labs(y=expression(h[SLDSC]^{2})) +
+  theme(#axis.text.x=element_blank(), 
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.line = element_blank())
+p.h2
+
+# ======================================================================= #
+# =================== COMBINE PLOTS: MAIN + HEATMAP =================== #
+# ======================================================================= #
+
+### Make blank plot to funciton as a 'dummy margin plot'
+p.blank <- ggplot(df.plot.tax_order, aes(x=annotation, y=-log10(p.value))) + 
+  geom_blank() + 
+  theme(panel.grid = element_blank(),axis.line = element_blank(),axis.title = element_blank(),axis.text = element_blank(),axis.ticks = element_blank(),panel.background = element_blank())
+
+### Patch
+p.patch <- p.blank + p.main + p.multi_gwas + plot_layout(ncol = 3, widths = c(6,10,5))
+p.patch
+
+### Save
+file.out <- sprintf("fig_celltypepriori_mb_with_heatmap.pdf")
+# ggsave(p_patch, filename=file.out, width=10, height=8)
+
+### Patchwork 'outer' margin issue
+### For some reason, patchwork ignores the 'outside' plot margin for the plots. 
+### The only plot.margin patchwork seems to respond to, is the 'inner' margin between plots (e.g. right margin for left plot or left margin for right plot).
+### (Top and bottom margins are also ignored.)
+### This means that adjusting plot.margin does not help us.
+# pm <- p.main + theme(plot.margin = unit(c(1,1,1,200), "pt"))
+# pm_multi_gwas <- p.multi_gwas + theme(plot.margin = unit(c(1,1,1,1), "pt"))
+# pm + pm_multi_gwas + plot_layout(ncol = 2, widths = c(3,1))
+
+
+# ======================================================================= #
+# ============================ CLASS annotation =============================== #
+# ======================================================================= #
+
+df.plot.anno_class <- df.plot.tax_order # copy (important to retain annotation factor order)
+### Rename
+df.plot.anno_class <- df.plot.anno_class %>% mutate(Class = case_when(
+  Class == "Oligoes" ~ "Oligodendrocytes",
+  Class == "PeripheralGlia" ~ "Peripheral Glia",
+  TRUE ~ as.character(Class))
+)
 
 ### Class
-p_anno_class <- ggplot(df.plot, aes(x=annotation, y=0, fill=Class)) + 
+p_anno_class <- ggplot(df.plot.anno_class, aes(x=annotation, y=0, fill=Class)) + 
   geom_tile() + 
   coord_flip() + 
   theme_minimal() + 
   theme(legend.position="bottom") +
-  labs("Class annotation")
-p_anno_class
+  theme(panel.grid = element_blank(), # remove background, axis ticks and texts
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_blank()) 
+# p_anno_class
 
-### Tax 4
-p_anno_tax4 <- ggplot(df.plot, aes(x=annotation, y=0, fill=TaxonomyRank4)) + 
-  geom_tile() + 
-  coord_flip() + 
-  theme_minimal() + 
-  theme(legend.position="none") + 
-  labs("TaxonomyRank4")
-p_anno_tax4
 
 # ======================================================================= #
-# ============================ patchwork =============================== #
+# =================== COMBINE PLOTS: MAIN + ANNO_CLASS ================== #
 # ======================================================================= #
 
-p_anno_class + p + plot_layout(ncol = 2, widths = c(1,10)) 
+p_patch <- p_anno_class + p.main + plot_layout(ncol = 2, widths = c(1,10)) # guides = "collect" # "auto", "collect", "keep"
+p_patch
+# plot_annotation(tag_levels = "A")
+
+file.out <- sprintf("fig_celltypepriori_mb_with_class_anno.pdf")
+# ggsave(p_patch, filename=file.out, width=10, height=8)
 
 
-p_anno_tax4 + p_anno_class + plot_layout(widths = c(5,5)) 
 
-p_anno_tax4 + p_anno_class + p + plot_layout(ncol = 3, widths = c(1,1,10)) 
+
+
+
+
+# ======================================================================= #
+# ============================ COLORS =============================== #
+# ======================================================================= #
+display.brewer.all(colorblindFriendly = TRUE)
+n_colors <- 6
+display.brewer.pal(n = n_colors, name = 'Dark2') # # View a single RColorBrewer palette by specifying its name
+brewer.pal(n = n_colors, name = "Dark2") # # Hexadecimal color specification
 
 # ======================================================================= #
 # ============================ XXXXXXXXXX =============================== #
 # ======================================================================= #
 
-df.plot.tax_order <- df.ldsc_cts %>% mutate(annotation = factor(annotation, levels=annotation[order(TaxonomyRank4)]))
 
-df.s <- df.plot.tax_order %>% count(TaxonomyRank4)
-df.s <- df.s %>% 
-  arrange(TaxonomyRank4) %>%
-  mutate(pos_mid=cumsum(n)-n/2,
-         pos_start=cumsum(n)-n,
-         pos_end=cumsum(n),
-         idx=1:n())
-df.s <- df.s %>% mutate(flag_draw_rect=if_else(idx %% 2 == 0, TRUE, FALSE))
-df.s
-
-### Tax 4
-p_anno_tax4 <- ggplot(df.plot.tax_order, aes(x=annotation, y=0, fill=TaxonomyRank4)) + 
-  geom_tile() + 
-  # annotate("text") + 
-  geom_text(data=df.s, inherit.aes=F, aes(x=pos_mid, y=1, label=TaxonomyRank4)) +
-  geom_rect(data=df.s %>% filter(flag_draw_rect), inherit.aes=F, aes(xmin=pos_start, xmax=pos_end, ymin=0, ymax=Inf), color="gray", alpha=0.3) +
-  coord_flip() + 
-  theme_minimal() + 
-  theme(legend.position="none") + 
-  labs("TaxonomyRank4")
-p_anno_tax4
-
-# inherit.aes=FALSE
-
-
-
-# ======================================================================= #
-# ============================ tmp =============================== #
-# ======================================================================= #
-
-df.tax4_cell_types <- df.ldsc_cts %>% 
-  group_by(TaxonomyRank4) %>%
-  summarise(celltypes=paste(annotation, collapse=","))
-df.tax4_cell_types
-
-df.tax4_cell_types.join <- df.tmp %>% left_join(df.tax4_cell_types)
-
-df.tmp <- read_csv("TaxonomyRank4
-Glutamatergic neuroblasts
-Non-glutamatergic neuroblasts
-Olfactory inhibitory neurons
-Telencephalon inhibitory interneurons
-Cholinergic and monoaminergic neurons
-Peptidergic neurons
-Spinal cord excitatory neurons
-Spinal cord inhibitory neurons
-Di- and mesencephalon excitatory neurons
-Di- and mesencephalon inhibitory neurons
-Hindbrain neurons
-Cerebellum neurons
-Telencephalon projecting excitatory neurons
-Dentate gyrus granule neurons
-Telencephalon projecting inhibitory neurons
-Enteric neurons
-Sympathetic noradrenergic neurons
-Sympathetic cholinergic neurons
-Peripheral sensory peptidergic neurons
-Peripheral sensory neurofilament neurons
-Peripheral sensory non-peptidergic neurons
-Oligodendrocytes
-Choroid epithelial cells
-Subcommissural organ hypendymal cells
-Ependymal cells
-Dentate gyrus radial glia-like cells
-Subventricular zone radial glia-like cells
-Astrocytes
-Olfactory ensheathing cells
-Oligodendrocyte precursor cells
-Schwann cells
-Satellite glia
-Enteric glia
-Vascular and leptomeningeal cells
-Vascular smooth muscle cells
-Pericytes
-Vascular endothelial cells
-Perivascular macrophages
-Microglia")
 # ======================================================================= #
 # ============================ XXXXXXXXXX =============================== #
 # ======================================================================= #

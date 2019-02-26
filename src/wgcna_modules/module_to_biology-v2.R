@@ -29,7 +29,8 @@ gwas <- "BMI_UKBB_Loh2018"
 # gwas <- "BMI_UPDATE_Yengo2018"
 
 name.dataset <- "mousebrain"
-prefix_genomic_annot <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
+prefix_genomic_annot <- "wgcna.mousebrain-190218.fdr_sign_celltypes.continuous" # deepsplit1
+# prefix_genomic_annot <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
 ### prefix_genomic_annot <- "wgcna.mousebrain-190111.fdr_sign_celltypes.continuous"
 ### prefix_genomic_annot <- "wgcna.mousebrain-181214.fdr_sign_celltypes.continuous"
 
@@ -127,7 +128,6 @@ if (name.dataset == "tabula_muris") {
                                                                                 module_origin_ncells=NCells, 
                                                                                 module_origin_desc=Description)
 }
-
 
 
 # ======================================================================= #
@@ -302,8 +302,10 @@ do.excel_export <- function(df, sheet_name, xlsx.workbook) {
   writeData(wb=xlsx.workbook, sheet=sheet_name, as.data.frame(df), colNames=T, rowNames=F)
 }
 
+
 # save.image(file = sprintf("out.module_to_biology.%s.RData", name.dataset))
 
+### Write to excel file
 xlsx.workbook <- createWorkbook(creator="PTimshel") # start excel
 do.excel_export(df.gprofiler.ordered.meta, sheet_name="GO analysis - GSEA", xlsx.workbook)
 do.excel_export(df.gprofiler.unordered.meta, sheet_name="GO analysis", xlsx.workbook)
@@ -313,7 +315,6 @@ saveWorkbook(xlsx.workbook, file = sprintf("out.module_to_biology.%s-%s.xlsx", g
 
 
 
-# Write to excel file
 
 # ======================================================================= #
 # =============================== XXXXX ================================ #

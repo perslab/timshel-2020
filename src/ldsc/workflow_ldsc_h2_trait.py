@@ -134,7 +134,7 @@ dict_gwas["RA_Okada201_liability_scale4"] = {"filepath": "/projects/timshel/sc-g
 ### Create job commands
 list_cmds_ldsc_prim = []
 for gwas in dict_gwas:
-	fileout_prefix_ldsc_h2 = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2_baseline/{gwas}".format(gwas=gwas)
+	fileout_prefix_ldsc_h2 = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2_trait/{gwas}".format(gwas=gwas)
 	if os.path.exists("{}.results".format(fileout_prefix_ldsc_h2)):
 		print("GWAS={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, fileout_prefix_ldsc_h2))
 		continue

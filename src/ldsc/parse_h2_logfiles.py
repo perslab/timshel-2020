@@ -48,7 +48,7 @@ df_h2["h2_zscore"] = df_h2["h2"]/df_h2["h2_se"]
 
 
 ### export
-df_h2.to_csv("/projects/timshel/sc-genetics/sc-genetics/results/h2_observed_scale.multi_gwas.csv", index=False)
+df_h2.to_csv("/projects/timshel/sc-genetics/sc-genetics/results/h2_trait.multi_gwas.csv", index=False)
 
 
 print("Script is done!")

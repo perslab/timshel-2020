@@ -28,8 +28,8 @@ setwd(here("src/ldsc"))
 
 
 ### PARAMS
-dataset_prefix <- "mousebrain_all"
-# dataset_prefix <- "tabula_muris"
+# dataset_prefix <- "mousebrain_all"
+dataset_prefix <- "tabula_muris"
 # dataset_prefix <- "campbell_lvl1"
 # dataset_prefix <- "campbell_lvl2"
 

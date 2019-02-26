@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-# Make mousebrain main fig
+# Make Tabula Muris main fig
 
 
 ### OUTPUT: 
@@ -14,10 +14,7 @@
 # ================== IMPORTANT LEGEND INFORMATION ======================= #
 # ======================================================================= #
 
-# 1. Pval for heatmap is 'clipped' at 5 (all values about 5 get the same max color)
-# 2. h2 barplot is on liability scale for case-control traits
-# 3. FDR correction is done per-trait.
-
+# SEE MOUSEBRAIN
 
 # ======================================================================= #
 # =============================== SETUP ================================= #
@@ -46,7 +43,7 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/primary-mousebrain_all.multi_gwas.csv.gz")
+file.results <- here("results/primary-tabula_muris.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
 # ======================================================================= #
@@ -92,18 +89,11 @@ df.ldsc_cts <- df.ldsc_cts %>% mutate(tau_norm = estimate/(h2/M_NUMBER_SNPS))
 # ======================================================================= #
 
 ### Read annotation metadata
-df.metadata <- get_metadata(dataset_prefix="mousebrain_all")
-
-### Read annotation taxonomy metadata
-source("constants-tmp-taxonomy_mapping.R") 
-df.taxonomy_metadata <- df.taxonomy_metadata %>% select(TaxonomyRank4, TaxonomyRank4_merged1, order_idx_mb_taxonomy_fig1c)
-if ( !(n_distinct(df.taxonomy_metadata$TaxonomyRank4_merged1) == n_distinct(df.taxonomy_metadata$order_idx_mb_taxonomy_fig1c)) ) {
-  stop("Columns 'order_idx_mb_taxonomy_fig1c' and 'TaxonomyRank4_merged1' must have the same number of unique values. Otherwise downstream sorting of factors will fail.")
-}
+df.metadata <- get_metadata(dataset_prefix="tabula_muris")
+df.metadata
 
 ### Add meta data
 df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation") # add meta data
-df.ldsc_cts <- df.ldsc_cts %>% left_join(df.taxonomy_metadata, by="TaxonomyRank4") # add taxonomy meta data
 df.ldsc_cts
 
 # ======================================================================= #
@@ -111,8 +101,7 @@ df.ldsc_cts
 # ======================================================================= #
 
 ### Order annotations
-df.ldsc_cts <- df.ldsc_cts %>% mutate(annotation=factor(annotation, levels=unique(annotation[order(order_idx_mb_taxonomy_fig1c, as.character(annotation))]))) # order annotations by their taxonomy (from MB Fig1c), and secondary order by their annotation name
-# ^*IMPORTANT*:  we here order annotation factor in the SAME ORDER 'TaxonomyRank4_merged1' is ordered later in df.tax_text_position
+df.ldsc_cts <- df.ldsc_cts %>% mutate(annotation=factor(annotation, levels=unique(annotation[order(tissue, cell_type)]))) # order annotations by their taxonomy (from MB Fig1c), and secondary order by their annotation name
 # ^ if df.ldsc_cts only contain 1 gwas, then you don't need the levels=unique().
 df.ldsc_cts$annotation %>% levels()
 
@@ -126,39 +115,52 @@ df.ldsc_cts
 # ============================ BMI point plot =============================== #
 # ======================================================================= #
 
+# Self-defined label formatting function
+tm_annotation_formatter <- function(annotation_tissue_celltype) {
+  # INPUT: annotation_tissue_celltype, string e.g. 'Marrow.Slamf1-negative_multipotent_progenitor_cell'
+  # USAGE 1: df %>% mutate
+  # USAGE 2: ggplot() + scale_y_discrete(label=tm_annotation_formatter)
+  label <- stringr::str_split_fixed(annotation_tissue_celltype, pattern="\\.", n=Inf)[,2]
+  label <- stringr::str_replace_all(label, pattern="-", " - ") # add space to any hyphens
+  label <- stringr::str_replace_all(label, pattern="_", " ") # convert _ to space
+  # label <- stringr::str_to_sentence(label) # title case
+  substr(label, 1, 1) <- toupper(substr(label, 1, 1)) # capitalize first character
+  return(label)
+}
+
+
 ### Create 'plotting' data frame
 df.plot.tax_order <- df.ldsc_cts %>%filter(gwas == "BMI_UKBB_Loh2018")  # filter BMI results
 
-### Rename
-df.plot.tax_order <- df.plot.tax_order %>% mutate(Region = case_when(
-  Region == "Midbrain dorsal" ~ "Midbrain",
-  Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
-  Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
-  TRUE ~ as.character(Region))
-)
+### Create clean names
+df.plot.tax_order <- df.plot.tax_order %>% mutate(annotation_label_fmt = tm_annotation_formatter(annotation))
+df.plot.tax_order
 
 ### Create data frame with taxonomy text data
 df.tax_text_position <- df.plot.tax_order %>% 
-  group_by(TaxonomyRank4_merged1) %>% 
+  group_by(tissue) %>% 
   summarize(n_annotations_in_tax=n()) %>% # count how many annotations in each tax
-  left_join(df.taxonomy_metadata %>% select(TaxonomyRank4_merged1, order_idx_mb_taxonomy_fig1c) %>% distinct(), by="TaxonomyRank4_merged1") %>% # add 'order_idx_mb_taxonomy_fig1c' to be able to sort factor correctly.
-    # ^ OBS: we use 'distinct()' because df.taxonomy_metadata contains (intentional) duplicated rows for some combinations of {TaxonomyRank4_merged1, order_idx_mb_taxonomy_fig1c}.
-  mutate(TaxonomyRank4_merged1 = factor(TaxonomyRank4_merged1, levels=TaxonomyRank4_merged1[order(order_idx_mb_taxonomy_fig1c)])) # IMPORTANT: order factor by the SAME ORDER as 'annotation' column is ordered by in df.plot.tax_order
+  left_join(df.metadata %>% select(tissue) %>% distinct(), by="tissue") %>%
+  # ^ OBS: we use 'distinct()' because df.taxonomy_metadata contains (intentional) duplicated rows for some combinations of {tissue, order_idx_mb_taxonomy_fig1c}.
+  mutate(tissue = factor(tissue, levels=tissue[order(tissue)])) # IMPORTANT: order factor by the SAME ORDER as 'annotation' column is ordered by in df.plot.tax_order
 ### Add information of the text's position in the plot
 df.tax_text_position <- df.tax_text_position %>% 
-  arrange(TaxonomyRank4_merged1) %>%
+  arrange(tissue) %>%
   mutate(pos_mid=cumsum(n_annotations_in_tax)-n_annotations_in_tax/2,
          pos_start=cumsum(n_annotations_in_tax)-n_annotations_in_tax,
          pos_end=cumsum(n_annotations_in_tax),
          idx=1:n()) # idx is used for identifying every n'th tax
 df.tax_text_position <- df.tax_text_position %>% mutate(flag_draw_rect=if_else(idx %% 2 == 0, TRUE, FALSE)) 
 
-### Remove some text because they contain too few cell-types
+### Rename + remove some text because they contain too few cell-types
 df.tax_text_position %>% arrange(n_annotations_in_tax) # ---> potentially filter : n_annotations_in_tax >= 5
-df.tax_text_position <- df.tax_text_position %>% mutate(TaxonomyRank4_merged1 = case_when(
-  TaxonomyRank4_merged1 == "Other CNS neurons" ~ "",
-  # TaxonomyRank4_merged1 == "Other glia" ~ "",
-  TRUE ~ as.character(TaxonomyRank4_merged1))
+df.tax_text_position <- df.tax_text_position %>% mutate(tissue = case_when(
+  tissue == "Brain_Myeloid" ~ "Brain",
+  tissue == "Brain_Non-Myeloid" ~ "Brain",
+  tissue == "Tongue" ~ "",
+  tissue == "Brain_Non-Myeloid" ~ "Brain",
+  TRUE ~ stringr::str_replace(tissue, pattern="_", replacement=" ") # TRUE ~ as.character(tissue)
+  )
 )
 
 
@@ -167,44 +169,17 @@ n_colors <- 12
 display.brewer.pal(n = n_colors, name = 'Paired') # # View a single RColorBrewer palette by specifying its name
 brewer.pal(n = n_colors, name = "Paired") # # Hexadecimal color specification
 
-# colormap.region <- c("Cortex"="#1B9E77",
-#                      "Thalamus"="#D95F02",
-#                      "Midbrain"="#7570B3",
-#                      "Hypothalamus"="#E7298A",
-#                      "Hippocampus"="#66A61E",
-#                      "Hippocampus/Cortex"="#E6AB02")
-# colormap.region <- c("Cortex"="#1F78B4",
-#                      "Hippocampus/Cortex"="#A6CEE3",
-#                      "Hippocampus"="#33A02C",
-#                      "Thalamus"="#FDBF6F",
-#                      "Midbrain"="#FF7F00",
-#                      "Hypothalamus"="#E31A1C"
-#                      )
-# colormap.region <- c("Cortex"="#1F78B4",
-#                      "Hippocampus/Cortex"="#CAB2D6",
-#                      "Hippocampus"="#6A3D9A",
-#                      "Thalamus"="#B15928",
-#                      "Midbrain"="#FF7F00",
-#                      "Hypothalamus"="#E31A1C"
-# )
-colormap.region <- c("Cortex"="#FF7F00",
-                     "Hippocampus/Cortex"="#B15928",
-                     "Hippocampus"="#E31A1C",
-                     "Thalamus"="#6A3D9A",
-                     "Midbrain"="#1F78B4",
-                     "Hypothalamus"="#33A02C"
-)
 
 fdr_threshold <- 0.05/nrow(df.plot.tax_order)
 p.main <- ggplot() +
   ### add ggplot 'baselayer'. This makes our 'canvas' and needs to go first (for some reason I don't fully understand...)
   geom_point(data=df.plot.tax_order, aes(x=annotation, y=-log10(p.value)), color="gray") +
   ### add tax info and gray rects (add gray rect before the data points, so avoid them 'covering' the points)
-  geom_text(data=df.tax_text_position, aes(x=pos_mid, y=-0.5, label=TaxonomyRank4_merged1), hjust="right", size=rel(3)) +
-  geom_rect(data=df.tax_text_position %>% filter(flag_draw_rect), aes(xmin=pos_start, xmax=pos_end, ymin=-3, ymax=Inf), color="gray", alpha=0.1) +
+  geom_text(data=df.tax_text_position, aes(x=pos_mid, y=-2, label=tissue), hjust="right", size=rel(3)) +
+  geom_rect(data=df.tax_text_position %>% filter(flag_draw_rect), aes(xmin=pos_start, xmax=pos_end, ymin=-3, ymax=Inf, fill=tissue), color="gray", alpha=0.1) +
   ### cell-types
-  geom_point(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region)) +
-  ggrepel::geom_text_repel(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5, show.legend=F) +
+  geom_point(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value))) +
+  ggrepel::geom_text_repel(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation_label_fmt), hjust = 0, nudge_x = 1.5, show.legend=F) +
   ### extra
   geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
   ### axes
@@ -216,19 +191,21 @@ p.main <- ggplot() +
   # ^ clip = 'off': disable cliping so df.tax_text_position text annotation can be outside of plot | REF https://stackoverflow.com/a/51312611/6639640
   ### guides
   #...
+  ### scale
+  scale_x_discrete(label=tm_annotation_formatter) +
   ### color
-  scale_color_manual(values=colormap.region)  +
+  # scale_color_manual(values=colormap.region)  +
   # scale_color_brewer(palette="Dark2") +
   # scale_color_viridis_d() + # viridis ---> does not work well
   ### theme
   theme_classic() + 
-  theme(axis.text.y=element_text(size=rel(0.3))) + # REF: https://stackoverflow.com/a/47144823/6639640
+  theme(axis.text.y=element_text(size=rel(0.7))) + # REF: https://stackoverflow.com/a/47144823/6639640
   theme(legend.position="bottom")
 ### Add margin to plot if displaying it directly (without pathwork)
-p.main.margin <- p.main + theme(plot.margin = unit(c(1,1,1,10), "cm")) # (t, r, b, l) widen left margin
+p.main.margin <- p.main + theme(plot.margin = unit(c(1,1,1,5), "cm")) # (t, r, b, l) widen left margin
 p.main.margin
 
-# file.out <- sprintf("fig_celltypepriori_mb.pdf")
+# file.out <- sprintf("fig_celltypepriori_tm.pdf")
 # ggsave(p, filename=file.out, width=9, height=8)
 
 
@@ -238,16 +215,16 @@ p.main.margin
 # ======================================================================= #
 
 filter.gwas <- c("BMI_UKBB_Loh2018",
-#"AN_PGC_Duncan2017",
-"EA3_Lee2018",
-"INTELLIGENCE_Savage2018",
-"SCZ_Pardinas2018",
-"INSOMNIA_Jansen2018",
-"MS_Patsopoulos2011",
-"WHRadjBMI_UKBB_Loh2018",
-"HEIGHT_UKBB_Loh2018",
-"LIPIDS_LDL_Willer2013",
-"RA_Okada2014")
+                 #"AN_PGC_Duncan2017",
+                 "EA3_Lee2018",
+                 "INTELLIGENCE_Savage2018",
+                 "SCZ_Pardinas2018",
+                 "INSOMNIA_Jansen2018",
+                 "MS_Patsopoulos2011",
+                 "WHRadjBMI_UKBB_Loh2018",
+                 "HEIGHT_UKBB_Loh2018",
+                 "LIPIDS_LDL_Willer2013",
+                 "RA_Okada2014")
 # ALTERNATIVE Immune: LUPUS_2015
 
 ### Create 'plotting' data frame
@@ -258,7 +235,7 @@ df.plot.multi_gwas
 
 ### Plot
 p.multi_gwas <- ggplot(df.plot.multi_gwas, aes(x=gwas, y=annotation, fill=-log10(p.value))) + 
-# p.multi_gwas <- ggplot(df.plot.multi_gwas, aes(x=annotation, y=gwas, fill=tau_norm)) + 
+  # p.multi_gwas <- ggplot(df.plot.multi_gwas, aes(x=annotation, y=gwas, fill=tau_norm)) + 
   geom_tile() + 
   geom_text(data=df.plot.multi_gwas %>% filter(fdr_significant), label="*", hjust=0.5, vjust=0.75) + # add asterisk if fdr significant
   # ^ hjust/vjust: https://stackoverflow.com/questions/7263849/what-do-hjust-and-vjust-do-when-making-a-plot-using-ggplot
@@ -336,111 +313,19 @@ p.patch <-
   (
     # LEFT
     (p.h2.blank / 
-              (p.blank + p.main + plot_layout(widths = c(6,10)))
-    + plot_layout(heights = c(1,10))
+       (p.blank + p.main + plot_layout(widths = c(6,10)))
+     + plot_layout(heights = c(1,10))
     ) |
-     # ) & theme(plot.margin =  unit(c(1,1,1,1), "pt")) | # dont know why "& theme()" does not recurse into nested levels
-    # RIGHT
-    (p.h2_no_x /
-              p.multi_gwas 
-    + plot_layout(heights = c(1,10))
-    )
-  # RIGHT + LEFT
+      # ) & theme(plot.margin =  unit(c(1,1,1,1), "pt")) | # dont know why "& theme()" does not recurse into nested levels
+      # RIGHT
+      (p.h2_no_x /
+         p.multi_gwas 
+       + plot_layout(heights = c(1,10))
+      )
+    # RIGHT + LEFT
   ) + plot_layout(widths = c(10,3)) & theme(plot.margin =  unit(c(1,1,1,1), "pt"))
 p.patch
 
 ### Save
-file.out <- sprintf("fig_celltypepriori_mb_with_heatmap_and_barplot.pdf")
+file.out <- sprintf("fig_celltypepriori_tm_with_heatmap_and_barplot.pdf")
 # ggsave(p.patch, filename=file.out, width=12, height=10)
-
-
-### Simple syntax (but needs the power of plot_layout()
-# (p.h2.blank / (p.blank | p.main) + plot_layout(heights = c(1,10))) | (p.h2 / p.multi_gwas)
-
-### Patch (with h2 barplot) - works but not aligned
-# p.patch <- p.blank + p.main + 
-#   (p.h2.blank + p.multi_gwas + plot_layout(ncol = 1, heights = c(1,10)) ) +
-#   plot_layout(ncol = 3, widths = c(6,10,5)) & theme(plot.margin =  unit(c(1,1,1,1), "pt"))
-# p.patch
-
-
-### WORKS BUT WRONG
-# p.patch <- ( ( (p.blank + p.main + plot_layout(ncol = 2, widths = c(6,10)))
-#                + p.h2.blank + plot_layout(ncol = 1, heights = c(1,10)) ) +
-#                (p.h2_no_x + p.multi_gwas + plot_layout(ncol = 1, heights = c(1,10)) ) ) +
-#   plot_layout(ncol = 2, widths = c(10,5)) & theme(plot.margin =  unit(c(1,1,1,1), "pt"))
-# p.patch
-
-
-
-### Patchwork 'outer' margin issue
-### For some reason, patchwork ignores the 'outside' plot margin for the plots. 
-### The only plot.margin patchwork seems to respond to, is the 'inner' margin between plots (e.g. right margin for left plot or left margin for right plot).
-### (Top and bottom margins are also ignored.)
-### This means that adjusting plot.margin does not help us.
-# pm <- p.main + theme(plot.margin = unit(c(1,1,1,200), "pt"))
-# pm_multi_gwas <- p.multi_gwas + theme(plot.margin = unit(c(1,1,1,1), "pt"))
-# pm + pm_multi_gwas + plot_layout(ncol = 2, widths = c(3,1))
-
-
-# ======================================================================= #
-# ============================ CLASS annotation =============================== #
-# ======================================================================= #
-
-df.plot.anno_class <- df.plot.tax_order # copy (important to retain annotation factor order)
-### Rename
-df.plot.anno_class <- df.plot.anno_class %>% mutate(Class = case_when(
-  Class == "Oligoes" ~ "Oligodendrocytes",
-  Class == "PeripheralGlia" ~ "Peripheral Glia",
-  TRUE ~ as.character(Class))
-)
-
-### Class
-p_anno_class <- ggplot(df.plot.anno_class, aes(x=annotation, y=0, fill=Class)) + 
-  geom_tile() + 
-  coord_flip() + 
-  theme_minimal() + 
-  theme(legend.position="bottom") +
-  theme(panel.grid = element_blank(), # remove background, axis ticks and texts
-        axis.title = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        panel.background = element_blank()) 
-# p_anno_class
-
-
-# ======================================================================= #
-# =================== COMBINE PLOTS: MAIN + ANNO_CLASS ================== #
-# ======================================================================= #
-
-p_patch <- p_anno_class + p.main + plot_layout(ncol = 2, widths = c(1,10)) # guides = "collect" # "auto", "collect", "keep"
-p_patch
-# plot_annotation(tag_levels = "A")
-
-file.out <- sprintf("fig_celltypepriori_mb_with_class_anno.pdf")
-# ggsave(p_patch, filename=file.out, width=10, height=8)
-
-
-
-
-# ======================================================================= #
-# ============================ COLORS =============================== #
-# ======================================================================= #
-display.brewer.all(colorblindFriendly = TRUE)
-n_colors <- 6
-display.brewer.pal(n = n_colors, name = 'Dark2') # # View a single RColorBrewer palette by specifying its name
-brewer.pal(n = n_colors, name = "Dark2") # # Hexadecimal color specification
-
-# ======================================================================= #
-# ============================ XXXXXXXXXX =============================== #
-# ======================================================================= #
-
-
-# ======================================================================= #
-# ============================ XXXXXXXXXX =============================== #
-# ======================================================================= #
-
-
-# ======================================================================= #
-# ============================ XXXXXXXXXX =============================== #
-# ======================================================================= #

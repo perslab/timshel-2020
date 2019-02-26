@@ -98,7 +98,7 @@ dict_gwas["MS_Patsopoulos2011_liability_scale"] = {"filepath": "/projects/timshe
 								 "samp-prev":0.31} # 5545/17698 | 5545 cases and 12153 controls | REF https://www.ncbi.nlm.nih.gov/pubmed/22190364 (MS_Patsopoulos2011)
 
 ######################################  ######################################
-dict_gwas["RA_Okada201_liability_scale"] = {"filepath": "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/RA_Okada2014.sumstats.gz",
+dict_gwas["RA_Okada2014_liability_scale"] = {"filepath": "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/RA_Okada2014.sumstats.gz",
 								 "pop-prev":0.01, # "The occurrence of RA is relatively constant with a prevalence of between 0.5 and 1.0%, a frequency that has been reported from several European [1-8] and North-American populations [9,10]" REF https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3240153/
 								 "samp-prev":0.29} # 14361/58284=.246396953 | Eurpean RA GWAS meta-analysis (14361 RA cases and 43923 conrols) | N_total = 58284 | REF http://plaza.umin.ac.jp/~yokada/datasource/software.htm
 

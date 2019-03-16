@@ -1,0 +1,110 @@
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(GGally)
+```
+
+
+```{r}
+# ======================================================================================================= #
+# ==========================================       SETUP      =========================================== #
+# ======================================================================================================= #
+
+dir.sc_genetics.data <- "/projects/timshel/sc-genetics/sc-genetics/data" # no trailing slash
+dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib"
+source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+
+```
+
+
+
+## Get list of files
+```{r}
+files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*.hsapiens_orthologs*") # matching on all data sets
+files.paths <- file.path(dir.sc_genetics.data, "expression", files)
+names(files.paths) <- str_replace_all(files, c("^.*/(.*?)\\." = "\\1.", 
+                                              "celltype_expr." = "", 
+                                              ".hsapiens_orthologs.csv.gz" = ""))
+
+
+
+print(files.paths)
+```
+
+## Read files
+```{r}
+# list.df_expr.raw <- lapply(files.paths, read_csv) # returns named list
+
+# ======================================================================================================= #
+# ====================================== LOAD EXPRESSION DATA  ========================================= #
+# ======================================================================================================= #
+
+PARAM.POS_TRANSFORMATION <- 'none' # 'square','abs','pos_only','none'
+
+wrapper.read_expression_data <- function(file.expr) {
+  if (grepl("ttest.hsapiens_orthologs", file.expr)) {
+    method_specific_expr="tstat"
+  } else if (grepl("avg_expr.hsapiens_orthologs", file.expr)) {
+    method_specific_expr="average"
+  }
+  df.expr <- read_expression_data(file.expr=file.expr,
+                                  method_specific_expr=method_specific_expr, 
+                                  pos_transformation=PARAM.POS_TRANSFORMATION, 
+                                  genes.filter=NULL,  
+                                  col_genes="gene", 
+                                  delim=",") 
+  return(df.expr)
+}
+
+### read data
+list.df_expr <- lapply(files.paths, wrapper.read_expression_data) # returns named list
+```
+
+```{r}
+head(list.df_expr[[1]])
+```
+
+
+```{r}
+### removing 'gene' col
+# list.df_expr <- lapply(list.df_expr.raw, select, -gene)
+```
+
+### test plot
+```{r, fig.width=8, fig.height=8}
+# ggcorr(list.df_expr[[1]], geom = "circle", hjust = 1, size = 2, layout.exp = 5) # label = TRUE
+ggcorr(list.df_expr[[1]], geom="circle", label = TRUE, label_size = 1.5, label_round = 2, label_alpha = TRUE, hjust = 1, size = 2, layout.exp = 5)
+# ggsave("plot.expr_correlation_plot.circle.pdf", w=8, h=8)
+```
+
+### export plots
+```{r}
+for (name in names(list.df_expr)) {
+  print(name)
+  ggcorr(list.df_expr[[name]], geom="circle", label = TRUE, label_size = 1.5, label_round = 2, label_alpha = TRUE, hjust = 1, size = 2, layout.exp = 5)
+  ggsave(sprintf("plot.expr_correlation_plot.%s.pdf", name), w=8, h=8)
+}
+```
+
+
+```{r}
+list.df_expr.raw <- lapply(list.df_expr, rownames_to_column, var="gene") # add gene variable
+
+datasets <- c("arc_lira", "maca.per_celltype", "maca.per_tissue_celltype", "maca.per_tissue") # update me!
+for (dataset in datasets) {
+  # dataset <- "arc_lira" # update me!
+  print(dataset)
+  
+  df.avg <- list.df_expr.raw[[sprintf("%s.avg_expr", dataset)]]
+  df.ttest <- list.df_expr.raw[[sprintf("%s.ttest", dataset)]]
+  df <- full_join(df.avg, df.ttest, by="gene", suffix=c(".avg", ".ttest")) 
+  df.gather <- df %>% gather(key="key", value="value", -gene)
+  df.separate <- df.gather %>% separate(col="key", into=c("cell_type", "test"), sep="\\.")
+  df.spread <- df.separate %>% spread(key="test", value="value")
+  
+  ggplot(df.spread, aes(x=avg, y=ttest)) + geom_point() + facet_wrap(~cell_type)
+  ggsave(sprintf("plot.avg_vs_tstat.%s.pdf", dataset), w=25, h=25)
+}
+```
+

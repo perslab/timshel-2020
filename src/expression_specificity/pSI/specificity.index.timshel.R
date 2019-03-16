@@ -1,7 +1,6 @@
-### Copy of specificity.index() function from pSI packages.
+### Copy of specificity.index() function from CRAN pSI package.
 ### Modifications: 
 # 1: return both pSI and SI values as a list [no SI = FALSE argument]
-# 2: parallize the loop for each cell-type
 
 ### TODO
 ### 1. Parallelize.

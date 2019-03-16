@@ -18,6 +18,18 @@ library(tidyverse)
 
 
 ######################################################################################################
+########################################## TODO IMPLEMENTATION #######################################
+######################################################################################################
+
+### general
+# - consistent naming: find/replace all SEM/sem with es.
+# - make into a package with roxygen documentation.
+
+### sem_obj
+# - add slot for annotation metadata (e.g. object$metadata). This will make many things simpler, because you don't have to read in metadata from separate files.
+
+
+######################################################################################################
 ######################################## Binning ############################################
 ######################################################################################################
 
@@ -107,7 +119,10 @@ calculate_specificity <- function(df.avg_expr){
   ### Calculate specificity
   df.specificity = as.data.frame(mat.mean_expr.scaled/(rowSums(mat.mean_expr.scaled)+0.000000000001))
   # ^ dividing every 'cell expression profile column' with the genes total expression (the rowSums)
-  # ^ adding 0.000000000001 avoids 'devision by zero errors'
+  # ^ adding 0.000000000001 avoids 'devision by zero' problems
+  # ^ R divison by zero:
+  # ^ 0/0=NA
+  # ^ 1/0=Inf
   # ^NB: rowSums(mat) == apply(mat,1,sum)
   return(df.specificity)
   
@@ -127,14 +142,27 @@ calculate_specificity <- function(df.avg_expr){
 ############################################# SI ##############################################
 ######################################################################################################
 
+# ^ XXXX then when we rank the genes while ignoring NA values (na.last="keep"), the gene will get a low rank or maybe even be NA.
+
 normalized_specificity_index <- function (df) {
   ### Input: data.frame. genes x cell-types. Any rownames are not used
   ### Output: normalized SI data.frame with same dimensions as input df.
-  ### Algorithm inspired by specificity.index() function from pSI packages: http://genetics.wustl.edu/jdlab/psi_package/
+  ### Algorithm inspired by specificity.index() function from pSI CRAN package.
+  ### pSI package references:
+  # Dougherty et al. 2010: https://academic.oup.com/nar/article/38/13/4218/2409074
+  # R CRAN package (v1.1, 2014-01-30, Official implementation): https://cran.r-project.org/package=pSI
+  # Second implementation: http://genetics.wustl.edu/jdlab/psi_package/
+  # First implementation: http://www.bactrap.org/downloads/Specificity.r
   ### Improvements of nSI (normalized specificity index) compared to the original SI
-  # Summary: modified for single-cell data.
-  # 1) Normalized ranks: if a gene is only expressed in one cell-type it will get nSI = 1
-  # 2) Added epsilon to ratio: relevant for single-cell data with many zeroes.
+  ### Summary of differences between nSI and SI:
+  # 1) Normalized ranks: if a gene is only expressed in one cell-type it will get nSI = 1. The SI score can be abitrary high.
+  # 2.1) Added epsilon to ratio to avoid NA/-Inf values: relevant for single-cell data that contain many zeroes.
+  # 2.2) Added numerical tricks to deal with zero values: fc=~0-->0 and fc=~1-->0
+  # 2.3) Use rank(ties.method="min") to add maximal penalty to genes with fc = 0. SI uses the default rank(ties.method="average").
+  # 3) We do not calculate log2(fc) because the log-transformation does not do anything [except potentially generating NA or -Inf] when ranking afterward 
+  #    [NB: in the paper, the authors also do not use log2 in the SI equation (eq 1).]
+  ### Additional remarks:
+  # We note that the Dougherty2010 SI equation (eq.1) is NOT consistent with any of the R implementations.
   
   print("Calculating nSI")
   epsilon <- 1e-100
@@ -149,25 +177,51 @@ normalized_specificity_index <- function (df) {
     ### Calculate fold-change
     # fc <- df[, j]/df[, notme] # without epsilon
     fc <- (df[, j]+epsilon)/(df[, notme]+epsilon) # df, genes x (annotations-1) | column-wise division.
-    # ^ we add epsilon because if a gene is not expressed in the other annotations, the ratio will be NA/Inf.
-    # ^ then when we rank the genes while ignoring NA values (na.last="keep"), the gene will get a low rank or maybe even be NA.
+    # ^ ***MARCH 13th 2019***: I realized that we can obtain equivalent results with perhaps slightly simpler code (but less transparant) without epsilon because the way R handles division by zero 1/0=Inf and 0/0=NA
+    # ^ ***MARCH 13th 2019***: Specifically, we can obtain equivalent results by removing epsilon from fc formula and not doing dplyr::near() 'mapping'.
+    # ^ ***MARCH 13th 2019***: But because the code is more transparant and works on python, we keep epsilon.
+    # ^ R division by zero:
+      # ^ 0/0=NA
+      # ^ 1/0=Inf
+      # ^ -1/0=-Inf
+    # ^ example to illustrate why it would work WITHOUT epsilon:
+    # ^ specific_gene: umi.self=100; umi.other=0 --> fc=100/0=Inf
+    # ^ unspecific_gene: umi.self=0; umi.other=10 --> fc=0/10=0
+    # ^ unspecific_gene_dropouts: umi.self=0; umi.other=0 --> fc=0/0=NA
+    # ^ the ranks of specific_gene and unspecific_gene will work and neeed no further explanation.
+    # ^ the rank of unspecific_gene_dropouts will get a low rank IF AND ONLY IF we propagate NA values (na.last="keep") and afterwards set them to zero.
+    ### With epsilon
+    # ^ because we add epsilon we need to do a few tricks after calculating fc:
     # ^ fc=~0 --> 0: ok
     # ^ fc=~1 --> 0: ok, see below
     # ^ fc>>c --> do nothing: fc can get very big (e.g. ~1e100) when annotation_j > 0 and annotation_k is 0: (some_number+epsilon)/(0+epsilon). We don't need to do anything there. The ranks will still work.
     fc[dplyr::near(fc,0)] <- 0 # we map fc near 0 to 0 to avoid numerical precision artifacts when ranking the genes and keeping track of ties. fc values near 0 arise when the annotation[j] is zero and the epsilon is added: (0+epsilon)/(some_number+epsilon)
-    fc[dplyr::near(fc,1)] <- 0 # we map fc near 1 to 0 because these fc values are almost certainly a result of dividing two zero measurements: (0+epsilon)/(0+epsilon). These fc values should be 0, because the gene is not expressed in the given annotation.
+    fc[dplyr::near(fc,1)] <- 0 # we map fc near 1 to 0 because these fc values are (almost) certainly a result of dividing two zero measurements: (0+epsilon)/(0+epsilon). These fc values should be 0, because the gene is not expressed in the given annotation.
     ### Rank genes: would want high ranks to correspond to high specificity
     fc_ranks <- apply(fc, 2, base::rank, na.last="keep", ties.method="min") # matrix, (genes x annotations-1)
-    # ^ rank in ascending order (low values = low rank; high values = high rank)
-    # ^ na.last="keep": NA values are kept with rank NA. That is, NA values are ignored during ranking and 'propagated' to the result vector.
-    # ^ ties.method="min" : tied genes get the minimum rank. We do this to add maximal penalty to genes with fc = 0. We are awere that it will also effect genes with fc >>, but they are unlikely to have tied values 
+    # ^ rank in ascending order (low values ==> low rank; high values ==> high rank)
+    # ^ na.last="keep": NA values are kept with rank NA. That is, NA values are ignored during ranking and 'propagated' to the result vector. 
+    #                   we must set na.last="keep" because of how rank() treats NA values: "NA values are never considered to be equal: for na.last = TRUE and na.last = FALSE they are given distinct ranks in the order in which they occur in x."
+    #                   that is, without na.last="keep" the NA values would be ARBITRARILY RANK and we don't want that when we, at least without epsilon, could get a lot of NA values in fc.
+    #                   NB: na.last="keep" is really only important if we DID NOT use episilon to avoid NA values in fc.
+    # ^ ties.method="min" : tied genes get the minimum rank. We do this to add maximal penalty to genes with fc = 0. 
+    #                       We are awere that it will also effect genes with fc >>, but they are unlikely to have tied fc values 
+    #                       emperically we observe that ties.method="min" creates a 'bimodal' distribution of nSI values: some genes will be specific, others (the majority) will be unspecific with the same value.
     # ALT FASTER: fc_ranks <- apply(fc, 2, data.table::frank, ...) # identical but faster solution using data.table::frank
-    ### Normalize ranks: divide each column by the number of genes and calculate the mean.
-    fc_ranks_normalized <- rowMeans(fc_ranks/nrow(fc_ranks))
+    ### Normalize ranks
+    fc_ranks_normalized <- rowMeans( (fc_ranks-1)/(nrow(fc_ranks)-1) ) # divide each column by the number of genes and calculate the mean.
+    ### Notes on subtracting 1 in the both denominator and numerator:
+    # ^ becasue we force [fc=~0-->0 and fc=~1-->0] and rank using ties.method="min", many genes will have rank=1 (lowest possible rank)
+    # ^ so when we below normalize the ranks, we many genes will get the same value: fc_ranks/nrow(fc_ranks) = 1/n_genes ==> some small number.
+    # ^ the fact that many genes will have nSI=1/n_genes results in a bimodal distribution of nSI [center_of_mass_no1 = 1/n_genes; center_of_mass_no2 ~ 0.8'ish],.
+    # ^ By subtracting 1 in the both denominator and numerator we obtain: 
+    # ^ 1) nSI will be 0 for genes with lowest possible rank. [becasue we subtract 1 in the denominator]
+    # ^ 2) nSI will be 1 for genes with highest possible rank [becasue we ALSO subtract 1 in the numerator]
     df.SI[,j] <- fc_ranks_normalized 
   }
   return(df.SI)
 }
+
 
 
 specificity.index.original <- function (pSI.in) {
@@ -333,7 +387,7 @@ ges_sem <- function(object_data, df.ncells) {
     mean.other <- rowSums(object_data[["mean"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
     frac.other <- rowSums(object_data[["frac_expr"]] %>% select(-!!annotation_sym) * df.n_other)/rowSums(df.n) # numeric vector, genes x 1
     ### Calculate GES
-    ges <- (mean.self+epsilon_1)/(mean.other+epsilon_1) * (frac.other+epsilon_2)/(frac.other+epsilon_2) # numeric, genes x 1
+    ges <- (mean.self+epsilon_1)/(mean.other+epsilon_1) * (frac.self+epsilon_2)/(frac.other+epsilon_2) # numeric, genes x 1
     ges[dplyr::near(ges, 0)] <- 0 # assigning ges values 'near equal to' zero to zero.
     list.ges[[annotation]] <- ges
     counter <- counter + 1
@@ -353,7 +407,13 @@ clean_annotation_name <- function(annotation_name) {
   return(stringr::str_replace_all(annotation_name, c("/"="-", "\\s+"="_")))
 }
 
-write_multi_geneset_file <- function(object, dataset_prefix, use_raw_sem_values=F, make_clean_annotation_names=T, add_all_genes_in_dataset=F) {
+write_multi_geneset_file <- function(object, 
+                                     dataset_prefix, 
+                                     use_raw_sem_values=F, 
+                                     make_clean_annotation_names=T, 
+                                     add_all_genes_in_dataset=F,
+                                     es_mean_only=F, # only export object[["sem_meta"]][["mean"]]. Saves time
+                                     write_file=T) {
   ### OUTPUT
   ### a file with filename multi_geneset.<dataset_prefix>.txt
   ### the file (no header) with the following columns:
@@ -369,6 +429,11 @@ write_multi_geneset_file <- function(object, dataset_prefix, use_raw_sem_values=
   check_annotation_names(object)
   print(sprintf("Running with make_clean_annotation_names=%s", make_clean_annotation_names))
   
+  
+  if (es_mean_only & (use_raw_sem_values | add_all_genes_in_dataset)) {
+    stop("es_mean_only argument cannot be used together with use_raw_sem_values or add_all_genes_in_dataset")
+  }
+  
   if (use_raw_sem_values) {
     print("OBS: use_raw_sem_values enabled. Will use object[['sem']] as sem value slot")
     SEM_SLOT <- "sem"
@@ -378,71 +443,82 @@ write_multi_geneset_file <- function(object, dataset_prefix, use_raw_sem_values=
   
   list_res <- list()
   i <- 1
-  ### loop over individual sem_transformed
-  for (sem_name in names(object[[SEM_SLOT]])) { 
-    for (annotation in names(object[[SEM_SLOT]][[sem_name]])) {
+  if (!es_mean_only) {
+    ### loop over individual sem_transformed
+    for (sem_name in names(object[[SEM_SLOT]])) { 
+      for (annotation in names(object[[SEM_SLOT]][[sem_name]])) {
+        print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
+        df.tmp <- object[[SEM_SLOT]][[sem_name]] %>% 
+          select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+          mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
+                 .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+                 gene=object[["genes"]]) # add geneset annotation and gene names 
+        ### NB: this simpler (no as_string() and .annotation) but less explicit version also works.
+        # df.tmp <- object[[SEM_SLOT]][[sem_name]] %>% 
+        #   select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+        #   mutate(annotation = annotation, # LHS is the name of the column we create; RHS is a string
+        #          sem_name = sem_name, # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+        #          gene=object[["genes"]]) # add geneset annotation and gene names 
+        if (!use_raw_sem_values) {
+          df.tmp <- df.tmp %>% filter(value > 0) # keep only sem_transformed > 0. Do this AFTER adding gene names
+        }
+        list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
+        i <- i + 1
+      }
+    }
+    ### add tstat_top10pct_binary [works for both conditions of use_raw_sem_values]
+    ### this SEM was used in Finucane2018 (LDSC-SEG)
+    sem_dependency <- "tstat"
+    sem_name <- "tstat_top10pct_binary"
+    if (is.null(object[[SEM_SLOT]][[sem_dependency]])) {
+      stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given SEM is calculated before running this function...", SEM_SLOT, sem_dependency))
+    }
+    for (annotation in names(object[[SEM_SLOT]][[sem_dependency]])) {
       print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
-      df.tmp <- object[[SEM_SLOT]][[sem_name]] %>% 
+      df.tmp <- object[[SEM_SLOT]][[sem_dependency]] %>% 
         select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
         mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
                .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
                gene=object[["genes"]]) # add geneset annotation and gene names 
-      ### NB: this simpler (no as_string() and .annotation) but less explicit version also works.
-      # df.tmp <- object[[SEM_SLOT]][[sem_name]] %>% 
-      #   select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-      #   mutate(annotation = annotation, # LHS is the name of the column we create; RHS is a string
-      #          sem_name = sem_name, # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-      #          gene=object[["genes"]]) # add geneset annotation and gene names 
-      if (!use_raw_sem_values) {
-        df.tmp <- df.tmp %>% filter(value > 0) # keep only sem_transformed > 0. Do this AFTER adding gene names
-      }
+      # SPECIFIC STEP
+      df.tmp <- df.tmp %>% 
+        filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
+        mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
       list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
       i <- i + 1
     }
-  }
-  ### add tstat_top10pct_binary [works for both conditions of use_raw_sem_values]
-  ### this SEM was used in Finucane2018 (LDSC-SEG)
-  sem_dependency <- "tstat"
-  sem_name <- "tstat_top10pct_binary"
-  if (is.null(object[[SEM_SLOT]][[sem_dependency]])) {
-    stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given SEM is calculated before running this function...", SEM_SLOT, sem_dependency))
-  }
-  for (annotation in names(object[[SEM_SLOT]][[sem_dependency]])) {
-    print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
-    df.tmp <- object[[SEM_SLOT]][[sem_dependency]] %>% 
-      select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-      mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-             .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-             gene=object[["genes"]]) # add geneset annotation and gene names 
-    # SPECIFIC STEP
-    df.tmp <- df.tmp %>% 
-      filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
-      mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
-    list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-    i <- i + 1
-  }
-  
-  ### add specificity_top10pct_binary [works for both conditions of use_raw_sem_values]
-  ### this SEM was used in Skene2018
-  sem_dependency <- "specificity"
-  sem_name <- "specificity_top10pct_binary"
-  if (is.null(object[[SEM_SLOT]][[sem_dependency]])) {
-    stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given SEM is calculated before running this function...", SEM_SLOT, sem_dependency))
-  }
-  for (annotation in names(object[[SEM_SLOT]][[sem_dependency]])) {
-    print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
-    df.tmp <- object[[SEM_SLOT]][[sem_dependency]] %>% 
-      select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-      mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-             .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-             gene=object[["genes"]]) # add geneset annotation and gene names 
-    # SPECIFIC STEP
-    df.tmp <- df.tmp %>% 
-      filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
-      mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
-    list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-    i <- i + 1
-  }
+    
+    ### add specificity_top10pct_binary [works for both conditions of use_raw_sem_values]
+    ### this SEM was used in Skene2018
+    sem_dependency <- "specificity"
+    sem_name <- "specificity_top10pct_binary"
+    if (is.null(object[[SEM_SLOT]][[sem_dependency]])) {
+      stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given SEM is calculated before running this function...", SEM_SLOT, sem_dependency))
+    }
+    for (annotation in names(object[[SEM_SLOT]][[sem_dependency]])) {
+      print(sprintf("Processing SEM = %s | counter = %s", sem_name, i))
+      df.tmp <- object[[SEM_SLOT]][[sem_dependency]] %>% 
+        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+        mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
+               .sem_name = as_string(sem_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+               gene=object[["genes"]]) # add geneset annotation and gene names 
+      # SPECIFIC STEP
+      df.tmp <- df.tmp %>% 
+        filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
+        mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
+      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
+      i <- i + 1
+    }
+    ### add all genes
+    if (add_all_genes_in_dataset) {
+      print("Adding all genes...")
+      list_res[[i]] <- tibble(value=1, 
+                              gene=object[["genes"]], 
+                              .annotation="all_genes_in_dataset",
+                              .sem_name="dummy")
+      i <- i + 1 # not needed, but good to have if you rearrange the code
+    }
+  } # end if (!es_mean_only)
   if (!use_raw_sem_values) {
     ### loop over sem_meta mean
     sem_name <- "sem_mean"
@@ -457,15 +533,6 @@ write_multi_geneset_file <- function(object, dataset_prefix, use_raw_sem_values=
       list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
       i <- i + 1
     }
-  }
-  ### add all genes
-  if (add_all_genes_in_dataset) {
-    print("Adding all genes...")
-    list_res[[i]] <- tibble(value=1, 
-                            gene=object[["genes"]], 
-                            .annotation="all_genes_in_dataset",
-                            .sem_name="dummy")
-    i <- i + 1 # not needed, but good to have if you rearrange the code
   }
   print("Doing bind_rows..")
   # rowbind
@@ -483,9 +550,12 @@ write_multi_geneset_file <- function(object, dataset_prefix, use_raw_sem_values=
   # check for any NA values
   if(any(is.na(df.multi_geneset))) {
     print("Error: df.multi_geneset contains NA values. Investigate the returned data.frame for NA values, resolve the issue and rerun this function. No file will be written.")
+    return(df.multi_geneset) 
   } else {
     print("Checked df.multi_geneset for NA values and found nothing. All good to go!")
-    # write file
+  }
+  
+  if (write_file) {
     file.out <- sprintf("multi_geneset.%s.txt.gz", dataset_prefix)
     print(sprintf("writing file: %s", file.out))
     df.multi_geneset %>% 
@@ -857,11 +927,17 @@ calc_empirical_pvalues <- function(df.obs, df.null) {
     # step 2: idx.insertions/nobs: finds the fraction of observations in the null that are SMALLER than the observed values
     # step 3: 1-idx.insertions/nobs: reverses the above --> finds the fraction of observations in the null that are LARGER than the observed values
     idx.insertions <- findInterval(df.obs %>% pull(!!rlang::sym(annotation)), sort(df.null %>% pull(!!rlang::sym(annotation))))
-    pvals <- 1 - (idx.insertions/nrow(df.obs))
-    ### REF: https://stat.ethz.ch/R-manual/R-devel/library/base/html/findInterval.html
-    # ...This is the same computation as for the empirical distribution function, and indeed, findInterval(t, sort(X)) is identical to n * Fn(t; X[1],..,X[n]) where Fn is the empirical distribution function of X[1],..,X[n].
-    list.pvals[[annotation]] <- pvals
-    list.qvals[[annotation]] <- p.adjust(pvals, method="BH")
+    ### findInterval REF: https://stat.ethz.ch/R-manual/R-devel/library/base/html/findInterval.html: ... This is the same computation as for the empirical distribution function, and indeed, findInterval(t, sort(X)) is identical to n * Fn(t; X[1],..,X[n]) where Fn is the empirical distribution function of X[1],..,X[n].
+    # return values of findInterval(x, vec) can take on values of {0...length(vec)}
+    n_null_gt_obs <- nrow(df.obs)-idx.insertion # number of null observations *greather than* our observed value. 
+    # ^ e.g. if an element in idx.insertion was the most extreme in the null, we have nrow(df.obs) == idx.insertion so n_null_gt_obs=0 for that element
+    pvals_empirical <- (n_null_gt_obs+1)/(nrow(df.obs)+1)
+    # *OBS*: Note that the above formula includes a commonly used pseudocount (North, Curtis, and Sham, 2002; Knijnenburg et al., 2009) to avoid P-values of zero.
+    ### ALTERNATIVE shorter but less transparant version: 
+    # pvals_empirical <- 1-(idx.insertion/(nrow(df.obs)+1)) # *OBS*: here you should not have +1 to idx.insertion because idx.insertion==nrow(df.obs) if our observed value is the most extreme
+    
+    list.pvals[[annotation]] <- pvals_empirical
+    list.qvals[[annotation]] <- p.adjust(pvals_empirical, method="BH")
   }
   df.pvals <- bind_cols(list.pvals) # tibble. colnames will be annotation names
   df.qvals <- bind_cols(list.qvals) # tibble. colnames will be annotation names

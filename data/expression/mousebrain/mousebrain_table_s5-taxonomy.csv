@@ -1,0 +1,40 @@
+TaxonomyRank1,TaxonomyRank2,TaxonomyRank3,TaxonomyRank4,TaxonomyRank4_reduced1,tax_order_idx_table_s5,tax_order_idx_mb_fig1c
+Immune cells,Immune cells,Immune cells,Perivascular macrophages,Immune/Microglia,38,1
+Immune cells,Immune cells,Immune cells,Microglia,Immune/Microglia,39,1
+Vascular cells,Vascular cells,Vascular cells,Vascular and leptomeningeal cells,Vascular,34,2
+Vascular cells,Vascular cells,Vascular cells,Vascular smooth muscle cells,Vascular,35,2
+Vascular cells,Vascular cells,Vascular cells,Pericytes,Vascular,36,2
+Vascular cells,Vascular cells,Vascular cells,Vascular endothelial cells,Vascular,37,2
+Glia,Neural crest-like glia,Neural crest-like glia,Enteric glia,Enteric glia,33,3
+Glia,Neural crest-like glia,Neural crest-like glia,Olfactory ensheathing cells,Other glia,29,4
+Glia,Neural crest-like glia,Neural crest-like glia,Schwann cells,Other glia,31,4
+Glia,Neural crest-like glia,Neural crest-like glia,Satellite glia,Other glia,32,4
+Glia,CNS glia,Astroependymal cells,Astrocytes,Astrocytes,28,5
+Glia,CNS glia,Astroependymal cells,Choroid epithelial cells,Other CNS glia,23,6
+Glia,CNS glia,Astroependymal cells,Subcommissural organ hypendymal cells,Other CNS glia,24,6
+Glia,CNS glia,Astroependymal cells,Ependymal cells,Other CNS glia,25,6
+Glia,CNS glia,Astroependymal cells,Dentate gyrus radial glia-like cells,Other CNS glia,26,6
+Glia,CNS glia,Astroependymal cells,Subventricular zone radial glia-like cells,Other CNS glia,27,6
+Glia,CNS glia,Oligodendrocytes,Oligodendrocytes,Oligodendrocytes,22,7
+Glia,Neural crest-like glia,Neural crest-like glia,Oligodendrocyte precursor cells,Oligodendrocytes,30,7
+Neurons,PNS neurons,Peripheral sensory neurons,Peripheral sensory peptidergic neurons,Peripheral sensory neurons,19,8
+Neurons,PNS neurons,Peripheral sensory neurons,Peripheral sensory neurofilament neurons,Peripheral sensory neurons,20,8
+Neurons,PNS neurons,Peripheral sensory neurons,Peripheral sensory non-peptidergic neurons,Peripheral sensory neurons,21,8
+Neurons,PNS neurons,Sympathetic neurons,Sympathetic noradrenergic neurons,Sympathetic neurons,17,9
+Neurons,PNS neurons,Sympathetic neurons,Sympathetic cholinergic neurons,Sympathetic neurons,18,9
+Neurons,PNS neurons,Enteric neurons,Enteric neurons,Enteric neurons,16,10
+Neurons,CNS neurons,Hindbrain neurons,Hindbrain neurons,Hindbrain neurons,11,12
+Neurons,CNS neurons,Cerebellum neurons,Cerebellum neurons,Hindbrain neurons,12,12
+Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon inhibitory neurons,Di- and mesencephalon inhibitory neurons,10,13
+Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon excitatory neurons,Di- and mesencephalon excitatory neurons,9,14
+Neurons,CNS neurons,Spinal cord neurons,Spinal cord excitatory neurons,Spinal cord excitatory neurons,7,15
+Neurons,CNS neurons,Spinal cord neurons,Spinal cord inhibitory neurons,Spinal cord inhibitory neurons,8,16
+Neurons,CNS neurons,"Cholinergic, monoaminergic and peptidergic neurons",Peptidergic neurons,Peptidergic neurons,6,17
+Neurons,CNS neurons,"Cholinergic, monoaminergic and peptidergic neurons",Cholinergic and monoaminergic neurons,Cholinergic and monoaminergic neurons,5,18
+Neurons,CNS neurons,Telencephalon interneurons,Telencephalon inhibitory interneurons,Telencephalon inhibitory interneurons,4,19
+Neurons,CNS neurons,Telencephalon interneurons,Olfactory inhibitory neurons,Olfactory inhibitory neurons,3,20
+Neurons,CNS neurons,Immature neural,Glutamatergic neuroblasts,Neuroblasts,1,21
+Neurons,CNS neurons,Immature neural,Non-glutamatergic neuroblasts,Neuroblasts,2,21
+Neurons,CNS neurons,Telencephalon projecting neurons,Dentate gyrus granule neurons,Other CNS neurons,14,22
+Neurons,CNS neurons,Telencephalon projecting neurons,Telencephalon projecting inhibitory neurons,Telencephalon projecting inhibitory neurons,15,23
+Neurons,CNS neurons,Telencephalon projecting neurons,Telencephalon projecting excitatory neurons,Telencephalon projecting excitatory neurons,13,24

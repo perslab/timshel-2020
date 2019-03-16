@@ -28,19 +28,25 @@ setwd(here("src/ldsc"))
 
 
 ### PARAMS
-# dataset_prefix <- "mousebrain_all"
-dataset_prefix <- "tabula_muris"
+dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "tabula_muris"
 # dataset_prefix <- "campbell_lvl1"
 # dataset_prefix <- "campbell_lvl2"
 
 genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
+
+#### mousebrain_all_190306_es_fix
+# genomic_annotation_prefix <- "celltypes.mousebrain_190306_es_fix.all"
+# dataset_prefix <- "mousebrain_all_190306_es_fix"
+
 
 # ======================================================================= #
 # =============================== LOAD LDSC CTS RESULTS ================================= #
 # ======================================================================= #
 
 ### Single GWAS
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UPDATE_Yengo2018.cell_type_results.txt", genomic_annotation_prefix)
+file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UKBB_Loh2018.cell_type_results.txt", genomic_annotation_prefix)
+# file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UPDATE_Yengo2018.cell_type_results.txt", genomic_annotation_prefix)
 # file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all__BMI_Yengo2018.cell_type_results.txt"
 # file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris.all__BMI_Yengo2018.cell_type_results.txt"
 # file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl1.all__BMI_Yengo2018.cell_type_results.txt"
@@ -86,10 +92,10 @@ df.ldsc_cts.export <- df.ldsc_cts.export %>% left_join(df.metadata, by="annotati
 # ======================================================================= #
 
 ### Multi GWAS
-# df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.multi_gwas.csv", dataset_prefix))
+# df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190316.%s.sem_mean.multi_gwas.csv", dataset_prefix))
 
 ### Single GWAS
-# df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.%s.csv", dataset_prefix, "BMI_UPDATE_Yengo2018"))
+# df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.%s.csv", dataset_prefix, "BMI_UKBB_Loh2018"))
 
 # ======================================================================= #
 # ================================ PLOT: cell priori [SINGLE-GWAS] ================================= #
@@ -103,12 +109,12 @@ p <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) +
   ggrepel::geom_text_repel(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=color_by_variable), hjust = 0, nudge_x = 1.5) + # OBS geom_text_repel
   geom_hline(yintercept=-log10(fdr_threshold), color="red") + 
   labs(x="Cell Type", y="-log10(P-value)") + # expression(-log[10]("P-value"))
-  ggtitle(sprintf("%s - %s", "BMI_Yengo2018", dataset_prefix)) +
+  ggtitle(sprintf("%s - %s", "BMI_UKBB_Loh2018", dataset_prefix)) +
   theme_classic() + 
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 p
-file.out <- sprintf("out.tmp.190103.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "BMI_UPDATE_Yengo2018")
+file.out <- sprintf("out.tmp.190316.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "BMI_UKBB_Loh2018")
 ggsave(p, filename=file.out, width=20, height=8)
 
 
@@ -140,9 +146,19 @@ for (name_elem in names(list.dfs.split)) {
 
 
 # ======================================================================= #
-# =============================== XXXXX ================================= #
+# ====== TMP compare mousebrain_all_190306_es_fix to existing =========== #
 # ======================================================================= #
-
+# df.ldsc_cts.fix.full <- df.ldsc_cts
+# 
+# df.ldsc_cts.no_fix <- df.ldsc_cts %>% filter(gwas == "BMI_UKBB_Loh2018")
+# df.ldsc_cts.no_fix <- df.ldsc_cts.no_fix %>% select(annotation, p.value)
+# df.ldsc_cts.fix <- df.ldsc_cts.fix.full %>% select(annotation, p.value) %>% mutate(fdr_significant = if_else(p.value < 0.05/n(), T, F))
+# df <- full_join(df.ldsc_cts.fix, df.ldsc_cts.no_fix, by="annotation", suffix=c(".fix", ".no_fix"))
+# ggplot(df, aes(x=p.value.fix, y=p.value.no_fix)) + geom_point()
+# ggplot(df, aes(x=-log10(p.value.fix), y=-log10(p.value.no_fix))) + 
+#   geom_point() + 
+#   geom_abline() + 
+#   geom_label_repel(data=df %>% filter(fdr_significant), aes(label=annotation))
 
 
 # ======================================================================= #

@@ -170,14 +170,16 @@ def get_all_genes_ref_ld_chr_name(dataset):
 	dict_dataset_all_genes_path_prefix = {"mousebrain":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset__all_genes_in_dataset.mousebrain.",
 						 				"tabula_muris":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset__all_genes_in_dataset.tabula_muris.",
 						 				"campbell":"/scratch/sc-ldsc/control.all_genes_in_dataset/per_annotation/control.all_genes_in_dataset__all_genes_in_dataset.campbell.",
+						 				 "dataset_with_no_all_genes":"" # value must be empty string.
 						 				 }
 	if not dataset in dict_dataset_all_genes_path_prefix:
 		raise KeyError("dataset={} is not found in dict_dataset_all_genes_path_prefix.".format(dataset))
 	ldsc_all_genes_ref_ld_chr_name = dict_dataset_all_genes_path_prefix[dataset]
-	# some obnoxious validation of the matches
-	files_ldscore = glob.glob("{}*l2.ldscore.gz".format(ldsc_all_genes_ref_ld_chr_name)) # get ldscore files for all chromosomes. glob() returns full file paths.
-	if not len(files_ldscore) == 22: # we must have ldscore files for every chromosome, so the length 
-		raise ValueError("dataset={} only has n={} matching {}*l2.ldscore.gz files. Expected 22 files. Check the ldscore file directory or update the dict_dataset_all_genes_path_prefix inside this function.".format(dataset, len(files_ldscore), ldsc_all_genes_ref_ld_chr_name))
+	if ldsc_all_genes_ref_ld_chr_name: # only needed to support dataset_with_no_all_genes (empty string valuates false)
+		# some obnoxious validation of the matches
+		files_ldscore = glob.glob("{}*l2.ldscore.gz".format(ldsc_all_genes_ref_ld_chr_name)) # get ldscore files for all chromosomes. glob() returns full file paths.
+		if not len(files_ldscore) == 22: # we must have ldscore files for every chromosome, so the length 
+			raise ValueError("dataset={} only has n={} matching {}*l2.ldscore.gz files. Expected 22 files. Check the ldscore file directory or update the dict_dataset_all_genes_path_prefix inside this function.".format(dataset, len(files_ldscore), ldsc_all_genes_ref_ld_chr_name))
 	return(ldsc_all_genes_ref_ld_chr_name)
 
 
@@ -329,7 +331,34 @@ list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 
 
 ################## Cell-types ##################
-# FLAG_WGCNA = False
+FLAG_WGCNA = False
+
+
+### Mean MB [mousebrain_all_190306_es_fix]
+dict_genomic_annot = {"celltypes.mousebrain_190306_es_fix.all":
+						{"dataset":"mousebrain",
+						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_190306_es_fix.txt.gz"},
+ 					 }
+
+
+### Mousebrain hierarchical (11 FDR cell-types + neurons)
+# dict_genomic_annot = {"celltypes.mousebrain.bmi_loh2018_11fdr_celltypes":
+# 						{"dataset":"mousebrain",
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_bmi_loh2018_11fdr_celltypes.sem_mean.txt.gz"},
+#  					 "celltypes.mousebrain.neurons":
+#  					  	{"dataset":"mousebrain",
+#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_neurons.sem_mean.txt.gz"}
+#  					 }
+
+
+# ### Adipocyte (sem_mean only)
+# dict_genomic_annot = {"celltypes.preadipocyte_developing_1808_branch":
+# 						{"dataset":"dataset_with_no_all_genes",
+# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch.sem_mean.txt.gz"},
+#  					 "celltypes.preadipocyte_developing_1808_branch_pc2_quantile":
+#  					  	{"dataset":"dataset_with_no_all_genes",
+#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch_pc2_quantile.sem_mean.txt.gz"}
+#  					 }
 
 # ### Mean MB+TB
 # dict_genomic_annot = {"celltypes.mousebrain.all":
@@ -375,7 +404,7 @@ list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 
 
 ################## WGCNA ##################
-FLAG_WGCNA = True
+# FLAG_WGCNA = True
 
 
 ### Modules from FDR significant cell-types [v4, 190218] | WGCNA med deepSplit 1 + n=11 BMI_UKBB_Loh2018 FDR cell-types 
@@ -387,10 +416,10 @@ FLAG_WGCNA = True
 # - Baade lavenderblush og lightpink3 er 100% bevarede (nu som henholdsvis ‘palevioletred’ og ‘brown’ - beklager, har ikke ville begynde at rette i det gamle script :S)
 # - antal moduler er faldet til 126
 
-dict_genomic_annot = {"wgcna.mousebrain-190218.fdr_sign_celltypes.continuous": 
-					  	{"dataset":"mousebrain", 
-					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_cell_cluster_module_genes.csv.gz"}
-					 }
+# dict_genomic_annot = {"wgcna.mousebrain-190218.fdr_sign_celltypes.continuous": 
+# 					  	{"dataset":"mousebrain", 
+# 					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_cell_cluster_module_genes.csv.gz"}
+# 					 }
 
 
 ### Mousebrain - trait specificity for lavenderblush and lightpink3 [190218]
@@ -495,6 +524,10 @@ for prefix_genomic_annot in list(dict_genomic_annot.keys()): # list() needed for
 list_cmds_ldsc_prim = []
 for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 	ldsc_all_genes_ref_ld_chr_name = get_all_genes_ref_ld_chr_name(param_dict["dataset"])
+	flag_all_genes = True
+	if ldsc_all_genes_ref_ld_chr_name=="":
+		print("OBS: Running without all_genes correction.")
+		flag_all_genes = False
 	for gwas in list_gwas:
 		fileout_prefix = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot)
 		if os.path.exists("{}.cell_type_results.txt".format(fileout_prefix)):
@@ -505,7 +538,7 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 		### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 		### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
 		cmd = """{PYTHON2_EXEC} {flag_unbuffered} {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
-		--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name} \
+		--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.{flag_all_genes}{ldsc_all_genes_ref_ld_chr_name} \
 		--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
 		--ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
 		--out {fileout_prefix}""".format(
@@ -514,6 +547,7 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 			script=PATH_LDSC_SCRIPT,
 			gwas=gwas,
 			prefix_genomic_annot=prefix_genomic_annot,
+			flag_all_genes="," if flag_all_genes else "",
 			ldsc_all_genes_ref_ld_chr_name=ldsc_all_genes_ref_ld_chr_name,
 			fileout_prefix=fileout_prefix
 			)

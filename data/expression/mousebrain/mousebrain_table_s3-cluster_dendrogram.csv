@@ -1,266 +1,266 @@
-﻿Dendrogram order,Cluster name,Description,Region,Developmental compartment,Neurotransmitter,Comment,Taxonomy_group,Probable location (manually assigned)
-0,TEGLU1,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Glutamate (VGLUT3)",Remaining heterogeneity for VGLUT3,Telencephalon projecting excitatory neurons,"Cingulate/Retrosplenial area, layer 6"
-1,TEGLU3,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,Glutamate (VGLUT1),,Telencephalon projecting excitatory neurons,Cortex pyramidal layer 6
-2,TEGLU2,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,Glutamate (VGLUT1),,Telencephalon projecting excitatory neurons,Cortex pyramidal layer 6b
-3,TEGLU20,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,Glutamate (VGLUT1),Remaining heterogeneity for Nitric oxide,Telencephalon projecting excitatory neurons,Cortex pyramidal layer 6
-4,TEGLU11,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,Glutamate (VGLUT1),,Telencephalon projecting excitatory neurons,Cortical pyramidal (poor markers)
-5,TEGLU12,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Telencephalon projecting excitatory neurons,"Lateral cortex layer 6: gustatory, barrel field, auditory"
-6,TEGLU10,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,Glutamate (VGLUT1),"Remaining heterogeneity for VGLUT2, Nitric oxide",Telencephalon projecting excitatory neurons,Cortical pyramidal layer 5
-7,TEGLU9,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Telencephalon projecting excitatory neurons,"Cingulate/Retrosplenial area, layer 5"
-8,TEGLU8,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Telencephalon projecting excitatory neurons,Cortical pyramidal layer 4
-9,TEGLU7,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)","Remaining heterogeneity for VGLUT2, Nitric oxide",Telencephalon projecting excitatory neurons,Cortical pyramidal layer 2/3
-10,TEGLU6,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Remaining heterogeneity for Nitric oxide,Telencephalon projecting excitatory neurons,"Cingulate/Retrosplenial area, layer 2"
-11,TEGLU13,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Nitric oxide",Remaining heterogeneity for VGLUT2,Telencephalon projecting excitatory neurons,Subiculum
-12,TEGLU14,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Telencephalon projecting excitatory neurons,Subiculum
-13,TEGLU5,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Telencephalon projecting excitatory neurons,Entorhinal superficial layers
-14,TEGLU16,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Nitric oxide",,Telencephalon projecting excitatory neurons,Piriform pyramidal
-15,TEGLU15,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Remaining heterogeneity for Nitric oxide,Telencephalon projecting excitatory neurons,Piriform pyramidal
-16,TEGLU17,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Remaining heterogeneity for Nitric oxide,Telencephalon projecting excitatory neurons,Piriform pyramidal
-17,TEGLU18,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Telencephalon projecting excitatory neurons,"Anterior olfactory nucleus, deep layer"
-18,TEGLU19,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,Glutamate (VGLUT1),,Telencephalon projecting excitatory neurons,Anterior olfactory nucleus and ventral striatum
-19,TEGLU22,"Excitatory neurons, amygdala",Amygdala,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Telencephalon projecting excitatory neurons,Basolateral amygdala
-20,TEGLU21,"Excitatory neurons, hippocampus CA1",Hippocampus,Telencephalon,"Glutamate (VGLUT1),Nitric oxide",,Telencephalon projecting excitatory neurons,"CA1 (posterior),subiculum,entorhinal"
-21,TEGLU4,"Excitatory neurons, cerebral cortex",Cortex,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Further split possible based on VGLUT2,Telencephalon projecting excitatory neurons,"Cortex pyramidal layer 5, Cingulate/Retrosplenial area (superficial and deep)"
-22,TEGLU24,"Excitatory neurons, hippocampus CA1",Hippocampus,Telencephalon,"Glutamate (VGLUT1),Nitric oxide",Remaining heterogeneity for Nitric oxide,Telencephalon projecting excitatory neurons,CA1
-23,TEGLU23,"Excitatory neurons, hippocampus CA3",Hippocampus,Telencephalon,"Glutamate (VGLUT1),Nitric oxide",Further split possible,Telencephalon projecting excitatory neurons,CA3
-24,DGGRC1,"Granule neuroblasts, dentate gyrus",Dentate gyrus,Telencephalon,Glutamate (VGLUT1),,Dentate gyrus granule neurons,Dentate gyrus
-25,DGGRC2,"Granule neurons, dentate gyrus",Dentate gyrus,Telencephalon,Glutamate (VGLUT1),,Dentate gyrus granule neurons,Dentate gyrus
-26,MSN1,"D1 medium spiny neurons, striatum",Striatum dorsal,Telencephalon,GABA,,Telencephalon projecting inhibitory neurons,Striatum dorsal
-27,MSN2,"D2 medium spiny neurons, striatum",Striatum dorsal,Telencephalon,GABA,,Telencephalon projecting inhibitory neurons,Striatum dorsal
-28,MSN3,"D2 medium spiny neurons, striatum",Striatum ventral,Telencephalon,GABA,,Telencephalon projecting inhibitory neurons,Striatum ventral
-29,MSN4,"D1 medium spiny neurons, striatum",Striatum ventral,Telencephalon,GABA,,Telencephalon projecting inhibitory neurons,Striatum ventral
-30,MSN5,"Patch D1/D2 neurons, striatum",Striatum ventral,Telencephalon,GABA,,Telencephalon projecting inhibitory neurons,Striatum ventral
-31,MSN6,"Matrix D1 neurons, striatum",Striatum ventral,Telencephalon,GABA,,Telencephalon projecting inhibitory neurons,Striatum ventral
-32,DETPH,"Neuroblast-like, habenula",Thalamus,Diencephalon,Glutamate (VGLUT2),Neurotransmitter assigned manually,Non-glutamatergic neuroblasts,Medial habenula
-33,DGNBL2,"Granule neuroblasts, dentate gyrus",Dentate gyrus,Telencephalon,Glutamate (VGLUT1),Remaining heterogeneity for VGLUT1,Non-glutamatergic neuroblasts,Dentate gyrus
-34,DGNBL1,"Granule neuroblasts, dentate gyrus",Dentate gyrus,Telencephalon,Glutamate (VGLUT2),,Non-glutamatergic neuroblasts,Dentate gyrus
-35,SZNBL,Neuronal intermidate progenitor cells,"Striatum dorsal, Striatum ventral, Dentate gyrus",Telencephalon,GABA,,Non-glutamatergic neuroblasts,"Sub ventricular zone, Dentate gyrus"
-36,OBNBL3,"Neuroblasts, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Non-glutamatergic neuroblasts,Olfactory bulb
-37,OBINH1,"Inhibitory neurons, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Olfactory inhibitory neurons,Main and accessory olfactory bulb granular layer
-38,OBINH5,"Inhibitory neurons, olfactory nulb",Olfactory bulb,Telencephalon,GABA,Remaining heterogeneity for Nitric oxide,Olfactory inhibitory neurons,Olfactory bulb
-39,OBINH2,"Inner horizontal cell, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Olfactory inhibitory neurons,"Olfactory bulb, mitral cell layer"
-40,OBINH3,"Inhibitory neurons, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Olfactory inhibitory neurons,Accessory olfactory bulb granular layer
-41,OBINH4,"Inhibitory neurons, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Olfactory inhibitory neurons,"Olfactory bulb, inner granular layer"
-42,OBNBL4,"Inhibitory neurons, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Olfactory inhibitory neurons,"Main olfactory bulb, glomerular layer"
-43,OBNBL5,"Inhibitory neurons, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Olfactory inhibitory neurons,"Main olfactory bulb, glomerular layer and Accessory olfactory bulb, granular layer"
-44,OBDOP,"Dopaminergic periglomerular interneuron, olfactory bulb",Olfactory bulb,Telencephalon,"GABA,Dopamine",,Olfactory inhibitory neurons,"Olfactory bulb, periglomerular layer"
-45,OBINH6,"External plexiform layer interneuron, olfactory bulb",Olfactory bulb,Telencephalon,GABA,,Olfactory inhibitory neurons,"Olfactory bulb, outer plexiform layer"
-46,DEINH1,"Inhibitory neurons, thalamus",Thalamus,Diencephalon,GABA,Trinarization detects VGLUT2,Telencephalon inhibitory interneurons,Reticular nucleus of the thalamus (Sst low)
-47,DEINH2,"Inhibitory neurons, thalamus",Thalamus,Diencephalon,GABA,,Telencephalon inhibitory interneurons,Reticular nucleus of the thalamus
-48,TEINH17,"Axo-axonic, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,GABA,Further split possible,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-49,TEINH18,"Basket and bistratified cells, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"GABA,Nitric oxide",,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-50,TEINH19,"Hippocamposeptal projection, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,GABA,,Telencephalon inhibitory interneurons,"Hippocampus (so),Cortex"
-51,TEINH21,"Sleep-active, long-range projection interneurons, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"GABA,Nitric oxide",Further split possible based on Acetylcholine,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-52,TEINH16,"Ivy and MGE-derived neurogliaform cells, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"GABA,Nitric oxide",,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-53,TEINH15,"CGE-derived neurogliaform cells, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"GABA,Nitric oxide",,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-54,TEINH14,"CGE-derived neurogliaform cells Cxcl14+, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,GABA,Remaining heterogeneity for Nitric oxide,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-55,TEINH20,"Inhibitory interneurons, hippocampus",Hippocampus,Telencephalon,GABA,,Telencephalon inhibitory interneurons,Hippocampus (sr/slm)
-56,TEINH13,"Trilaminar cells, hippocampus",Hippocampus,Telencephalon,"Glutamate (VGLUT3),GABA",Remaining heterogeneity for VGLUT3,Telencephalon inhibitory interneurons,Hippocampus
-57,TEINH12,"Non-border Cck interneurons, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"Glutamate (VGLUT3),GABA",Remaining heterogeneity for VGLUT3,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-58,TEINH9,"Non-border Cck interneurons, hippocampus",Hippocampus,Telencephalon,GABA,,Telencephalon inhibitory interneurons,Hippocampus
-59,TEINH10,"R-LM border Cck interneurons, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"Glutamate (VGLUT3),GABA","Remaining heterogeneity for VGLUT3, Nitric oxide",Telencephalon inhibitory interneurons,"Hippocampus (sr/slm),Cortex"
-60,TEINH11,"R-LM border Cck interneurons, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"Glutamate (VGLUT3),GABA",Remaining heterogeneity for VGLUT3,Telencephalon inhibitory interneurons,"Hippocampus (sr/slm),Cortex"
-61,TEINH4,"Interneuron-selective interneurons, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,GABA,,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-62,TEINH5,"Interneuron-selective interneurons, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,"GABA,Nitric oxide",,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-63,TEINH8,"Interneuron-selective interneurons, hippocampus",Hippocampus,Telencephalon,GABA,,Telencephalon inhibitory interneurons,Hippocampus
-64,TEINH7,"Interneuron-selective interneurons, hippocampus",Hippocampus,Telencephalon,GABA,,Telencephalon inhibitory interneurons,Hippocampus
-65,TEINH6,"Interneuron-selective interneurons, cortex/hippocampus","Hippocampus,Cortex",Telencephalon,GABA,Remaining heterogeneity for Nitric oxide,Telencephalon inhibitory interneurons,"Hippocampus,Cortex"
-66,TECHO,"Cholinergic interneurons, telencephalon","Striatum dorsal, Striatum ventral,Amygdala",Telencephalon,"Glutamate (VGLUT3),GABA,Acetylcholine,Nitric oxide","Remaining heterogeneity for GABA, Nitric oxide",Cholinergic and monoaminergic neurons,"Striatum,Amygdala"
-67,DECHO1,"Cholinergic neurons, septal nucleus, Meissnert and diagonal band",Hypothalamus,Diencephalon,"Glutamate (VGLUT3),GABA,Acetylcholine,Nitric oxide","Further split possible based on GABA, VGLUT3",Cholinergic and monoaminergic neurons,"Medial septal nuclues, diagonal band nucleus and nucleus basalis of Meissnert"
-68,HBCHO4,Afferent nuclei of cranial nerves III-V,Pons,Rhombencephalon,"Glutamate (VGLUT2),Acetylcholine,Nitric oxide",Remaining heterogeneity for VGLUT2,Cholinergic and monoaminergic neurons,Afferent nuclei of cranial nerves III-V
-69,HBCHO3,Afferent nuclei of cranial nerves VI-XII,Medulla,Rhombencephalon,"Acetylcholine,Noradrenaline,Dopamine,Nitric oxide","Remaining heterogeneity for Dopamine, Noradrenaline",Cholinergic and monoaminergic neurons,Afferent nuclei of cranial nerves VI-XII
-70,HBADR,Adrenergic cell groups of the medulla,Medulla,Rhombencephalon,"Glutamate (VGLUT2),Glutamate (VGLUT3),Adrenaline",Remaining heterogeneity for Acetylcholine,Cholinergic and monoaminergic neurons,"Nucleus of the solitary tract, adrenergic cell groups C1-3"
-71,HBNOR,Noradrenergic neurons of the medulla,Medulla,Rhombencephalon,"Glutamate (VGLUT2),Noradrenaline,Nitric oxide",Remaining heterogeneity for Serotonin,Cholinergic and monoaminergic neurons,A1-2 noradrenergic cell groups
-72,HYPEP7,"Pmch neurons, hypothalamus",Hypothalamus,Diencephalon,Glutamate (VGLUT2),,Cholinergic and monoaminergic neurons,Lateral hypothalamic area
-73,HYPEP6,"Orexin-producing neurons, hypothalamus",Hypothalamus,Diencephalon,"Glutamate (VGLUT2),Nitric oxide",Remaining heterogeneity for Dopamine,Cholinergic and monoaminergic neurons,Dorsomedial nucleus of the hypothalamus
-74,MEGLU14,Glutamatergic projection neurons of the raphe nucleus,Midbrain dorsal,Mesencephalon,Glutamate (VGLUT3),Remaining heterogeneity for Acetylcholine,Cholinergic and monoaminergic neurons,Dorsal raphe nucleus
-75,MBDOP1,"Dopaminergic neurons, periaqueductal grey",Midbrain ventral,Mesencephalon,"Glutamate (VGLUT2),Dopamine",,Cholinergic and monoaminergic neurons,"Ventral midbrain, periaqueductal grey"
-76,MBDOP2,"Dopaminergic neurons, ventral midbrain (SNc, VTA)",Midbrain ventral,Mesencephalon,"Glutamate (VGLUT2),Dopamine",,Cholinergic and monoaminergic neurons,Ventral tegmental area and subtantia nigra
-77,HBSER1,"Serotonergic neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT3),Serotonin",Remaining heterogeneity for Nitric oxide,Cholinergic and monoaminergic neurons,"Ventral midbrain/isthmic dorsal raphe (B7), caudal linear nucleus (B8), medial lemniscus (B9), isthmic periaqueductal grey (B4?)"
-78,HBSER2,"Serotonergic neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT3),Serotonin",Remaining heterogeneity for Nitric oxide,Cholinergic and monoaminergic neurons,"Nucleus raphe Pons (B5, B6)"
-79,HBSER3,"Serotonergic neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT3),GABA,Serotonin",Remaining heterogeneity for VGLUT3,Cholinergic and monoaminergic neurons,"Ventral midbrain, rostral pons"
-80,HBSER5,"Serotonergic neurons, hindbrain",Pons,Rhombencephalon,"GABA,Serotonin",,Cholinergic and monoaminergic neurons,"Nucleus raphe pons (pallidus, oscurus, magnus, B1-3)"
-81,HBSER4,"Serotonergic neurons, hindbrain",Medulla,Rhombencephalon,"Glutamate (VGLUT3),Serotonin",Remaining heterogeneity for Acetylcholine,Cholinergic and monoaminergic neurons,"Nucleus raphe medulla (pallidus, oscurus, magnus, B1-3)"
-82,TEINH3,"Inhibitory neurons, telencephalon",Pallidum,Telencephalon,GABA,,Peptidergic neurons,Bed nuclei of the stria terminalis posterior division 
-83,TEINH2,"Inhibitory neurons, septal nucleus","Striatum dorsal, Striatum ventral",Telencephalon,GABA,,Peptidergic neurons,Septal nucleus
-84,DEINH4,"Inhibitory neurons, thalamus",Thalamus,Diencephalon,"GABA,Nitric oxide",,Peptidergic neurons,Paraventricular nucleus of the thalamus (best fit) but do not fit with Nmu expression
-85,DEINH5,"Peptidergic neurons, hypothalamus",Hypothalamus,Diencephalon,GABA,,Peptidergic neurons,"Medial preoptic nucleus, Bed nuclei of the stria terminalis anterior division"
-86,HYPEP3,"Peptidergic neurons, hypothalamus",Hypothalamus,Diencephalon,"Glutamate (VGLUT2),Nitric oxide",Trinarization detects GABA,Peptidergic neurons,Ventromedial hypothalamic nucleus
-87,HYPEP1,"Peptidergic neurons, hypothalamus",Hypothalamus,Diencephalon,Glutamate (VGLUT2),Remaining heterogeneity for Nitric oxide,Peptidergic neurons,Lateral hypothalamic area
-88,HYPEP2,"Peptidergic neurons, hypothalamus",Hypothalamus,Diencephalon,"Glutamate (VGLUT2),Nitric oxide",Remaining heterogeneity for VGLUT2,Peptidergic neurons,Paraventricular hypothalamic nucleus
-89,MEINH14,"Inhibitory neurons, midbrain",Midbrain ventral,Mesencephalon,GABA,,Peptidergic neurons,"Midbrain reticular nucleus, Darkschewitz nucleus,"
-90,DEINH6,"Peptidergic neurons, hypothalamus",Hypothalamus,Diencephalon,GABA,,Peptidergic neurons,"Arcuate hypothalamic nucleus (probably, Npy, Agrp cells)"
-91,DEINH8,"Inhibitory neurons, hypothalamus",Hypothalamus,Diencephalon,GABA,,Peptidergic neurons,"Suprachiasmatic nucleus, Medial preoptic nucleus"
-92,DEINH7,"Inhibitory neurons, hypothalamus",Hypothalamus,Diencephalon,GABA,,Peptidergic neurons,"Suprachiasmatic nucleus, Medial preoptic nucleus"
-93,HYPEP5,"Vasopressin-producing cells, hypothalamus",Hypothalamus,Diencephalon,Glutamate (VGLUT2),,Peptidergic neurons,Paraventricular hypothalamic nucleus magnocellular division and/or Diagonal band nucleus
-94,HYPEP4,"Oxytocin-producing cells, hypothalamus",Hypothalamus,Diencephalon,"Glutamate (VGLUT2),Nitric oxide",,Peptidergic neurons,Dorsomedial nucleus of the hypothalamus. magnocellular neurosecretory cells.
-95,HYPEP8,"Peptidergic neurons, hypothalamus",Hypothalamus,Diencephalon,Glutamate (VGLUT2),,Peptidergic neurons,Anteroventral periventricular continue along midline to Medial septal nucleus
-96,SCINH11,"Central canal neurons, spinal cord",Spinal cord,Spinal cord,GABA,,Peptidergic neurons,Spinal Cord central canal
-97,SCINH10,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,"GABA,Glycine,Nitric oxide",Remaining heterogeneity for Glycine,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-6"
-98,SCINH9,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,"GABA,Glycine",Remaining heterogeneity for Nitric oxide,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-6"
-99,SCINH8,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,GABA,,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-6"
-100,SCINH7,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,GABA,,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-6"
-101,SCINH6,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,GABA,,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-4"
-102,SCINH5,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,"GABA,Glycine",,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-6"
-103,SCINH4,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,GABA,,Spinal cord inhibitory neurons,"Dorsal horn, lamina 3-6"
-104,SCINH3,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,"GABA,Glycine",,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-6"
-105,HBINH9,"Inhibitory neurons, hindbrain",Medulla,Rhombencephalon,"GABA,Glycine",Remaining heterogeneity for Nitric oxide,Spinal cord inhibitory neurons,Paragigantocellular reticular nucleus
-106,SCINH2,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,"GABA,Glycine",Trinarization detects VGLUT2,Spinal cord inhibitory neurons,"Dorsal horn, lamina 2-6"
-107,SCGLU1,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Dorsal horn lamina 4-6
-108,SCGLU2,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Dorsal horn lamina 4-6
-109,SCGLU3,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Dorsal horn lamina 1-3
-110,SCGLU4,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,"Glutamate (VGLUT2),Nitric oxide",,Spinal cord excitatory neurons,Dorsal horn lamina 2-3
-111,SCGLU5,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,"Dorsal horn, lamina 2-3"
-112,SCGLU6,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Dorsal horn lamina 1-2
-113,SCGLU7,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Dorsal horn lamina 2-5
-114,SCGLU8,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),Neurotransmitter assigned manually,Spinal cord excitatory neurons,Dorsal horn lamina 2-5
-115,SCGLU9,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Dorsal horn lamina 3
-116,SCGLU10,"Excitatory neurons, spinal cord",Spinal cord,Spinal cord,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Dorsal horn lamina 2-4
-117,HBGLU10,"Excitatory neurons, hindbrain",Medulla,Rhombencephalon,Glutamate (VGLUT2),,Spinal cord excitatory neurons,Nucleus of the solitary tract
-118,HBGLU3,"Excitatory neurons, hindbrain",Medulla,Rhombencephalon,"Glutamate (VGLUT2),Nitric oxide",Remaining heterogeneity for Nitric oxide,Di- and mesencephalon excitatory neurons,Nucleus of the solitary tract
-119,HBGLU2,"Excitatory neurons, hindbrain",Medulla,Rhombencephalon,"Glutamate (VGLUT2),Nitric oxide",,Di- and mesencephalon excitatory neurons,Nucleus of the solitary tract
-120,MEGLU2,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,Periaqueductal grey
-121,MEGLU3,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,Periaqueductal grey
-122,DEGLU5,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,Anterior pretectal nucleus
-123,MEGLU1,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),Remaining heterogeneity for Nitric oxide,Di- and mesencephalon excitatory neurons,"Superior colliculus, red nucleus"
-124,MEGLU7,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,Inferior colliculus
-125,MEGLU8,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,"Glutamate (VGLUT2),Nitric oxide",,Di- and mesencephalon excitatory neurons,Inferior colliculus
-126,MEGLU9,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,"Glutamate (VGLUT2),Nitric oxide",Further split possible based on Th,Di- and mesencephalon excitatory neurons,Mantle of inferior colliculus
-127,MEGLU10,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,"Glutamate (VGLUT2),Nitric oxide",,Di- and mesencephalon excitatory neurons,Inferior colliculus
-128,MEGLU11,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,Inferior colliculus
-129,MBCHO1,"Cholinergic neurons, midbrain red nucleus",Midbrain ventral,Mesencephalon,"Glutamate (VGLUT2),Acetylcholine",,Di- and mesencephalon excitatory neurons,Red nucleus
-130,MEGLU6,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,"Superior colliculus, sensory related, deep layer"
-131,MEGLU5,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,"Superior colliculus, sensory related"
-132,MEGLU4,"Excitatory neurons, midbrain",Midbrain dorsal,Mesencephalon,"Glutamate (VGLUT2),Nitric oxide",,Di- and mesencephalon excitatory neurons,"Superior colliculus, sensory related"
-133,CR,"Cajal-Retzius cells, hippocampus",Dentate gyrus,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Di- and mesencephalon excitatory neurons,Dentate gyrus molecular layer
-134,DECHO2,"Cholinergic neurons, habenula",Thalamus,Diencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Acetylcholine","Further split possible based on Acetylcholine, Th",Di- and mesencephalon excitatory neurons,Habenula
-135,HBGLU1,"Excitatory neurons, hindbrain",Medulla,Rhombencephalon,"Glutamate (VGLUT2),Glutamate (VGLUT3)",,Di- and mesencephalon excitatory neurons,Inferior olivary complex
-136,DEGLU1,"Excitatory neurons, thalamus",Thalamus,Diencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Di- and mesencephalon excitatory neurons,Posterior thalamus
-137,DEGLU2,"Excitatory neurons, hypothalamus",Hypothalamus,Diencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Further split possible based on VGLUT1,Di- and mesencephalon excitatory neurons,Subparafascicular nucleus
-138,DEGLU3,"Excitatory neurons, thalamus",Thalamus,Diencephalon,Glutamate (VGLUT2),,Di- and mesencephalon excitatory neurons,Paraventricular nucleus of the thalamus
-139,DEGLU4,"Excitatory neurons, thalamus",Thalamus,Diencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Di- and mesencephalon excitatory neurons,Parafascicular nucleus
-140,MEINH12,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,GABA,,Di- and mesencephalon inhibitory neurons,Superior colliculus
-141,MEINH11,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,"GABA,Nitric oxide",,Di- and mesencephalon inhibitory neurons,Superior colliculus superficial gray layer
-142,MEINH10,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,"GABA,Nitric oxide",,Di- and mesencephalon inhibitory neurons,Superior colliculus superficial grey layer
-143,MEINH9,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,GABA,Remaining heterogeneity for Nitric oxide,Di- and mesencephalon inhibitory neurons,Dorsal midbrain scattered
-144,MEINH5,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,GABA,,Di- and mesencephalon inhibitory neurons,Superior colliculus (sparse)
-145,MEINH6,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,GABA,Trinarization detects VGLUT2,Di- and mesencephalon inhibitory neurons,Superior colliculus
-146,MEINH7,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,GABA,,Di- and mesencephalon inhibitory neurons,Superior colliculus
-147,MEINH4,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,"GABA,Nitric oxide",,Di- and mesencephalon inhibitory neurons,Anterior pretectal nucleus
-148,MEINH3,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,GABA,,Di- and mesencephalon inhibitory neurons,"Dorsal midbrain, medial geniculate nucleus, anteroventral midbrain"
-149,HBINH5,"Inhibitory neurons, hindbrain",Medulla,Rhombencephalon,"GABA,Glycine",,Di- and mesencephalon inhibitory neurons,Gigantocellular reticular nucleus
-150,MEINH2,"Inhibitory neurons, midbrain","Midbrain dorsal,Midbrain ventral",Mesencephalon,GABA,,Di- and mesencephalon inhibitory neurons,Midbrain
-151,DEINH3,"Inhibitory neurons, hypothalamus",Hypothalamus,Diencephalon,GABA,,Di- and mesencephalon inhibitory neurons,Subthalamic nucleus
-152,TEINH1,"Inhibitory neurons, pallidum",Pallidum,Telencephalon,GABA,,Di- and mesencephalon inhibitory neurons,Medial septal nucleus and Magnocellular nucleus
-153,MEINH13,"Inhibitory neurons, midbrain",Midbrain ventral,Mesencephalon,GABA,,Di- and mesencephalon inhibitory neurons,"Ventral/caudal midbrain (SN, VTA, reticular nucleus)"
-154,MEINH8,"Inhibitory neurons, midbrain",Midbrain dorsal,Mesencephalon,GABA,Remaining heterogeneity for Nitric oxide,Di- and mesencephalon inhibitory neurons,"Superior colliculus superficial grey layer; Erdinger-Westphal nucleus, periaqueductal grey, nucleus of the optic tract"
-155,HBINH1,"Inhibitory neurons, hindbrain",Pons,Rhombencephalon,"GABA,Nitric oxide",,Di- and mesencephalon inhibitory neurons,"Pons, interpeduncular and tegmental nuclei in rh1"
-156,HBINH3,"Inhibitory neurons, hindbrain",Medulla,Rhombencephalon,"GABA,Glycine",Remaining heterogeneity for Nitric oxide,Hindbrain neurons,Paragigantocellular reticular nucleus
-157,HBINH4,"Inhibitory neurons, hindbrain",Medulla,Rhombencephalon,"GABA,Glycine",Remaining heterogeneity for Nitric oxide,Hindbrain neurons,Paragigantocellular reticular nucleus
-158,HBINH6,"Inhibitory neurons, hindbrain",Pons,Rhombencephalon,"GABA,Glycine","Further split possible, Remaining heterogeneity for Nitric oxide, Trinarization detects Acetylcholine",Hindbrain neurons,Koelliker-Fuse subnucleus
-159,HBINH2,"Inhibitory neurons, hindbrain",Medulla,Rhombencephalon,"GABA,Glycine,Acetylcholine,Nitric oxide",Remaining heterogeneity for Acetylcholine,Hindbrain neurons,Nucleus of the solitary tract
-160,HBCHO1,"Cholinergic neurons, hindbrain",Medulla,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Acetylcholine",,Hindbrain neurons,Medulla (several nuclei)
-161,HBCHO2,"Cholinergic neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Acetylcholine,Nitric oxide",Trinarization detects Serotonin,Hindbrain neurons,"Medial pontine nuclei, reticulotegmental nuclei"
-162,HBGLU4,"Excitatory neurons, hindbrain",Medulla,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Hindbrain neurons,Medial vestibular nucleus and Nucleus prepositus
-163,HBGLU5,"Excitatory neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Nitric oxide",,Hindbrain neurons,"Pontine reticular nucleus, caudal part"
-164,HBGLU6,"Excitatory neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Nitric oxide",Further split possible ,Hindbrain neurons,Pontine gray
-165,HBGLU7,"Excitatory neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Nitric oxide",,Hindbrain neurons,Tegmental reticular nucleus
-166,HBGLU8,"Excitatory neurons, hindbrain",Pons,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2),Nitric oxide",,Hindbrain neurons,Tegmental reticular nucleus
-167,HBGLU9,"Excitatory neurons, hindbrain",Medulla,Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)","Further split possible, Remaining heterogeneity for Nitric oxide",Hindbrain neurons,Spinal nucleus of the trigeminal 
-168,HBINH7,"Inhibitory neurons, hindbrain",Pons,Rhombencephalon,"GABA,Glycine",Further split possible based on Nitric oxide,Hindbrain neurons,Superior olivary complex
-169,HBINH8,"Inhibitory neurons, hindbrain",Medulla,Rhombencephalon,"GABA,Glycine",,Hindbrain neurons,Spinal nucleus of the trigeminal 
-170,SCINH1,"Inhibitory neurons, spinal cord",Spinal cord,Spinal cord,"GABA,Glycine",,Hindbrain neurons,"Dorsal horn, lamina 2-3,6"
-171,CBINH2,"Granular layer interneurons, cerebellum",Cerebellum,Rhombencephalon,"GABA,Glycine",,Cerebellum neurons,"Cerebellum, granular layer"
-172,MEINH1,"Inhibitory neurons, midbrain",Midbrain ventral,Mesencephalon,"GABA,Nitric oxide",,Cerebellum neurons,"VTA, Substantia nigra, central nucleus raphe"
-173,CBINH1,"Molecular layer interneurons, cerebellum",Cerebellum,Rhombencephalon,"GABA,Nitric oxide",,Cerebellum neurons,"Cerebellum, molecular layer"
-174,CBPC,Purkinje cells,Cerebellum,Rhombencephalon,GABA,Trinarization detects VGLUT1,Cerebellum neurons,"Cerebellum, border of granular layer and molecular layer"
-175,CBGRC,"Granule neurons, cerebellum",Cerebellum,Rhombencephalon,Glutamate (VGLUT1),,Cerebellum neurons,Cerebellum
-176,CBNBL2,"Neuroblasts, cerebellum",Cerebellum,Rhombencephalon,Glutamate (VGLUT1),,Cerebellum neurons,Cerabellum
-177,CBNBL1,"Neuroblasts, cerebellum","Pons,Medullae,Cerebellum",Rhombencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Glutamatergic neuroblasts,"Hindbrain (pons, medulla cerabellum)"
-178,SEPNBL,"Neuroblasts, septum",Pallidum,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Glutamatergic neuroblasts,Triangular nucleus of septum
-179,OBNBL1,"Neuroblasts, olfactory",Olfactory bulb,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Glutamatergic neuroblasts,"Main olfactory bulb mitral layer, Main olfactory bulb outer plexiform layer"
-180,OBNBL2,"Neuroblasts, olfactory bulb",Olfactory bulb,Telencephalon,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Remaining heterogeneity for VGLUT1,Glutamatergic neuroblasts,"Main olfactory bulb mitral layer, Main olfactory bulb outer plexiform layer"
-181,ENT1,Nitrergic enteric neurons,Enteric nervous system,Neural crest,"Acetylcholine,Nitric oxide",,Enteric neurons,Myenteric plexus of small intestine
-182,ENT2,Nitrergic enteric neurons,Enteric nervous system,Neural crest,Nitric oxide,,Enteric neurons,Myenteric plexus of small intestine
-183,ENT3,Nitrergic enteric neurons,Enteric nervous system,Neural crest,Nitric oxide,,Enteric neurons,Myenteric plexus of small intestine
-184,ENT4,Cholinergic enteric neurons,Enteric nervous system,Neural crest,Acetylcholine,,Enteric neurons,Myenteric plexus of small intestine
-185,ENT5,Cholinergic enteric neurons,Enteric nervous system,Neural crest,Acetylcholine,,Enteric neurons,Myenteric plexus of small intestine
-186,ENT6,Cholinergic enteric neurons,Enteric nervous system,Neural crest,Acetylcholine,,Enteric neurons,Myenteric plexus of small intestine
-187,ENT7,"Cholinergic enteric neurons, VGLUT2",Enteric nervous system,Neural crest,"Glutamate (VGLUT2),Acetylcholine",Remaining heterogeneity for Dopamine,Enteric neurons,Myenteric plexus of small intestine
-188,ENT8,"Cholinergic enteric neurons, VGLUT2",Enteric nervous system,Neural crest,"Glutamate (VGLUT2),Acetylcholine",,Enteric neurons,Myenteric plexus of small intestine
-189,ENT9,Cholinergic enteric neurons,Enteric nervous system,Neural crest,Acetylcholine,,Enteric neurons,Myenteric plexus of small intestine
-190,SYNOR1,Noradrenergic erector muscle neurons,Sympathetic ganglion,Neural crest,Noradrenaline,,Sympathetic noradrenergic neurons,Sympathetic ganglion
-191,SYNOR2,"Noradrenergic neurons, sympathetic",Sympathetic ganglion,Neural crest,Noradrenaline,,Sympathetic noradrenergic neurons,Sympathetic ganglion
-192,SYNOR3,"Noradrenergic neurons, sympathetic",Sympathetic ganglion,Neural crest,Noradrenaline,,Sympathetic noradrenergic neurons,Sympathetic ganglion
-193,SYNOR4,Noradrenergic erector muscle neurons,Sympathetic ganglion,Neural crest,Noradrenaline,,Sympathetic noradrenergic neurons,Sympathetic ganglion
-194,SYNOR5,Noradrenergic erector muscle neurons,Sympathetic ganglion,Neural crest,Noradrenaline,,Sympathetic noradrenergic neurons,Sympathetic ganglion
-195,SYCHO2,"Cholinergic neurons, sympathetic",Sympathetic ganglion,Neural crest,"Acetylcholine,Noradrenaline",,Sympathetic cholinergic neurons,Sympathetic ganglion
-196,SYCHO1,"Cholinergic neurons, sympathetic",Sympathetic ganglion,Neural crest,"Acetylcholine,Noradrenaline",,Sympathetic cholinergic neurons,Sympathetic ganglion
-197,PSPEP8,"Peptidergic (TrpM8), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-198,PSPEP7,"Peptidergic (TrpM8), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-199,PSPEP6,"Peptidergic (TrpM8), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-200,PSPEP5,"Peptidergic (PEP1.2), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-201,PSPEP2,"Peptidergic (PEP1.3), DRG",Dorsal root ganglion,Neural crest,"Glutamate (VGLUT2),Nitric oxide",,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-202,PSPEP4,"Peptidergic (PEP1.1), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-203,PSPEP3,"Peptidergic (PEP1..4), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-204,PSPEP1,"Peptidergicv (PEP2), DRG",Dorsal root ganglion,Neural crest,"Glutamate (VGLUT1),Glutamate (VGLUT2),Nitric oxide",Remaining heterogeneity for VGLUT1,Peripheral sensory peptidergic neurons,Dorsal root ganglion
-205,PSNF3,"Neurofilament (NF2/3), DRG",Dorsal root ganglion,Neural crest,"Glutamate (VGLUT1),Glutamate (VGLUT2)",,Peripheral sensory neurofilament neurons,Dorsal root ganglion
-206,PSNF2,"Neurofilament (NF4/5), DRG",Dorsal root ganglion,Neural crest,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Remaining heterogeneity for Nitric oxide,Peripheral sensory neurofilament neurons,Dorsal root ganglion
-207,PSNF1,"Neurofilament (NF1), DRG",Dorsal root ganglion,Neural crest,"Glutamate (VGLUT1),Glutamate (VGLUT2)",Remaining heterogeneity for Nitric oxide,Peripheral sensory neurofilament neurons,Dorsal root ganglion
-208,PSNP1,"Non-peptidergic (TH), DRG",Dorsal root ganglion,Neural crest,"Glutamate (VGLUT2),Glutamate (VGLUT3)",,Peripheral sensory non-peptidergic neurons,Dorsal root ganglion
-209,PSNP2,"Non-peptidergic (NP1.1), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory non-peptidergic neurons,Dorsal root ganglion
-210,PSNP3,"Non-peptidergic (NP1.2), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory non-peptidergic neurons,Dorsal root ganglion
-211,PSNP4,"Non-peptidergic (NP2.1), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory non-peptidergic neurons,Dorsal root ganglion
-212,PSNP5,"Non-peptidergic (NP2.2), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory non-peptidergic neurons,Dorsal root ganglion
-213,PSNP6,"Non-peptidergic (NP3), DRG",Dorsal root ganglion,Neural crest,Glutamate (VGLUT2),,Peripheral sensory non-peptidergic neurons,Dorsal root ganglion
-214,COP1,Committed oligodendrocytes cells (COP),CNS,CNS,,,Oligodendrocytes,CNS
-215,COP2,"Committed oligodendrocytes cells (COP), pons/medulla specific",CNS,CNS,,,Oligodendrocytes,Pons/medulla (possible batch effect)
-216,NFOL2,"Newly formed oligodendrocytes (NFOL), pons/medulla specific",CNS,CNS,,,Oligodendrocytes,Pons/medulla (possible batch effect)
-217,NFOL1,Newly formed oligodendrocytes (NFOL),CNS,CNS,,,Oligodendrocytes,CNS
-218,MFOL2,Myelin forming oligodendrocytes (MFOL),CNS,CNS,,,Oligodendrocytes,CNS
-219,MFOL1,Myelin forming oligodendrocytes (MFOL),CNS,CNS,,,Oligodendrocytes,Pons/medulla (possible batch effect)
-220,MOL1,Mature oligodendrocytes,CNS,CNS,,,Oligodendrocytes,CNS
-221,MOL2,"Mature oligodendrocytes, hindbrain",CNS,CNS,,,Oligodendrocytes,Pons/medulla (possible batch effect)
-222,MOL3,"Mature oligodendrocytes, spinal cord enriched (high Klk6)",CNS,CNS,,,Oligodendrocytes,Spinal cord-enriched
-223,CHOR,Chorid plexus epithelial cells,"Medulla,Thalamus",CNS,,,Choroid epithelial cells,"Medulla,Thalamus"
-224,HYPEN,"Hypendymal cell, subcommissural organ",Subcommissural organ,CNS,,,Subcommissural organ hypendymal cells,Subcommissural organ
-225,EPSC,"Ependymal cells, spinal cord",Spinal cord,CNS,,,Ependymal cells,Spinal cord
-226,EPEN,Ependymal cells,Brain,CNS,,,Ependymal cells,Brain
-227,EPMB,"Ependymal cells, midbrain",Midbrain dorsal,Mesencephalon,,,Ependymal cells,Dorsal midbrain pia
-228,RGDG,Dentate gyrus radial glia-like cells,Dentate gyrus,Telencephalon,,,Dentate gyrus radial glia-like cells,Dentate gyrus subgranular zone
-229,RGSZ,Subventricular zone radial glia-like cells,"Striatum dorsal,Striatum ventral",Telencephalon,,,Subventricular zone radial glia-like cells,"Striatum, rostral migragtory stream, olfactory bulb"
-230,ACTE1,"Telencephalon astrocytes, fibrous",Telencephalon,Telencephalon,,,Astrocytes,Telencephalon
-231,ACTE2,"Telencephalon astrocytes, protoplasmic",Telencephalon,Telencephalon,,,Astrocytes,Telencephalon
-232,ACOB,Olfactory astrocytes,Olfactory bulb,Telencephalon,,,Astrocytes,Olfactory bulb periglomerular layer
-233,ACNT1,"Non-telencephalon astrocytes, protoplasmic","Hypothalamus,Thalamus,Midbrain dorsal,Midbrain ventral,Pons,Medulla,Spinal cord","Diencephalon,Mesencephalon,Rhombencephalon,Spinal cord",,,Astrocytes,Non-telencephalon
-234,ACNT2,"Non-telencephalon astrocytes, fibrous","Hypothalamus,Thalamus,Midbrain dorsal,Midbrain ventral,Pons,Medulla,Spinal cord","Diencephalon,Mesencephalon,Rhombencephalon,Spinal cord",,,Astrocytes,Non-telencephalon
-235,ACMB,Dorsal midbrain Myoc-expressing astrocyte-like,Midbrain dorsal,Mesencephalon,,,Astrocytes,Dorsal midbrain
-236,ACBG,Bergmann glia,Cerebellum,Rhombencephalon,,,Astrocytes,Cerebellum
-237,OEC,Olfactory ensheathing cells,Olfactory bulb,Neural crest,,,Olfactory ensheathing cells,Olfactory bulb
-238,OPC,Oligodendrocytes precursor cells,CNS,CNS,,,Oligodendrocyte precursor cells,CNS
-239,SCHW,Schwann cells,Dorsal root ganglion,Neural crest,,,Schwann cells,Dorsal root ganglion
-240,SATG2,Satellite glia,"Dorsal root ganglion,Sympathetic ganglion",Neural crest,,,Satellite glia,"Dorsal root ganglion,Sympathetic ganglion"
-241,SATG1,"Satellite glia, proliferating",Dorsal root ganglion,Neural crest,,,Satellite glia,Dorsal root ganglion
-242,ENTG1,"Enteric glia, proliferating",Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-243,ENTG2,Enteric glia,Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-244,ENTG3,Enteric glia,Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-245,ENTG4,Enteric glia,Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-246,ENTG5,Enteric glia,Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-247,ENTG6,Enteric glia,Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-248,ENTG7,Enteric glia,Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-249,ENMFB,Enteric mesothelial fibroblasts,Enteric nervous system,Neural crest,,,Enteric glia,Enteric nervous system
-250,ABC,Vascular leptomeningeal cells,CNS,Neural crest,,,Vascular and leptomeningeal cells,Pia/meninges surface
-251,VLMC2,Vascular leptomeningeal cells,CNS,Neural crest,,,Vascular and leptomeningeal cells,Olfactory bulb-enriched
-252,VLMC1,Vascular leptomeningeal cells,CNS,Neural crest,,,Vascular and leptomeningeal cells,CNS
-253,VECA,"Vascular endothelial cells, arterial",CNS,Mesoderm,,,Vascular smooth muscle cells,CNS
-254,PER3,Pericytes,CNS,Mesoderm,,,Vascular smooth muscle cells,CNS
-255,VSMCA,"Vascular smooth muscle cells, arterial",CNS,Mesoderm,,,Vascular smooth muscle cells,CNS
-256,PER1,Pericytes,CNS,Mesoderm,,,Pericytes,CNS
-257,PER2,"Pericytes, possibly mixed with VENC",CNS,Mesoderm,,,Pericytes,CNS
-258,VECC,"Vascular endothelial cells, capillary",CNS,Mesoderm,,,Vascular endothelial cells,CNS
-259,VECV,"Vascular endothelial cells, venous",CNS,Mesoderm,,,Vascular endothelial cells,CNS
-260,PVM1,Perivascular macrophages,CNS,Mesoderm,,,Perivascular macrophages,CNS
-261,PVM2,"Perivascular macrophages, activated",CNS,Mesoderm,,,Perivascular macrophages,CNS
-262,MGL3,"Microglia, activated",CNS,Mesoderm,,,Microglia,CNS
-263,MGL2,"Microglia, activated",CNS,Mesoderm,,,Microglia,CNS
-264,MGL1,Microglia,CNS,Mesoderm,,,Microglia,CNS
+﻿Dendrogram order_table_s3,ClusterName
+0,TEGLU1
+1,TEGLU3
+2,TEGLU2
+3,TEGLU20
+4,TEGLU11
+5,TEGLU12
+6,TEGLU10
+7,TEGLU9
+8,TEGLU8
+9,TEGLU7
+10,TEGLU6
+11,TEGLU13
+12,TEGLU14
+13,TEGLU5
+14,TEGLU16
+15,TEGLU15
+16,TEGLU17
+17,TEGLU18
+18,TEGLU19
+19,TEGLU22
+20,TEGLU21
+21,TEGLU4
+22,TEGLU24
+23,TEGLU23
+24,DGGRC1
+25,DGGRC2
+26,MSN1
+27,MSN2
+28,MSN3
+29,MSN4
+30,MSN5
+31,MSN6
+32,DETPH
+33,DGNBL2
+34,DGNBL1
+35,SZNBL
+36,OBNBL3
+37,OBINH1
+38,OBINH5
+39,OBINH2
+40,OBINH3
+41,OBINH4
+42,OBNBL4
+43,OBNBL5
+44,OBDOP
+45,OBINH6
+46,DEINH1
+47,DEINH2
+48,TEINH17
+49,TEINH18
+50,TEINH19
+51,TEINH21
+52,TEINH16
+53,TEINH15
+54,TEINH14
+55,TEINH20
+56,TEINH13
+57,TEINH12
+58,TEINH9
+59,TEINH10
+60,TEINH11
+61,TEINH4
+62,TEINH5
+63,TEINH8
+64,TEINH7
+65,TEINH6
+66,TECHO
+67,DECHO1
+68,HBCHO4
+69,HBCHO3
+70,HBADR
+71,HBNOR
+72,HYPEP7
+73,HYPEP6
+74,MEGLU14
+75,MBDOP1
+76,MBDOP2
+77,HBSER1
+78,HBSER2
+79,HBSER3
+80,HBSER5
+81,HBSER4
+82,TEINH3
+83,TEINH2
+84,DEINH4
+85,DEINH5
+86,HYPEP3
+87,HYPEP1
+88,HYPEP2
+89,MEINH14
+90,DEINH6
+91,DEINH8
+92,DEINH7
+93,HYPEP5
+94,HYPEP4
+95,HYPEP8
+96,SCINH11
+97,SCINH10
+98,SCINH9
+99,SCINH8
+100,SCINH7
+101,SCINH6
+102,SCINH5
+103,SCINH4
+104,SCINH3
+105,HBINH9
+106,SCINH2
+107,SCGLU1
+108,SCGLU2
+109,SCGLU3
+110,SCGLU4
+111,SCGLU5
+112,SCGLU6
+113,SCGLU7
+114,SCGLU8
+115,SCGLU9
+116,SCGLU10
+117,HBGLU10
+118,HBGLU3
+119,HBGLU2
+120,MEGLU2
+121,MEGLU3
+122,DEGLU5
+123,MEGLU1
+124,MEGLU7
+125,MEGLU8
+126,MEGLU9
+127,MEGLU10
+128,MEGLU11
+129,MBCHO1
+130,MEGLU6
+131,MEGLU5
+132,MEGLU4
+133,CR
+134,DECHO2
+135,HBGLU1
+136,DEGLU1
+137,DEGLU2
+138,DEGLU3
+139,DEGLU4
+140,MEINH12
+141,MEINH11
+142,MEINH10
+143,MEINH9
+144,MEINH5
+145,MEINH6
+146,MEINH7
+147,MEINH4
+148,MEINH3
+149,HBINH5
+150,MEINH2
+151,DEINH3
+152,TEINH1
+153,MEINH13
+154,MEINH8
+155,HBINH1
+156,HBINH3
+157,HBINH4
+158,HBINH6
+159,HBINH2
+160,HBCHO1
+161,HBCHO2
+162,HBGLU4
+163,HBGLU5
+164,HBGLU6
+165,HBGLU7
+166,HBGLU8
+167,HBGLU9
+168,HBINH7
+169,HBINH8
+170,SCINH1
+171,CBINH2
+172,MEINH1
+173,CBINH1
+174,CBPC
+175,CBGRC
+176,CBNBL2
+177,CBNBL1
+178,SEPNBL
+179,OBNBL1
+180,OBNBL2
+181,ENT1
+182,ENT2
+183,ENT3
+184,ENT4
+185,ENT5
+186,ENT6
+187,ENT7
+188,ENT8
+189,ENT9
+190,SYNOR1
+191,SYNOR2
+192,SYNOR3
+193,SYNOR4
+194,SYNOR5
+195,SYCHO2
+196,SYCHO1
+197,PSPEP8
+198,PSPEP7
+199,PSPEP6
+200,PSPEP5
+201,PSPEP2
+202,PSPEP4
+203,PSPEP3
+204,PSPEP1
+205,PSNF3
+206,PSNF2
+207,PSNF1
+208,PSNP1
+209,PSNP2
+210,PSNP3
+211,PSNP4
+212,PSNP5
+213,PSNP6
+214,COP1
+215,COP2
+216,NFOL2
+217,NFOL1
+218,MFOL2
+219,MFOL1
+220,MOL1
+221,MOL2
+222,MOL3
+223,CHOR
+224,HYPEN
+225,EPSC
+226,EPEN
+227,EPMB
+228,RGDG
+229,RGSZ
+230,ACTE1
+231,ACTE2
+232,ACOB
+233,ACNT1
+234,ACNT2
+235,ACMB
+236,ACBG
+237,OEC
+238,OPC
+239,SCHW
+240,SATG2
+241,SATG1
+242,ENTG1
+243,ENTG2
+244,ENTG3
+245,ENTG4
+246,ENTG5
+247,ENTG6
+248,ENTG7
+249,ENMFB
+250,ABC
+251,VLMC2
+252,VLMC1
+253,VECA
+254,PER3
+255,VSMCA
+256,PER1
+257,PER2
+258,VECC
+259,VECV
+260,PVM1
+261,PVM2
+262,MGL3
+263,MGL2
+264,MGL1

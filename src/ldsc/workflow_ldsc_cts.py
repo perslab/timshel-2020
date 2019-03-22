@@ -244,18 +244,20 @@ PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2
 
 PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 FLAG_UNBUFFERED = True
-N_PARALLEL_LDSC_REGRESSION_JOBS = 3
+N_PARALLEL_LDSC_REGRESSION_JOBS = 1
 # FLAG_BINARY = True
 FLAG_BINARY = False
 
 
-list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
+# list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 
 # list_gwas = ["BMI_UKBB_Loh2018_no_mhc_max_chisq_80",
 # "BMI_UKBB_Loh2018_no_mhc_max_chisq_720",
 # "BMI_UPDATE_Yengo2018_no_mhc_max_chisq_720",
 # "BMI_UPDATE_Yengo2018_no_mhc_max_chisq_80"]
 
+
+list_gwas = ["1KG_phase3_EUR_null_gwas_P{}".format(x) for x in range(1,11)] # 1..10
 
 # list_gwas = ["ADHD_PGC_Demontis2017",
 # "AD_Jansen2019",
@@ -335,10 +337,10 @@ FLAG_WGCNA = False
 
 
 ### Mean MB [mousebrain_all_190306_es_fix]
-dict_genomic_annot = {"celltypes.mousebrain_190306_es_fix.all":
-						{"dataset":"mousebrain",
-						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_190306_es_fix.txt.gz"},
- 					 }
+# dict_genomic_annot = {"celltypes.mousebrain_190306_es_fix.all":
+# 						{"dataset":"mousebrain",
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_190306_es_fix.txt.gz"},
+#  					 }
 
 
 ### Mousebrain hierarchical (11 FDR cell-types + neurons)
@@ -360,7 +362,13 @@ dict_genomic_annot = {"celltypes.mousebrain_190306_es_fix.all":
 #  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch_pc2_quantile.sem_mean.txt.gz"}
 #  					 }
 
-# ### Mean MB+TB
+# ### Mean TM ONLY [for null]
+dict_genomic_annot = {"celltypes.tabula_muris.all":
+ 					  	{"dataset":"tabula_muris",
+ 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+ 					 }
+
+# # ### Mean MB+TM
 # dict_genomic_annot = {"celltypes.mousebrain.all":
 # 						{"dataset":"mousebrain",
 # 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},

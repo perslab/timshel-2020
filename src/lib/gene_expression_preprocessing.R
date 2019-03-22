@@ -1316,7 +1316,7 @@ mouse_to_human_ortholog_gene_mapping <- function(gene_ids, type_mouse_gene_ids) 
 
 
 ######################################################################################################
-######################## mouse_to_human_ortholog_gene_expression_mapping [DATA FRAME INPUT] #############################
+############ mouse_to_human_ortholog_gene_expression_mapping [DATA FRAME INPUT] ######################
 ######################################################################################################
 # Funtion to do ortholog mapping: map mouse genes to human
 
@@ -1446,6 +1446,38 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr, type_mouse_
   return(df.expr.ens.human)
   
 }  
+
+
+
+######################################################################################################
+############ mouse_to_human_ortholog_gene_expression_mapping [DATA FRAME INPUT] ######################
+######################################################################################################
+### THIS FUNCTION IS NOT USED VERY MUCH. [But it is still helpful.]
+
+### Map:  HUMAN --> MOUSE
+human_to_mouse_ortholog_gene_expression_mapping <- function(df, colname_geneids_from="ensembl_gene_id", colname_geneids_to="mmusculus_homolog_ensembl_gene") {
+  ### INPUT df: a tibble/data.frame with the column 'colname_geneids_from' with human ensembl gene ids.
+  ### OUTOUT df: a tibble with MOUSE ensembl gene ids added to the column 'colname_geneids_to'. Genes that did not map have NA values.
+  
+  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
+  df.mapping <- suppressMessages(read_delim(file.mapping, delim="\t"))
+  # ensembl_gene_id chromosome_name start_position  end_position    mmusculus_homolog_ensembl_gene  mmusculus_homolog_orthology_confidence
+  # ENSG00000138593 15      49280673        49338760        ENSMUSG00000035093      1
+  # ENSG00000166351 21      14982498        15013906        ENSMUSG00000095294      0
+  df <- as.data.frame(df) # convert to df to ensure the the below operations work.
+  genes_mapped <- df.mapping$mmusculus_homolog_ensembl_gene[match(df[,colname_geneids_from], df.mapping$ensembl_gene_id)]
+  bool_dups <- duplicated(na.omit(genes_mapped)) # excluding NA when counting duplicated. duplicated(c(NA,NA,NA)) returns FALSE  TRUE  TRUE.
+  print(sprintf("Number of genes with a NON-unique mapping (genes with duplicated gene IDs after mapping): %s",sum(bool_dups)))
+  print(sprintf("Number of genes mapped: %s",sum(!is.na(genes_mapped))))
+  print(sprintf("Number of genes not mapped: %s",sum(is.na(genes_mapped)))) # number of not mapped genes
+  df <- df %>% mutate(!!rlang::sym(colname_geneids_to):=genes_mapped)
+  # filter(!is.na(gene)) %>% # remove all rows without mapping
+  # filter(!duplicated(gene)) # keep only one of the duplicated pair (if any)
+  return(df)
+}
+
+
+
 
 ######################################################################################################
 ######################################## GENE ID MAPPING ############################################

@@ -13,12 +13,17 @@
 *.nb.html
 *.Rmd.html
 
+### R studio
+.Rproj.user
+# ^ folder where project-specific temporary files (e.g. auto-saved source documents, window-state, etc.) are stored
+packrat/lib*/
+packrat/src/
+
+
 ################## Data files ##################
 
 ### R
 *.RData
-.Rproj.user
-
 
 ################## PROJECT SPECIFC ##################
 out
@@ -68,3 +73,4 @@ src/magma-gene_scores/out_magma_BMI/
 
 ### TMP
 src/tmp-leftover_code/
+

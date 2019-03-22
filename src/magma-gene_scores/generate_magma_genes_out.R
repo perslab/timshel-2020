@@ -111,9 +111,12 @@ cmd_args <- sprintf("--bfile %s --gene-annot %s --pval %s ncol=N --out %s", file
 cat("magma", cmd_args)
 # system2(magma_exec, cmd_args)
 
+### OUTPUT files
+# .genes.raw
+# .genes.out
 
 # ======================================================================= #
-# ================ MAGMA covar (get corrected gene-based vals) =========== #
+# ====== MAGMA covar: create gsa.genes.out [corrected gene-based vals] ======== #
 # ======================================================================= #
 
 ### CMD
@@ -129,5 +132,39 @@ cmd_args <- sprintf("--gene-results %s --gene-covar %s --model correct=all direc
 cat("magma", cmd_args)
 # system2(magma_exec, cmd_args)
 
+### OUTPUT files
+# .gsa.genes.out
+# .gsa.out
+# .log
+
+
+************************* TODO **************************
+  1. FINISH THIS BELOW
+  2. add gene symbol [write function to do that]
+  3. delete map_magma_genes_out_file_to_mouse.R when you are done
+  4. git commit
+
+# ======================================================================= #
+# =========================== Map from human to mouse =================== #
+# ======================================================================= #
+
+### add ensembl ids
+df.magma <- add_ensembl_ids_from_entrez(df.magma, colname_geneids_from="GENE", colname_geneids_to="ensembl_gene_id")
+# [1] "Number of genes mapped: 17467"
+# [1] "Number of genes not mapped: 158"
+# [1] "Number of genes with a NON-unique mapping (genes with duplicated ensembl gene IDs after mapping): 33"
+# [1] "Total mapping stats: 191 genes have no mapping (not mapped + duplicates) out of 17625 input genes."
+# [1] "Total genes mapped (non NA genes): 17434"
+# [1] "Returning tibble with the column 'ensembl_gene_id' added where all gene identifiers unique. Unmapped genes have NA values"
+
+# ======================================================================= #
+# =========================== Map from human to mouse =================== #
+# ======================================================================= #
+
+### add mouse orthologs
+df.magma <- human_to_mouse_ortholog_gene_expression_mapping(df.magma, colname_geneids_from="ensembl_gene_id", colname_geneids_to="mmusculus_homolog_ensembl_gene")
+# [1] "Number of genes with a NON-unique mapping (genes with duplicated gene IDs after mapping): 0"
+# [1] "Number of genes mapped: 14782"
+# [1] "Number of genes not mapped: 2843"
 
 

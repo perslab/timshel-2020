@@ -286,18 +286,41 @@ if (!flag.loaded_gwas_linked_rdata) { # only load GWAS data if not already loade
   # df.gwas.rp <- read_gwas(GWAS_FILE, exlcude.HLA=T, do.log_odds=F) # columns c('chrom', 'pos', 'rsid', 'beta', 'se', 'maf')
     # ^ DEFAULT rolypoly format GWAS. 
   
+  ### Standard RolyPoly format GWAS
+  # rsID    beta    se      pval    snp_maf chr     pos
+  # rs3094315       0.01162 0.09537 0.9031  0.16    1       752566
+  # rs3131972       0.007808        0.09523 0.9347  0.161   1       752721
+  # rs3131969       0.007906        0.1011  0.9377  0.1282  1       754182
   df.gwas.rp <- read_gwas(file.gwas=GWAS_FILE, 
                         exlcude.HLA=T, 
                         do.log_odds=F,
                         delim="\t", # file delimiter
                         col_chrom="chr",
                         col_pos="pos",
-                        col_rsid="SNP", # NEW
-                        col_beta="BETA", # NEW
-                        col_se="SE", # NEW
+                        col_rsid="rsID",
+                        col_beta="beta",
+                        col_se="se",
                         col_maf="snp_maf" 
-                        ) # 2019-01-30 format from LDSC munged GWAS (data/gwas_sumstats_ldsc/timshel-collection/)
-
+                        )
+  
+  ### 2019-01-30 format from *SOME* LDSC munged GWAS (data/gwas_sumstats_ldsc/timshel-collection/)
+  ### Use if running with e.g. BMI_UKBB_Loh2018_no_mhc.sumstats.gz
+  # SNP     A1      A2      Z       N       snp_maf chr     pos     BETA    SE      P_ORIG  P
+  # rs3094315       G       A       -0.51   457824  0.16    1       752566  -0.00103711     0.00265924      0.61    0.6100514617950388
+  # rs3131972       A       G       -0.659  457824  0.161   1       752721  -0.00138153     0.00265722      0.51    0.5098957686599146
+  # rs3131969       A       G       -0.722  457824  0.1282  1       754182  -0.00167423     0.00284474      0.47    0.4702944775228827
+  # df.gwas.rp <- read_gwas(file.gwas=GWAS_FILE, 
+  #                         exlcude.HLA=T, 
+  #                         do.log_odds=F,
+  #                         delim="\t", # file delimiter
+  #                         col_chrom="chr",
+  #                         col_pos="pos",
+  #                         col_rsid="SNP", # NEW
+  #                         col_beta="BETA", # NEW
+  #                         col_se="SE", # NEW
+  #                         col_maf="snp_maf" 
+  # )
+  
   if (LDSC_INPUT_MODE) {
     print("RUNNING IN LDSC_INPUT_MODE. Will se values for 'se' column")
     df.gwas.rp$se <- 0.001

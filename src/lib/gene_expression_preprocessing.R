@@ -326,13 +326,14 @@ zscore_sem <- function(object_data) {
 tstat_sem <- function(object_data, df.ncells) {
   ### vectorized calculation of pooled variance for each gene
   # formula: sum_i{var[i]*(n[i]-1)}/sum_i{n[i]-1}, where i is the group.
+  
   print("Calculating t-stat")
   
   annotations <- colnames(object_data[["mean"]])
   n_genes <- dim(object_data[["mean"]])[1]
   
   df.n <- df.ncells %>% slice(rep(1:n(), each=n_genes )) # df, 1 x annotations | replicate row in ncells. REF rep(): https://stackoverflow.com/a/47780537/6639640
-  var.pooled <- rowSums(object_data[["var"]] * (df.n-1))/rowSums(df.n - 1) # numeric vector, genes x 1 | unbiased least squares estimate (n-1) of pooled variance.
+  sd.pooled <- sqrt(rowSums(object_data[["var"]] * (df.n-1))/rowSums(df.n - 1)) # numeric vector, genes x 1 | unbiased least squares estimate (n-1) of pooled standard deviation.
   list.tstat <- list()
   counter <- 1
   for (annotation in annotations) {
@@ -347,8 +348,8 @@ tstat_sem <- function(object_data, df.ncells) {
     # ^ rowSums(df.n %>% slice(1)) gives the same as rowSums(df.n) because all rows are identical
     n_x <- df.ncells %>% pull(!!annotation_sym) # numeric vector, genes x 1
     n_y <- rowSums(df.n_other) # numeric vector, genes x 1
-    var.pooled_scaling_factor <- sqrt(1/n_x+1/n_y) # sqrt(1/n1+1/n2)
-    tstat <- (x-y)/(var.pooled*var.pooled_scaling_factor) # numeric, genes x 1 | tstat = (mean - other) / (pooled_var*sqrt(1/n1+1/n2))
+    sd.pooled_scaling_factor <- sqrt(1/n_x+1/n_y) # sqrt(1/n1+1/n2)
+    tstat <- (x-y)/(sd.pooled*sd.pooled_scaling_factor) # numeric, genes x 1 | tstat = (mean - other) / (pooled_sd*sqrt(1/n1+1/n2))
     # pt(tstat, df=sum(df.n)-2, lower.tail=T) # numeric vector, genes x 1 | one-sided ttest for higher expression. Each gene as the same number of degree of freedom (dof). Dof is total number of observations (cells) minus 2.
     list.tstat[[annotation]] <- tstat
     # if (annotation=="ENT1") {break}

@@ -41,7 +41,7 @@ source(here("src/lib/plot_expression_specificity.R"))
 # ================================ MOUSEBRAIN PLOT ================================ #
 # ======================================================================= #
 
-load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
+load(here("src/datasets-expression/mousebrain/mousebrain.sem_obj.RData"))
 
 ### Cell-types to plot
 # AGRP ENSG00000159723 | DEINH6	Arcuate hypothalamic nucleus (probably, Npy, Agrp cells)
@@ -87,13 +87,39 @@ p
 # ================================ gene centric plots ================================ #
 # ======================================================================= #
 
-### Main plot
+
 annotations_highlight <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign cell-types mousebrain
+
+### Main plot
 genes_select <- c("POMC", "AGRP", "LEPR", "FTO", "BDNF", "MC4R", "BBS4", "DRD2", "DRD1")
 show_only_nonzero_es <- FALSE
 df.es.gene <- get_mean_nes_gene_centric(sem_obj, genes_select=genes_select)
 p <- es_plot_gene_centric(df.es.gene, annotations_highlight=annotations_highlight, show_only_nonzero_es=show_only_nonzero_es)
 p
+
+### ADCY3 / MC4R
+genes_select <- c("ADCY3", "MC4R")
+show_only_nonzero_es <- FALSE
+df.es.gene <- get_mean_nes_gene_centric(sem_obj, genes_select=genes_select)
+p <- es_plot_gene_centric(df.es.gene, annotations_highlight=annotations_highlight, show_only_nonzero_es=show_only_nonzero_es)
+p
+
+
+### Ciliopathy-related proteins
+genes_select <- c("MRAP2","ALMS1","MKS1","CEP290","FRITZ","C2ORF86","SDCCAG8","CEP19","ANKRD26")
+show_only_nonzero_es <- FALSE
+df.es.gene <- get_mean_nes_gene_centric(sem_obj, genes_select=genes_select)
+p <- es_plot_gene_centric(df.es.gene, annotations_highlight=annotations_highlight, show_only_nonzero_es=show_only_nonzero_es)
+p
+
+genes_select <- c("BBS1","BBS2","BBS3","BBS4","BBS5","BBS6","BBS7","BBS8","BBS9","BBS10","BBS11","BBS12")
+show_only_nonzero_es <- FALSE
+df.es.gene <- get_mean_nes_gene_centric(sem_obj, genes_select=genes_select)
+p <- es_plot_gene_centric(df.es.gene, annotations_highlight=annotations_highlight, show_only_nonzero_es=show_only_nonzero_es)
+p
+
+
+
 
 ### MC1R-MC5R (MC3R)
 genes_select <- c("MC1R", "MC2R", "MC3R", "MC4R", "MC5R")
@@ -101,6 +127,8 @@ show_only_nonzero_es <- FALSE
 df.es.gene <- get_mean_nes_gene_centric(sem_obj, genes_select=genes_select)
 p <- es_plot_gene_centric(df.es.gene, annotations_highlight=annotations_highlight, show_only_nonzero_es=show_only_nonzero_es)
 p
+
+
 
 ### Other
 annotations_highlight <- c("HYPEP5", "HYPEP2")
@@ -142,7 +170,7 @@ p
 # ================================ TABULA MURIS PLOT ================================ #
 # ======================================================================= #
  
-load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData")
+load(here("src/datasets-expression/tabula_muris/tabula_muris.sem_obj.RData"))
 
 ### Cell-types to plot
 # - [INS NOT IN DATA - multiple orthologs] Beta-cells (insulin+). See http://www.ensembl.org/Homo_sapiens/Gene/Compara_Ortholog?db=core;g=ENSG00000254647;r=11:2181009-2182571

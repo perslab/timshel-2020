@@ -22,16 +22,22 @@
 library(tidyverse)
 library(here)
 
-setwd(here("src/magma/"))
 
+dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
+source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+
+
+dir.wd <- "src/magma-gene_scores"
+setwd(here(dir.wd))
 
 # ======================================================================= #
 # ================================ CONSTANTS ================================ #
 # ======================================================================= #
 
+RUN_MODE <- TRUE # if True, then MAGMA system calls will be made
 
 magma_exec <- "/tools/magma/1.07a/magma"
-dir.out_magma <- here("src/magma/out_magma_BMI")
+dir.out_magma <- here(dir.wd, "/out_magma_BMI")
 dir.create(dir.out_magma, showWarnings = FALSE)
 
 # ======================================================================= #
@@ -63,7 +69,10 @@ file.annot_prefix <- file.path(dir.out_magma, "NCBI37_1kgp_up100kb_down100kb")
 ### Call
 cmd_args <- sprintf("--annotate window=100,100 --snp-loc %s --gene-loc %s --out %s", file.snp_loc, file.gene_loc, file.annot_prefix)
 cmd_args
-# system2(magma_exec, cmd_args)
+if (RUN_MODE) {
+  system2(magma_exec, cmd_args)
+}
+
 
 # ======================================================================= #
 # ================= [*RUN ONCE*] Make dummy covar file ================= #
@@ -80,7 +89,7 @@ df.all_magma_genes
 
 ### Write
 file.dummy_gene_covar <- file.path(dir.out_magma, "magma_dummy_gene_covar_file.NCBI37_3.tab")
-# write_tsv(df.all_magma_genes, path=file.dummy_gene_covar)
+write_tsv(df.all_magma_genes, path=file.dummy_gene_covar)
 
 
 # ======================================================================= #
@@ -88,8 +97,8 @@ file.dummy_gene_covar <- file.path(dir.out_magma, "magma_dummy_gene_covar_file.N
 # ======================================================================= #
 
 ### Params
-# gwas_name <- "BMI_UKBB_Loh2018_no_mhc"
-gwas_name <- "BMI_UPDATE_Yengo2018_no_mhc"
+gwas_name <- "BMI_UKBB_Loh2018_no_mhc"
+# gwas_name <- "BMI_UPDATE_Yengo2018_no_mhc"
 
 # ======================================================================= #
 # == Calc gene-based P-vals: create .genes.raw and .genes.out (uncorrected) == #
@@ -109,7 +118,9 @@ file.out_genes_prefix <- file.path(dir.out_magma, gwas_name)
 ### Call
 cmd_args <- sprintf("--bfile %s --gene-annot %s --pval %s ncol=N --out %s", file.bfile, file.annot, file.gwas, file.out_genes_prefix)
 cat("magma", cmd_args)
-# system2(magma_exec, cmd_args)
+if (RUN_MODE) {
+  system2(magma_exec, cmd_args)
+}
 
 ### OUTPUT files
 # .genes.raw
@@ -124,47 +135,61 @@ cat("magma", cmd_args)
 
 ### Params
 file.gene_results <- sprintf("%s.genes.raw", file.out_genes_prefix)
-file.out_gene_level <- file.path(dir.out_magma, sprintf("%s.resid_correct_all", gwas_name))
+file.outprefix_gene_level <- file.path(dir.out_magma, sprintf("%s.resid_correct_all", gwas_name))
 # file.dummy_gene_covar
 
 ### Call [correct=all]
-cmd_args <- sprintf("--gene-results %s --gene-covar %s --model correct=all direction-covar=greater --settings abbreviate=0 gene-info --out %s", file.gene_results, file.dummy_gene_covar, file.out_gene_level)
+cmd_args <- sprintf("--gene-results %s --gene-covar %s --model correct=all direction-covar=greater --settings abbreviate=0 gene-info --out %s", file.gene_results, file.dummy_gene_covar, file.outprefix_gene_level)
 cat("magma", cmd_args)
-# system2(magma_exec, cmd_args)
+if (RUN_MODE) {
+  system2(magma_exec, cmd_args)
+}
 
 ### OUTPUT files
 # .gsa.genes.out
 # .gsa.out
 # .log
 
-
-************************* TODO **************************
-  1. FINISH THIS BELOW
-  2. add gene symbol [write function to do that]
-  3. delete map_magma_genes_out_file_to_mouse.R when you are done
-  4. git commit
-
 # ======================================================================= #
-# =========================== Map from human to mouse =================== #
+# ============= Add more gene IDs: Ensembl + gene symbol IDs ============ #
 # ======================================================================= #
+
+### Read file from previous step
+file.gsa_genes <- sprintf("%s.gsa.genes.out", file.outprefix_gene_level) # output file from MAGMA --gene-covar --model cmd
+df.magma <- read_table(file.gsa_genes, comment = "#")
 
 ### add ensembl ids
 df.magma <- add_ensembl_ids_from_entrez(df.magma, colname_geneids_from="GENE", colname_geneids_to="ensembl_gene_id")
-# [1] "Number of genes mapped: 17467"
-# [1] "Number of genes not mapped: 158"
-# [1] "Number of genes with a NON-unique mapping (genes with duplicated ensembl gene IDs after mapping): 33"
-# [1] "Total mapping stats: 191 genes have no mapping (not mapped + duplicates) out of 17625 input genes."
-# [1] "Total genes mapped (non NA genes): 17434"
+# [1] "Number of genes mapped: 17951"
+# [1] "Number of genes not mapped: 193"
+# [1] "Number of genes with a NON-unique mapping (genes with duplicated ensembl gene IDs after mapping): 41"
+# [1] "Total mapping stats: 234 genes have no mapping (not mapped + duplicates) out of 18144 input genes."
+# [1] "Total genes mapped (non NA genes): 17910"
 # [1] "Returning tibble with the column 'ensembl_gene_id' added where all gene identifiers unique. Unmapped genes have NA values"
 
+### gene symbol
+df.magma <- hs_add_gene_symbol_from_ensembl_ids(df.magma, colname_geneids_from="ensembl_gene_id", colname_geneids_to="gene_symbol")
+# [1] "Number of genes mapped: 17481"
+# [1] "Number of genes not mapped: 663"
+# [1] "Number of genes with a NON-unique mapping (genes with duplicated ensembl gene IDs after mapping): 0"
+# [1] "Total mapping stats: 663 genes have no mapping (not mapped + duplicates) out of 18144 input genes."
+# [1] "Total genes mapped (non NA genes): 17481"
+# [1] "Returning tibble with the column 'gene_symbol' added where all gene identifiers unique. Unmapped genes have NA values"
+
 # ======================================================================= #
-# =========================== Map from human to mouse =================== #
+# =========================== Add mouse ortholog gene =================== #
 # ======================================================================= #
 
 ### add mouse orthologs
 df.magma <- human_to_mouse_ortholog_gene_expression_mapping(df.magma, colname_geneids_from="ensembl_gene_id", colname_geneids_to="mmusculus_homolog_ensembl_gene")
 # [1] "Number of genes with a NON-unique mapping (genes with duplicated gene IDs after mapping): 0"
-# [1] "Number of genes mapped: 14782"
-# [1] "Number of genes not mapped: 2843"
+# [1] "Number of genes mapped: 14972"
+# [1] "Number of genes not mapped: 3172"
 
+
+# ======================================================================= #
+# =========================== Write output file =================== #
+# ======================================================================= #
+
+df.magma %>% write_tsv()
 

@@ -1518,7 +1518,7 @@ add_ensembl_ids_from_entrez <- function(df, colname_geneids_from="entrez", colna
 
 
 # Map: HUMAN ENSEMBL --> GENE SYMBOL
-hs_add_gene_symbol_from_ensembl_ids <- function(df, colname_geneids_from="gene", colname_geneids_to="ensembl_gene_id") {
+hs_add_gene_symbol_from_ensembl_ids <- function(df, colname_geneids_from="ensembl_gene_id", colname_geneids_to="gene_symbol") {
   ### INPUT df: a tibble/data.frame with the column 'colname_geneids_from' with human ensembl gene ids.
   ### OUTOUT df 
   # returns a tibble with human gene symbols added to the column 'colname_geneids_to'. 

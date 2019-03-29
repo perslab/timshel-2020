@@ -46,7 +46,11 @@ library(viridis)
 # ==================================================================================== #
 # ================================ Annotation centric ================================ #
 # ==================================================================================== #
-get_es_annotation_centric <- function(sem_obj, annotation) {
+### Annotation centric: 
+# Plot ES of all genes for **one annotation** (annotation). 
+# You can highlight genes in the plot function.
+
+get_es.annotation_centric <- function(sem_obj, annotation) {
   ### OBS: this function only supports extracting one annotation.
   
   if (is.null(sem_obj[["group_by_annotation.sem"]][[annotation]])) {
@@ -56,11 +60,11 @@ get_es_annotation_centric <- function(sem_obj, annotation) {
   df.es <- sem_obj[["group_by_annotation.sem"]][[annotation]] %>% 
     mutate(gene=sem_obj$genes) %>% 
     hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name") # map gene
-  
-  ### Add SEM mean
+  ### Add addition data
   df.es <- df.es %>% 
     mutate(
-      `mean nES` = sem_obj$sem_meta$mean[[annotation]] # returns a (unnamed) numeric vector. This works even though sem_obj$sem_meta$mean is a tibble
+      expr_mean = sem_obj$data$mean[[annotation]],
+      es_mu = sem_obj$sem_meta$mean[[annotation]] 
     )
   
   ### Wrangle data
@@ -74,19 +78,21 @@ get_es_annotation_centric <- function(sem_obj, annotation) {
   return(df.es.mod)
   #   gene            gene_name gene_idx_fixed es_metric es_weight gene_idx_sorted_within_metric
   #   <chr>           <chr>              <int> <chr>         <dbl>                         <int>
-  #   ENSG00000141668 CBLN2                  1 DE t-test    -0.885                          1040
-  #   ENSG00000204624 DISP3                  2 DE t-test    -0.653                          7517
-  #   ENSG00000187848 P2RX2                  3 DE t-test    -1.33                            211
-  #   ENSG00000171522 PTGER4                 4 DE t-test    -0.722                          4716
+  #   ENSG00000141668 CBLN2                  1 tstat    -0.885                          1040
+  #   ENSG00000204624 DISP3                  2 tstat    -0.653                          7517
+  #   ENSG00000187848 P2RX2                  3 tstat    -1.33                            211
+  #   ENSG00000171522 PTGER4                 4 tstat    -0.722                          4716
 }
 
 
-es_plot_annotation_centric <- function(df.es, genes_highlight) {
+plot_es.annotation_centric <- function(df.es, genes_highlight) {
   # df.es <- df.es %>% mutate(gene_label = paste0(gene_name, "(", round(es_weight,2), ")") ) # looks too complication
   # TODO: try to add geom_density2d() to the plot
   
   ### rename
   df.es <- df.es %>% mutate(es_metric = case_when(
+    es_metric == "es_mu" ~ "ES mu",
+    es_metric == "expr_mean" ~ "Mean expr",
     es_metric == "ges" ~ "GES",
     es_metric == "specificity" ~ "Specificity",
     es_metric == "si" ~ "SI",
@@ -107,15 +113,13 @@ es_plot_annotation_centric <- function(df.es, genes_highlight) {
 }
 
 # ============================================================================== #
-# ================================ Gene centric ================================ #
+# ================================ gene UTILS ================================ #
 # ============================================================================== #
 
-get_es_gene_centric <- function(sem_obj, genes_select) {
-  # this function supports multiple genes (genes_select as vector)
-  
-  ### DEVELOPMENT
-  # sem_obj
-  # genes_select <- c("AGRP", "NPY")
+.get_genes_select_idx <- function(sem_obj, genes_select) {
+  ### Function to get indices of genes in genes_select. Genes not in sem_obj will be dropped.
+  ### Input: genes_select is a character vector of gene names
+  ### Return: a named character vector. values are indecies of matching genes, names are gene names.
   
   ### Get index of genes
   df.genes <- tibble(gene=sem_obj$genes) %>% hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name")
@@ -128,14 +132,35 @@ get_es_gene_centric <- function(sem_obj, genes_select) {
     genes_match.idx <- genes_match.idx[!is.na(genes_match.idx)] # exclude NAs from match
   }
   genes_match.names <- df.genes$gene_name[genes_match.idx] # extract after excluding NAs
+  names(genes_match.idx) <- genes_match.names # set names
+  return(genes_match.idx)
+}
+
+# ============================================================================== #
+# ================================ Gene centric ================================ #
+# ============================================================================== #
+### Gene centric: Plot ES of all annotations for **one gene** (genes_select supports multiple genes as subplots). 
+# You can highlight annotations in the plot function.
+
+get_es.gene_centric.all_es_metrics <- function(sem_obj, genes_select) {
+  ### returns all ES metrics (incl. es_mu and mean expr)
+  # this function supports multiple genes (genes_select as vector)
   
+  ### DEVELOPMENT
+  # sem_obj
+  # genes_select <- c("AGRP", "NPY")
+  
+  genes_match.idx <- .get_genes_select_idx(sem_obj, genes_select)
+
   list.es <- list()
   for (annotation in sem_obj$annotations) {
-    df.es <- sem_obj[["group_by_annotation.sem"]][[annotation]] %>% slice(genes_match.idx)
-    es_mean <- sem_obj$sem_meta$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector
+    df.es <- sem_obj[["group_by_annotation.sem"]][[annotation]] %>% slice(genes_match.idx) # df | ges, si, tstat, specificity
+    expr_mean <- sem_obj$data$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | mean expression
+    es_mean <- sem_obj$sem_meta$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | es_mu
     list.es[[annotation]] <- df.es %>% mutate(
+      expr_mean=expr_mean,
       es_mean=es_mean,
-      gene_name=genes_match.names)
+      gene_name=names(genes_match.idx))
   }
   df.es <- bind_rows(list.es, .id="annotation")
   # annotation  tstat   ges        si specificity es_mean gene_nanme 
@@ -150,7 +175,6 @@ get_es_gene_centric <- function(sem_obj, genes_select) {
     # mutate(gene_idx_sorted_within_metric = rank(es_weight)) %>%
     ungroup()
   
-  
   return(df.es.gather)
   # annotation gene_name es_metric es_weight
   # <chr>      <chr>     <chr>         <dbl>
@@ -160,18 +184,42 @@ get_es_gene_centric <- function(sem_obj, genes_select) {
 }
 
 
-get_mean_nes_gene_centric <- function(sem_obj, genes_select) {
-  ### OBS: this function uses only sem_meta$mean data
+
+get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metric) {
+  ### OBS: this function uses only sem_meta$mean datas
   # this function supports multiple genes (genes_select as vector)
   
-  ### Get data
-  df.es_mean <- sem_obj$sem_meta$mean %>% 
-    mutate(gene=sem_obj$genes) %>% 
-    hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name") %>% # map gene
-    select(gene_name, everything(), -gene)
-  df.es_mean
+  es_metrics_allowed <- c("expr_mean", "es_mu", "tstat", "ges", "si", "specificity")
+  stopifnot(length(es_metric)==1) # only one es metric allowed
+  if (!any(es_metric %in% es_metrics_allowed)) {
+    stop(sprintf("Argument for es_metric did not match es_metrics_allowed: [%s]", paste(es_metrics_allowed, collapse=", ")))
+  }
   
-  df.es_mean.gene_filter <- df.es_mean %>% filter(gene_name %in% genes_select)
+  ### Get matching genes
+  genes_match.idx <- .get_genes_select_idx(sem_obj, genes_select)
+  
+  
+  ### Get data
+  if (es_metric == "es_mu") {
+    df.es <- es_mean <- sem_obj$sem_meta$mean
+  } else if (es_metric == "expr_mean") {
+    df.es <- sem_obj$data$mean
+  } else { # 'real' es metric
+    df.es <- sem_obj$sem[[es_metric]]
+  }
+  
+  df.es_mean.gene_filter <- df.es %>% 
+    slice(genes_match.idx) %>% # select genes
+    mutate(gene_name=names(genes_match.idx)) # add gene names
+
+  ### OLD method | WORKS [SIMPLE] [but OK delete]
+  # df.es_mean <- sem_obj$sem_meta$mean %>% 
+  #   mutate(gene=sem_obj$genes) %>% 
+  #   hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name") %>% # map gene
+  #   select(gene_name, everything(), -gene)
+  # df.es_mean.gene_filter <- df.es_mean %>% filter(gene_name %in% genes_select)
+  
+  ### Transform to long format
   df.es_mean.gene_filter <- df.es_mean.gene_filter %>% gather(key="annotation", value=es_weight, -gene_name)
   
   return(df.es_mean.gene_filter)
@@ -182,7 +230,12 @@ get_mean_nes_gene_centric <- function(sem_obj, genes_select) {
   # POMC      ACBG               0
 }
 
-es_plot_gene_centric <- function(df, annotations_highlight, show_only_nonzero_es=F) {
+plot_es.gene_centric.single_es_metric <- function(df, 
+                                                  annotations_highlight, 
+                                                  show_only_nonzero_es=F, 
+                                                  scale.es_mu=T, # y-scale (0-1 for es_mu)
+                                                  scale.log=F # y-scale log-transform
+                                                  ) {
   # this function supports multiple genes (genes_select as vector)
   # this function supports multiple annotations (annotations_highlight as vector)
   
@@ -210,32 +263,42 @@ es_plot_gene_centric <- function(df, annotations_highlight, show_only_nonzero_es
     geom_point(size=2, color="gray") + 
     # geom_point(data=df %>% filter(annotation %in% annotations_highlight), color="black", size=3) +  # highlight black
     geom_point(data=df %>% filter(annotation %in% annotations_highlight), aes(color=es_weight), size=3) +  # highlight color scale
-    scale_color_viridis_c(limits=c(0,1), direction=-1) + 
     geom_segment(aes(x=x_order, xend=x_order, y=0, yend=es_weight), color="grey") +
     geom_label_repel(data=df %>% filter(annotation %in% annotations_highlight)) +
     facet_wrap(~gene_name, 
                scales = "free" # x scale must be set 'free' because we use x='x_order', so every position is different
     ) +
     ### Axis
-    labs(x="Cell-type", y="mean nES weight") + 
+    labs(x="Cell-type", y="ES weight") + 
     ### Add categories to axis | replace the numeric values (x_order) on each x-axis with the appropriate label
     scale_x_continuous(
       breaks = df$x_order,
       labels = df$annotation,
       expand = c(0,0) # this is needed (for some reason) to make the x-axis labels properly aligned to the data
     ) +
-    scale_y_continuous(limits=c(0,1)) + # fix the scale of the plot
     theme_classic() +
     theme(axis.text.x = element_text(angle = 75, hjust = 1)) +
     theme(axis.text.x=element_text(size = rel(0.5))) # smaller x-axis labels
   # theme(axis.text.x=element_blank()) # hide x-axis labels
-  p
+  
+  p <- p + scale_color_viridis_c(direction=-1)
+  if (scale.es_mu) {
+    p <- p + scale_color_viridis_c(limits=c(0,1), direction=-1) + 
+      scale_y_continuous(limits=c(0,1))
+  }
+  if (scale.log) {
+    p <- p + scale_y_log10()
+  }
+  
   return(p)
 }
 
 
+
 .es_plot_gene_centric_pathwork <- function(df, annotations_highlight, show_only_nonzero_es=F) {
-  # TODO: make this function wrap plots using patchwork. 1: make a list of plots. 2: combine list of plots using patchwork::wrap_plots().
+  # TODO: make this function wrap plots using patchwork. 
+  # 1: make a list of plots. 
+  # 2: combine list of plots using patchwork::wrap_plots().
   stop("Not yet implemented")
   
   ### Plot [THIS CODE WORKS - save for now]

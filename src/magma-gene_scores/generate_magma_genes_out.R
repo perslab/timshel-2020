@@ -135,11 +135,11 @@ if (RUN_MODE) {
 
 ### Params
 file.gene_results <- sprintf("%s.genes.raw", file.out_genes_prefix)
-file.outprefix_gene_level <- file.path(dir.out_magma, sprintf("%s.resid_correct_all", gwas_name))
+file.out_gene_level_prefix <- file.path(dir.out_magma, sprintf("%s.resid_correct_all", gwas_name))
 # file.dummy_gene_covar
 
 ### Call [correct=all]
-cmd_args <- sprintf("--gene-results %s --gene-covar %s --model correct=all direction-covar=greater --settings abbreviate=0 gene-info --out %s", file.gene_results, file.dummy_gene_covar, file.outprefix_gene_level)
+cmd_args <- sprintf("--gene-results %s --gene-covar %s --model correct=all direction-covar=greater --settings abbreviate=0 gene-info --out %s", file.gene_results, file.dummy_gene_covar, file.out_gene_level_prefix)
 cat("magma", cmd_args)
 if (RUN_MODE) {
   system2(magma_exec, cmd_args)
@@ -155,7 +155,7 @@ if (RUN_MODE) {
 # ======================================================================= #
 
 ### Read file from previous step
-file.gsa_genes <- sprintf("%s.gsa.genes.out", file.outprefix_gene_level) # output file from MAGMA --gene-covar --model cmd
+file.gsa_genes <- sprintf("%s.gsa.genes.out", file.out_gene_level_prefix) # output file from MAGMA --gene-covar --model cmd
 df.magma <- read_table(file.gsa_genes, comment = "#")
 
 ### add ensembl ids
@@ -191,5 +191,6 @@ df.magma <- human_to_mouse_ortholog_gene_expression_mapping(df.magma, colname_ge
 # =========================== Write output file =================== #
 # ======================================================================= #
 
-df.magma %>% write_tsv()
+file.export <- sprintf("%s.gsa.genes.mapped.out", file.out_gene_level_prefix)
+df.magma %>% write_tsv(file.export)
 

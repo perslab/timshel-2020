@@ -1,0 +1,116 @@
+tissue_celltype,tissue,cell_type,n_cells
+Bladder.bladder cell,Bladder,bladder cell,695
+Bladder.bladder urothelial cell,Bladder,bladder urothelial cell,683
+Brain_Myeloid.macrophage,Brain_Myeloid,macrophage,61
+Brain_Myeloid.microglial cell,Brain_Myeloid,microglial cell,4394
+Brain_Non-Myeloid.astrocyte,Brain_Non-Myeloid,astrocyte,432
+Brain_Non-Myeloid.Bergmann glial cell,Brain_Non-Myeloid,Bergmann glial cell,40
+Brain_Non-Myeloid.brain pericyte,Brain_Non-Myeloid,brain pericyte,156
+Brain_Non-Myeloid.endothelial cell,Brain_Non-Myeloid,endothelial cell,715
+Brain_Non-Myeloid.neuron,Brain_Non-Myeloid,neuron,281
+Brain_Non-Myeloid.oligodendrocyte,Brain_Non-Myeloid,oligodendrocyte,1574
+Brain_Non-Myeloid.oligodendrocyte precursor cell,Brain_Non-Myeloid,oligodendrocyte precursor cell,203
+Fat.B cell,Fat,B cell,519
+Fat.endothelial cell,Fat,endothelial cell,668
+Fat.mesenchymal stem cell of adipose,Fat,mesenchymal stem cell of adipose,2107
+Fat.myeloid cell,Fat,myeloid cell,1123
+Fat.natural killer cell,Fat,natural killer cell,95
+Fat.T cell,Fat,T cell,353
+Fat.unknown cell type,Fat,unknown cell type,102
+Heart.cardiac muscle cell,Heart,cardiac muscle cell,133
+Heart.endocardial cell,Heart,endocardial cell,165
+Heart.endothelial cell,Heart,endothelial cell,1365
+Heart.erythrocyte,Heart,erythrocyte,91
+Heart.fibroblast,Heart,fibroblast,2189
+Heart.leukocyte,Heart,leukocyte,523
+Heart.myofibroblast cell,Heart,myofibroblast cell,178
+Heart.professional antigen presenting cell,Heart,professional antigen presenting cell,59
+Heart.smooth muscle cell,Heart,smooth muscle cell,42
+Heart.unknown cell type,Heart,unknown cell type,28
+Kidney.endothelial cell,Kidney,endothelial cell,126
+Kidney.epithelial cell of proximal tubule,Kidney,epithelial cell of proximal tubule,219
+Kidney.kidney collecting duct epithelial cell,Kidney,kidney collecting duct epithelial cell,121
+Kidney.leukocyte,Kidney,leukocyte,16
+Kidney.macrophage,Kidney,macrophage,37
+Large_Intestine.Brush cell of epithelium proper of large intestine,Large_Intestine,Brush cell of epithelium proper of large intestine,63
+Large_Intestine.enterocyte of epithelium of large intestine,Large_Intestine,enterocyte of epithelium of large intestine,964
+Large_Intestine.enteroendocrine cell,Large_Intestine,enteroendocrine cell,59
+Large_Intestine.epithelial cell of large intestine,Large_Intestine,epithelial cell of large intestine,2019
+Large_Intestine.large intestine goblet cell,Large_Intestine,large intestine goblet cell,833
+Limb_Muscle.B cell,Limb_Muscle,B cell,71
+Limb_Muscle.endothelial cell,Limb_Muscle,endothelial cell,219
+Limb_Muscle.lymphocyte,Limb_Muscle,lymphocyte,81
+Limb_Muscle.macrophage,Limb_Muscle,macrophage,76
+Limb_Muscle.mesenchymal stem cell,Limb_Muscle,mesenchymal stem cell,499
+Limb_Muscle.skeletal muscle satellite cell,Limb_Muscle,skeletal muscle satellite cell,540
+Limb_Muscle.skeletal muscle satellite stem cell,Limb_Muscle,skeletal muscle satellite stem cell,439
+Limb_Muscle.T cell,Limb_Muscle,T cell,35
+Liver.B cell,Liver,B cell,41
+Liver.endothelial cell of hepatic sinusoid,Liver,endothelial cell of hepatic sinusoid,182
+Liver.hepatocyte,Liver,hepatocyte,391
+Liver.Kupffer cell,Liver,Kupffer cell,61
+Liver.natural killer cell,Liver,natural killer cell,39
+Lung.B cell,Lung,B cell,57
+Lung.ciliated columnar cell of tracheobronchial tree,Lung,ciliated columnar cell of tracheobronchial tree,25
+Lung.classical monocyte,Lung,classical monocyte,90
+Lung.epithelial cell of lung,Lung,epithelial cell of lung,113
+Lung.leukocyte,Lung,leukocyte,35
+Lung.lung endothelial cell,Lung,lung endothelial cell,693
+Lung.monocyte,Lung,monocyte,65
+Lung.myeloid cell,Lung,myeloid cell,85
+Lung.natural killer cell,Lung,natural killer cell,37
+Lung.stromal cell,Lung,stromal cell,423
+Lung.T cell,Lung,T cell,53
+Lung.unknown cell type,Lung,unknown cell type,40
+Mammary_Gland.basal cell,Mammary_Gland,basal cell,1340
+Mammary_Gland.endothelial cell,Mammary_Gland,endothelial cell,47
+Mammary_Gland.luminal epithelial cell of mammary gland,Mammary_Gland,luminal epithelial cell of mammary gland,578
+Mammary_Gland.stromal cell,Mammary_Gland,stromal cell,440
+Marrow.B cell,Marrow,B cell,44
+Marrow.basophil,Marrow,basophil,25
+Marrow.common lymphoid progenitor,Marrow,common lymphoid progenitor,156
+Marrow.granulocyte,Marrow,granulocyte,761
+Marrow.granulocyte monocyte progenitor cell,Marrow,granulocyte monocyte progenitor cell,134
+Marrow.granulocytopoietic cell,Marrow,granulocytopoietic cell,221
+Marrow.hematopoietic precursor cell,Marrow,hematopoietic precursor cell,265
+Marrow.immature B cell,Marrow,immature B cell,344
+Marrow.immature natural killer cell,Marrow,immature natural killer cell,36
+Marrow.immature NK T cell,Marrow,immature NK T cell,37
+Marrow.immature T cell,Marrow,immature T cell,60
+Marrow.late pro-B cell,Marrow,late pro-B cell,306
+Marrow.macrophage,Marrow,macrophage,173
+Marrow.mature natural killer cell,Marrow,mature natural killer cell,49
+Marrow.megakaryocyte-erythroid progenitor cell,Marrow,megakaryocyte-erythroid progenitor cell,55
+Marrow.monocyte,Marrow,monocyte,266
+Marrow.naive B cell,Marrow,naive B cell,692
+Marrow.pre-natural killer cell,Marrow,pre-natural killer cell,22
+Marrow.precursor B cell,Marrow,precursor B cell,517
+Marrow.regulatory T cell,Marrow,regulatory T cell,27
+Marrow.Slamf1-negative multipotent progenitor cell,Marrow,Slamf1-negative multipotent progenitor cell,713
+Marrow.Slamf1-positive multipotent progenitor cell,Marrow,Slamf1-positive multipotent progenitor cell,134
+Pancreas.endothelial cell,Pancreas,endothelial cell,66
+Pancreas.leukocyte,Pancreas,leukocyte,54
+Pancreas.pancreatic A cell,Pancreas,pancreatic A cell,390
+Pancreas.pancreatic acinar cell,Pancreas,pancreatic acinar cell,182
+Pancreas.pancreatic D cell,Pancreas,pancreatic D cell,140
+Pancreas.pancreatic ductal cell,Pancreas,pancreatic ductal cell,161
+Pancreas.pancreatic PP cell,Pancreas,pancreatic PP cell,73
+Pancreas.pancreatic stellate cell,Pancreas,pancreatic stellate cell,49
+Pancreas.type B pancreatic cell,Pancreas,type B pancreatic cell,449
+Skin.basal cell of epidermis,Skin,basal cell of epidermis,562
+Skin.epidermal cell,Skin,epidermal cell,276
+Skin.keratinocyte stem cell,Skin,keratinocyte stem cell,1404
+Skin.leukocyte,Skin,leukocyte,15
+Skin.stem cell of epidermis,Skin,stem cell of epidermis,53
+Spleen.B cell,Spleen,B cell,1297
+Spleen.macrophage,Spleen,macrophage,48
+Spleen.T cell,Spleen,T cell,352
+Thymus.DN1 thymic pro-T cell,Thymus,DN1 thymic pro-T cell,32
+Thymus.immature T cell,Thymus,immature T cell,1277
+Thymus.leukocyte,Thymus,leukocyte,40
+Tongue.basal cell of epidermis,Tongue,basal cell of epidermis,1086
+Tongue.keratinocyte,Tongue,keratinocyte,330
+Trachea.blood cell,Trachea,blood cell,206
+Trachea.endothelial cell,Trachea,endothelial cell,113
+Trachea.epithelial cell,Trachea,epithelial cell,201
+Trachea.mesenchymal cell,Trachea,mesenchymal cell,830

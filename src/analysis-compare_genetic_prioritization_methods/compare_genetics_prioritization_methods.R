@@ -49,7 +49,7 @@ df.ldsc
 # ======================================================================= #
 # ================================ MAGMA ================================ #
 # ======================================================================= #
-file.magma <- here("src/magma/out.cell_prioritization.mousebrain.BMI_UKBB_Loh2018_no_mhc.sem_meta_mean.csv")
+file.magma <- here("src/model-fit_gene_based_scores/out.cell_prioritization.mousebrain.BMI_UKBB_Loh2018_no_mhc.sem_meta_mean.csv")
 df.magma <- read_csv(file.magma)
 df.magma <- df.magma %>% select(annotation, pval=p.value)
 df.magma
@@ -74,7 +74,7 @@ df.depict_zscore <- df.depict_zscore %>% select(annotation=`MeSH term`,
 # ================================ ROLYPPOLY ================================ #
 # ======================================================================= #
 # read CSV in this folder
-file.rolypoly <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp.v3/inference_rp_ldscmunge.BMI_UPDATE_Yengo2018_no_mhc.tss.100kb.none.nboot500/table.pvals.mousebrain_all.sem_mean.csv"
+file.rolypoly <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp.v3/inference_rp_ldscmunge.BMI_UPDATE_Yengo2018_no_mhc.tss.100kb.none.nboot500/table.pvals.mousebrain_all.sem_mean.csv"
 df.rolypoly <- read_csv(file.rolypoly)
 df.rolypoly <- df.rolypoly %>% select(annotation, pval=bp_value)
 
@@ -99,11 +99,11 @@ df <- bind_rows(list.comb, .id="method")
 
 df.export <- df %>% spread(key="method", value="pval")
 file.out <- sprintf("method_comparison.mousebrain.pvals%s.csv", if_else(flag_include_depict, ".with_depict", ""))
-df.export %>% write_csv(file.out)
+# df.export %>% write_csv(file.out)
 
 df.export.rank <- df %>% group_by(method) %>% mutate(pval=rank(pval)) %>% spread(key="method", value="pval")
 file.out <- sprintf("method_comparison.mousebrain.rank%s.csv", if_else(flag_include_depict, ".with_depict", ""))
-df.export.rank %>% write_csv(file.out)
+# df.export.rank %>% write_csv(file.out)
 
 
 
@@ -115,8 +115,8 @@ df.export.rank %>% write_csv(file.out)
 df.matplot <- df %>% mutate(pval_mlog10 = -log10(pval)) 
 df.matplot <- df.matplot %>% select(-pval) %>% spread(key="method", value="pval_mlog10")
 ggpairs(df.matplot %>% select(-annotation))
-file.out <- sprintf("method_comparison.mousebrain.matrix_plot%s.pdf", if_else(flag_include_depict, ".with_depict", ""))
-ggsave(file.out, width=12, height=12)
+# file.out <- sprintf("method_comparison.mousebrain.matrix_plot%s.pdf", if_else(flag_include_depict, ".with_depict", ""))
+# ggsave(file.out, width=12, height=12)
 
 # ======================================================================= #
 # ================================ PLOT BARPLOT ================================ #
@@ -140,8 +140,8 @@ ggplot(df %>% filter(annotation %in%  filter.celltypes), aes(x=annotation, y=-lo
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip() +
   labs(x="Cell-type", y=expression(-log[10](P)))
-file.out <- sprintf("method_comparison.mousebrain.bar_plot_fdr_celltypes%s.pdf", if_else(flag_include_depict, ".with_depict", ""))
-ggsave(file.out, width=10, height=6)
+# file.out <- sprintf("method_comparison.mousebrain.bar_plot_fdr_celltypes%s.pdf", if_else(flag_include_depict, ".with_depict", ""))
+# ggsave(file.out, width=10, height=6)
 
 
 

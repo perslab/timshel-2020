@@ -12,6 +12,12 @@ import random
 
 import make_annot_from_geneset_all_chr
 
+###################################### TODO ######################################
+
+### Run without the default use of two-stage estimation and a cap on maximum chisq in estimation of the intercept term
+# --chisq-max 9999 --two-step 9999 # (an arbitrarily high value) per recommendation of the Neale Lab. This is meant to adjust for the very large sample size of the UK Biobank. 
+# REF: http://www.nealelab.is/blog/2017/9/20/insights-from-estimates-of-snp-heritability-for-2000-traits-and-disorders-in-uk-biobank
+
 ###################################### USAGE ######################################
 # Compatibility: Python 2 and 3
 

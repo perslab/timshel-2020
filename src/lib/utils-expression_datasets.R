@@ -54,12 +54,11 @@ utils.rename_annotations.tabula_muris <- function(annotations, style, check_all_
   # annotations:      a vector of annotations. 
   #                   the annotation names should be cleaned without spaces
   #                   e.g. for tabula_muris "Brain_Non-Myeloid.oligodendrocyte_precursor_cell"
-  # style:        style.
+  # style:            style.
   # check_all_matches:  if true, the function will raise an exception if not all input annotations were found in the database.
   ### OUTPUT
   # a vector of formatted annotation names. Only matching names will be updated.
   # the length of the output vector is equal to the input vector.
-  stop("NOT IMPLEMENTED YET")
   
   allowed_styles <- c("celltype", "tissue - celltype", "celltype (tissue)")
   if (!style %in% allowed_styles) {
@@ -68,38 +67,55 @@ utils.rename_annotations.tabula_muris <- function(annotations, style, check_all_
   
   ### Get metadata
   df.metadata <- get_metadata("tabula_muris")
-  ### Clean metadata
-  df.metadata <- df.metadata %>% mutate(tissue_clean = case_when(
+  ### Clean metadata: tissues
+  df.metadata <- df.metadata %>% mutate(tissue = case_when(
     tissue == "Brain_Myeloid" ~ "Brain",
     tissue == "Brain_Non-Myeloid" ~ "Brain",
     TRUE ~ stringr::str_replace(tissue, pattern="_", replacement=" ") # TRUE ~ as.character(tissue)
     )
   )
+  ### Note: "cell_type" column is already clean: Bergmann glial cell", "brain pericyte"
+
   
+  ### Check that all are present in database
+  bool.matches <- annotations %in% df.metadata$annotation
+  if (check_all_matches && !all(bool.matches)) {
+    annotations_not_found <- annotations[!bool.matches]
+    stop(sprintf("Some annotations not found: [%s]", paste(annotations_not_found, collapse=",")))
+  }
   
+  ### Format output conditional on style
+  df.metadata.select <- df.metadata %>% filter(annotation %in% annotations)
   if (style == "celltype") {
-    # TODO
+    df.out_fmt <- df.metadata.select %>% 
+      mutate(fmt=cell_type)
   } else if (style=="tissue - celltype") {
-    # TODO
+    df.out_fmt <- df.metadata.select %>% 
+      mutate(fmt=paste(tissue, " - ", cell_type, sep=""))
   } else if (style=="celltype (tissue)") {
-    # TODO
+    df.out_fmt <- df.metadata.select %>% 
+      mutate(fmt=paste(cell_type, "(", tissue, ")", sep=""))
   } else {
     stop("Internal function error")
   }
-  ### Rea
   
-  ### TODO
-  # PRINT UNIQUE ANNOTATION THAT DID NOT MATCH.
-  # Clean Brain_Non_myeloid.
-  
-
+  ### Join renamed with input
+  df.all <- tibble(annotation=annotations) # this ensures that the return value has the same length as the input
+  df.all <- df.all %>% left_join(df.out_fmt, by="annotation")
+  ### Add fmt column for non-matches
+  df.all <- df.all %>% mutate(fmt=if_else(is.na(fmt), annotation, fmt)) 
+  # ^ non-matches have NA values in the 'fmt' column. we replace na with the input annotation name
+  annotations_fmt <- df.all %>% pull(fmt) # returns vector
+  return(annotations_fmt)
 }
 
 ### EXAMPLE CALL
-# style <- "fullname_author_year"
-# gwas_ids <- c("CROHNS_Jostins2012", "LIPIDS_HDL_Teslovich2010") # must pass
-# gwas_ids.fmt <- utils.rename_gwas(gwas_ids, style, return_as_df=F)
-# gwas_ids.fmt
+# style <- "tissue - celltype"
+# annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5", "Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
+# annotations_fmt <- utils.rename_annotations.tabula_muris(annotations, style, check_all_matches=F)
+# annotations_fmt
+
+
 
 # ======================================================================= #
 # ========================= CAMPBELL RENAME FUNCTION ===================== #

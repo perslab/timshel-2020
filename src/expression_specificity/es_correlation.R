@@ -30,12 +30,12 @@ setwd(here("src/expression_specificity"))
 # ======================================================================= #
 
 ### Tabula muris
-dataset_prefix <- "tabula_muris"
-filter.celltypes <- c("Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
+# dataset_prefix <- "tabula_muris"
+# filter.celltypes <- c("Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
 
 ### Mousebrain
-# dataset_prefix <- "mousebrain_all"
-# filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
+dataset_prefix <- "mousebrain_all"
+filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
 
 # ======================================================================= #
 # ============================ LOAD DATA =============================== #

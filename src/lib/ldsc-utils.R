@@ -1,5 +1,6 @@
 ### Helper functions for LDSC post analysis
 
+library(tidyverse)
 
 # ======================================================================= #
 # ============================== MISC =============================== #
@@ -57,45 +58,3 @@ load_ldsc_cts_results <- function(file.ldsc_cts, dataset_prefix) {
   return(df.ldsc_cts)
 }
 
-
-# ======================================================================= #
-# ============================== READ METADATA =============================== #
-# ======================================================================= #
-
-get_metadata <- function(dataset_prefix) {
-  if (dataset_prefix == "campbell_lvl1") {
-    file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv"
-    df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl1)
-    df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
-  } else if (dataset_prefix == "campbell_lvl2") {
-    file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv"
-    df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl2)
-    df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
-  } else if (dataset_prefix == "mousebrain_all") {
-    cols_metadata_keep <- c("ClusterName",
-                            "Class",
-                            "Description",
-                            "NCells",
-                            "Neurotransmitter",
-                            "Probable_location",
-                            "Region",
-                            "TaxonomyRank1",
-                            "TaxonomyRank2",
-                            "TaxonomyRank3",
-                            "TaxonomyRank4")
-    file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
-    # df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
-    df.metadata <- read_csv(file.metadata)
-    df.metadata <- df.metadata %>% mutate(color_by_variable = Class)
-  } else if (dataset_prefix == "tabula_muris") {
-    file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
-    df.metadata <- read_csv(file.metadata)
-    df.metadata <- df.metadata %>% mutate(
-      annotation = tissue_celltype,
-      color_by_variable = tissue)
-    df.metadata <- df.metadata %>% mutate(annotation = stringr::str_replace_all(annotation, pattern="\\s+", replacement="_"))
-  } else {
-    stop("wrong dataset_prefix")
-  }
-  return(df.metadata)
-}

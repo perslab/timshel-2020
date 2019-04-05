@@ -37,9 +37,10 @@ file.data <- here("results/h2_annotation_intervals-multi_gwas.csv.gz")
 df.ldsc <- read_csv(file.data)
 
 # ======================================================================= #
-# ================== COMPUTE AVERAGE across all traits =================== #
+# ========== COMPUTE AVERAGE across all meta-analysis traits ============ #
 # ======================================================================= #
 
+gwas_ids.meta_analysis <- utils.get_gwas_ids_for_meta_analysis()
 ### Dplyr summarise
 
 # ======================================================================= #
@@ -55,7 +56,7 @@ display.brewer.pal(n=6, name="YlOrRd")
 ### SELECTED ANNOTATIONS
 filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
 # filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5")
-# filter.annotations <- c(filter.annotations, "Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte")
+# filter.annotations <- c(filter.annotations, "Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
 
 ### GWAS
 # filter.gwas <- "BMI_UKBB_Loh2018"

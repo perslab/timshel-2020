@@ -20,11 +20,60 @@ library(here)
 
 
 # ======================================================================= #
-# =============================== DATA ================================= #
+# ===================== DATA GWAS_ID META-ANALYSIS ====================== #
+# ======================================================================= #
+
+# N_GWAS = 39
+# GWAS represent represent the lastest GWAS for each trait.
+# Traits are selected to be as independent/non-redundant as possible.
+# LAST MODIFIED: 04.05.2019
+
+.data.gwas_ids_meta_analysis <- "AD_Jansen2019
+ADHD_PGC_Demontis2017
+AN_PGC_Duncan2017
+ASD_iPSYCH_PGC_Grove2018
+BIP_PGC2018
+BMI_UKBB_Loh2018
+CAD_Schunkert2011
+CARDIOVASCULAR_UKBB_Loh2018
+CELIAC_Dubois2010
+CROHNS_Jostins2012
+DEPRESSION_Nagel2018
+DIASTOLICadjMED_UKBB_Loh2018
+EA3_Lee2018
+FG_Female_Lagou2018
+FI_Female_Lagou2018
+HBA1C_MAGIC_Wheeler2017
+HEIGHT_UKBB_Loh2018
+IBD_Jostins2012
+INSOMNIA_Jansen2018
+INTELLIGENCE_Savage2018
+LIPIDS_HDL_Teslovich2010
+LIPIDS_LDL_Teslovich2010
+LIPIDS_TG_Teslovich2010
+LUPUS_Bentham2015
+MDD_Howard2019
+MS_Patsopoulos2011
+NEUROTICISM_Nagel2018
+PBC_Cordell2015
+RA_Okada2014
+RB_Linner_2019
+SCZ_Pardinas2018
+SWB_Okbay2016
+SYSTOLICadjMED_UKBB_Loh2018
+T1D_Bradfield2011
+T2D_UKBB_Loh2018
+UC_Jostins2012
+WHR_Pulit2019
+WHRadjBMI_UKBB_Loh2018
+WORRY_Nagel2018"
+
+# ======================================================================= #
+# =========================== DATA RENAMING ============================= #
 # ======================================================================= #
 # TODO: move to .csv file in data/
 
-.data.rename_gwas <- "trait_name_full	trait_name_abrv	author	year	gwas_id
+.data.gwas_rename <- "trait_name_full	trait_name_abrv	author	year	gwas_id
 Multiple Sclerosis	MS	Patsopoulos	2011	MS_Patsopoulos2011
 Alzheimer's Disease	AD	Lambert	2013	AD_Lambert2013
 Alzheimer's Disease	AD	Jansen	2019	AD_Jansen2019
@@ -95,7 +144,18 @@ Cardiovascular Diseases	CVD	Loh	2018	CARDIOVASCULAR_UKBB_Loh2018"
 
 
 # ======================================================================= #
-# =============================== RENAME FUNCTION ================================= #
+# ========================= FUNCTION: RENAME ============================= #
+# ======================================================================= #
+
+utils.get_gwas_ids_for_meta_analysis <- function() {
+  gwas_ids.meta_analysis <- read_csv(.data.gwas_ids_meta_analysis, col_names=F) %>% pull(X1)
+  print(sprintf("Returning n=%s gwas_ids", length(gwas_ids.meta_analysis)))
+  return(gwas_ids.meta_analysis)
+}
+  
+
+# ======================================================================= #
+# ======================== FUNCTION: RENAME GWAS ========================= #
 # ======================================================================= #
 
 utils.rename_gwas <- function(gwas_ids, style, check_all_matches=F, return_as_df=F) {
@@ -132,7 +192,7 @@ utils.rename_gwas <- function(gwas_ids, style, check_all_matches=F, return_as_df
     print("Warning: trait name abreviations are not unique.")
   }
   ### Read data
-  df.gwas_database <- read_tsv(.data.rename_gwas)
+  df.gwas_database <- read_tsv(.data.gwas_rename)
   if (any(duplicated(df.gwas_database$gwas_id))) {
     stop("internal renaming data frame contains duplicates. Fix the .csv file")
   }

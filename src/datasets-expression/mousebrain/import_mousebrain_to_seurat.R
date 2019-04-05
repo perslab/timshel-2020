@@ -16,7 +16,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
 setwd(wd)
 
 library(Seurat)
@@ -28,7 +28,7 @@ library(tidyverse)
 # ======================================================================= #
 
 ### Data
-file.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-L5.top10_cts.csv.gz"
+file.data <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-L5.top10_cts.csv.gz"
 df.data_raw <- read_csv(file.data) %>% rename(gene=X1)
 dim(df.data_raw) # ---> 27998   1585
 # ^^ duplicates: ???
@@ -38,7 +38,7 @@ head(df.data_raw)
 dim(df.data_raw) # ---> *27933*   1584
 
 ### Meta data
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-L5.top10_cts.metadata.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-L5.top10_cts.metadata.csv"
 df.metadata <- read_csv(file.metadata)
 
 

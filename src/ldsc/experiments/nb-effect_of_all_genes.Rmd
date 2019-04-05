@@ -20,8 +20,8 @@ The analysis was done on Yengo BMI GWAS with the GTEx annotations.
 
 
 ```{r}
-df.all_genes <- read_tsv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-cts_effects_of_model_covariates/experiment.gtex_tissues.baseline.all_genes.BMI_Yengo2018.cell_type_results.txt")
-df.no_all_genes <- read_tsv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-cts_effects_of_model_covariates/experiment.gtex_tissues.baseline.BMI_Yengo2018.cell_type_results.txt")
+df.all_genes <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-cts_effects_of_model_covariates/experiment.gtex_tissues.baseline.all_genes.BMI_Yengo2018.cell_type_results.txt")
+df.no_all_genes <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-cts_effects_of_model_covariates/experiment.gtex_tissues.baseline.BMI_Yengo2018.cell_type_results.txt")
 ```
 
 ```{r}

@@ -19,14 +19,14 @@ library(tidyverse)
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-novo_bulk/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-novo_bulk/"
 setwd(wd)
 
 # ======================================================================= #
 # ============================ PLOT 1: RHO BAR PLOT ============================== #
 # ======================================================================= #
 
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables"
 
 ### read expression data - NOVO BULK | rho (you can also do the same for log_fdr)
 filenames <- list.files(path=dir.data,  pattern="nn_lira_sema_per_brain_area_run1_.*_metadata_corr_rho.csv") # RHO
@@ -36,7 +36,7 @@ list.dfs <- lapply(file.path(dir.data, filenames), read_csv)
 names(list.dfs) <- filenames # e.g. xxx
 names(list.dfs)
 df <- list.dfs %>% purrr::reduce(full_join, by = "X1")
-# df.pvals <- read_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_all_metadata_corr_logfdr.csv")
+# df.pvals <- read_csv("/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_all_metadata_corr_logfdr.csv")
 # df.pvals
 df <- df %>% rename(treatment = X1)
 df <- df %>% filter(treatment %in% c("Vehicle",
@@ -58,7 +58,7 @@ p
 # ============================ PLOT 2 - with P-val significance ============================== #
 # ======================================================================= #
 
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables"
 
 ### read rho (you can also do the same for log_fdr)
 filenames <- list.files(path=dir.data,  pattern="nn_lira_sema_per_brain_area_run1_.*_metadata_corr_rho.csv") # RHO
@@ -69,7 +69,7 @@ names(list.dfs) <- filenames # e.g. xxx
 names(list.dfs)
 df.rho <- list.dfs %>% purrr::reduce(full_join, by = "X1")
 ### read P-vals
-df.pval <- read_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_all_metadata_corr_logfdr.csv")
+df.pval <- read_csv("/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_all_metadata_corr_logfdr.csv")
 df.pval
 ### join
 df <- full_join(df.rho, df.pval, by="X1", suffix = c("-DUMMY_JOIN_STRING-rho", "-DUMMY_JOIN_STRING-pval"))

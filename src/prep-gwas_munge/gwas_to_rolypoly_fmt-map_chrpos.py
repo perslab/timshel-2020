@@ -249,7 +249,7 @@ LOG_TRANSFORM_BETA=False #
 
 ################## cov_INSOMNIA_Hammerschlag2017 ##################
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/INSOMNIA_Hammerschlag2017/Hammerschlag_NatGenet2017_insomnia_sumstats-full_090617.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/INSOMNIA_Hammerschlag2017/Hammerschlag_NatGenet2017_insomnia_sumstats-full_090617.txt.gz"
 # file_out_prefix = "cov_INSOMNIA_Hammerschlag2017"
 
 # ### SNP     UNIQUE_ID       CHR     POS     A1      A2      EAF     OR      BETA    SE      P       N_analyzed      N_cases N_controls      INFO
@@ -412,7 +412,7 @@ LOG_TRANSFORM_BETA=False #
 
 ################## mental_AN_Boraska2014 ##################
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/AN_Boraska2014/gcan_meta.out.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/AN_Boraska2014/gcan_meta.out.gz"
 # file_out_prefix = "mental_AN_Boraska2014"
 
 # ### chromosome      position        SNP     reference_allele        other_allele    eaf     OR      OR_se   OR_95L  OR_95U  z       p_sanger        _-log10_p-value q_statistic     q_p-value       i2      n_studies       n_samples       effects
@@ -429,7 +429,7 @@ LOG_TRANSFORM_BETA=False #
 
 ################## mental_AN_Duncan2017 *NOT COMPLETD* ##################
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/AN_PGC_Duncan2017/pgc.ed.freeze1.summarystatistics.July2017.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/AN_PGC_Duncan2017/pgc.ed.freeze1.summarystatistics.July2017.txt.gz"
 # file_out_prefix = "mental_AN_Duncan2017"
 
 # ### CHR     SNP     BP      A1      A2      INFO    OR      SE      P       ngt
@@ -447,11 +447,11 @@ LOG_TRANSFORM_BETA=False #
 ################## BMI_HEIGHT_Yengo2018 ##################
 
 # ### BMI
-# # file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt.gz"
+# # file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt.gz"
 # # file_out_prefix = "body_BMI_Yengo2018"
 
 # ### HEIGHT
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Wood_et_al+UKBiobank_2018.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Wood_et_al+UKBiobank_2018.txt.gz"
 # file_out_prefix = "body_height_Yengo2018"
 
 
@@ -472,7 +472,7 @@ LOG_TRANSFORM_BETA=False #
 
 ################## MENOPAUSE_Day2015 ##################
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/MENOPAUSE_Day2015/Menopause_HapMap2_DayNG2015_18112015.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/MENOPAUSE_Day2015/Menopause_HapMap2_DayNG2015_18112015.txt.gz"
 # file_out_prefix = "repro_menopause_Day2015"
 
 # ## MarkerName      allele1 allele2 HapMap_eaf      effect  stderr  p
@@ -494,7 +494,7 @@ LOG_TRANSFORM_BETA=False #
 
 ################## MENARCHE_Perry2014 ##################
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/MENARCHE_Perry2014/Menarche_Nature2014_GWASMetaResults_17122014.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/MENARCHE_Perry2014/Menarche_Nature2014_GWASMetaResults_17122014.txt.gz"
 # file_out_prefix = "repro_menarche_Perry2014"
 
 # ## MarkerName      Effect_Allele   Other_Allele    HapMap_Freq     GWAS_Beta       GWAS_P  iCOGs   Plus_iCOGs_Beta Plus_iCOGs_P
@@ -515,7 +515,7 @@ LOG_TRANSFORM_BETA=False #
 
 ################## disease_T2D_Guarch2018 ##################
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/T2D_70kforT2D_Guarch2018/summarystatistics_metal_1KGPhase1_UK10K_imputed_PublicT2DGWAS_data_HetISq_75.w_snpsnap_rsid.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/T2D_70kforT2D_Guarch2018/summarystatistics_metal_1KGPhase1_UK10K_imputed_PublicT2DGWAS_data_HetISq_75.w_snpsnap_rsid.txt.gz"
 # file_out_prefix = "disease_T2D_Guarch2018"
 
 # COL_rsID = "rsID"
@@ -525,7 +525,7 @@ LOG_TRANSFORM_BETA=False #
 # LOG_TRANSFORM_BETA=False
 
 ################## EA3 Lee2018 ##################
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA3_Lee2018/GWAS_EduYears_excl23andMe.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA3_Lee2018/GWAS_EduYears_excl23andMe.txt.gz"
 # file_out_prefix = "cov_EduYears_Lee2018"
 
 # ## MarkerName      CHR     POS     A1      A2      EAF     Beta    SE      Pval
@@ -541,7 +541,7 @@ LOG_TRANSFORM_BETA=False #
 
 
 ################## EA2 Okbay2016 ##################
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA2_Okbay2016/EduYears_Main.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA2_Okbay2016/EduYears_Main.txt.gz"
 # file_out_prefix = "cov_EduYears_Okbay2016"
 
 # COL_rsID = "MarkerName"
@@ -551,7 +551,7 @@ LOG_TRANSFORM_BETA=False #
 # LOG_TRANSFORM_BETA=False
 
 ################## WHR ##################
-## file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHR_COMBINED_AllAncestries.txt.gz"
+## file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHR_COMBINED_AllAncestries.txt.gz"
 ## file_out_prefix = "body_WHR_Shungin2015_ALL"
 
 # file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHRadjBMI_COMBINED_EUR.txt.gz"
@@ -577,22 +577,22 @@ LOG_TRANSFORM_BETA=False #
 # LOG_TRANSFORM_BETA=False
 
 ################## Lipids ##################
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_HDL.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_HDL.txt.gz"
 # file_out_prefix = "lipids_HDL_Willer2013"
 # Number of SNPs in GWAS data: 2437751
 # Number of SNPs in GWAS data *NOT found* in SNP chr pos mapping file: 63826
 # Percent SNPs not found: 2.62 %
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_LDL.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_LDL.txt.gz"
 # file_out_prefix = "lipids_LDL_Willer2013"
 # Number of SNPs in GWAS data: 2447441
 # Number of SNPs in GWAS data *NOT found* in SNP chr pos mapping file: 66167
 # Percent SNPs not found: 2.70 %
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_TC.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_TC.txt.gz"
 # file_out_prefix = "lipids_TC_Willer2013"
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_TG.txt.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_TG.txt.gz"
 # file_out_prefix = "lipids_TG_Willer2013"
 
 # mv jointGwasMc_HDL.gwassumstats.rolypoly_fmt.tab.gz lipids_HDL_Willer2013.gwassumstats.rolypoly_fmt.tab.gz
@@ -600,7 +600,7 @@ LOG_TRANSFORM_BETA=False #
 # mv jointGwasMc_TC.gwassumstats.rolypoly_fmt.tab.gz lipids_TC_Willer2013.gwassumstats.rolypoly_fmt.tab.gz
 # mv jointGwasMc_TG.gwassumstats.rolypoly_fmt.tab.gz lipids_TG_Willer2013.gwassumstats.rolypoly_fmt.tab.gz
 
-# list_files = glob.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_*.txt.gz")
+# list_files = glob.glob("/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/jointGwasMc_*.txt.gz")
 # print list_files
 #     # /Users/djw472/data/GWAS-sumstats/alkesgroup-collection/UKBB/body_BMIz.sumstats.gz
 #     # /Users/djw472/data/GWAS-sumstats/alkesgroup-collection/UKBB/body_HEIGHTz.sumstats.gz
@@ -617,7 +617,7 @@ LOG_TRANSFORM_BETA=False #
 # chr1    rs142557973     T       C       731718  0.665   1.01949 0.0198  0.3298  0
 # chr1    rs141242758     T       C       734349  0.666   1.02071 0.02    0.3055  0
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/ckqny.scz2snpres.gz"
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/ckqny.scz2snpres.gz"
 # file_out_prefix = "mental_SCZ_Ripke2014"
 
 # COL_rsID = "snpid"
@@ -645,8 +645,8 @@ LOG_TRANSFORM_BETA=False #
 # rs2462495       1       79033   A       G       A       0.00129115      0.00321513      0.00929391      7.7E-01 459324  0.536566
 # rs114608975     1       86028   T       C       T       0.896384        0.000549046     0.00115835      5.8E-01 459324  0.340885
 
-# list_files = ["/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/cov_SMOKING_STATUS.sumstats.gz"] # SINGLE-TEST
-# # list_files = glob.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/*sumstats.gz") # get all files
+# list_files = ["/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/cov_SMOKING_STATUS.sumstats.gz"] # SINGLE-TEST
+# # list_files = glob.glob("/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/*sumstats.gz") # get all files
 # print list_files
 
 # ## file_out_prefix = <NOT DEFINED FOR ALKES / LOOP MODE>
@@ -662,7 +662,7 @@ LOG_TRANSFORM_BETA=False #
 # file_gwas = "/Users/djw472/data/GWAS-sumstats/timshel-collection/BMI_Locke2015/All_ancestries_SNP_gwas_mc_merge_nogc.tbl.uniq" # (cannot read .zip from GUI OSX zipped file)
 # file_out_prefix = "body_BMI_Locke2015_All"
 
-# file_gwas = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_Locke2015/EUR_ancestries_SNP_gwas_mc_merge_nogc.tbl.uniq.gz" #
+# file_gwas = "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_Locke2015/EUR_ancestries_SNP_gwas_mc_merge_nogc.tbl.uniq.gz" #
 # file_out_prefix = "body_BMI_Locke2015_EUR"
 
 # COL_rsID = "SNP"
@@ -691,7 +691,7 @@ LOG_TRANSFORM_BETA=False #
 
 
 # file_collection = "/Users/djw472/Dropbox/0_Projects/p_sc_genetics/analysis/src/snpsnap_EUR_1KG_phase3-chrpos_mapping.tab.gz" # OSX
-file_collection = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/snp_mapping/snpsnap_EUR_1KG_phase3-chrpos_mapping.tab.gz" # Ygg
+file_collection = "/projects/timshel/sc-genetics/sc-genetics/data/snp_mapping/snpsnap_EUR_1KG_phase3-chrpos_mapping.tab.gz" # Ygg
 
 COL_OUT_rsID = "rsID"  # do not change unless you really mean it - used to match rolypoly names
 COL_OUT_beta = "beta" # do not change unless you really mean it - used to match rolypoly names

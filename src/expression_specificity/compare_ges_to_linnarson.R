@@ -36,7 +36,7 @@ load(file="mousebrain.sem_obj.RData") # human
 # 2: My GES values are distributed 'close' to normal but with a long tail. The distribution is 'nicer' (less 'spiky', less variance) compared to Linnarson GES.
 # 3: The median of my GES for each cell-type seems to be VERY close to 1. This is a nice attribute.
 
-df.ges.linnarson <- read_file_fast("/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.enrichment_values.csv.gz")
+df.ges.linnarson <- read_file_fast("/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.enrichment_values.csv.gz")
 df.ges.my <- df.ges %>% mutate(gene=sem.ex[["genes"]])
 df.ges.my.join <- df.ges.my %>% left_join(df.ges.linnarson, by="gene")
 ggplot(df.ges.my.join, aes(x=ENT8.x, y=ENT8.y)) + geom_point()

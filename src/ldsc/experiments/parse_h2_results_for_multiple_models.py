@@ -25,7 +25,7 @@ header = ["Model", # PT
 
 all_model_results = []
 for model in models:
-	files = glob.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.{model}/*.results".format(model=model))
+	files = glob.glob("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.{model}/*.results".format(model=model))
 	model_results = []
 	for file_result in files:
 		annotation_name = re.search(r"experiment.gtex_tissues.h2.(.*).BMI_Yengo2018.results$", os.path.basename(file_result)).groups()[0] # experiment.gtex_tissues.h2.Artery_Coronary.BMI_Yengo2018.results

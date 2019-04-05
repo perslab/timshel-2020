@@ -11,7 +11,7 @@
 
 ############################################
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/misc/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/misc/"
 setwd(wd)
 
 # ======================================================================================================= #

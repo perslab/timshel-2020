@@ -21,12 +21,12 @@ import subprocess
 # ### Run the regression
 # GWAS=BMI_Yengo2018
 # CTS=novo_bulk_sema_lira
-# python2 /raid5/projects/timshel/sc-genetics/ldsc/ldsc/ldsc.py \
-#     --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}.sumstats.gz \
-#     --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline. \
-#     --out /raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna_modules/${CTS}_${GWAS} \
+# python2 /projects/timshel/sc-genetics/ldsc/ldsc/ldsc.py \
+#     --h2-cts /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}.sumstats.gz \
+#     --ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline. \
+#     --out /projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna_modules/${CTS}_${GWAS} \
 #     --ref-ld-chr-cts /XXX/${CTS}.ldcts \
-#     --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights.
+#     --w-ld-chr /projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights.
 
 ###################################### DESCRIPTION ######################################
 
@@ -57,9 +57,9 @@ def preprocess(prefix_out, file_multi_gene_set):
 	### Make annot
 	cmd = """{python_exec} make_annot_from_geneset_all_chr.py \
 	--file_multi_gene_set {file_multi_gene_set} \
-	--file_gene_coord /raid5/projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
+	--file_gene_coord /projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
 	--windowsize 100000 \
-	--bimfile_basename /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
+	--bimfile_basename /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
 	--out_dir /scratch/sc-ldsc/{prefix_out} \
 	--out_prefix {prefix_out} \
 	--flag_wgcna \
@@ -90,7 +90,7 @@ def preprocess(prefix_out, file_multi_gene_set):
 
 
 	### make cts file
-	cmd="{python_exec} make_cts_file.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_out}/per_annotation/ --cts_outfile /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/wgcna.{prefix_out}.ldcts.txt".format(python_exec=python_exec, prefix_out=prefix_out)
+	cmd="{python_exec} make_cts_file.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_out}/per_annotation/ --cts_outfile /projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/wgcna.{prefix_out}.ldcts.txt".format(python_exec=python_exec, prefix_out=prefix_out)
 	# ^*OBS***:DIRTY USING wgcna. as prefix in  wgcna.{prefix_out}.ldcts.txt. FIX THIS.
 	print("Running command: {}".format(cmd))
 	p = subprocess.Popen(cmd, shell=True)
@@ -101,12 +101,12 @@ def preprocess(prefix_out, file_multi_gene_set):
 ###################################### CALL FUNCTION ######################################
 
 
-dict_CTS = {"mousebrain_Ependymal":"/raid5/projects/jonatan/tmp-mousebrain/tables/mousebrain_Ependymal_ClusterName_2_cell_cluster_module_genes.csv",
-"mousebrain_Immune":"/raid5/projects/jonatan/tmp-mousebrain/tables/mousebrain_Immune_ClusterName_2_cell_cluster_module_genes.csv",
-"mousebrain_PeripheralGlia":"/raid5/projects/jonatan/tmp-mousebrain/tables/mousebrain_PeripheralGlia_ClusterName_2_cell_cluster_module_genes.csv",
-"mousebrain_Vascular":"/raid5/projects/jonatan/tmp-mousebrain/tables/mousebrain_Vascular_ClusterName_2_cell_cluster_module_genes.csv",
-"mousebrain_Astrocytes":"/raid5/projects/jonatan/tmp-mousebrain/tables/mousebrain_Astrocytes_ClusterName_2_cell_cluster_module_genes.csv",
-"mousebrain_Oligos":"/raid5/projects/jonatan/tmp-mousebrain/tables/mousebrain_Oligos_ClusterName_2_cell_cluster_module_genes.csv"}
+dict_CTS = {"mousebrain_Ependymal":"/projects/jonatan/tmp-mousebrain/tables/mousebrain_Ependymal_ClusterName_2_cell_cluster_module_genes.csv",
+"mousebrain_Immune":"/projects/jonatan/tmp-mousebrain/tables/mousebrain_Immune_ClusterName_2_cell_cluster_module_genes.csv",
+"mousebrain_PeripheralGlia":"/projects/jonatan/tmp-mousebrain/tables/mousebrain_PeripheralGlia_ClusterName_2_cell_cluster_module_genes.csv",
+"mousebrain_Vascular":"/projects/jonatan/tmp-mousebrain/tables/mousebrain_Vascular_ClusterName_2_cell_cluster_module_genes.csv",
+"mousebrain_Astrocytes":"/projects/jonatan/tmp-mousebrain/tables/mousebrain_Astrocytes_ClusterName_2_cell_cluster_module_genes.csv",
+"mousebrain_Oligos":"/projects/jonatan/tmp-mousebrain/tables/mousebrain_Oligos_ClusterName_2_cell_cluster_module_genes.csv"}
 
 for prefix_out, file_multi_gene_set in dict_CTS.items():
 	preprocess(prefix_out, file_multi_gene_set)
@@ -114,7 +114,7 @@ for prefix_out, file_multi_gene_set in dict_CTS.items():
 
 ###################################### CALL LDSC ######################################
 
-path_ldsc_script = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc/ldsc.py" 
+path_ldsc_script = "/projects/timshel/sc-genetics/ldsc/ldsc/ldsc.py" 
 
 n_parallel_jobs = 4
 
@@ -126,11 +126,11 @@ list_GWAS = ["BMI_Yengo2018",
 list_cmds = []
 for CTS in dict_CTS:
 	for GWAS in list_GWAS:
-		cmd = """{python_exec} {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{GWAS}.sumstats.gz \
-	    --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline. \
-	    --out /raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.{CTS}.{GWAS} \
-	    --ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/wgcna.{CTS}.ldcts.txt \
-	    --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights.""".format(
+		cmd = """{python_exec} {script} --h2-cts /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{GWAS}.sumstats.gz \
+	    --ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline. \
+	    --out /projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.{CTS}.{GWAS} \
+	    --ref-ld-chr-cts /projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/wgcna.{CTS}.ldcts.txt \
+	    --w-ld-chr /projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights.""".format(
 			python_exec=python_exec,
 			script=path_ldsc_script,
 			GWAS=GWAS,

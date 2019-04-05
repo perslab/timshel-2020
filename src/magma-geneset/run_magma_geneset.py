@@ -11,7 +11,7 @@ import pandas as pd
 ### Usage
 # python run_magma_geneset.py \
 # --file_gwas_raw /scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw \
-# --file_wgcna_module_genelist /raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv \
+# --file_wgcna_module_genelist /projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv \
 # --outprefix magma_geneset_BMI_Yengo2018
 
 
@@ -42,7 +42,7 @@ def map_ensembl_genes_mouse_to_human(df):
     """
     
     
-    file_mapping = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
+    file_mapping = "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
     ### SNIPPET
     # ensembl_gene_id chromosome_name start_position  end_position    mmusculus_homolog_ensembl_gene  mmusculus_homolog_orthology_confidence
     # ENSG00000138593 15      49280673        49338760        ENSMUSG00000035093      1
@@ -109,7 +109,7 @@ def map_hs_ensembl_to_entrez(df):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--file_gwas_raw', type=str, help='Filepath to MAGMA GWAS raw. E.g. /scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw')
-parser.add_argument('--file_wgcna_module_genelist', type=str, help='Filepath to WGCNA Pipeline genelist ("*_cluster_module_genes.csv file)". E.g. /raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv')
+parser.add_argument('--file_wgcna_module_genelist', type=str, help='Filepath to WGCNA Pipeline genelist ("*_cluster_module_genes.csv file)". E.g. /projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv')
 parser.add_argument('--outprefix', type=str, help='Output prefix. Absolute or relative. E.g. /scratch/test_prefix or just myprefix')
 args = parser.parse_args()
 
@@ -121,7 +121,7 @@ outprefix = args.outprefix
 
 ### args test
 # file_gwas_raw = "/scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw"
-# file_wgcna_module_genelist = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv"
+# file_wgcna_module_genelist = "/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv"
 # outprefix = "magma_test_run_bmi"
 
 

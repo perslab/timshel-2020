@@ -13,7 +13,7 @@ library(GGally) # for ggpairs and ggcorr
 library(ggridges)
 
 ### Load 'table.pvals.ALL_DATA.csv'
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
 df <- read_csv(file.in)
 df <- df %>% filter(grepl("mousebrain",dataset))
 df <- df %>% mutate(dataset=stringr::str_replace(dataset, ".*\\.", "")) # shorten dataset names (rename)

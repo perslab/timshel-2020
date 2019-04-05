@@ -3,7 +3,7 @@
 library(tidyverse)
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/wgcna_modules/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/wgcna_modules/"
 setwd(wd)
 
 
@@ -12,7 +12,7 @@ setwd(wd)
 
 
 ### Read LDSC results
-file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.maca.BMI_Yengo2018.cell_type_results.txt"
+file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.maca.BMI_Yengo2018.cell_type_results.txt"
 df.ldsc_cts <- read_tsv(file.ldsc_cts) %>% rename(BETA=Coefficient, SE=Coefficient_std_error, P=Coefficient_P_value)
 df.ldsc_cts <- df.ldsc_cts %>% mutate(module_id=stringr::str_split_fixed(Name,pattern="\\.",n=2)[,2]) # add module ID from 'Name' string, e.g. maca_tissue_cell_type.slateblue4
 n.top_modules <- 100
@@ -33,7 +33,7 @@ df.cem <- df.cem %>% rename(cell_type=V1, cell_id=V2)
 
 
 ### Read LDSC results
-file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.mousebrain.BMI_Yengo2018.cell_type_results.txt"
+file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.mousebrain.BMI_Yengo2018.cell_type_results.txt"
 df.ldsc_cts <- read_tsv(file.ldsc_cts) %>% rename(BETA=Coefficient, SE=Coefficient_std_error, P=Coefficient_P_value)
 df.ldsc_cts <- df.ldsc_cts %>% mutate(module_id=stringr::str_split_fixed(Name,pattern="\\.",n=2)[,2]) # add module ID from 'Name' string, e.g. maca_tissue_cell_type.slateblue4
 n.top_modules <- 100

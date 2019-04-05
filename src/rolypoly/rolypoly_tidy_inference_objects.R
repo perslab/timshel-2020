@@ -34,7 +34,7 @@ file.rp <- opt$input_file
 
 # file.rp <- "out.rolypoly_objs.body_BMI_Locke2015.squared_tss_10kb.final.RData"
 #file.rp <- "out.rolypoly_objs-v1/out.rolypoly_objs.disease_CARDIOVASCULAR.squared_tss_10kb.final.RData"
-# file.rp <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot1000/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData"
+# file.rp <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot1000/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData"
 
 # name.gwas <- stringr::str_split(basename(file.rp), "\\.")[[1]][2] # --> name.gwas = "body_BMI_Locke2015"
 # print(name.gwas)

@@ -16,14 +16,14 @@
 
 library(tidyverse)
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 setwd(wd)
 
 ### Output file
 # SNP     P       N
 
 # DIR_OUT <- "/scratch/tmp-magma_gwas"
-DIR_OUT <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma"
+DIR_OUT <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma"
 
 
 
@@ -35,7 +35,7 @@ DIR_OUT <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_m
 ### blood_EOSINOPHIL_COUNT
 file.out <- file.path(DIR_OUT, "blood_EOSINOPHIL_COUNT.txt")
 N_study <- 444656
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/blood_EOSINOPHIL_COUNT.sumstats.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/alkesgroup_UKBB/blood_EOSINOPHIL_COUNT.sumstats.gz"
 df <- read_tsv(file.in)
 #df <- df %>% rename(SNP=rsID, P=pval)
 #df <- df %>% mutate(N=N_study) # modify
@@ -99,14 +99,14 @@ df %>% write_tsv(file.out)
 # ============================  NULL GWAS  =============================== #
 # ======================================================================= #
 ### TEST
-# head /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/NULL_GWAS/plink_out.1KG_phase3_EUR_null_gwas.P1.qassoc | perl -lane 'if ($.==1) {print "SNP\tP\tN"; next}; print "$F[1]\t$F[8]\t503"'
+# head /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/NULL_GWAS/plink_out.1KG_phase3_EUR_null_gwas.P1.qassoc | perl -lane 'if ($.==1) {print "SNP\tP\tN"; next}; print "$F[1]\t$F[8]\t503"'
 
 # N_study = 503 (individuals from 1KGP)
 
 ### BASH command ---> WORKS
 # for i in {1..10}
 # do
-# cat /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/NULL_GWAS/plink_out.1KG_phase3_EUR_null_gwas.P${i}.qassoc | perl -lane 'if ($.==1) {print "SNP\tP\tN"; next}; print "$F[1]\t$F[8]\t503"' > /scratch/tmp-magma_gwas/1KG_phase3_EUR_null_gwas_P${i}.txt
+# cat /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/NULL_GWAS/plink_out.1KG_phase3_EUR_null_gwas.P${i}.qassoc | perl -lane 'if ($.==1) {print "SNP\tP\tN"; next}; print "$F[1]\t$F[8]\t503"' > /scratch/tmp-magma_gwas/1KG_phase3_EUR_null_gwas_P${i}.txt
 # done
 
 
@@ -114,7 +114,7 @@ df %>% write_tsv(file.out)
 # null_gwas_idx <- 1:10
 # for (i in null_gwas_idx) {
 #   perl_cmd <- 'if ($.==1) {print "SNP\tP\tN"; next}; print "$F[1]\t$F[8]\t503"'
-#   cmd <- sprintf("head /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/NULL_GWAS/plink_out.1KG_phase3_EUR_null_gwas.P%s.qassoc | perl -lane '%s' > /scratch/tmp-magma_gwas/1KG_phase3_EUR_null_gwas.P%s.txt", i, perl_cmd, i)
+#   cmd <- sprintf("head /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/NULL_GWAS/plink_out.1KG_phase3_EUR_null_gwas.P%s.qassoc | perl -lane '%s' > /scratch/tmp-magma_gwas/1KG_phase3_EUR_null_gwas.P%s.txt", i, perl_cmd, i)
 #   system2(cmd)
 #   print(cmd)
 # }
@@ -136,7 +136,7 @@ df %>% write_tsv(file.out)
 # fasting glucose (up to 67,506 men/73,089 women) 
 file.out <- file.path(DIR_OUT, "FG_male_Lagou2018.txt")
 N_study <- 67506 # MALE SAMPLE SIZE
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FG_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FG_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=snp, P=male_pvalue)
 df <- df %>% mutate(N=N_study) # modify
@@ -148,7 +148,7 @@ df %>% write_tsv(file.out)
 # fasting insulin (up to 47,806 men/50,404 women),
 file.out <- file.path(DIR_OUT, "FI_male_Lagou2018.txt")
 N_study <- 47806 # MALE SAMPLE SIZE
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FI_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FI_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=snp, P=male_pvalue)
 df <- df %>% mutate(N=N_study) # modify
@@ -162,7 +162,7 @@ df %>% write_tsv(file.out)
 # fasting glucose (up to 67,506 men/73,089 women) 
 file.out <- file.path(DIR_OUT, "FG_female_Lagou2018.txt")
 N_study <- 73089 # FEMALE SAMPLE SIZE
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FG_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FG_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=snp, P=female_pvalue)
 df <- df %>% mutate(N=N_study) # modify
@@ -174,7 +174,7 @@ df %>% write_tsv(file.out)
 # fasting insulin (up to 47,806 men/50,404 women),
 file.out <- file.path(DIR_OUT, "FI_female_Lagou2018.txt")
 N_study <- 50404 # FEMALE SAMPLE SIZE
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FI_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/FI_FG_Lagou2018/FI_STAGE1_2_3_SEX_GWAS_2018.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=snp, P=female_pvalue)
 df <- df %>% mutate(N=N_study) # modify
@@ -196,7 +196,7 @@ df %>% write_tsv(file.out)
 file.out <- file.path(DIR_OUT, "T2D_70kforT2D_Guarch2018.txt")
 N_study <- 12931+57196
 # 12,931 cases and 57,196 controls from European descent populations.
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/T2D_70kforT2D_Guarch2018/summarystatistics_metal_1KGPhase1_UK10K_imputed_PublicT2DGWAS_data_HetISq_75.w_snpsnap_rsid.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/T2D_70kforT2D_Guarch2018/summarystatistics_metal_1KGPhase1_UK10K_imputed_PublicT2DGWAS_data_HetISq_75.w_snpsnap_rsid.txt.gz"
 # GWAS of full sample including 113,006 individuals (32,384 cases and 80,622 controls)
 df <- read_tsv(file.in)
 head(df)
@@ -231,7 +231,7 @@ N_study <- 105318
 # CASES = 40,675
 # CONTROLS = 64,643
 # TOTAL = 105,318
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Pardinas2018/clozuk_pgc2.meta.sumstats.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Pardinas2018/clozuk_pgc2.meta.sumstats.txt.gz"
 # GWAS of full sample including 113,006 individuals (32,384 cases and 80,622 controls)
 df <- read_tsv(file.in)
 head(df)
@@ -261,7 +261,7 @@ df %>% write_tsv(file.out)
 
 file.out <- file.path(DIR_OUT, "INSOMNIA_Hammerschlag2017.txt")
 N_study <- 32384+80622
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/INSOMNIA_Hammerschlag2017/Hammerschlag_NatGenet2017_insomnia_sumstats-full_090617.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/INSOMNIA_Hammerschlag2017/Hammerschlag_NatGenet2017_insomnia_sumstats-full_090617.txt.gz"
 # GWAS of full sample including 113,006 individuals (32,384 cases and 80,622 controls)
 df <- read_tsv(file.in)
 head(df)
@@ -287,7 +287,7 @@ df %>% write_tsv(file.out)
 #### BDvsCONT
 file.out <- file.path(DIR_OUT, "BIP_SCZ_BDvsCONT_PGC2018.txt")
 N_study <- 20129+21524
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BIP_SCZ_PGC2018/BDvsCONT.sumstats.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BIP_SCZ_PGC2018/BDvsCONT.sumstats.gz"
 # BDvsCONT.sumstats.gz: Bipolar disorder cases (n=20,129) against an independent bipolar specific set of controls (n=21,524)
 df <- read_tsv(file.in)
 head(df)
@@ -300,7 +300,7 @@ df %>% write_tsv(file.out)
 ### SCZvsBD
 file.out <- file.path(DIR_OUT, "BIP_SCZ_SCZvsBD_PGC2018.txt")
 N_study <- 23585+15270
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BIP_SCZ_PGC2018/SCZvsBD.sumstats.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BIP_SCZ_PGC2018/SCZvsBD.sumstats.gz"
 # SCZvsBD.sumstats.gz: A subset of schizophrenia cases (n=23,585) and bipolar disorder cases (n=15,270) matched for ancestry and genotyping array platform.
 df <- read_tsv(file.in)
 head(df)
@@ -320,7 +320,7 @@ file.out <- file.path(DIR_OUT, "AN_PGC_Duncan2017.txt")
 N_study <- 3495+10982 # --> 14477
 # N_CASES = 3,495
 # N_CONTROL = 10,982
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/AN_PGC_Duncan2017/pgc.ed.freeze1.summarystatistics.July2017.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/AN_PGC_Duncan2017/pgc.ed.freeze1.summarystatistics.July2017.txt.gz"
 df <- read_tsv(file.in)
 head(df)
 df <- df %>% mutate(N=N_study) # modify
@@ -343,7 +343,7 @@ df %>% write_tsv(file.out)
 file.out <- file.path(DIR_OUT, "ADHD_PGC_Demontis2017.txt")
 N_study <- 19099+34194 # 53293
 # adhd_eur_jun2017.gz: European ancestry meta-analysis (19,099 cases, 34,194 controls)
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/ADHD_PGC_Demontis2017/adhd_eur_jun2017.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/ADHD_PGC_Demontis2017/adhd_eur_jun2017.gz"
 df <- read_tsv(file.in)
 head(df)
 df <- df %>% mutate(N=N_study) # modify
@@ -367,7 +367,7 @@ N_study <- 46350 # MAGMA docs: the total sample size, also when using case-contr
 # N_CASES = 18381
 # N_CONTROL = 27969
 # TOTAL = 18381+27969=46350
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/ASD_iPSYCH_PGC_Grove2018/iPSYCH-PGC_ASD_Nov2017.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/ASD_iPSYCH_PGC_Grove2018/iPSYCH-PGC_ASD_Nov2017.txt.gz"
 df <- read_tsv(file.in)
 head(df)
 df <- df %>% mutate(N=N_study) # modify
@@ -394,7 +394,7 @@ N_study <- 13574 # MAGMA docs: the total sample size, also when using case-contr
 # N_CASES = 6197
 # N_CONTROL = 7377
 # TOTAL = 6197+7377=13574
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/ASD_iPSYCH_PGC_Anney2017/daner_AUT_meta14_CEU_all.hg19.Mar2016_info_0.60_maf_0.05_release_Jun2017.with_header.tsv.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/ASD_iPSYCH_PGC_Anney2017/daner_AUT_meta14_CEU_all.hg19.Mar2016_info_0.60_maf_0.05_release_Jun2017.with_header.tsv.gz"
 df <- read_tsv(file.in)
 head(df)
 df <- df %>% rename(SNP=snp, P=p)
@@ -415,7 +415,7 @@ file.out <- file.path(DIR_OUT, "MDD_PGC_Wray2018.txt")
 N_study <- 153780 # MAGMA docs: the total sample size, also when using case-control analysis results
 # N_CASES = 130664-75607=55057
 # N_CONTROL = 330470-231747=98723
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/MDD_PGC_Wray2018/MDD2018_ex23andMe.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/MDD_PGC_Wray2018/MDD2018_ex23andMe.gz"
 df <- read_tsv(file.in)
 df.problems <- problems(df)
 df <- df %>% filter(complete.cases(.)) # OBS: remove NA values
@@ -439,7 +439,7 @@ df %>% write_tsv(file.out)
 file.out <- file.path(DIR_OUT, "EA2_Okbay2016.txt")
 N_study <- 217568 # MAGMA docs: the total sample size, also when using case-control analysis results
 
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA2_Okbay2016/EduYears_Main.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA2_Okbay2016/EduYears_Main.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=MarkerName, P=Pval) %>% mutate(N=N_study) # modify
 df <- df %>% select(SNP, P, N) # filter
@@ -457,7 +457,7 @@ df %>% write_tsv(file.out)
 file.out <- file.path(DIR_OUT, "EA3_Lee2018.txt")
 N_study <- 766345 # MAGMA docs: the total sample size, also when using case-control analysis results
 
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA3_Lee2018/GWAS_EduYears_excl23andMe.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA3_Lee2018/GWAS_EduYears_excl23andMe.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=MarkerName, P=Pval) %>% mutate(N=N_study) # modify
 df <- df %>% select(SNP, P, N) # filter
@@ -472,7 +472,7 @@ df %>% write_tsv(file.out)
 file.out <- file.path(DIR_OUT, "SCZ_EUR_Ripke2014.txt")
 N_study <- 77096 # EUR only
 
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/daner_PGC_SCZ49.sh2_mds10_1000G-frq_2.OR-FILTER.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/SCZ_Ripke2014/daner_PGC_SCZ49.sh2_mds10_1000G-frq_2.OR-FILTER.gz"
 df <- read_tsv(file.in)
 df <- df %>% mutate(N=N_study) # modify
 df <- df %>% select(SNP, P, N) # filter
@@ -487,7 +487,7 @@ df %>% write_tsv(file.out)
 
 file.out <- file.path(DIR_OUT, "HEIGHT_Wood2014.txt")
 
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/HEIGHT_Wood2014/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/HEIGHT_Wood2014/GIANT_HEIGHT_Wood_et_al_2014_publicrelease_HapMapCeuFreq.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=MarkerName, P=p)
 df <- df %>% select(SNP, P, N) # filter
@@ -503,7 +503,7 @@ df %>% write_tsv(file.out)
 
 ### LDL
 file.out <- file.path(DIR_OUT, "LIPIDS_LDL_Willer2013.txt")
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_LDL.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_LDL.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=rsid, P='P-value')
 df <- df %>% select(SNP, P, N) # filter
@@ -513,7 +513,7 @@ df %>% write_tsv(file.out)
 
 ### HDL
 file.out <- file.path(DIR_OUT, "LIPIDS_HDL_Willer2013.txt")
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_HDL.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_HDL.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=rsid, P='P-value')
 df <- df %>% select(SNP, P, N) # filter
@@ -524,7 +524,7 @@ df %>% write_tsv(file.out)
 
 ### TC
 file.out <- file.path(DIR_OUT, "LIPIDS_TC_Willer2013.txt")
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_TC.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/LIPIDS_Willer2013/jointGwasMc_TC.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=rsid, P='P-value')
 df <- df %>% select(SNP, P, N) # filter
@@ -547,7 +547,7 @@ df %>% write_tsv(file.out)
 
 ### WHR
 file.out <- file.path(DIR_OUT, "WHR_Shungin2015.txt")
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHR_COMBINED_EUR.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHR_COMBINED_EUR.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=MarkerName, P='p')
 df <- df %>% select(SNP, P, N) # filter
@@ -558,7 +558,7 @@ df %>% write_tsv(file.out)
 
 ### WHR_adjBMI [**SPECIAL**]
 file.out <- file.path(DIR_OUT, "WHR_adjBMI_Shungin2015.txt")
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHRadjBMI_COMBINED_EUR.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHRadjBMI_COMBINED_EUR.txt.gz"
 df <- read_tsv(file.in, col_types=cols('N'=col_double())) # *OBS specific to GIANT_2015_WHRadjBMI_COMBINED_EUR.txt.gz*
 # problems(df)
 df <- df %>% rename(SNP=MarkerName, P='p')
@@ -583,7 +583,7 @@ N_study <- 58284 # MAGMA docs: the total sample size, also when using case-contr
 # chr1:751756     1       751756  T       C       1.17    1.04    1.33    0.01
 # rs3094315       1       752566  A       G       1.14    1.03    1.26    0.0093
 
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/RA_Okada2014/RA_GWASmeta_European_v2.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/RA_Okada2014/RA_GWASmeta_European_v2.txt.gz"
 df <- read_tsv(file.in)
 df <- df %>% rename(SNP=SNPID, P='P-val') %>% mutate(N=N_study) # modify
 df <- df %>% select(SNP, P, N) # filter
@@ -597,7 +597,7 @@ df %>% write_tsv(file.out)
 
 ### HEIGHT_Yengo2018
 file.out <- file.path(DIR_OUT, "HEIGHT_Yengo2018.txt")
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Wood_et_al+UKBiobank_2018.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Wood_et_al+UKBiobank_2018.txt.gz"
 df <- read_tsv(file.in)
 problems(df) # n_problems = 58 ---> we ignore them (see below)
 #df <- df %>% rename(SNP=rsID, P=pval)
@@ -609,7 +609,7 @@ df %>% write_tsv(file.out)
 
 ### BMI_Yengo2018
 file.out <- file.path(DIR_OUT, "BMI_Yengo2018.txt")
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt.gz"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt.gz"
 df <- read_tsv(file.in)
 problems(df) # n_problems = 1 ---> we ignore them (see below)
 #df <- df %>% rename(SNP=rsID, P=pval)

@@ -19,7 +19,7 @@
 
 
 ### BMI test run
-# time Rscript rolypoly.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_BMI_Locke2015 --run_name squared_tss_10kb --n_cores 10 test_run |& tee rolypoly.body_BMI_Locke2015.out.txt
+# time Rscript rolypoly.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_BMI_Locke2015 --run_name squared_tss_10kb --n_cores 10 test_run |& tee rolypoly.body_BMI_Locke2015.out.txt
 
 
 # ======================================================================================================= #

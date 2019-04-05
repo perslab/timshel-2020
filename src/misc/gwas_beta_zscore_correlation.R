@@ -10,7 +10,7 @@ summary(df.alkes_ukbb$Beta) # -->
 # -0.4391500 -0.0030290 -0.0000188 -0.0000337  0.0029946  0.3123350 
 
 ### LDSC format | LOG TRANS BETA with some ZERO vals
-df <- read_tsv("/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/alkesgroup/sumstats_formatted/Ever_Smoked.sumstats")
+df <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/alkesgroup/sumstats_formatted/Ever_Smoked.sumstats")
 summary(df$Z) # min = 0
 anyNA(df$Z)
 anyNA(log(df$Z)) # log(0) ==> Inf
@@ -35,7 +35,7 @@ plot(abs(df.gwas$Beta), -log10(df.gwas$Pval))
 
 ### Edu
 df.edu.raw <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/EA2_Okbay2016/EduYears_Main.txt.gz")
-df.edu.munge <- read_tsv("/raid5/projects/timshel/sc-genetics/ldsc/src/tutorial-james/EA2_excl_23andMe_noGC.sumstats.gz")
+df.edu.munge <- read_tsv("/projects/timshel/sc-genetics/ldsc/src/tutorial-james/EA2_excl_23andMe_noGC.sumstats.gz")
 
 df.edu <- left_join(df.edu.munge, df.edu.raw, by=c("SNP"="MarkerName"))
 

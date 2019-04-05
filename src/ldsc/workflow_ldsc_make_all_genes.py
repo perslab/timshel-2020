@@ -13,7 +13,7 @@ import re
 
 
 PYTHON_EXEC = "/tools/anaconda/2-4.4.0/bin/python2" # runs on python2
-PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
+PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 
 
 ################## CONTROL GENE SET ##################
@@ -22,7 +22,7 @@ FLAG_WGCNA = False
 
 ### FDR significant modules
 prefix_genomic_annot="control.all_genes_in_dataset"
-file_multi_gene_set="/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.all_genes_in_dataset.txt"
+file_multi_gene_set="/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.all_genes_in_dataset.txt"
 ### SNIPPET [the annotation name does NOT matter when the ldscores are only used for control [but the name will be used when doing --h2 (non cts analysis)]]
 # all_genes_in_dataset.mousebrain      ENSG00000141668 1
 # all_genes_in_dataset.mousebrain      ENSG00000204624 1
@@ -38,9 +38,9 @@ file_multi_gene_set="/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/mu
 ###  *RESOURCE NOTES*: if you have many modules (~3000-6000) then set --n_parallel_jobs to ~2-5 (instead of 22). Otherwise the script will up all the MEMORY on yggdrasil and fail.
 cmd = """{PYTHON_EXEC} make_annot_from_geneset_all_chr.py \
 --file_multi_gene_set {file_multi_gene_set} \
---file_gene_coord /raid5/projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
+--file_gene_coord /projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
 --windowsize 100000 \
---bimfile_basename /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
+--bimfile_basename /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
 {flag_binary} \
 {flag_wgcna} \
 --out_dir /scratch/sc-ldsc/{prefix_genomic_annot} \

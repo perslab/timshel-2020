@@ -164,7 +164,7 @@ for (chisq_cutoff in chisq_cutoffs) {
 # length(bool.isin) - sum(bool.isin) # missing = 39,694
 # 
 # ### LDSC 1KG data
-# file.snp_mapping_ldsc_1kg <- "/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.CHR_1_22.bim"
+# file.snp_mapping_ldsc_1kg <- "/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.CHR_1_22.bim"
 # df.snp_mapping_ldsc_1kg <- read_tsv(file.snp_mapping_ldsc_1kg, col_names=c("chr", "rsID", "cm", "pos", "a1", "a2"))
 # 
 # bool.isin <- df.gwas_munge$SNP %in% df.snp_mapping_ldsc_1kg$rsID

@@ -13,8 +13,8 @@
 # ==============================  USAGE  =============================== #
 # ======================================================================= #
 
-# time Rscript wgcna_kme_preprocessing.R campbell_agrp /raid5/projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/agrp_kmemedule.csv
-# time Rscript wgcna_kme_preprocessing.R campbell_pomc /raid5/projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/pomc_kmemedule.csv
+# time Rscript wgcna_kme_preprocessing.R campbell_agrp /projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/agrp_kmemedule.csv
+# time Rscript wgcna_kme_preprocessing.R campbell_pomc /projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/pomc_kmemedule.csv
 
 ### AGRP and POMC (the same output)
 # [1] "Number of genes not mapped from MGI to Ensembl ID: 118 out of 5000 genes (2.36 pct)"
@@ -44,7 +44,7 @@ source(here("src/lib/load_functions.R")) # load sc-genetics library
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-wgcna_modules/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-wgcna_modules/"
 setwd(wd)
 
 data_set_name <- commandArgs(trailingOnly=TRUE)[1]
@@ -52,9 +52,9 @@ file.data <- commandArgs(trailingOnly=TRUE)[2]
 print(sprintf("RUNNING file.data=%s", file.data))
 
 
-# file.data <- "/raid5/projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/agrp_kmemedule.csv"
+# file.data <- "/projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/agrp_kmemedule.csv"
 # data_set_name <- "campbell_agrp"
-# file.data <- "/raid5/projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/pomc_kmemedule.csv"
+# file.data <- "/projects/tp/tmp-bmi-brain/data/wgcna/campbell_arc/pomc_kmemedule.csv"
 # data_set_name <- "campbell_pomc"
 
 # ======================================================================= #

@@ -1,7 +1,7 @@
 
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/"
 setwd(wd)
 
 library(tidyverse)

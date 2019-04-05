@@ -17,7 +17,7 @@ library(tidyverse)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
 setwd(wd)
 
 dataset_prefix <- "mousebrain"
@@ -38,7 +38,7 @@ cols_metadata_keep <- c("ClusterName",
                         "TaxonomyRank3",
                         "TaxonomyRank4")
 
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
 df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
 
 # df.metadata <- df.metadata %>% mutate(color_by_variable = Class)
@@ -48,7 +48,7 @@ df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename
 # ======================================================================= #
 
 # The last column gives a P-value from a one-sided test that the coefficient is greater than zero. 
-file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all.mean.BMI_Yengo2018.cell_type_results.txt"
+file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all.mean.BMI_Yengo2018.cell_type_results.txt"
 df.ldsc_cts <- read_tsv(file.ldsc_cts)
 tmp_split <- stringr::str_split_fixed(df.ldsc_cts$Name,pattern="\\.", n=Inf)
 df.ldsc_cts <- df.ldsc_cts %>% mutate(sem=tmp_split[,length(tmp_split[1,])],
@@ -75,7 +75,7 @@ load(file="mousebrain.sem_obj.RData") # human
 # ================================ LOAD MAGMA ================================= #
 # ======================================================================= #
 
-file.magma <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
+file.magma <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
 df.magma <- read_table(file.magma, comment = "#")
 
 ### add ensembl ids

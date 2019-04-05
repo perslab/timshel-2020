@@ -4,7 +4,7 @@
 
 library(tidyverse)
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/"
 setwd(wd)
 
 # ======================================================================= #
@@ -15,54 +15,54 @@ setwd(wd)
 # ### MAGMA correct_genesize_density
 # magma \
 # --gene-results /scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw \
-# --gene-covar /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
+# --gene-covar /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
 # --model \
 # correct=include,genesize,density \
 # direction-covar=greater \
 # --settings abbreviate=0 gene-info \
-# --out /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_genesize_density
+# --out /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_genesize_density
 
 # ### MAGMA correct_density
 # magma \
 # --gene-results /scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw \
-# --gene-covar /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
+# --gene-covar /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
 # --model \
 # correct=include,density \
 # direction-covar=greater \
 # --settings abbreviate=0 gene-info \
-# --out /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_density
+# --out /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_density
 
 
 # ### MAGMA correct_genesize
 # magma \
 # --gene-results /scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw \
-# --gene-covar /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
+# --gene-covar /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
 # --model \
 # correct=include,genesize \
 # direction-covar=greater \
 # --settings abbreviate=0 gene-info \
-# --out /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_genesize
+# --out /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_genesize
 
 # ### MAGMA correct_none
 # magma \
 # --gene-results /scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw \
-# --gene-covar /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
+# --gene-covar /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
 # --model \
 # correct=none \
 # direction-covar=greater \
 # --settings abbreviate=0 gene-info \
-# --out /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_none
+# --out /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_none
 # 
 # 
 # ### MAGMA correct_all
 # magma \
 # --gene-results /scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.raw \
-# --gene-covar /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
+# --gene-covar /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/mousebrain.sem.specificity_quantiles.entrez.txt \
 # --model \
 # correct=all \
 # direction-covar=greater \
 # --settings abbreviate=0 gene-info \
-# --out /raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_all
+# --out /projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/magma.specificity_quantiles.correct_all
 
 # ============================================================================ #
 # ======================= READ MAGMA *.gsa.out (cell-type enrichment) ================ #
@@ -80,7 +80,7 @@ setwd(wd)
 # ENT5         COVAR   13985    0.0029439     0.040209   0.00087223   0.00037008
 
 ### read *.gsa.out data
-DIR.sem_data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/data-effect_of_magma_internal_covariates/"
+DIR.sem_data <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/data-effect_of_magma_internal_covariates/"
 filenames <- list.files(path=DIR.sem_data,  pattern="*.gsa.out")
 list.df_sem <- lapply(file.path(DIR.sem_data, filenames), read_table, comment = "#")
 filenames_shorten <- stringr::str_match(filenames, "magma.specificity_quantiles\\.(.*)\\.gsa.out")[,2] # e.g. "celltype_expr.specificity_quantiles.hsapiens_orthologs.csv.gz" --> "specificity_quantiles"
@@ -139,7 +139,7 @@ ggplot(df.plot, aes(x=correct_genesize, y=correct_none)) + geom_point() + geom_a
 # 254173       1    1099286    1134815     11       4  643729     -0.86689   -0.00016317     -0.86672
 
 ### read *.gsa.genes.out data
-DIR.sem_data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/data-effect_of_magma_internal_covariates/"
+DIR.sem_data <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/data-effect_of_magma_internal_covariates/"
 filenames <- list.files(path=DIR.sem_data,  pattern="*.gsa.genes.out")
 list.df_sem <- lapply(file.path(DIR.sem_data, filenames), read_table, comment = "#")
 filenames_shorten <- stringr::str_match(filenames, "magma.specificity_quantiles\\.(.*)\\.gsa.genes.out")[,2] # e.g. "celltype_expr.specificity_quantiles.hsapiens_orthologs.csv.gz" --> "specificity_quantiles"

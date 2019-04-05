@@ -22,7 +22,7 @@ library(Seurat)
 library(tidyverse)
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus"
 setwd(wd)
 
 # ======================================================================= #

@@ -105,7 +105,7 @@ def job_scheduler(list_cmds, n_parallel_jobs):
 PYTHON3_EXEC = "/tools/anaconda/3-4.4.0/envs/py3_anaconda3_PT180510/bin/python3"
 PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2"
 
-PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
+PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 N_PARALLEL_LDSC_REGRESSION_JOBS = 4
 
 list_gwas = ["BMI_UKBB_Loh2018"]
@@ -141,12 +141,12 @@ dict_addtional_cond_annotations_mb = {"wgcna.mousebrain-190111-dodgerblue":"/scr
 									 } 
 
 dict_cts_conditional = {"celltypes.mousebrain.all":
-						{"file_cts":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/celltypes.mousebrain.all.ldcts.txt",
+						{"file_cts":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/celltypes.mousebrain.all.ldcts.txt",
 						"dataset":"mousebrain",
 						"conditional_annotations":list_cond_annotations_mb,
 						"dict_addtional_cond_annotations":dict_addtional_cond_annotations_mb},
  					 "celltypes.tabula_muris.all":
- 					  	{"file_cts":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/celltypes.tabula_muris.all.ldcts.txt",
+ 					  	{"file_cts":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/celltypes.tabula_muris.all.ldcts.txt",
  					  	"dataset":"tabula_muris",
  					  	"conditional_annotations":list_cond_annotations_tm},
  					 }
@@ -168,7 +168,7 @@ for prefix_genomic_annot, param_dict in dict_cts_conditional.items():
 	for gwas in list_gwas:
 		for cond_annotation in param_dict["conditional_annotations"]:
 			cond_ref_ld_chr_name = get_cond_ref_ld_chr_name(cond_annotation, param_dict["dataset"])
-			fileout_prefix = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}__CONDITIONAL__{cond_annotation}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot, cond_annotation=cond_annotation)
+			fileout_prefix = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}__CONDITIONAL__{cond_annotation}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot, cond_annotation=cond_annotation)
 			if os.path.exists("{}.cell_type_results.txt".format(fileout_prefix)):
 				print("GWAS={}, prefix_genomic_annot={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, prefix_genomic_annot, fileout_prefix))
 				continue
@@ -176,10 +176,10 @@ for prefix_genomic_annot, param_dict in dict_cts_conditional.items():
 			### *OBS*: we are runnin ldsc python script with UNBUFFERED stdout and stderr
 			### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 			### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
-			cmd = """{PYTHON2_EXEC} -u {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
-            --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
-            --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
-            --ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
+			cmd = """{PYTHON2_EXEC} -u {script} --h2-cts /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
+            --ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
+            --w-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
+            --ref-ld-chr-cts /projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
             --out {fileout_prefix}""".format(
 				PYTHON2_EXEC=PYTHON2_EXEC,
 				script=PATH_LDSC_SCRIPT,
@@ -195,7 +195,7 @@ for prefix_genomic_annot, param_dict in dict_cts_conditional.items():
 		if "dict_addtional_cond_annotations" in param_dict:
 			for cond_annotation in param_dict["dict_addtional_cond_annotations"]:
 				cond_ref_ld_chr_name = param_dict["dict_addtional_cond_annotations"][cond_annotation]
-				fileout_prefix = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}__CONDITIONAL__{cond_annotation}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot, cond_annotation=cond_annotation)
+				fileout_prefix = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}__CONDITIONAL__{cond_annotation}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot, cond_annotation=cond_annotation)
 				if os.path.exists("{}.cell_type_results.txt".format(fileout_prefix)):
 					print("GWAS={}, prefix_genomic_annot={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, prefix_genomic_annot, fileout_prefix))
 					continue
@@ -203,10 +203,10 @@ for prefix_genomic_annot, param_dict in dict_cts_conditional.items():
 				### *OBS*: we are runnin ldsc python script with UNBUFFERED stdout and stderr
 				### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 				### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
-				cmd = """{PYTHON2_EXEC} -u {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
-                --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
-                --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
-                --ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
+				cmd = """{PYTHON2_EXEC} -u {script} --h2-cts /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
+                --ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
+                --w-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
+                --ref-ld-chr-cts /projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
                 --out {fileout_prefix}""".format(
 					PYTHON2_EXEC=PYTHON2_EXEC,
 					script=PATH_LDSC_SCRIPT,

@@ -40,7 +40,7 @@ genomic_annotation_prefix <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continu
 
 
 ### Set LDSC specific files
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
+file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
 file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", genomic_annotation_prefix, genomic_annotation_prefix)
 
 # ======================================================================= #
@@ -61,7 +61,7 @@ df.ldsc_cts
 
 
 ### Module origin metadata
-file.module_origin_metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
+file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
 df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=ClusterName, Region)
 ### Module origin mapping file (log.%.multi_geneset.txt)
 df.module_geneset <- read_tsv(file.module_geneset)

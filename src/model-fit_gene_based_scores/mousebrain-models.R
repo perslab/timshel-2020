@@ -19,7 +19,7 @@ library(tidyverse)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
 setwd(wd)
 
 dataset_prefix <- "mousebrain"
@@ -40,7 +40,7 @@ cols_metadata_keep <- c("ClusterName",
                         "TaxonomyRank3",
                         "TaxonomyRank4")
 
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
 df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
 
 
@@ -67,7 +67,7 @@ df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename
 
 # source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
 # 
-# sem_obj_mouse <- create_sem_object("/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain")
+# sem_obj_mouse <- create_sem_object("/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain")
 # sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
 # sem_obj.mouse.sub <- subset_annotations(sem_obj_mouse, c("EPMB","HYPEN","EPEN","EPSC","CHOR"))
 # sem_obj.sub <- map_to_human(sem_obj.mouse.sub, type_mouse_gene_ids="ensembl")
@@ -96,7 +96,7 @@ load(file="mousebrain.sem_obj.RData") # human
 # ================================ LOAD MAGMA ================================= #
 # ======================================================================= #
 
-file.magma <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
+file.magma <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
 df.magma <- read_table(file.magma, comment = "#")
 
 ### add ensembl ids

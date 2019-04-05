@@ -242,7 +242,7 @@ library(ggplot2)</code></pre>
 </div>
 <div id="notebook-specific-parameters" class="section level1">
 <h1><span class="header-section-number">4</span> Notebook specific parameters</h1>
-<pre class="r"><code>setwd(&quot;/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-effect_of_rolypoly_n_bootstrap_iterations/&quot;)</code></pre>
+<pre class="r"><code>setwd(&quot;/projects/timshel/sc-genetics/sc-genetics/src/nb-effect_of_rolypoly_n_bootstrap_iterations/&quot;)</code></pre>
 </div>
 <div id="function-to-extract-data" class="section level1">
 <h1><span class="header-section-number">5</span> Function to extract data</h1>
@@ -296,14 +296,14 @@ extract_data &lt;- function(list.res, obj_type) {
 # 
 # # ======================= nboot1000 ======================= #
 # ### 1000
-# load(&quot;/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.gtex_sub.nboot1000.RData&quot;)
+# load(&quot;/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.gtex_sub.nboot1000.RData&quot;)
 # names(list.rp_inference)
 # list.cmp[[&quot;n1000&quot;]] &lt;- extract_data(list.res=list.rp_inference, obj_type=&quot;full_rp&quot;)
 # 
 # 
 # # ======================= nboot100 ======================= #
 # ### 100
-# load(&quot;/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData&quot;)
+# load(&quot;/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData&quot;)
 # list.rp_inference &lt;- list.rp_inference[&quot;gtex.sub_tissue_gene_tpm.avg_expr&quot;] # obs: single-bracket. SUBSETTING.
 # names(list.rp_inference)
 # list.cmp[[&quot;n100&quot;]] &lt;- extract_data(list.res=list.rp_inference, obj_type=&quot;full_rp&quot;)

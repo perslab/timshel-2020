@@ -1,5 +1,5 @@
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/"
 setwd(wd)
 
 ### Install
@@ -11,11 +11,11 @@ library(tidyverse)
 # ======================= READ DATA ======================= #
 #file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain_skene.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" # mousebrain
 #file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/maca/maca.per_tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" # maca
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris.tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" # tabula_muris
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris.tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" # tabula_muris
 df.avg_expr <- read_csv(file.in) %>% column_to_rownames("gene") %>% as.data.frame()
 
 # ======================= CALC pSI/SI ======================= #
-source("/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/specificity.index.timshel.R") # loads 'specificity.index.timshel' function
+source("/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/specificity.index.timshel.R") # loads 'specificity.index.timshel' function
 system.time(list.si <- specificity.index.timshel(pSI.in=df.avg_expr, p_max = 1, e_min=1e-5))
 # list(SI=df.SI, pSI=df.pSI) # named list
 # save.image("psi.mousebrain.pmax_1.e_min_1e-5.RData")

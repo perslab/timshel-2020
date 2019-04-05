@@ -1,6 +1,6 @@
 ############### SYNOPSIS ###################
 # Combine kME files for Tabula Muris from each cell-type
-# E.g. "/raid5/projects/jonatan/tmp-maca/tables/maca_tissue_cell_type_kME_Trachea_stromal cell_kME.csv"
+# E.g. "/projects/jonatan/tmp-maca/tables/maca_tissue_cell_type_kME_Trachea_stromal cell_kME.csv"
 
 ### OUTPUT: 
 # ....
@@ -24,7 +24,7 @@ setwd(wd)
 # ======================================================================= #
 
 ### Read
-dir.data <- "/raid5/projects/jonatan/tmp-maca/tables"
+dir.data <- "/projects/jonatan/tmp-maca/tables"
 filenames <- list.files(path=dir.data,  pattern="maca_tissue_cell_type_kME_(.*)_kME.csv")
 list.df <- lapply(file.path(dir.data, filenames), data.table::fread, nThread=24, data.table=F, showProgress=T)
 filenames_shorten <- stringr::str_match(filenames, "maca_tissue_cell_type_kME_(.*)_kME.csv")[,2]
@@ -48,7 +48,7 @@ df.join <- list.df.mapped %>% purrr::reduce(full_join, by = "genes")
 # =============================== WRITE ================================ #
 # ======================================================================= #
 
-# data.table::fwrite(df.join, file="/raid5/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.all_modules_kME.csv", sep=",", nThread=24, showProgress=T)
+# data.table::fwrite(df.join, file="/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.all_modules_kME.csv", sep=",", nThread=24, showProgress=T)
 
 # ======================================================================= #
 # ======================== Calculate correlation ======================== #
@@ -58,8 +58,8 @@ print("Doing correlation pearson")
 system.time(df.cor.pearson <- df.join %>% select(-genes) %>% cor(use = "pairwise.complete.obs", method="pearson") %>% as.data.frame())
 print("Doing correlation spearman")
 system.time(df.cor.spearman <- df.join %>% select(-genes) %>% cor(use = "pairwise.complete.obs", method="spearman") %>% as.data.frame())
-file.out.pearson <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.all_modules_kME.correlation.pearson.csv"
-file.out.spearman <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.all_modules_kME.correlation.spearman.csv"
+file.out.pearson <- "/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.all_modules_kME.correlation.pearson.csv"
+file.out.spearman <- "/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.all_modules_kME.correlation.spearman.csv"
 write_csv(df.cor.pearson, path=file.out.pearson)
 write_csv(df.cor.spearman, path=file.out.spearman)
 

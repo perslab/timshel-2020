@@ -46,7 +46,7 @@ source(here("src/lib/load_functions.R")) # load sc-genetics library
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
 setwd(wd)
 
 N.CORES <- 20

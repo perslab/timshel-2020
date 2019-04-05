@@ -35,7 +35,7 @@ name.dataset <- "mousebrain"
 
 ### Map:  ENTREZ --> ENSEMBL
 map_entrez2ensembl <- function(df.magma) {
-  file.mapping <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
+  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
   df.mapping <- read_tsv(file.mapping)
 
   genes_mapped <- df.mapping$ensembl_gene_id[match(df.magma$GENE, df.mapping$entrezgene)]
@@ -88,11 +88,11 @@ do_gprofiler <- function(df, ordered_query){
 file.magma_gwas <- "/scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
 # file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.1e-5.depict_tissues_loci.txt" # 1e-5
 file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.5e-8.depict_tissues_loci.txt" # 5e-8
-file.genes_mendelian <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_s21_mendelian_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
-file.genes_rare_variant <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_table1_rare_variants.mapped.txt" # human_genes = ensembl_gene_id
-file.genes_mouse_obesity <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/yazdi2015_table1_mouse_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
+file.genes_mendelian <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_s21_mendelian_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
+file.genes_rare_variant <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_table1_rare_variants.mapped.txt" # human_genes = ensembl_gene_id
+file.genes_mouse_obesity <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/yazdi2015_table1_mouse_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
 
-file.ortholog_genes_background <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz" # human_genes = ensembl_gene_id
+file.ortholog_genes_background <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz" # human_genes = ensembl_gene_id
 
 # ======================================================================= #
 # ============================ *SWITCH* ================================ #
@@ -100,18 +100,18 @@ file.ortholog_genes_background <- "/raid5/projects/timshel/sc-genetics/sc-geneti
 
 if (name.dataset == "maca") {
   ### MACA
-  file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.maca.BMI_Yengo2018.cell_type_results.txt"
+  file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.maca.BMI_Yengo2018.cell_type_results.txt"
   file.module_geneset <- "/scratch/sc-ldsc/maca/log.maca_tissue_cell_type.multi_geneset.txt"
   
-  file.module_origin_metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/maca_facs.tissue_cell_type.metadata.csv"
+  file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/maca_facs.tissue_cell_type.metadata.csv"
   df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=tissue_cell_type,
                                                                                 module_origin_ncells=n, 
                                                                                 module_origin_desc=tissue)
 } else if (name.dataset == "mousebrain_Neurons") {
   ### Mousebrain Neurons
-  file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.mousebrain_Neurons.BMI_Yengo2018.cell_type_results.txt"
+  file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.mousebrain_Neurons.BMI_Yengo2018.cell_type_results.txt"
   file.module_geneset <- "/scratch/sc-ldsc/mousebrain_Neurons/log.Neurons_ClusterName.multi_geneset.txt"
-  file.module_origin_metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
+  file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
   df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=ClusterName,
                                                                                 module_origin_ncells=NCells, 
                                                                                 module_origin_desc=Description)
@@ -123,14 +123,14 @@ if (name.dataset == "maca") {
   # Astrocytes      ACBG    blue1   ENSMUSG00000027368      Dusp2   0.962783147428202       ENSG00000158050 Astrocytes.blue1
 
   
-  file.module_origin_metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
+  file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
   df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=ClusterName,
                                                                                 module_origin_ncells=NCells, 
                                                                                 module_origin_desc=Description)
   
 } else if (name.dataset == "hypothalamus_mette_thesis") {
   ### hypothalamus_mette_thesis
-  file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.hypothalamus_mette_thesis.BMI_Yengo2018.cell_type_results.txt"
+  file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.hypothalamus_mette_thesis.BMI_Yengo2018.cell_type_results.txt"
   file.module_geneset <- "/scratch/sc-ldsc/hypothalamus_mette_thesis/log.hypothalamus_mette_thesis.multi_geneset.txt"
   
   df.module_origin_metadata <- tibble(module_origin="DUMMY",
@@ -178,7 +178,7 @@ df.module_metadata <- df.module_geneset %>% select(module_origin, module_id) %>%
 
 ### LDSC module results
 if (name.dataset == "mousebrain") {
-  files <- Sys.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.mousebrain_*.BMI_Yengo2018.cell_type_results.txt")
+  files <- Sys.glob("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/wgcna.mousebrain_*.BMI_Yengo2018.cell_type_results.txt")
   df.ldsc_cts <- lapply(files, read_tsv) %>% bind_rows()
   df.ldsc_cts <- df.ldsc_cts %>% mutate(module_id=stringr::str_replace_all(Name, pattern="mousebrain_", "")) # SPECIFIC FOR 'MOUSEBRAIN ALL': e.g mousebrain_Astrocytes.purple2 --> Astrocytes.purple2
 } else {

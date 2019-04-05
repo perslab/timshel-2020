@@ -20,7 +20,7 @@ library(tidyverse)
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
 setwd(wd)
 
 # ======================================================================= #
@@ -39,7 +39,7 @@ load(file.RData.cell_atlas)
 df.metadata <- seurat_obj@meta.data %>% group_by(tissue_celltype) %>% summarise(n_cells = n()) # count
 df.metadata <- df.metadata %>% separate(tissue_celltype, into=c("tissue", "cell_type"), sep="\\.", remove=F, extra="merge")# split
 df.metadata %>% write_csv(path="tabula_muris_facs.tissue_celltype.metadata.csv")
-# /raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/
+# /projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/
 
 # ======================================================================= #
 # ============================  XXXX  ============================== #

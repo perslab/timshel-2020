@@ -21,7 +21,7 @@
 library(tidyverse)
 library(Seurat)
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus"
 setwd(wd)
 
 # ======================================================================= #
@@ -216,9 +216,9 @@ save(seurat_obj, file="/scratch/data-for_fast_access/pub-others/campbell2017/cam
 # ======================================================================= #
 
 seurat_obj@meta.data %>% count(taxonomy_lvl1, taxonomy_lvl2, cell_type_all_lvl1) %>% 
-  write_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv")
+  write_csv("/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv")
 seurat_obj@meta.data %>% count(taxonomy_lvl1, taxonomy_lvl2, cell_type_all_lvl2) %>%
-  write_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv")
+  write_csv("/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv")
 
 # ======================================================================= #
 # ================================ EXPORT TO CSV ============================= #

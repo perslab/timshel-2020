@@ -13,7 +13,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
 setwd(wd)
 
 
@@ -48,7 +48,7 @@ library(tidyverse)
 # ============================ LOAD DATA ============================== #
 # ======================================================================= #
 
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 filenames <- list.files(path=dir.data,  pattern="wgcna.mousebrain_(.*).cell_type_results.txt") 
 filenames
 list.dfs <- lapply(file.path(dir.data, filenames), read_tsv)
@@ -81,7 +81,7 @@ df <- df.ldsc_cts %>% select(gwas, module_id, module_ldsc_pval=P) %>% left_join(
 # ============================ ADD CELL META DATA  =============================== #
 # ======================================================================= #
 
-file.module_origin_metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
+file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
 df.module_origin_metadata <- read_csv(file.module_origin_metadata)
 df.module_origin_metadata <- df.module_origin_metadata %>% select(module_origin=ClusterName,
        Developmental_compartment,

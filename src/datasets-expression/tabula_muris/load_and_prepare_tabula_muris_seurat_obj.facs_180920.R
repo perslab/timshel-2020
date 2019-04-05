@@ -20,11 +20,11 @@ library(tidyverse)
 # ============================  XXXXX  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
 setwd(wd)
 
 ### Load
-file.RData.cell_atlas <- "/raid5/data/pub-others/tabula_muris/figshare/180920-Robj/FACS_all.Robj" # 8.1 GB | # tiss_FACS
+file.RData.cell_atlas <- "/data/pub-others/tabula_muris/figshare/180920-Robj/FACS_all.Robj" # 8.1 GB | # tiss_FACS
 load(file.RData.cell_atlas) 
 seurat_obj <- tiss_FACS; 
 rm(tiss_FACS) # rename
@@ -110,4 +110,4 @@ all(seurat_obj@cell.names==seurat_obj@meta.data$cell) # ok
 seurat_obj <- NormalizeData(seurat_obj, normalization.method = "LogNormalize", scale.factor = 1e4)
 
 ### Save Robj
-save(seurat_obj, file="/raid5/data/pub-others/tabula_muris/figshare/180920-Robj/tabula_muris.seurat_obj.facs.figshare_180920.RData")
+save(seurat_obj, file="/data/pub-others/tabula_muris/figshare/180920-Robj/tabula_muris.seurat_obj.facs.figshare_180920.RData")

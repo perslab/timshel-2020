@@ -16,7 +16,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 setwd(wd)
 
 
@@ -29,7 +29,7 @@ source("magma_celltyping_modified_functions.R")
 # ============================  LOAD DATA  =============================== #
 # ======================================================================= #
 
-file.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.csv.gz"
+file.data <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.csv.gz"
 df.data_raw <- read_csv(file.data) %>% rename(gene=X1)
 # ^^ duplicates: ‘3110039M20Rik’, ‘4930556M19Rik’, ‘Apoc2’, ‘Atn1’, ‘C1s2’, ‘Ccdc142’, ‘Ccl19’, ‘Ccl21a’, ‘Ccl21b’, ‘Ccl21c’, ‘Ccl27a’, ‘Cd37’, ‘D130017N08Rik’, ‘Dancr’, ‘Fam205a2’, ‘Fbxw14’, ‘Flg’, ‘Gbp6’, ‘Gm15853’, ‘Gm16701’, ‘Gm2464’, ‘Gm3286’, ‘Hist2h2bb’, ‘Il11ra2’, ‘Itgam’, ‘l7Rn6’, ‘Ltbp4’, ‘Map2k7’, ‘Nova2’, ‘Ntn5’, ‘Olfr108’, ‘Olfr126’, ‘Olfr1284’, ‘Olfr1309’, ‘Olfr1316’, ‘Olfr1366’, ‘Olfr1396’, ‘Olfr1496’, ‘Olfr170’, ‘Olfr730’, ‘Olfr790’, ‘Olfr809’, ‘Pcdha11’, ‘Pcdhga8’, ‘Pik3c2g’, ‘Rp1’, ‘Schip1’, ‘Sgsm3’, ‘Smim20’, ‘Syngr4’, ‘Tead2’, ‘Tgfb1i1’, ‘Tulp2’, ‘U2af1l4’, ‘Umad1’, ‘Zfand4’ 
 df.data_raw <- df.data_raw %>% distinct(gene, .keep_all = TRUE) # remove duplicate gene names

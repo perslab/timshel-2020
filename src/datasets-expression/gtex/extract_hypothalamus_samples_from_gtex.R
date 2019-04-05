@@ -22,7 +22,7 @@ library(Matrix)
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-gtex/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-gtex/"
 setwd(wd)
 
 # ======================================================================= #

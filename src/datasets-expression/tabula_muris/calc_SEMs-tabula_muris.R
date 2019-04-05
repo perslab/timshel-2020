@@ -20,7 +20,7 @@ library(here)
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
-# wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
+# wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
 # setwd(wd)
 
 # ======================================================================= #
@@ -29,7 +29,7 @@ source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 dataset_prefix <- "tabula_muris"
 
-sem_obj_mouse <- create_sem_object(sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/%s", dataset_prefix))
+sem_obj_mouse <- create_sem_object(sprintf("/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/%s", dataset_prefix))
 sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
 # [1] "Number of genes with NA in anova pvalue: 390. (This number is not used for anything. We just report it for your information)"
 # [1] "Number of sporadic_expressed_genes: 2365"

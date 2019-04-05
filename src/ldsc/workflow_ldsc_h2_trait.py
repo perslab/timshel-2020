@@ -62,8 +62,8 @@ def job_scheduler(list_cmds, n_parallel_jobs):
 PYTHON3_EXEC = "/tools/anaconda/3-4.4.0/envs/py3_anaconda3_PT180510/bin/python3"
 PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2"
 
-PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
-PATH_LDSC_DATA_MAIN="/raid5/projects/timshel/sc-genetics/ldsc/data"
+PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
+PATH_LDSC_DATA_MAIN="/projects/timshel/sc-genetics/ldsc/data"
 
 
 FLAG_UNBUFFERED = True

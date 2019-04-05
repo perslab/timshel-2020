@@ -24,7 +24,7 @@ setwd(here("src/GE-mousebrain"))
 # ================================== Mouse ============================== #
 # ======================================================================= #
 
-sem_obj_mouse <- create_sem_object("/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain")
+sem_obj_mouse <- create_sem_object("/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain")
 sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
 # sem_obj_mouse <- calc_sem_wrapper(sem_obj_mouse)
 # sem_obj_mouse <- bin_sems(sem_obj_mouse, n_bins=101, threshold_bin_zero=0)
@@ -79,7 +79,7 @@ stop("QUITING SCRIPT - DONE")
 
 ### Load metadata
 cols_keep.metadata <- c("ClusterName","Class","NCells","Description","Probable_location","Region","Developmental_compartment","TaxonomyRank1","TaxonomyRank2","TaxonomyRank3","TaxonomyRank4")
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
 df.metadata <- read_csv(file.metadata) %>% select(cols_keep.metadata)
 df.metadata
 
@@ -100,7 +100,7 @@ save(sem_obj.hier.TaxonomyRank2, file="mousebrain.sem_obj.hier.TaxonomyRank2.RDa
 # ============================= Hierarchical: SUBSET ALL NEURONS ================================= #
 # ======================================================================= #
 
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
 df.metadata <- read_csv(file.metadata) %>% select(ClusterName, Class)
 annotations.neurons <- df.metadata %>% filter(Class=="Neurons") %>% pull(ClusterName)
 length(annotations.neurons) # 214

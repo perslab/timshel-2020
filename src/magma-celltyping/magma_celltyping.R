@@ -21,7 +21,7 @@ print(sprintf("RUNNING GWAS_NAME=%s", GWAS_NAME))
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-# wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+# wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 # setwd(wd)
 
 
@@ -51,12 +51,12 @@ data(ortholog_data_Mouse_Human)  # loaded from the EWCT package [loads ortholog_
 gwas_sumstats_path <- file.path("/scratch/tmp-magma_gwas/", sprintf("%s.txt", GWAS_NAME)) # not a gziped file
 
 ### LDSC PATH
-# gwas_sumstats_path <- file.path("/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_magma_ldsc", sprintf("%s.magma_fmt.txt", GWAS_NAME)) # not a gziped file
+# gwas_sumstats_path <- file.path("/projects/timshel/sc-genetics/sc-genetics/data/gwas_magma_ldsc", sprintf("%s.magma_fmt.txt", GWAS_NAME)) # not a gziped file
 
 ### GWAS MANUAL
-# gwas_sumstats_path <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/bmi_yengo2018_magma_fmt.txt" # WORKS
+# gwas_sumstats_path <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/bmi_yengo2018_magma_fmt.txt" # WORKS
 
-# gwas_sumstats_path <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt"
+# gwas_sumstats_path <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt"
 # ERROR - reading p-value file: non-numeric or non-integer value for sample size variable N on line 447477
 # 	line: 6	6176144	rs12210959	T	C	0.7384	-0.0014	0.0022	 5.1e-01	6e+05
 

@@ -32,7 +32,7 @@ source(here("src/lib/load_functions.R")) # load sc-genetics library
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/"
 setwd(wd)
 
 N.CORES <- 10

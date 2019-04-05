@@ -27,8 +27,8 @@ setwd(here("src/expression_specificity"))
 # ======================================================================= #
 
 ### load data
-# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
-load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-190306.sem_obj.RData")
+# load("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
+load("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-190306.sem_obj.RData")
 
 # ======================================================================= #
 # ================================ Write SEMs ================================= #

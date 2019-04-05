@@ -44,9 +44,9 @@ setwd(here("src/expression_specificity"))
 # =========================== LOAD DATA ========================= #
 # ======================================================================= #
 
-# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
+# load("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
 # sem_obj.mb <- sem_obj
-# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData")
+# load("/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData")
 # sem_obj.tm <- sem_obj
 
 
@@ -123,7 +123,7 @@ df.sem_meta.bin_counts %>% group_by(sem_meta_bin) %>% summarise(mean = mean(n)) 
 # =============================================================================================== #
 # ***TODO***: port this code to new workflow
 
-DIR.X <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain"
+DIR.X <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain"
 filenames <- list.files(path=DIR.X,  pattern="*.hsapiens_orthologs.csv.gz")
 list.x <- lapply(file.path(DIR.X, filenames), read_csv)
 list.x <- lapply(list.x, function(df) df %>% select(-gene))

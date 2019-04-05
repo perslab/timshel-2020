@@ -2,7 +2,7 @@
 
 library(tidyverse)
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/"
 setwd(wd)
 
 # ======================================================================= #
@@ -17,7 +17,7 @@ map_ensembl2entrez <- function(df) {
   ### TODO: make 'gene' column a variable, so the name does not have to be 'gene'
   ### TODO: check the entrez mapped genes are UNIQUE
   
-  file.mapping <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
+  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
   df.mapping <- read_tsv(file.mapping) # col1=ensembl_gene_id, col2=entrezgene
   
   genes_mapped <- df.mapping$entrezgene[match(df$gene, df.mapping$ensembl_gene_id)]
@@ -37,7 +37,7 @@ map_ensembl2entrez <- function(df) {
 # ============================================================================ #
 
 ### read SEM expression data
-DIR.sem_data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain"
+DIR.sem_data <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain"
 filenames <- list.files(path=DIR.sem_data,  pattern="*.hsapiens_orthologs.csv.gz") # has *HUMAN* ENSEMBL IDs
 list.df_sem <- lapply(file.path(DIR.sem_data, filenames), read_csv)
 filenames_shorten <- stringr::str_match(filenames, "celltype_expr\\.(.*)\\.hsapiens_orthologs.csv.gz")[,2] # e.g. "celltype_expr.specificity_quantiles.hsapiens_orthologs.csv.gz" --> "specificity_quantiles"

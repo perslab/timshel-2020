@@ -26,7 +26,7 @@ source(here("src/lib/load_functions.R")) # load sc-genetics library
 # ======================================================================= #
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca"
 setwd(wd)
 
 dataset_prefix <- "tabula_muris"
@@ -35,7 +35,7 @@ dataset_prefix <- "tabula_muris"
 # ============================== READ METADATA =============================== #
 # ======================================================================= #
 
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
 df.metadata <- read_csv(file.metadata) %>% mutate(
   annotation = tissue_celltype,
   color_by_variable = tissue)
@@ -80,7 +80,7 @@ df_multi_geneset
 # ================================ LOAD MAGMA ================================= #
 # ======================================================================= #
 
-file.magma <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
+file.magma <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
 df.magma <- read_table(file.magma, comment = "#")
 
 ### add ensembl ids

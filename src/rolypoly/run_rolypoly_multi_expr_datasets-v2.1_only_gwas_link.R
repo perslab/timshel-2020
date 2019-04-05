@@ -24,27 +24,27 @@
 # ======================================================================================================= #
 
 ### body_WHR_Shungin2015
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_WHR_Shungin2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_WHR_Shungin2015 --run_name squared_tss_10kb --n_cores 10 |& tee log.body_WHR_Shungin2015.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_WHR_Shungin2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_WHR_Shungin2015 --run_name squared_tss_10kb --n_cores 10 |& tee log.body_WHR_Shungin2015.out.txt
 ### cov_EDU_YEARS
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/cov_EDU_YEARS.gwassumstats.rolypoly_fmt.tab.gz --gwas_name cov_EDU_YEARS --run_name squared_tss_10kb --n_cores 10 |& tee log.cov_EDU_YEARS.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/cov_EDU_YEARS.gwassumstats.rolypoly_fmt.tab.gz --gwas_name cov_EDU_YEARS --run_name squared_tss_10kb --n_cores 10 |& tee log.cov_EDU_YEARS.out.txt
 ### body_WHRadjBMIz
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_WHRadjBMIz.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_WHRadjBMIz --run_name squared_tss_10kb --n_cores 10 |& tee log.body_WHRadjBMIz.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_WHRadjBMIz.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_WHRadjBMIz --run_name squared_tss_10kb --n_cores 10 |& tee log.body_WHRadjBMIz.out.txt
 ### body_BMIz [MISSING]
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMIz.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_BMIz --run_name squared_tss_10kb --n_cores 10 |& tee log.body_BMIz.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMIz.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_BMIz --run_name squared_tss_10kb --n_cores 10 |& tee log.body_BMIz.out.txt
 ### disease_T2D.gwassumstats
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/disease_T2D.gwassumstats.rolypoly_fmt.tab.gz --gwas_name disease_T2D --run_name squared_tss_10kb --n_cores 10 |& tee log.disease_T2D.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/disease_T2D.gwassumstats.rolypoly_fmt.tab.gz --gwas_name disease_T2D --run_name squared_tss_10kb --n_cores 10 |& tee log.disease_T2D.out.txt
 ### body_HEIGHTz
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_HEIGHTz.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_HEIGHTz --run_name squared_tss_10kb --n_cores 10 |& tee log.body_HEIGHTz.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_HEIGHTz.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_HEIGHTz --run_name squared_tss_10kb --n_cores 10 |& tee log.body_HEIGHTz.out.txt
 ### mental_SCZ_Ripke2014
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/mental_SCZ_Ripke2014.gwassumstats.rolypoly_fmt.tab.gz --gwas_name mental_SCZ_Ripke2014 --run_name squared_tss_10kb --n_cores 10 |& tee log.mental_SCZ_Ripke2014.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/mental_SCZ_Ripke2014.gwassumstats.rolypoly_fmt.tab.gz --gwas_name mental_SCZ_Ripke2014 --run_name squared_tss_10kb --n_cores 10 |& tee log.mental_SCZ_Ripke2014.out.txt
 ### lipids_TC.Willer2013
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/lipids_TC.Willer2013.gwassumstats.rolypoly_fmt.tab.gz --gwas_name lipids_TC.Willer2013 --run_name squared_tss_10kb --n_cores 10 |& tee log.lipids_TC.Willer2013.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/lipids_TC.Willer2013.gwassumstats.rolypoly_fmt.tab.gz --gwas_name lipids_TC.Willer2013 --run_name squared_tss_10kb --n_cores 10 |& tee log.lipids_TC.Willer2013.out.txt
 
 ### body_BMI_Locke2015
-# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_BMI_Locke2015 --run_name squared_tss_10kb --n_cores 10 |& tee log.body_BMI_Locke2015.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name body_BMI_Locke2015 --run_name squared_tss_10kb --n_cores 10 |& tee log.body_BMI_Locke2015.out.txt
 
 ### BMI test run
-# time Rscript run_rolypoly_multi_expr_datasets-v2.R --gwas_file /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name TEST_body_BMI_Locke2015 --run_name gene.10kb.squared.protein_coding_only --window_position gene --window_size_kb 10 --pos_transformation square --protein_coding_only --n_cores 10 --test_run |& tee log.TEST_body_BMI_Locke2015.out.txt
+# time Rscript run_rolypoly_multi_expr_datasets-v2.R --gwas_file /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz --gwas_name TEST_body_BMI_Locke2015 --run_name gene.10kb.squared.protein_coding_only --window_position gene --window_size_kb 10 --pos_transformation square --protein_coding_only --n_cores 10 --test_run |& tee log.TEST_body_BMI_Locke2015.out.txt
 
 
 # ======================================================================================================= #
@@ -177,11 +177,11 @@ print(list.run_parameters)
 # =============================================== DEBUGGING ============================================= #
 # ======================================================================================================= #
 
-# GWAS_FILE <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz"
+# GWAS_FILE <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats/body_BMI_Locke2015.gwassumstats.rolypoly_fmt.tab.gz"
 # GWAS_NAME <- "body_BMI_Locke2015"
 # RUN_NAME <- "TMPTMPTMP_debug.gene.10kb.squared.protein_coding_only"# or "gene.10kb.squared.all_genes"
-# OUTDIR <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v2-tmp_test"
-# GWAS_LINKED_FILE <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.rolypoly_objs-v2.pos_only/rolypoly_objs.body_BMI_Locke2015.gene.10kb.squared.protein_coding_only.gwas_linked.RData"
+# OUTDIR <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v2-tmp_test"
+# GWAS_LINKED_FILE <- "/projects/timshel/sc-genetics/sc-genetics/out/out.rolypoly_objs-v2.pos_only/rolypoly_objs.body_BMI_Locke2015.gene.10kb.squared.protein_coding_only.gwas_linked.RData"
 # EXPR_DATA_LIST <- NULL # or XXXX
 # N_BOOTSTRAP_ITERS <- 500 # number of bootstrap iterations
 # N_CORES <- 3 # number of cores for parallel

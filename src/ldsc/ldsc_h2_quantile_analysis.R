@@ -31,7 +31,7 @@ setwd(here("src/ldsc"))
 # column summarizing the heritability explained by each quantile, its enrichment and corresponding standard error and P value.
 
 ### Load - MULTI GWAS AND ANNOTATIONS
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2/"
 filenames <- list.files(path=dir.data,  pattern="(.*).results_quantile_qfixed_h2")
 # filenames <- filenames[!grepl(pattern="__CONDITIONAL__", filenames, perl=T)] # exclude any conditional results
 list.dfs <- lapply(file.path(dir.data, filenames), read_tsv)

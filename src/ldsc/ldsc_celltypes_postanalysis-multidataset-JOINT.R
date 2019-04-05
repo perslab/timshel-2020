@@ -37,7 +37,7 @@ genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 # =============================== LOAD LDSC CTS RESULTS ================================= #
 # ======================================================================= #
 
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
+file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
 df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
 df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
 df.ldsc_cts

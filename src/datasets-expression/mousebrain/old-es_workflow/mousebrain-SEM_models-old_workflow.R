@@ -22,7 +22,7 @@ library(here)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
 setwd(wd)
 
 
@@ -32,7 +32,7 @@ setwd(wd)
 
 ### We use CPM and log-transformed averaged data (as in the 'standard' workflow)
 ### File has mouse ensembl geneIDs
-file.avg_expr <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-L5.cpm_average_log.ensembl_musculus.csv.gz"
+file.avg_expr <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-L5.cpm_average_log.ensembl_musculus.csv.gz"
 df.avg_expr <- read_csv(file.avg_expr) %>% column_to_rownames(var="X1")
 
 ### Ortholog mapping
@@ -51,7 +51,7 @@ wrapper_calculate_and_write_sems(df.human, name.dataset="mousebrain")
 # ======================================================================= #
 
 ### Read data
-file.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.enrichment_values.csv.gz" # mouse gene symbols
+file.data <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.enrichment_values.csv.gz" # mouse gene symbols
 df <- read_csv(file.data) %>% rename(gene=X1)
 # ^^ n duplicate genes ~= 65
 df <- df %>% distinct(gene, .keep_all = TRUE) # remove duplicate gene names

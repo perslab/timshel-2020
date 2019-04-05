@@ -16,13 +16,12 @@
 # ======================================================================= #
 
 library(tidyverse)
+library(here)
+
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
-
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
-setwd(wd)
+setwd(here("src/ldsc"))
 
 
 # ======================================================================= #

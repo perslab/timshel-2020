@@ -24,8 +24,7 @@ library(here)
 library(skimr) # REF: https://cran.r-project.org/web/packages/skimr/vignettes/Using_skimr.html
 
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 setwd(here("src/expression_specificity"))
 

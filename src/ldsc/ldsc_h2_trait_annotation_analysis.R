@@ -29,7 +29,7 @@ setwd(here("src/ldsc"))
 # ======================================================================= #
 
 ### Load - MULTI GWAS AND ANNOTATIONS
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2/"
 filenames <- list.files(path=dir.data,  pattern="(.*).results$")
 list.dfs <- lapply(file.path(dir.data, filenames), read_tsv)
 list.dfs <- lapply(list.dfs, function(df) {df %>% filter(row_number() == n())}) # extract last row
@@ -51,7 +51,7 @@ df.ldsc
 # ======================================================================= #
 
 ### Export (selected columns)
-file.out <- here("results/h2-multi_gwas.csv.gz")
+file.out <- here("results/h2_annotations-multi_gwas.csv.gz")
 file.out
 # df.ldsc %>% select(-Category) %>% arrange(gwas) %>% write_csv(file.out)
 
@@ -65,7 +65,7 @@ df.export <- df.ldsc %>% group_by(gwas) %>%
   arrange(gwas, rank) %>%
   select(-Category)
 df.export
-df.export %>% write_csv("out.h2_trait_annotation_table.all.csv")
+df.export %>% write_csv("out.h2_annotations.all.csv")
 
 df.export <- df.ldsc %>% group_by(gwas) %>% 
   mutate(rank = rank(-`Coefficient_z-score`)) %>% 
@@ -73,13 +73,13 @@ df.export <- df.ldsc %>% group_by(gwas) %>%
   arrange(gwas, rank) %>%
   select(-Category)
 df.export
-df.export %>% write_csv("out.h2_trait_annotation_table.top5.csv")
+df.export %>% write_csv("out.h2_annotations.top5.csv")
 
 ### export WGCNA
 df.export <- df.ldsc %>% 
   filter(run_name=="wgcna.mousebrain-190111") %>%
   select(-Category)
-df.export %>% write_csv("out.h2_trait_annotation_table.wgcna.csv")
+df.export %>% write_csv("out.h2_annotations.wgcna.csv")
 
 
 # ======================================================================= #

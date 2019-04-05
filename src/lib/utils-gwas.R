@@ -28,7 +28,7 @@ library(here)
 Multiple Sclerosis	MS	Patsopoulos	2011	MS_Patsopoulos2011
 Alzheimer's Disease	AD	Lambert	2013	AD_Lambert2013
 Alzheimer's Disease	AD	Jansen	2019	AD_Jansen2019
-ADHG	ADHD	Demontis	2017	ADHD_PGC_Demontis2017
+Attention Deficit Hyperactivity Disorder	ADHD	Demontis	2017	ADHD_PGC_Demontis2017
 Anorexia Nervosa 	AN	Duncan	2017	AN_PGC_Duncan2017
 Autism Spectrum Disorder	ASD	Grove	2018	ASD_iPSYCH_PGC_Grove2018
 Bipolar Disorder	BIP	PGC	2018	BIP_PGC2018

@@ -96,27 +96,70 @@ LIST_CHROMOSOMES = list(range(1,23)) # 1..22 | only used to validate that all an
 
 FLAG_UNBUFFERED = True
 
-N_PARALLEL_QUANTILE_PERL_JOBS=50
-N_PARALLEL_LDSC_REGRESSION_JOBS = 50
+N_PARALLEL_QUANTILE_PERL_JOBS = 50
+N_PARALLEL_LDSC_REGRESSION_JOBS = 10
 N_PARALLEL_H2_RSCRIPT_JOBS = 50
 
-list_gwas = ["BMI_UKBB_Loh2018",
-			 "BMI_UPDATE_Yengo2018",
-			 "T2D_DIAMANTE_Mahajan2018",
-			 "T2D_UKBB_DIAMANTE_Mahajan2018",
-			 "T2D_UKBB_Loh2018",
-			 "HEIGHT_UKBB_Loh2018",
-			 "HEIGHT_Yengo2018",
-			 "LIPIDS_LDL_Teslovich2010",
-			 "RA_Okada2014",
-			]
 
+### PRIM LIST GWAS [ALL RUN on h2 + h2_quantile]
+# list_gwas = ["BMI_UKBB_Loh2018",
+# 			 "BMI_UPDATE_Yengo2018",
+# 			 "T2D_DIAMANTE_Mahajan2018",
+# 			 "T2D_UKBB_DIAMANTE_Mahajan2018",
+# 			 "T2D_UKBB_Loh2018",
+# 			 "HEIGHT_UKBB_Loh2018",
+# 			 "HEIGHT_Yengo2018",
+# 			 "LIPIDS_LDL_Teslovich2010",
+# 			 "RA_Okada2014",
+# 			]
+
+
+### Meta-analysis traits [n=39]
+list_gwas = ["AD_Jansen2019",
+"ADHD_PGC_Demontis2017",
+"AN_PGC_Duncan2017",
+"ASD_iPSYCH_PGC_Grove2018",
+"BIP_PGC2018",
+"BMI_UKBB_Loh2018",
+"CAD_Schunkert2011",
+"CARDIOVASCULAR_UKBB_Loh2018",
+"CELIAC_Dubois2010",
+"CROHNS_Jostins2012",
+"DEPRESSION_Nagel2018",
+"DIASTOLICadjMED_UKBB_Loh2018",
+"EA3_Lee2018",
+"FG_Female_Lagou2018",
+"FI_Female_Lagou2018",
+"HBA1C_MAGIC_Wheeler2017",
+"HEIGHT_UKBB_Loh2018",
+"IBD_Jostins2012",
+"INSOMNIA_Jansen2018",
+"INTELLIGENCE_Savage2018",
+"LIPIDS_HDL_Teslovich2010",
+"LIPIDS_LDL_Teslovich2010",
+"LIPIDS_TG_Teslovich2010",
+"LUPUS_Bentham2015",
+"MDD_Howard2019",
+"MS_Patsopoulos2011",
+"NEUROTICISM_Nagel2018",
+"PBC_Cordell2015",
+"RA_Okada2014",
+"RB_Linner_2019",
+"SCZ_Pardinas2018",
+"SWB_Okbay2016",
+"SYSTOLICadjMED_UKBB_Loh2018",
+"T1D_Bradfield2011",
+"T2D_UKBB_Loh2018",
+"UC_Jostins2012",
+"WHR_Pulit2019",
+"WHRadjBMI_UKBB_Loh2018",
+"WORRY_Nagel2018"]
 
 ##################################################################################################
 ############################################ PARAMS ##############################################
 ##################################################################################################
 
-FLAG_QUANTILE_FIXED = True
+FLAG_QUANTILE_FIXED = True # True is used for publication
 # FLAG_QUANTILE_FIXED = False
 
 
@@ -133,13 +176,16 @@ dict_annotations_mb = dict_annotations
 
 ################## TABULA MURIS ##################
 dict_annotations = collections.defaultdict(dict)
-list_annotations = ["Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell","Brain_Non-Myeloid.oligodendrocyte","Brain_Non-Myeloid.astrocyte",
-"Pancreas.type_B_pancreatic_cell","Pancreas.pancreatic_A_cell","Pancreas.pancreatic_D_cell","Pancreas.pancreatic_PP_cell",
-"Liver.hepatocyte", # LDL
-"Spleen.T_cell", # RA
-"Trachea.mesenchymal_cell", # Height
-"Limb_Muscle.mesenchymal_stem_cell", # Height
-]
+### LIST for h2_quantile
+list_annotations = ["Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell","Brain_Non-Myeloid.oligodendrocyte"]
+### FULL LIST for h2
+# list_annotations = ["Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell","Brain_Non-Myeloid.oligodendrocyte","Brain_Non-Myeloid.astrocyte",
+# "Pancreas.type_B_pancreatic_cell","Pancreas.pancreatic_A_cell","Pancreas.pancreatic_D_cell","Pancreas.pancreatic_PP_cell",
+# "Liver.hepatocyte", # LDL
+# "Spleen.T_cell", # RA
+# "Trachea.mesenchymal_cell", # Height
+# "Limb_Muscle.mesenchymal_stem_cell", # Height
+# ]
 
 for annotation in list_annotations:
 	dict_annotations[annotation]["name_context"] = "tabula_muris.{}.sem_mean".format(annotation)

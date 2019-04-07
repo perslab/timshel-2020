@@ -89,7 +89,7 @@ df.plot_h2q <- df.ldsc %>% filter(gwas %in% filter.gwas, annotation %in% filter.
 p <- plot_h2_annotation_intervals(df.plot_h2q)
 p
 file.out <- sprintf("figs/fig_h2_annotation_intervals.main.mb_fdr_celltypes.%s.pdf", paste(filter.gwas, collapse="-"))
-ggsave(filename=file.out, p, width=12, height=6)
+# ggsave(filename=file.out, p, width=12, height=6)
 
 
 
@@ -120,8 +120,7 @@ df.ldsc.meta_analysis <- bind_rows(df.ldsc.meta_analysis, df.ldsc)
 
 ### GWAS [*SWITCH*]
 filter.gwas <- c("BMI_UKBB_Loh2018", "META_ANALYSIS") 
-# filter.gwas <- c("BMI_UKBB_Loh2018", "HEIGHT_Yengo2018") # SCZ_Pardinas2018
-
+filter.gwas <- c("BMI_UKBB_Loh2018", "HEIGHT_Yengo2018", "WHRadjBMI_UKBB_Loh2018") # "RA_Okada2014", "MS_Patsopoulos2011", "SCZ_Pardinas2018"
 
 ### SELECTED ANNOTATIONS
 filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
@@ -134,14 +133,18 @@ df.plot_h2q
 
 ### PLOT
 p <- plot_h2_annotation_intervals(df.plot_h2q)
-p <- p + facet_grid(gwas_fmt~run_name, space="free_x", scales="free_x", drop=T)
+p <- p + facet_grid(gwas_fmt~run_name, 
+                    space="free_x", scales="free_x", drop=T)
+                    # switch="x") # If "x", the top labels will be displayed to the bottom. If "y", the right-hand side labels will be displayed to the left. Can also be set to "both".
 p <- p + theme(panel.grid.major = element_blank(), # REF: https://stackoverflow.com/questions/14185754/remove-strip-background-keep-panel-border
                panel.grid.minor = element_blank(),
                strip.background = element_blank(),
-               panel.border = element_rect(colour = "black"))
+               panel.border = element_rect(colour = "black"),
+               strip.text.y = element_text(size=rel(0.5)) # gwas text size smaller for easier post edditing
+               )
 p
 file.out <- sprintf("figs/fig_h2_annotation_intervals.som.fdr_celltypes.%s.pdf", paste(filter.gwas, collapse="-"))
-# ggsave(filename=file.out, p, width=12, height=10)
+# ggsave(filename=file.out, p, width=12, height=8)
 
 
 

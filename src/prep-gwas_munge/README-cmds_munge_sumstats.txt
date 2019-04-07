@@ -552,7 +552,7 @@ GWAS=IBD_Jostins2012
 ln -s $PATH_SOURCE/IBD.sumstats.gz $PATH_DEST/${GWAS}.sumstats.gz
 GWAS=PBC_Cordell2015
 ln -s $PATH_SOURCE/Primary_biliary_cirrhosis.sumstats.gz $PATH_DEST/${GWAS}.sumstats.gz
-GWAS=LUPUS_2015
+GWAS=LUPUS_Bentham2015
 ln -s $PATH_SOURCE/Lupus.sumstats.gz $PATH_DEST/${GWAS}.sumstats.gz
 GWAS=CAD_Schunkert2011
 ln -s $PATH_SOURCE/Coronary_Artery_Disease.sumstats.gz $PATH_DEST/${GWAS}.sumstats.gz

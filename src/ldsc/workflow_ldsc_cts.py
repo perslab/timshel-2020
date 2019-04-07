@@ -10,6 +10,8 @@ import sys
 import string
 import random
 
+import math
+
 import make_annot_from_geneset_all_chr
 
 ###################################### TODO ######################################
@@ -211,17 +213,27 @@ def get_all_genes_ref_ld_chr_name(dataset):
 ###################################### Job scheduler ######################################
 
 def job_scheduler(list_cmds, n_parallel_jobs):
-	""" Schedule parallel jobs with at most n_parallel_jobs parallel jobs."""
+	""" 
+	Schedule parallel jobs with at most n_parallel_jobs parallel jobs.
+	
+
+	UPDATE April 7th 2019: this is the most recent version of job_scheduler() as it includes new print functionalities:
+	- total number of batches
+	- total number of jobs
+	[Notice the dependency of math lib]
+	"""
+	N_TOTAL_JOBS = len(list_cmds)
+	N_TOTAL_BATCHES = math.ceil(N_TOTAL_JOBS/n_parallel_jobs) # round up
 	list_of_processes = []
 	batch = 1
 	for i, cmd in enumerate(list_cmds, start=1):
-		print("job schedule batch = {} | i = {} | Running command: {}".format(batch, i, cmd))
+		print("job schedule batch = {}/{} | i = {}/{} | Running command: {}".format(batch, N_TOTAL_BATCHES, i, N_TOTAL_JOBS, cmd))
 		## p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1, stdout=FNULL, stderr=subprocess.STDOUT)
 		### You need to keep devnull open for the entire life of the Popen object, not just its construction. 
 		### FNULL = open(os.devnull, 'w') # devnull filehandle does not need to be closed?
 		p = subprocess.Popen(cmd, shell=True, bufsize=0 if FLAG_UNBUFFERED else -1)
 		list_of_processes.append(p)
-		print("job schedule batch = {} | i = {} | PIDs of running jobs (list_of_processes):".format(batch, i))
+		print("job schedule batch = {}/{} | i = {}/{} | PIDs of running jobs (list_of_processes):".format(batch, N_TOTAL_BATCHES, i, N_TOTAL_JOBS))
 		print(" ".join([str(p.pid) for p in list_of_processes])) # print PIDs
 		if i % n_parallel_jobs == 0: # JOB BATCH SIZE
 			batch += 1
@@ -250,7 +262,7 @@ PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2
 
 PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 FLAG_UNBUFFERED = True
-N_PARALLEL_LDSC_REGRESSION_JOBS = 1
+N_PARALLEL_LDSC_REGRESSION_JOBS = 3
 # FLAG_BINARY = True
 FLAG_BINARY = False
 
@@ -263,77 +275,75 @@ FLAG_BINARY = False
 # "BMI_UPDATE_Yengo2018_no_mhc_max_chisq_80"]
 
 
-list_gwas = ["1KG_phase3_EUR_null_gwas_P{}".format(x) for x in range(1,11)] # 1..10
+# list_gwas = ["1KG_phase3_EUR_null_gwas_P{}".format(x) for x in range(1,11)] # 1..10
 
-# list_gwas = ["ADHD_PGC_Demontis2017",
-# "AD_Jansen2019",
-# "AD_Lambert2013",
-# "AN_PGC_Duncan2017",
-# "ASD_iPSYCH_PGC_Grove2018",
-# "BIP_PGC2018",
-# "blood_EOSINOPHIL_COUNT",
-# "BMI_Locke2015",
-# "BMI_UPDATE_Yengo2018",
-# "CAD_Schunkert2011",
-# "CELIAC_Dubois2010",
-# "CROHNS_Jostins2012",
-# "DEPRESSED_AFFECT_Nagel2018",
-# "DEPRESSION_Nagel2018",
-# "DS_Okbay2016",
-# "EA2_Okbay2016",
-# "EA3_Lee2018",
-# "FG_Female_Lagou2018",
-# "FG_Male_Lagou2018",
-# "FI_Female_Lagou2018",
-# "FI_Male_Lagou2018",
-# "HBA1C_MAGIC_Wheeler2017",
-# "LIPIDS_HDL_Teslovich2010",
-# "HEIGHT_Wood2014",
-# "HEIGHT_Yengo2018",
-# "IBD_Jostins2012",
-# "INSOMNIA_Jansen2018",
-# "INTELLIGENCE_Savage2018",
-# "INTELLIGENCE_Sniekers2017",
-# "LIPIDS_LDL_Teslovich2010",
-# "LUPUS_2015",
-# "MDD_PGC_Wray2018",
-# "MS_Patsopoulos2011",
-# "NEUROTICISM_Nagel2018",
-# "NEUROTICISM_OKBAY2016",
-# "PBC_Cordell2015",
-# "RA_Okada2014",
-# "RB_Linner_2019",
-# "SCZ_Pardinas2018",
-# "SCZ_EUR_Ripke2014",
-# "SWB_Okbay2016",
-# "T1D_Bradfield2011",
-# "T2DadjBMI_DIAMANTE_Mahajan2018",
-# "T2D_DIAMANTE_Mahajan2018",
-# "T2D_UKBB_DIAMANTE_Mahajan2018",
-# "T2D_Xue2018",
-# "LIPIDS_TG_Teslovich2010",
-# "UC_Jostins2012",
-# "WHR_adjBMI_Shungin2015",
-# "WHR_Shungin2015",
-# "WORRY_Nagel2018",
-# "WHR_Pulit2019",
-# "WHRadjBMI_Pulit2019",
-# "BMI_Pulit2019",
-# "BMI_male_Pulit2019",
-# "BMI_female_Pulit2019",
-# "BMI_UKBB_Loh2018",
-# "WHRadjBMI_UKBB_Loh2018",
-# "HEIGHT_UKBB_Loh2018",
-# "DIASTOLICadjMED_UKBB_Loh2018",
-# "SYSTOLICadjMED_UKBB_Loh2018",
-# "CARDIOVASCULAR_UKBB_Loh2018",
-# "MDD_Howard2019",
-# "LIPIDS_HDL_Willer2013",
-# "LIPIDS_LDL_Willer2013",
-# "LIPIDS_TG_Willer2013",
-# "LIPIDS_TC_Willer2013",
-# "T2D_UKBB_Loh2018"]
-
+list_gwas = ["AD_Lambert2013",
+"AD_Jansen2019",
+"ADHD_PGC_Demontis2017",
+"AN_PGC_Duncan2017",
+"ASD_iPSYCH_PGC_Grove2018",
+"BIP_PGC2018",
+"BMI_female_Pulit2019",
+"BMI_Locke2015",
+"BMI_male_Pulit2019",
+"BMI_Pulit2019",
+"BMI_UKBB_Loh2018",
+"BMI_UPDATE_Yengo2018",
+"CAD_Schunkert2011",
+"CARDIOVASCULAR_UKBB_Loh2018",
+"CELIAC_Dubois2010",
+"CROHNS_Jostins2012",
+"DEPRESSED_AFFECT_Nagel2018",
+"DEPRESSION_Nagel2018",
+"DIASTOLICadjMED_UKBB_Loh2018",
+"DS_Okbay2016",
+"EA2_Okbay2016",
+"EA3_Lee2018",
+"FG_Female_Lagou2018",
+"FG_Male_Lagou2018",
+"FI_Female_Lagou2018",
+"FI_Male_Lagou2018",
+"HBA1C_MAGIC_Wheeler2017",
+"HEIGHT_UKBB_Loh2018",
+"HEIGHT_Wood2014",
+"HEIGHT_Yengo2018",
+"IBD_Jostins2012",
+"INSOMNIA_Jansen2018",
+"INTELLIGENCE_Savage2018",
+"INTELLIGENCE_Sniekers2017",
+"LIPIDS_HDL_Teslovich2010",
+"LIPIDS_HDL_Willer2013",
+"LIPIDS_LDL_Teslovich2010",
+"LIPIDS_LDL_Willer2013",
+"LIPIDS_TC_Willer2013",
+"LIPIDS_TG_Teslovich2010",
+"LIPIDS_TG_Willer2013",
+"LUPUS_Bentham2015",
+"MDD_Howard2019",
+"MDD_PGC_Wray2018",
+"MS_Patsopoulos2011",
+"NEUROTICISM_Nagel2018",
+"NEUROTICISM_Okbay2016",
+"PBC_Cordell2015",
+"RA_Okada2014",
+"RB_Linner_2019",
+"SCZ_EUR_Ripke2014",
+"SCZ_Pardinas2018",
+"SWB_Okbay2016",
+"SYSTOLICadjMED_UKBB_Loh2018",
+"T1D_Bradfield2011",
+"T2D_DIAMANTE_Mahajan2018",
+"T2D_UKBB_DIAMANTE_Mahajan2018",
+"T2D_UKBB_Loh2018",
+"T2D_Xue2018",
+"T2DadjBMI_DIAMANTE_Mahajan2018",
+"UC_Jostins2012",
+"WHR_Pulit2019",
+"WHR_Shungin2015",
+"WHRadjBMI_Pulit2019",
+"WHRadjBMI_Shungin2015",
+"WHRadjBMI_UKBB_Loh2018",
+"WORRY_Nagel2018"]
 
 
 
@@ -369,19 +379,19 @@ FLAG_WGCNA = False
 #  					 }
 
 # ### Mean TM ONLY [for null]
-dict_genomic_annot = {"celltypes.tabula_muris.all":
- 					  	{"dataset":"tabula_muris",
- 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
- 					 }
-
-# # ### Mean MB+TM
-# dict_genomic_annot = {"celltypes.mousebrain.all":
-# 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
-#  					 "celltypes.tabula_muris.all":
+# dict_genomic_annot = {"celltypes.tabula_muris.all":
 #  					  	{"dataset":"tabula_muris",
 #  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
 #  					 }
+
+### Mean MB+TM
+dict_genomic_annot = {"celltypes.mousebrain.all":
+						{"dataset":"mousebrain",
+						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+ 					 "celltypes.tabula_muris.all":
+ 					  	{"dataset":"tabula_muris",
+ 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+ 					 }
 
 
 ### top10pct (Skene and Hillary)

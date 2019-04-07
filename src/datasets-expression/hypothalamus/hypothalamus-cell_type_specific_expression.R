@@ -19,20 +19,20 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-library(Seurat)
 library(tidyverse)
+library(here)
 
+library(Seurat)
 library(parallel)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
 # ======================================================================= #
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/"
 setwd(wd)
 
 N.CORES <- 10

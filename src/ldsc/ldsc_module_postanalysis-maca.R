@@ -13,7 +13,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
 setwd(wd)
 
 
@@ -24,7 +24,7 @@ library(tidyverse)
 # ============================ LOAD DATA ============================== #
 # ======================================================================= #
 
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 
 filenames <- list.files(path=dir.data,  pattern="wgcna.maca.*cell_type_results.txt") 
 filenames
@@ -58,7 +58,7 @@ df <- df %>% group_by(gwas) %>% mutate(P_adj = P*n())
 # ======================================================================= #
 
 ### Read geneset file
-# file.multi_geneset <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv" # novo_lira_sema
+# file.multi_geneset <- "/projects/timshel/sc-genetics/sc-genetics/out/out.wgcna/nn_lira_sema/tables/nn_lira_sema_per_brain_area_run1_cell_cluster_module_genes.csv" # novo_lira_sema
 # file.multi_geneset <- "/projects/jonatan/tmp-mousebrain/tables/mousebrain_Neurons_ClusterName_2_cell_cluster_module_genes.csv" # mousebrain neurons
 file.multi_geneset <- "/projects/jonatan/tmp-maca/tables/maca_tissue_cell_type_kME_cell_cluster_module_genes.csv" # maca
 df.multi_geneset <- read_csv(file.multi_geneset)
@@ -82,7 +82,7 @@ df.metadata <- df %>% select(gwas, module_id, module_ldsc_pval=P, module_origin,
                              cell_type, tissue, n_genes_module_mouse=NGENES_MOUSE)
 
 ### WRITE 'META-DATA FILE'
-# df.metadata %>% write_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.module_prioritization.ldsc.metadata.MULTI_TRAIT.csv")
+# df.metadata %>% write_csv("/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.module_prioritization.ldsc.metadata.MULTI_TRAIT.csv")
 
 # ======================================================================= #
 # ============================ TRAIT SPECIFICITY =============================== #
@@ -128,8 +128,8 @@ p
 # ======================== Compare LDSC and MAGMA ======================= #
 # ======================================================================= #
 
-df.cmp.ldsc <- read_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/out.ldsc.wgcna_maca.BMI_Yengo2018.csv")
-df.cmp.magma <- read_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-geneset/out.magma_geneset.wgcna_maca.BMI_Yengo2018.csv")
+df.cmp.ldsc <- read_csv("/projects/timshel/sc-genetics/sc-genetics/src/ldsc/out.ldsc.wgcna_maca.BMI_Yengo2018.csv")
+df.cmp.magma <- read_csv("/projects/timshel/sc-genetics/sc-genetics/src/magma-geneset/out.magma_geneset.wgcna_maca.BMI_Yengo2018.csv")
 df.cmp <- full_join(df.cmp.ldsc, df.cmp.magma, by="module_id", suffix=c(".ldsc", ".magma"))
 df.cmp
 ggplot(df.cmp, aes(x=-log10(P.ldsc), y=-log10(P.magma), color=tissue)) + geom_point(alpha=0.3) + guides(color=FALSE)

@@ -14,7 +14,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 setwd(wd)
 
 library(Seurat) # only needed if fiddling with Seurat objects

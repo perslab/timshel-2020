@@ -15,7 +15,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 setwd(wd)
 
 # library(MAGMA.Celltyping) # loads EWCE package
@@ -32,7 +32,7 @@ dataset <- "MACA"
 # "out.magma_celltyping.XXX.results.MACA.csv"
 # "out.magma_celltyping.SCZ_Ripke2014.results.mousebrain.csv"
 
-dir.results <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+dir.results <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 
 # ======================================================================= #
 # ============================ READ RESULTS =============================== #

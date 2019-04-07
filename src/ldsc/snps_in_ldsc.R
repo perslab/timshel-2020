@@ -36,11 +36,11 @@
 # 141123 1000G BIM
 
 chromosome <- 22
-file.hm <- sprintf("/raid5/projects/timshel/sc-genetics/ldsc/data/hapmap3_snps/hm.%s.snp", chromosome)
-file.baseline <- sprintf("/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.%s.l2.ldscore.gz", chromosome)
-file.1kg <- sprintf("/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.%s.bim", chromosome)
-file.hm_print_snps <- "/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/print_snps.txt"
-file.hm_merge_alleles <- "/raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist"
+file.hm <- sprintf("/projects/timshel/sc-genetics/ldsc/data/hapmap3_snps/hm.%s.snp", chromosome)
+file.baseline <- sprintf("/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.%s.l2.ldscore.gz", chromosome)
+file.1kg <- sprintf("/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.%s.bim", chromosome)
+file.hm_print_snps <- "/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/print_snps.txt"
+file.hm_merge_alleles <- "/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist"
 
 
 df.hm <- read_table(file.hm,col_names="SNP")
@@ -67,18 +67,18 @@ sum(df.baseline$SNP %in% df.hm_print_snps$SNP) # 17489 | HURRA, all baseline SNP
 # ### LDSCORE files
 # for i in {20..22}; do
 # echo Chr $i
-# echo `cat /raid5/projects/timshel/sc-genetics/ldsc/data/hapmap3_snps/hm.$i.snp | wc -l` "Hapmap SNPs"
+# echo `cat /projects/timshel/sc-genetics/ldsc/data/hapmap3_snps/hm.$i.snp | wc -l` "Hapmap SNPs"
 # echo `zcat /scratch/sc-ldsc/nn_lira_sema/nn_lira_sema.yellow.$i.l2.ldscore.gz | wc -l` "NN individual ANNOT (no pandas concat)"
 # #echo `zcat /scratch/sc-ldsc/nn_lira_sema_1000kb/nn_lira_sema.COMBINED_ANNOT.$i.l2.ldscore.gz | wc -l` "NN COMBINED ANNOT 1000kb"
 # #echo `zcat /scratch/sc-ldsc/nn_lira_sema-combined/nn_lira_sema.COMBINED_ANNOT.$i.l2.ldscore.gz | wc -l` "NN COMBINED ANNOT 100kb"
 # echo `zcat /scratch/sc-ldsc/maca/maca_tissue_cell_type.COMBINED_ANNOT.$i.l2.ldscore.gz | wc -l` "MACA COMBINED ANNOT"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.$i.l2.ldscore.gz | wc -l` "BASELINE"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_cell_type_groups/cell_type_group.9.$i.l2.ldscore.gz | wc -l` "1000G_Phase3_cell_type_groups"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.control.$i.l2.ldscore.gz | wc -l` "Cahoy CONTROL"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.3.$i.l2.ldscore.gz | wc -l` "Cahoy 3"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/baselineLD_v2.0/baselineLD.$i.l2.ldscore.gz | wc -l` "baselineLD_v2.0"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.$i.l2.ldscore.gz | wc -l` "baseline_v1.1"
-# echo `cat /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.$i.bim | wc -l` "1000G BIM"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.$i.l2.ldscore.gz | wc -l` "BASELINE"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_cell_type_groups/cell_type_group.9.$i.l2.ldscore.gz | wc -l` "1000G_Phase3_cell_type_groups"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.control.$i.l2.ldscore.gz | wc -l` "Cahoy CONTROL"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.3.$i.l2.ldscore.gz | wc -l` "Cahoy 3"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/baselineLD_v2.0/baselineLD.$i.l2.ldscore.gz | wc -l` "baselineLD_v2.0"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.$i.l2.ldscore.gz | wc -l` "baseline_v1.1"
+# echo `cat /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.$i.bim | wc -l` "1000G BIM"
 # done
 # 
 # 
@@ -89,11 +89,11 @@ sum(df.baseline$SNP %in% df.hm_print_snps$SNP) # 17489 | HURRA, all baseline SNP
 # echo `zcat /scratch/sc-ldsc/nn_lira_sema_1000kb/nn_lira_sema.COMBINED_ANNOT.$i.annot.gz | wc -l` "NN COMBINED ANNOT 1000kb"
 # echo `zcat /scratch/sc-ldsc/nn_lira_sema-combined/nn_lira_sema.COMBINED_ANNOT.$i.annot.gz | wc -l` "NN COMBINED ANNOT 100kb"
 # echo `zcat /scratch/sc-ldsc/maca/maca_tissue_cell_type.COMBINED_ANNOT.$i.annot.gz | wc -l` "MACA COMBINED ANNOT"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.$i.annot.gz | wc -l` "BASELINE"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_cell_type_groups/cell_type_group.9.$i.annot.gz | wc -l` "1000G_Phase3_cell_type_groups"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.control.$i.annot.gz | wc -l` "Cahoy CONTROL"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.3.$i.annot.gz | wc -l` "Cahoy 3"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/baselineLD_v2.0/baselineLD.$i.annot.gz | wc -l` "baselineLD_v2.0"
-# echo `zcat /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.$i.annot.gz | wc -l` "baseline_v1.1"
-# echo `cat /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.$i.bim | wc -l` "1000G BIM"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.$i.annot.gz | wc -l` "BASELINE"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_cell_type_groups/cell_type_group.9.$i.annot.gz | wc -l` "1000G_Phase3_cell_type_groups"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.control.$i.annot.gz | wc -l` "Cahoy CONTROL"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Cahoy_1000Gv3_ldscores/Cahoy.3.$i.annot.gz | wc -l` "Cahoy 3"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/baselineLD_v2.0/baselineLD.$i.annot.gz | wc -l` "baselineLD_v2.0"
+# echo `zcat /projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.$i.annot.gz | wc -l` "baseline_v1.1"
+# echo `cat /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.$i.bim | wc -l` "1000G BIM"
 # done

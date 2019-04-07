@@ -40,11 +40,11 @@ import make_annot_from_geneset_all_chr
 ###################################### WIKI ######################################
 
 ### DOCS weights and baseline
-# --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.
-# --ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.
+# --ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.
+# --ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.
 
-# --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights.
-# --w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC.
+# --w-ld-chr /projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights.
+# --w-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC.
 
 
 ###################################### FUNCTIONS ######################################
@@ -96,9 +96,9 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 	###  *RESOURCE NOTES*: if you have many modules (~3000-6000) then set --n_parallel_jobs to ~2-5 (instead of 22). Otherwise the script will up all the MEMORY on yggdrasil and fail.
 	cmd = """{PYTHON3_EXEC} {flag_unbuffered} make_annot_from_geneset_all_chr.py \
 	--file_multi_gene_set {file_multi_gene_set} \
-	--file_gene_coord /raid5/projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
+	--file_gene_coord /projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
 	--windowsize 100000 \
-	--bimfile_basename /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
+	--bimfile_basename /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
 	{flag_binary} \
 	{flag_wgcna} \
 	--out_dir /scratch/sc-ldsc/{prefix_genomic_annot} \
@@ -154,7 +154,7 @@ def ldsc_pre_computation(prefix_genomic_annot, file_multi_gene_set):
 
 	### make cts file
 	###  *RESOURCE NOTES*: this script is light-weight and uses no computational resources
-	cmd="{PYTHON3_EXEC} {flag_unbuffered} make_cts_file.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/per_annotation/ --cts_outfile /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt --annotation_filter {file_cts_annotation_filter}".format(PYTHON3_EXEC=PYTHON3_EXEC,
+	cmd="{PYTHON3_EXEC} {flag_unbuffered} make_cts_file.py --prefix_ldscore_files /scratch/sc-ldsc/{prefix_genomic_annot}/per_annotation/ --cts_outfile /projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt --annotation_filter {file_cts_annotation_filter}".format(PYTHON3_EXEC=PYTHON3_EXEC,
 																																																																								  flag_unbuffered="-u" if FLAG_UNBUFFERED else "", 
 																																																																								  prefix_genomic_annot=prefix_genomic_annot,
 																																																																								  file_cts_annotation_filter=file_cts_annotation_filter)
@@ -248,7 +248,7 @@ def job_scheduler(list_cmds, n_parallel_jobs):
 PYTHON3_EXEC = "/tools/anaconda/3-4.4.0/envs/py3_anaconda3_PT180510/bin/python3"
 PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2"
 
-PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
+PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 FLAG_UNBUFFERED = True
 N_PARALLEL_LDSC_REGRESSION_JOBS = 1
 # FLAG_BINARY = True
@@ -362,53 +362,53 @@ FLAG_WGCNA = False
 # ### Adipocyte (sem_mean only)
 # dict_genomic_annot = {"celltypes.preadipocyte_developing_1808_branch":
 # 						{"dataset":"dataset_with_no_all_genes",
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch.sem_mean.txt.gz"},
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch.sem_mean.txt.gz"},
 #  					 "celltypes.preadipocyte_developing_1808_branch_pc2_quantile":
 #  					  	{"dataset":"dataset_with_no_all_genes",
-#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch_pc2_quantile.sem_mean.txt.gz"}
+#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch_pc2_quantile.sem_mean.txt.gz"}
 #  					 }
 
 # ### Mean TM ONLY [for null]
 dict_genomic_annot = {"celltypes.tabula_muris.all":
  					  	{"dataset":"tabula_muris",
- 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+ 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
  					 }
 
 # # ### Mean MB+TM
 # dict_genomic_annot = {"celltypes.mousebrain.all":
 # 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
 #  					 "celltypes.tabula_muris.all":
 #  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
 #  					 }
 
 
 ### top10pct (Skene and Hillary)
 # dict_genomic_annot = {"celltypes.mousebrain_top10pct.all":
 # 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_top10pct_binary.txt.gz"},
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_top10pct_binary.txt.gz"},
 #  					 "celltypes.tabula_muris_top10pct.all":
 #  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_top10pct_binary.txt.gz"}
+#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_top10pct_binary.txt.gz"}
 #  					 }
 
 # ### Raw SEMs
 # dict_genomic_annot = {"celltypes.mousebrain_raw_sems.all":
 # 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_raw_sems.txt.gz"},
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_raw_sems.txt.gz"},
 #  					 "celltypes.tabula_muris_raw_sems.all":
 #  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_raw_sems.txt.gz"}
+#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_raw_sems.txt.gz"}
 #  					 }
 
 
 # dict_genomic_annot = {"celltypes.campbell_lvl1.all":
 # 						{"dataset":"campbell",
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl1.sem_mean.txt"},
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl1.sem_mean.txt"},
 # 					 "celltypes.campbell_lvl2.all":
 # 					   	{"dataset":"campbell",
-# 					   	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl2.sem_mean.txt"}
+# 					   	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl2.sem_mean.txt"}
 # 					  }
 
 
@@ -472,7 +472,7 @@ dict_genomic_annot = {"celltypes.tabula_muris.all":
 # 		else:
 # 			raise Exception(".")
 # 		dict_genomic_annot[key_name] = {"dataset":dataset_name, 
-# 									"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/{}.min_kme_{:.2f}.csv.gz".format(file_prefix_cluster, cutoff_kme)
+# 									"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/{}.min_kme_{:.2f}.csv.gz".format(file_prefix_cluster, cutoff_kme)
 # 									}
 
 
@@ -492,10 +492,10 @@ dict_genomic_annot = {"celltypes.tabula_muris.all":
 # ### NOTES: too many modules generated. ~50 modules per cell-type
 # dict_genomic_annot = {"wgcna.tabula_muris-181214.fdr_sign_celltypes.continuous": 
 # 						{"dataset":"tabula_muris", 
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/tabula_muris-181214.tabula_muris_2_cell_cluster_module_genes.fdr_sign_celltypes.csv"},
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/tabula_muris-181214.tabula_muris_2_cell_cluster_module_genes.fdr_sign_celltypes.csv"},
 # 					  "wgcna.mousebrain-181214.fdr_sign_celltypes.continuous": 
 # 					  	{"dataset":"mousebrain", 
-# 					  	"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/mousebrain-181214.mb_ClusterName_6_cell_cluster_module_genes.fdr_sign_celltypes.csv"}
+# 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/mousebrain-181214.mb_ClusterName_6_cell_cluster_module_genes.fdr_sign_celltypes.csv"}
 # 					 }
 
 ### All modules
@@ -505,7 +505,7 @@ dict_genomic_annot = {"celltypes.tabula_muris.all":
 ### TEST
 # dict_genomic_annot = {"wgcna.tmp_test_file_multi_gene_set_wgcna200": 
 # 						{"dataset":"tabula_muris", 
-# 						"file_multi_gene_set":"/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/test_file_multi_gene_set_wgcna200.csv"},
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/test_file_multi_gene_set_wgcna200.csv"},
 # 					}
 
 
@@ -543,7 +543,7 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 		print("OBS: Running without all_genes correction.")
 		flag_all_genes = False
 	for gwas in list_gwas:
-		fileout_prefix = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot)
+		fileout_prefix = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot)
 		if os.path.exists("{}.cell_type_results.txt".format(fileout_prefix)):
 			print("GWAS={}, prefix_genomic_annot={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, prefix_genomic_annot, fileout_prefix))
 			continue
@@ -551,10 +551,10 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 		### *OBS*: we are runnin ldsc python script with UNBUFFERED stdout and stderr
 		### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 		### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
-		cmd = """{PYTHON2_EXEC} {flag_unbuffered} {script} --h2-cts /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
-		--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.{flag_all_genes}{ldsc_all_genes_ref_ld_chr_name} \
-		--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
-		--ref-ld-chr-cts /raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
+		cmd = """{PYTHON2_EXEC} {flag_unbuffered} {script} --h2-cts /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
+		--ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.{flag_all_genes}{ldsc_all_genes_ref_ld_chr_name} \
+		--w-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
+		--ref-ld-chr-cts /projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
 		--out {fileout_prefix}""".format(
 			PYTHON2_EXEC=PYTHON2_EXEC,
 			flag_unbuffered="-u" if FLAG_UNBUFFERED else "",

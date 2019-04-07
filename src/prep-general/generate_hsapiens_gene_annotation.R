@@ -24,7 +24,7 @@ library(tidyverse)
 
 # rm(list=ls())
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src"
 setwd(wd)
 
 

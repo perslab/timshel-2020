@@ -12,10 +12,10 @@ library(EWCE)
 library(tidyverse)
 
 ### Load
-load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
+load("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
 
 ### Gene list
-df.genes <- read_tsv("/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/yazdi2015_table1_mouse_obesity_genes.mapped.txt")
+df.genes <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/yazdi2015_table1_mouse_obesity_genes.mapped.txt")
 df.genes$ensembl_gene_id
 
 genes.hits <- df.genes$ensembl_gene_id[!is.na(df.genes$ensembl_gene_id)]

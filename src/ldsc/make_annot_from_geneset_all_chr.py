@@ -52,10 +52,10 @@ except Exception as e:
 
 ### test
 # python2 make_annot_from_geneset_all_chr.py \
-# --file_multi_gene_set /raid5/projects/timshel/sc-genetics/ldsc/ldsc/test_file_multi_gene_set_wgcna200.csv \
-# --file_gene_coord /raid5/projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
+# --file_multi_gene_set /projects/timshel/sc-genetics/ldsc/ldsc/test_file_multi_gene_set_wgcna200.csv \
+# --file_gene_coord /projects/timshel/sc-genetics/ldsc/data/gene_coords/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.LDSC_fmt.txt \
 # --windowsize 100000 \
-# --bimfile_basename /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
+# --bimfile_basename /projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_plink/1000G.EUR.QC \
 # --out_dir ./tmp_tmp_test_make_annot \
 # --out_prefix test_xxx1 \
 # --flag_wgcna \
@@ -122,7 +122,7 @@ def map_ensembl_genes_mouse_to_human(df, out_dir, out_prefix, print_log_files=Tr
 		Otherwise the .map() function might fail
 	"""
 	print("Mapping from mouse to human genes")
-	file_mapping = "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
+	file_mapping = "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
 	### SNIPPET
 	# ensembl_gene_id chromosome_name start_position  end_position    mmusculus_homolog_ensembl_gene  mmusculus_homolog_orthology_confidence
 	# ENSG00000138593 15      49280673        49338760        ENSMUSG00000035093      1

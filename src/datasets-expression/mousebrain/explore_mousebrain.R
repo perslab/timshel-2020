@@ -47,7 +47,7 @@ library(Seurat)
 # =============================== PARAMS ================================ #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/"
 setwd(wd)
 
 # ======================================================================= #

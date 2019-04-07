@@ -4,7 +4,7 @@
 
 ### Date: Oct 19th 2018
 ### Author: Pascal Timshel
-### Gene tables mapped via the script: /raid5/projects/timshel/sc-genetics/sc-genetics/src/preparation_steps/map_obesity_gene_tables.R
+### Gene tables mapped via the script: /projects/timshel/sc-genetics/sc-genetics/src/preparation_steps/map_obesity_gene_tables.R
 
 
 Human genes with Mendelian variants leading to extreme forms of obesity (Sup. Tab. 21 in https://www.nature.com/articles/s41588-017-0011-x)

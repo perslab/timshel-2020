@@ -17,7 +17,7 @@ library(Seurat)
 library(tidyverse)
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
 setwd(wd)
 
 # ======================================================================= #
@@ -25,7 +25,7 @@ setwd(wd)
 # ======================================================================= #
 
 print("Reading Seurat data object...")
-file.RData.cell_atlas <- "/raid5/data/pub-others/tabula_muris/figshare/180920-Robj/tabula_muris.seurat_obj.facs.figshare_180920.RData" # seurat_obj
+file.RData.cell_atlas <- "/data/pub-others/tabula_muris/figshare/180920-Robj/tabula_muris.seurat_obj.facs.figshare_180920.RData" # seurat_obj
 load(file.RData.cell_atlas) 
 
 

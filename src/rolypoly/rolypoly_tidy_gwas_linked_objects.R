@@ -17,7 +17,7 @@
 #=============================================== USAGE ================================================== #
 # ======================================================================================================= #
 
-# Rscript /raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/rolypoly_tidy_gwas_linked_objects.R --input_file /raid5/projects/timshel/sc-genetics/sc-genetics/out/out.rolypoly_objs-v2/rolypoly_objs.blood_EOSINOPHIL_COUNT.tss.10kb.square.all_genes.gwas_linked.RData --dir_out /scratch/sc-genetics/tmp_gwas_linked"
+# Rscript /projects/timshel/sc-genetics/sc-genetics/src/RP-meta/rolypoly_tidy_gwas_linked_objects.R --input_file /projects/timshel/sc-genetics/sc-genetics/out/out.rolypoly_objs-v2/rolypoly_objs.blood_EOSINOPHIL_COUNT.tss.10kb.square.all_genes.gwas_linked.RData --dir_out /scratch/sc-genetics/tmp_gwas_linked"
 
 # ======================================================================================================= #
 # ============================================ OptParse ================================================= #
@@ -39,7 +39,7 @@ dir.create(dir_out,showWarnings=F, recursive=T) # make new directory. cmd does n
 
 # file.rp <- "out.rolypoly_objs.body_BMI_Locke2015.squared_tss_10kb.final.RData"
 #file.rp <- "out.rolypoly_objs-v1/out.rolypoly_objs.disease_CARDIOVASCULAR.squared_tss_10kb.final.RData"
-# file.rp <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot1000/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData"
+# file.rp <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot1000/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData"
 
 # name.gwas <- stringr::str_split(basename(file.rp), "\\.")[[1]][2] # --> name.gwas = "body_BMI_Locke2015"
 # print(name.gwas)

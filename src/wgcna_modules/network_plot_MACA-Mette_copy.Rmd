@@ -2,7 +2,7 @@
 # Load data 
 ```{r}
 # Mouse brain
-kMEs <- read.csv(gzfile("/raid5/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/mousebrain.all_modules_kME.csv.gz"))
+kMEs <- read.csv(gzfile("/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/mousebrain.all_modules_kME.csv.gz"))
 
 
 # Tabula muris
@@ -14,11 +14,11 @@ kMEs <- kMEs[, -1]
 
 
 # Mouse brain
-meta <- read.csv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/mousebrain.module_prioritization.ldsc.metadata.MULTI_TRAIT.csv")
+meta <- read.csv("/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/mousebrain.module_prioritization.ldsc.metadata.MULTI_TRAIT.csv")
 
 
 # Tabula muris
-meta <- read.csv("/raid5/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.module_prioritization.ldsc.metadata.MULTI_TRAIT.csv")
+meta <- read.csv("/projects/timshel/sc-genetics/sc-genetics/out/module_correlation_graph/tabula_muris.module_prioritization.ldsc.metadata.MULTI_TRAIT.csv")
 
 
 ```

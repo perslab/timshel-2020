@@ -40,7 +40,7 @@ library(ggplot2)
 
 # Notebook specific parameters
 ```{r}
-setwd("/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-effect_of_rolypoly_n_bootstrap_iterations/")
+setwd("/projects/timshel/sc-genetics/sc-genetics/src/nb-effect_of_rolypoly_n_bootstrap_iterations/")
 ```
 
 
@@ -99,14 +99,14 @@ extract_data <- function(list.res, obj_type) {
 # 
 # # ======================= nboot1000 ======================= #
 # ### 1000
-# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.gtex_sub.nboot1000.RData")
+# load("/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.gtex_sub.nboot1000.RData")
 # names(list.rp_inference)
 # list.cmp[["n1000"]] <- extract_data(list.res=list.rp_inference, obj_type="full_rp")
 # 
 # 
 # # ======================= nboot100 ======================= #
 # ### 100
-# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData")
+# load("/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v3.univariate-nboot100/rolypoly_objs.body_BMI_Yengo2018.tss.10kb.pos_only.all_genes.inference.RData")
 # list.rp_inference <- list.rp_inference["gtex.sub_tissue_gene_tpm.avg_expr"] # obs: single-bracket. SUBSETTING.
 # names(list.rp_inference)
 # list.cmp[["n100"]] <- extract_data(list.res=list.rp_inference, obj_type="full_rp")

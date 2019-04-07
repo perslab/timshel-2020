@@ -20,7 +20,7 @@ add_ensembl_gene_id_from_gene_symbol <- function(df, colname_genes="gene") {
   # ======================================================================= #
   print("Reading gene mapping files...")
   
-  file.gene_name_mapping <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz"
+  file.gene_name_mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz"
   df.gene_name_mapping <- suppressMessages(read_delim(file.gene_name_mapping, delim="\t"))
   
   # ======================================================================= #
@@ -174,7 +174,7 @@ mouse_mgi_to_human_ortholog_mapping <- function(df, colname_genes_mgi="gene_mgi"
 
 # ======================= file.genes_mouse_obesity ======================= #
 
-file.genes_mouse_obesity <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/original_tables/yazdi2015_table1_mouse_obesity_genes.txt"
+file.genes_mouse_obesity <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/original_tables/yazdi2015_table1_mouse_obesity_genes.txt"
 df.genes_mouse_obesity <- read_tsv(file.genes_mouse_obesity) 
 df.genes_mouse_obesity <- df.genes_mouse_obesity %>% filter(!duplicated(gene)) # remove dups
 ### HGNChelper does not help for mouse symbols...
@@ -220,14 +220,14 @@ df.genes_mouse_obesity.human %>% write_tsv("yazdi2015_table1_mouse_obesity_genes
 # ======================= file.genes_rare_variant ======================= #
 
 ### Human genes
-file.genes_rare_variant <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/original_tables/turcot2018_table1_rare_variants.txt"
+file.genes_rare_variant <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/original_tables/turcot2018_table1_rare_variants.txt"
 df.genes_rare_variant <- read_tsv(file.genes_rare_variant)
 df.genes_rare_variant.ens <- add_ensembl_gene_id_from_gene_symbol(df.genes_rare_variant, colname_genes="gene_symbol") # ---> all genes mapped
 df.genes_rare_variant.ens %>% write_tsv("turcot2018_table1_rare_variants.mapped.txt")
 
 # ======================= file.genes_mendelian ======================= #
 
-file.genes_mendelian <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/original_tables/turcot2018_s21_mendelian_obesity_genes.txt"
+file.genes_mendelian <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/original_tables/turcot2018_s21_mendelian_obesity_genes.txt"
 df.genes_mendelian <- read_tsv(file.genes_mendelian)
 df.genes_mendelian
 df.genes_mendelian.ens <- add_ensembl_gene_id_from_gene_symbol(df.genes_mendelian, colname_genes="gene_symbol") # ---> all genes mapped

@@ -2,7 +2,7 @@
 library(tidyverse)
 library(loomR)
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/wgcna_modules/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/wgcna_modules/"
 setwd(wd)
 
 
@@ -50,7 +50,7 @@ colnames(df)[highlyCorrelated]
 # [2] "maca_mods_scaled_kME_1.tissue_cell_type_kME.Trachea_endothelial cell.mediumseagreen_594
 
 ### find overlap
-file.clusters <- "/raid5/projects/jonatan/tmp-maca/tables/maca_tissue_cell_type_kME_cell_cluster_module_genes.csv"
+file.clusters <- "/projects/jonatan/tmp-maca/tables/maca_tissue_cell_type_kME_cell_cluster_module_genes.csv"
 df.clusters <- read_csv(file.clusters)
 df.clusters.sub <- df.clusters %>% filter(module %in% c("black_2072", "mediumseagreen_594"))
 res <- df.clusters.sub %>% group_by(module) %>% do(var=.$ensembl)

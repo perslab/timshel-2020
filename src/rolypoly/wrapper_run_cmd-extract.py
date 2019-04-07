@@ -13,16 +13,16 @@ import subprocess
 
 ###################################### XXX ######################################
 
-script2run = "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/rolypoly_extract_inference_results-BACKUP.R"
+script2run = "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/rolypoly_extract_inference_results-BACKUP.R"
 
 
-files_in = glob.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1/*.final.RData")
-# files_in = glob.glob("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1.clean/*.inference.RData")
+files_in = glob.glob("/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1/*.final.RData")
+# files_in = glob.glob("/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1.clean/*.inference.RData")
 
 list_cmds = ["Rscript {} --input_file {}".format(script2run, filepath) for filepath in files_in]
 
-# time Rscript rolypoly_extract_inference_results.R --input_file /raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1/out.rolypoly_objs.disease_HI_CHOL_SELF_REP.squared_tss_10kb.final.RData
-# time Rscript rolypoly_extract_inference_results.R --input_file /raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1/out.rolypoly_objs.body_BMI_Locke2015.squared_tss_10kb.final.RData
+# time Rscript rolypoly_extract_inference_results.R --input_file /projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1/out.rolypoly_objs.disease_HI_CHOL_SELF_REP.squared_tss_10kb.final.RData
+# time Rscript rolypoly_extract_inference_results.R --input_file /projects/timshel/sc-genetics/sc-genetics/src/RP-meta/out.rolypoly_objs-v1/out.rolypoly_objs.body_BMI_Locke2015.squared_tss_10kb.final.RData
 
 print list_cmds
 print len(list_cmds)

@@ -1,5 +1,5 @@
 
-setwd("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-depict")
+setwd("/projects/timshel/sc-genetics/sc-genetics/src/GE-depict")
 
 library(tidyverse)
 # library(rlang)

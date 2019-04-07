@@ -5,7 +5,7 @@ library(tidyverse)
 load(file="rsession_celltyping.mousebrain.RData")
 
 ### Meta data
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv"
 df.metadata <- read_csv(file.metadata)
 cols.keep.metadata <- c("Class",
                         "ClusterName",

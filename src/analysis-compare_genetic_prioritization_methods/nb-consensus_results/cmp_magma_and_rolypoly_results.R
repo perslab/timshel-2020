@@ -6,7 +6,7 @@ library(tidyverse)
 rm(list=ls()) # clear workspace
 
 ### MAGMA
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping/out.magma_celltyping.BMI_Yengo2018.results.mousebrain.csv"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping/out.magma_celltyping.BMI_Yengo2018.results.mousebrain.csv"
 df.magma <- read_csv(file.in)
 df.magma <- df.magma %>% mutate(COVAR=stringr::str_match(df.magma$COVAR ,"_(.*)")[,2]) # rename Neurons_HBGLU3 to HBGLU3.
 
@@ -16,7 +16,7 @@ df.magma <- df.magma %>% mutate(COVAR=stringr::str_match(df.magma$COVAR ,"_(.*)"
 # ggplot(df.magma, aes(x=SE)) + geom_density() # --> MAGMA have roughly a bell-shaped SE distribution with low SD.
 
 ### RolyPoly - 'table.pvals.ALL_DATA.csv'
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
 df.rolypoly <- read_csv(file.in)
 df.rolypoly <- df.rolypoly %>% filter(dataset=="mousebrain_skene.quantiles") # filter 
 

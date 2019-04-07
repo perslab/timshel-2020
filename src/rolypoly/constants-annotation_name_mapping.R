@@ -9,7 +9,7 @@
 
 
 ### PREP
-# df.tmp.meta <- read_csv("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv")
+# df.tmp.meta <- read_csv("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv")
 # df.tmp.meta <- df.tmp.meta %>% select(c("ClusterName",
 #                                         "NCells",
 #                                         "Description",

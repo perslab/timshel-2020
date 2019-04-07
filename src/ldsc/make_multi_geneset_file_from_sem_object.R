@@ -14,12 +14,12 @@
 # ======================================================================= #
 
 library(tidyverse)
+library(here)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
-setwd(wd)
+
+setwd(here("src/ldsc/"))
 
 
 
@@ -27,7 +27,7 @@ setwd(wd)
 # ========== MAKE multi_geneset_file mousebrain FDR sign. cell-type ======= #
 # ======================================================================= #
 
-load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
+load("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
 # annotations <- c("MEGLU10","MEGLU1","DEINH3","TEGLU23","MEINH2","MEGLU11","DEGLU5","TEGLU17")
 annotations <- c("MEGLU10","DEINH3","MEGLU1","MEINH2","TEGLU23","DEGLU5")
 sem_obj.sub <- subset_annotations(sem_obj, annotations)
@@ -44,10 +44,10 @@ df_multi_geneset <- write_multi_geneset_file(sem_obj.sub, dataset_prefix="mouseb
 # ================ MAKE multi_geneset_file for each dataset ============= #
 # ======================================================================= #
 
-list.datasets <- list("mousebrain_all"="/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData",
-                      "tabula_muris"="/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData",
-                      "campbell_lvl1"="/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl1.sem_obj.RData",
-                      "campbell_lvl2"="/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl2.sem_obj.RData")
+list.datasets <- list("mousebrain_all"="/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData",
+                      "tabula_muris"="/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData",
+                      "campbell_lvl1"="/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl1.sem_obj.RData",
+                      "campbell_lvl2"="/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl2.sem_obj.RData")
 
 for (dataset_prefix in names(list.datasets)) {
   print(dataset_prefix)
@@ -63,7 +63,7 @@ for (dataset_prefix in names(list.datasets)) {
 ### TMP FOR DEBUGGING 
 # dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
 # source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
-# load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl1.sem_obj.RData")
+# load("/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl1.sem_obj.RData")
 # df.multi_geneset <- write_multi_geneset_file(sem_obj, dataset_prefix, use_raw_sem_values=T)
 # df.multi_geneset %>% filter(.sem_name =="tstat_top10pct_binary") %>% count(.annotation)
 # df.multi_geneset %>% filter(.sem_name =="specificity_top10pct_binary") %>% count(.annotation)
@@ -72,9 +72,9 @@ for (dataset_prefix in names(list.datasets)) {
 # =============================== MAKE ALL GENES multi_geneset_file ================================= #
 # ======================================================================= #
 
-list.datasets <- list("mousebrain"="/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData",
-                      "tabula_muris"="/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData",
-                      "campbell"="/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl1.sem_obj.RData") # OBS: we treat campbell_lvl1 and campbell_lvl2 identical.
+list.datasets <- list("mousebrain"="/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData",
+                      "tabula_muris"="/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData",
+                      "campbell"="/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/campbell_lvl1.sem_obj.RData") # OBS: we treat campbell_lvl1 and campbell_lvl2 identical.
 
 ### Get genes for each dataset
 list.dfs <- list()

@@ -18,13 +18,13 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
-
 library(tidyverse)
+library(here)
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
+source(here("src/lib/load_functions.R")) # load sc-genetics library
+
+
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
 setwd(wd)
 
 
@@ -65,7 +65,7 @@ DATA_SET <- "mousebrain"
 load(sprintf("/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping/CellTypeData_%s.rda", DATA_SET)) # loads ctd file
 
 ### COPY FROM ewce-mousebrain.R This 'CellTypeData_mousebrain.rda' was loaded like this from the "mousebrain-agg_L5.csv.gz"
-# file.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.csv.gz"
+# file.data <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.csv.gz"
 # df.data_raw <- read_csv(file.data) %>% rename(gene=X1)
 # # ^^ duplicates: ‘3110039M20Rik’, ‘4930556M19Rik’, ‘Apoc2’, ‘Atn1’, ‘C1s2’, ‘Ccdc142’, ‘Ccl19’, ‘Ccl21a’, ‘Ccl21b’, ‘Ccl21c’, ‘Ccl27a’, ‘Cd37’, ‘D130017N08Rik’, ‘Dancr’, ‘Fam205a2’, ‘Fbxw14’, ‘Flg’, ‘Gbp6’, ‘Gm15853’, ‘Gm16701’, ‘Gm2464’, ‘Gm3286’, ‘Hist2h2bb’, ‘Il11ra2’, ‘Itgam’, ‘l7Rn6’, ‘Ltbp4’, ‘Map2k7’, ‘Nova2’, ‘Ntn5’, ‘Olfr108’, ‘Olfr126’, ‘Olfr1284’, ‘Olfr1309’, ‘Olfr1316’, ‘Olfr1366’, ‘Olfr1396’, ‘Olfr1496’, ‘Olfr170’, ‘Olfr730’, ‘Olfr790’, ‘Olfr809’, ‘Pcdha11’, ‘Pcdhga8’, ‘Pik3c2g’, ‘Rp1’, ‘Schip1’, ‘Sgsm3’, ‘Smim20’, ‘Syngr4’, ‘Tead2’, ‘Tgfb1i1’, ‘Tulp2’, ‘U2af1l4’, ‘Umad1’, ‘Zfand4’ 
 # df.data_raw <- df.data_raw %>% distinct(gene, .keep_all = TRUE) # remove duplicate gene names
@@ -78,7 +78,7 @@ ctd = prepare.quantile.groups(ctd,specificity_species="mouse",numberOfBins=40) #
 ### INFO
 # the ctd data has been FILTERED on 1:1 orthologs by the EWCE package.
 # the ctd data contains MOUSE GENE IDENTIFYERS, and hence has not been mapped yet.
-# SEE "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping/ewce-mousebrain" for details on how the CTD RData file was generated.
+# SEE "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping/ewce-mousebrain" for details on how the CTD RData file was generated.
 
 ### INFO #2:
 # mouse_to_human_ortholog_gene_expression_mapping() MUST get as input a data frame with columnnames=annotations, rownames=mouse_gene_symbols

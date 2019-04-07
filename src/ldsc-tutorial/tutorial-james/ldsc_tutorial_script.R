@@ -14,12 +14,12 @@
 # ======================= SETUP ======================= #
 
 
-ldsc_path <- "/raid5/projects/timshel/sc-genetics/ldsc/ldsc/"
-workdir <- "/raid5/projects/timshel/sc-genetics/ldsc/src/tutorial-james/"
+ldsc_path <- "/projects/timshel/sc-genetics/ldsc/ldsc/"
+workdir <- "/projects/timshel/sc-genetics/ldsc/src/tutorial-james/"
 python_executive <- "/tools/anaconda/2-4.4.0/bin/python" # OBS: hack: trailing white space.
 
-gwas_data_path <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/JAMESLEE_traits"
-ldsc_data_path <- "/raid5/projects/timshel/sc-genetics/ldsc/data"
+gwas_data_path <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/JAMESLEE_traits"
+ldsc_data_path <- "/projects/timshel/sc-genetics/ldsc/data"
 
 setwd(workdir)
 

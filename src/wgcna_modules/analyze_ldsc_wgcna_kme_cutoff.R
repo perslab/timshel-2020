@@ -23,12 +23,12 @@ setwd(wd)
 # ======================================================================= #
 
 ### TB
-# dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+# dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 # filenames <- list.files(path=dir.data,  pattern="wgcna.tabula_muris-190111.fdr_sign_celltypes_min_kme_(.*).continuous__BMI_Yengo2018.cell_type_results.txt")
 # filenames <- c("wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous__BMI_Yengo2018.cell_type_results.txt")
 
 ### MB
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 filenames <- list.files(path=dir.data,  pattern="wgcna.mousebrain-190111.fdr_sign_celltypes_min_(.*).continuous__BMI_Yengo2018.cell_type_results.txt")
 filenames <- c(filenames, "wgcna.mousebrain-190111.fdr_sign_celltypes.continuous__BMI_Yengo2018.cell_type_results.txt")
 

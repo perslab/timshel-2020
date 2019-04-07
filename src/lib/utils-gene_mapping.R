@@ -269,7 +269,7 @@ add_ensembl_ids_from_entrez <- function(df, colname_geneids_from="entrez", colna
   
   df <- as.data.frame(df) # convert to df to ensure the the below operations work.
   
-  file.mapping <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
+  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
   df.mapping <- suppressMessages(read_tsv(file.mapping))
   
   genes_mapped <- df.mapping$ensembl_gene_id[match(df[,colname_geneids_from], df.mapping$entrezgene)]
@@ -302,7 +302,7 @@ hs_add_gene_symbol_from_ensembl_ids <- function(df, colname_geneids_from="ensemb
   
   df <- as.data.frame(df) # convert to df to ensure the the below operations work.
   
-  file.mapping <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz"
+  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz"
   df.mapping <- suppressMessages(read_tsv(file.mapping))
   
   genes_mapped <- df.mapping$gene_name_optimal[match(df[,colname_geneids_from], df.mapping$ensembl_gene_id)]

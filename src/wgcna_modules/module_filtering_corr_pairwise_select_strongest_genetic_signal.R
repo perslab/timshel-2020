@@ -25,8 +25,7 @@ library(corrr)
 library(GGally)
 
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 setwd(here("src/wgcna_modules"))
 
@@ -41,7 +40,7 @@ df.kme <- read_csv(file.kme)
 ### LOAD LDSC CTS RESULTS
 gwas <- "BMI_UKBB_Loh2018"
 genomic_annotation_prefix <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
+file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
 df.ldsc_cts <- read_tsv(file.ldsc_cts)
 df.ldsc_cts <- df.ldsc_cts %>% 
   mutate(module_id = str_split_fixed(Name, "__", n=Inf)[,2]) %>%

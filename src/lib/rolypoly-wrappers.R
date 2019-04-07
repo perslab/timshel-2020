@@ -204,7 +204,7 @@ wrapper.run_rolypoly_univariate_over_expr_datasets <- function(list.df_expr,
   ### R parallel computing and zombie processes
   # REF: https://stackoverflow.com/questions/25388139/r-parallel-computing-and-zombie-processes
   # REF: https://stackoverflow.com/questions/25348607/how-to-stop-r-from-leaving-zombie-processes-behind
-  # 12367 12370 12367 35481 pts/34   12367 S+   132983994   0:00      \_ /bin/sh -c Rscript run_rolypoly_multi_expr_datasets-v3.R --gwas_name body_BMI_Yengo2018 --run_name tss.10kb.none.all_genes --outdir /raid5/projects/timshe
+  # 12367 12370 12367 35481 pts/34   12367 S+   132983994   0:00      \_ /bin/sh -c Rscript run_rolypoly_multi_expr_datasets-v3.R --gwas_name body_BMI_Yengo2018 --run_name tss.10kb.none.all_genes --outdir /projects/timshe
   # 12370 12374 12367 35481 pts/34   12367 R+   132983994 2194:08      |   \_ /usr/lib64/R/bin/exec/R --slave --no-restore --file=run_rolypoly_multi_expr_datasets-v3.R --args --gwas_name body_BMI_Yengo2018 --run_name tss.10kb.n
   # 12374 78262 12367 35481 pts/34   12367 Z+   132983994   3:35      |       \_ [R] <defunct>
   #   12374 78264 12367 35481 pts/34   12367 Z+   132983994   3:25      |       \_ [R] <defunct>

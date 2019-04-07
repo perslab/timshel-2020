@@ -261,11 +261,11 @@ files.ldsc_cts &lt;- c(&quot;raw&quot;=here(&quot;out/out.ldsc/celltypes.tabula_
 
 files.ldsc_cts</code></pre>
 <pre><code>##                                                                                                                                     raw 
-## &quot;/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris_raw_sems.all__BMI_Yengo2018.cell_type_results.txt&quot; 
+## &quot;/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris_raw_sems.all__BMI_Yengo2018.cell_type_results.txt&quot; 
 ##                                                                                                                              continuous 
-##     &quot;/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris_cont.all__BMI_Yengo2018.cell_type_results.txt&quot; 
+##     &quot;/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris_cont.all__BMI_Yengo2018.cell_type_results.txt&quot; 
 ##                                                                                                                                  binary 
-##   &quot;/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris_binary.all__BMI_Yengo2018.cell_type_results.txt&quot;</code></pre>
+##   &quot;/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris_binary.all__BMI_Yengo2018.cell_type_results.txt&quot;</code></pre>
 <pre class="r"><code>df.ldsc_cts &lt;- bind_rows(lapply(files.ldsc_cts, load_ldsc_cts_results, dataset_prefix), .id=&quot;annotation_type&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(

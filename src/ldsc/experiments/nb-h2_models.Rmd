@@ -15,7 +15,7 @@ library(GGally)
 # Data
 
 ```{r}
-df <- read_tsv("/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/experiments/experiment.gtex_tissues.h2.ALL_MODELS.BMI_Yengo2018.txt")
+df <- read_tsv("/projects/timshel/sc-genetics/sc-genetics/src/ldsc/experiments/experiment.gtex_tissues.h2.ALL_MODELS.BMI_Yengo2018.txt")
 ```
 
 ```{r}

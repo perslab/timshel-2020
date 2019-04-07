@@ -12,7 +12,7 @@ This package takes GWAS summary statistics & Single Cell Transcriptome specifici
 
 # Initialization
 ```{r}
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 setwd(wd)
 ```
 
@@ -116,11 +116,11 @@ The function `check.sumstats.formatted.for.magma` does some basic processing to 
 
 
 ```{r}
-# gwas_sumstats_path <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt"
+# gwas_sumstats_path <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt"
 # ERROR - reading p-value file: non-numeric or non-integer value for sample size variable N on line 447477
 # 	line: 6	6176144	rs12210959	T	C	0.7384	-0.0014	0.0022	 5.1e-01	6e+05
 
-gwas_sumstats_path <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/bmi_yengo2018_magma_fmt.txt"
+gwas_sumstats_path <- "/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/BMI_HEIGHT_Yengo2018/bmi_yengo2018_magma_fmt.txt"
 
 # gwas_sumstats_path <- "/projects/tp/tmp-bmi-brain/data/gwas/bmi_height_yengo_2018/Meta-analysis_Locke_et_al+UKBiobank_2018.txt.gz.tab"
 ```

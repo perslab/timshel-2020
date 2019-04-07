@@ -23,8 +23,7 @@ library(gghighlight)
 library(ggrepel)
 library(viridis)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
 setwd(here("src/expression_specificity"))
@@ -39,9 +38,9 @@ source(here("src/lib/plot_expression_specificity.R"))
 # ============================ PUBLICATION PLOT ========================= #
 # ======================================================================= #
 
-load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
+load("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
 sem_obj.mb <- sem_obj
-load("/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData")
+load("/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData")
 sem_obj.tm <- sem_obj
 
 # ============================ ANNO DENSITY PLOT ========================= #

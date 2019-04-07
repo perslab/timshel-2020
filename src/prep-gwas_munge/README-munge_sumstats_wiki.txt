@@ -9,9 +9,9 @@ Cheers,
 Raymond
 
 @@@@@@@@@@@@@@@@@@ Error when using pandas 0.23.4 @@@@@@@@@@@@@@@@@@
-Reading list of SNPs for allele merge from /raid5/projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist
+Reading list of SNPs for allele merge from /projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist
 Read 1217311 SNPs for allele merge.
-Reading sumstats from /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/INSOMNIA_Jansen2018/Insomnia_sumstats_Jansenetal.txt.gz into memory 5000000 SNPs at a time.
+Reading sumstats from /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/INSOMNIA_Jansen2018/Insomnia_sumstats_Jansenetal.txt.gz into memory 5000000 SNPs at a time.
 ... done
 Read 10862567 SNPs from --sumstats file.
 Removed 9698237 SNPs not in --merge-alleles.
@@ -29,9 +29,9 @@ Removed 120 SNPs whose alleles did not match --merge-alleles (1136202 SNPs remai
 ERROR converting summary statistics:
 
 Traceback (most recent call last):
-  File "/raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py", line 707, in munge_sumstats
+  File "/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py", line 707, in munge_sumstats
     dat = allele_merge(dat, merge_alleles, log)
-  File "/raid5/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py", line 445, in allele_merge
+  File "/projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py", line 445, in allele_merge
     dat.loc[~jj, [i for i in dat.columns if i != 'SNP']] = float('nan')
   File "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/lib/python2.7/site-packages/pandas/core/indexing.py", line 188, in __setitem__
     indexer = self._get_setitem_indexer(key)

@@ -19,12 +19,13 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-library(Seurat)
 library(tidyverse)
+library(here)
+
+library(Seurat)
 library(Matrix)
 
 library(parallel)
-
 
 ### Source custom scripts
 dir.project_src <- "/projects/timshel/sc-arc_lira/src"
@@ -32,15 +33,14 @@ dir.pers_lab_sc_lib <- "/projects/timshel/git/perslab-sc-library"
 source(sprintf("%s/constants-cell_type_annotations.R", dir.project_src)) # loads cell type annotations
 source(sprintf("%s/seurat_functions/load_functions.R", dir.pers_lab_sc_lib)) # load Pers lab/Timshel single-cell library
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
 # ======================================================================= #
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-arc_lira/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-arc_lira/"
 setwd(wd)
 
 N.CORES <- 10

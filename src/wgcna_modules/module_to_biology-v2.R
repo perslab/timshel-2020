@@ -45,7 +45,7 @@ prefix_genomic_annot <- "wgcna.mousebrain-190218.fdr_sign_celltypes.continuous" 
 
 ### Map:  ENTREZ --> ENSEMBL
 map_entrez2ensembl <- function(df.magma) {
-  file.mapping <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
+  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
   df.mapping <- read_tsv(file.mapping)
 
   genes_mapped <- df.mapping$ensembl_gene_id[match(df.magma$GENE, df.mapping$entrezgene)]
@@ -99,31 +99,31 @@ do_gprofiler <- function(df, ordered_query){
 file.magma_gwas <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
 # file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.1e-5.depict_tissues_loci.txt" # 1e-5
 file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.5e-8.depict_tissues_loci.txt" # 5e-8
-file.genes_mendelian <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_s21_mendelian_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
-file.genes_rare_variant <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_table1_rare_variants.mapped.txt" # human_genes = ensembl_gene_id
-file.genes_mouse_obesity <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/yazdi2015_table1_mouse_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
+file.genes_mendelian <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_s21_mendelian_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
+file.genes_rare_variant <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_table1_rare_variants.mapped.txt" # human_genes = ensembl_gene_id
+file.genes_mouse_obesity <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/yazdi2015_table1_mouse_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
 
-file.ortholog_genes_background <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz" # human_genes = ensembl_gene_id
+file.ortholog_genes_background <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz" # human_genes = ensembl_gene_id
 
 # ======================================================================= #
 # ============================ *SWITCH* ================================ #
 # ======================================================================= #
 
 ### Set LDSC specific files
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", prefix_genomic_annot, gwas)
+file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", prefix_genomic_annot, gwas)
 file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", prefix_genomic_annot, prefix_genomic_annot)
 
 
 if (name.dataset == "tabula_muris") {
   ### MACA
-  file.module_origin_metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
+  file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
   df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=tissue_celltype,
                                                                                 module_origin_ncells=n_cells, 
                                                                                 module_origin_desc=tissue)
   df.module_origin_metadata <- df.module_origin_metadata %>% mutate(module_origin = stringr::str_replace_all(module_origin, pattern="\\s+", replacement="_")) 
 } else if (name.dataset == "mousebrain") {
   ### Mousebrain
-  file.module_origin_metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
+  file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
   df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=ClusterName,
                                                                                 module_origin_ncells=NCells, 
                                                                                 module_origin_desc=Description)

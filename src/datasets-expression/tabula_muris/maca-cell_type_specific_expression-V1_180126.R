@@ -24,6 +24,8 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
+library(here)
+
 library(Seurat)
 library(tidyverse)
 library(Matrix)
@@ -37,15 +39,14 @@ library(parallel)
 # source(sprintf("%s/constants-cell_type_annotations.R", dir.project_src)) # loads cell type annotations
 # source(sprintf("%s/seurat_functions/load_functions.R", dir.pers_lab_sc_lib)) # load Pers lab/Timshel single-cell library
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
 # ======================================================================= #
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
 setwd(wd)
 
 N.CORES <- 20

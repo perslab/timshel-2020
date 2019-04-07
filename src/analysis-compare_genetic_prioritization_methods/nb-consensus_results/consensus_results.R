@@ -14,7 +14,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-consensus_results/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-consensus_results/"
 setwd(wd)
 
 # library(MAGMA.Celltyping) # loads EWCE package
@@ -30,7 +30,7 @@ library(tidyverse)
 # ============================ READ MOUSEBRAIN METADATA =============================== #
 # ======================================================================= #
 
-file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.mousebrain.csv"
+file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.mousebrain.csv"
 df.metadata <- read_csv(file.metadata)
 df.metadata
 
@@ -38,7 +38,7 @@ df.metadata
 # ============================ MAGMA =============================== #
 # ======================================================================= #
 
-dir.results <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping/OUT"
+dir.results <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping/OUT"
 gwas.name <- "BMI_Yengo2018"
 
 list.files <- file.path(dir.results, list.files(path = dir.results, pattern = sprintf("(.*).%s.results.MOUSEBRAIN_EXT_(.*).csv", gwas.name)))
@@ -71,7 +71,7 @@ df.score.magma <- df.spread.rank
 # ======================================================================= #
 
 ### RolyPoly - 'table.pvals.ALL_DATA.csv'
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
 df.rolypoly <- read_csv(file.in)
 df.rolypoly %>% distinct(dataset)
 df.rolypoly <- df.rolypoly %>% filter(dataset %in% c("mousebrain.enrichment_log", "mousebrain.z_score_pos_log", "mousebrain_skene.quantiles")) # filter 

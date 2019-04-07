@@ -16,13 +16,13 @@
 # ======================================================================= #
 
 library(tidyverse)
+library(here)
 
 ### Source custom scripts
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-wgcna_modules/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-wgcna_modules/"
 setwd(wd)
 
 
@@ -32,7 +32,7 @@ setwd(wd)
 
 ### MACA
 # DATA_SET_NAME <- "maca_tissue_cell_type.kme" # ONLY USED FOR OUTPUT FILES
-# DIR.expr_data <- "/raid5/projects/jonatan/tmp-maca/tables"
+# DIR.expr_data <- "/projects/jonatan/tmp-maca/tables"
 # filenames <- list.files(path=DIR.expr_data,  pattern="maca_tissue_cell_type_kME_(.*)_kME.csv") # maca_tissue_cell_type_kME_Tongue_keratinocyte_kME.csv
 # list.df_expr <- lapply(file.path(DIR.expr_data, filenames), read_csv)
 # filenames_shorten <- stringr::str_match(filenames, "maca_tissue_cell_type_kME_(.*)_kME.csv")[,2]
@@ -41,7 +41,7 @@ setwd(wd)
 
 ### MOUSEBRAIN neurons
 DATA_SET_NAME <- "mousebrain_Neurons_ClusterName.kme"  # ONLY USED FOR OUTPUT FILES
-DIR.expr_data <- "/raid5/projects/jonatan/tmp-mousebrain/tables"
+DIR.expr_data <- "/projects/jonatan/tmp-mousebrain/tables"
 filenames <- list.files(path=DIR.expr_data,  pattern="mousebrain_Neurons_ClusterName_2_(.*)_kME.csv") # mousebrain_Vascular_ClusterName_2_ENMFB_kME.csv
 list.df_expr <- lapply(file.path(DIR.expr_data, filenames), read_csv)
 filenames_shorten <- stringr::str_match(filenames, "mousebrain_Neurons_ClusterName_2_(.*)_kME.csv")[,2]

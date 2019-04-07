@@ -3,7 +3,7 @@
 library(tidyverse)
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/"
 setwd(wd)
 
 # =========================================================================================================== #
@@ -12,7 +12,7 @@ setwd(wd)
 
 
 ### Load 'table.pvals.ALL_DATA.csv'
-file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
+file.in <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp_hm3.v3.nboot100/inference_rp_hm3.body_BMI_Yengo2018.tss.10kb.hm3.none.protein_coding_only.nboot100/table.pvals.ALL_DATA.csv"
 df.res_all <- read_csv(file.in)
 df.res_all <- df.res_all %>% filter(grepl("mousebrain",dataset))
 df.res_all <- df.res_all %>% mutate(dataset=stringr::str_replace(dataset, ".*\\.", "")) # shorten dataset names (rename)

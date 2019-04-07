@@ -9,8 +9,8 @@ import time
 ### USAGE (should run in python2.7 environment because runs on python2.7)
 # module unload anaconda
 # module load anaconda/2-4.4.0
-# python run_depict_from_template_cfg.py --cfg_template_file /raid5/projects/timshel/DEPICT/reproductive_behavior/TEMPLATE_reproductive_behavior.cfg \
-# --gwas_summary_statistics_file /raid5/data/genetic-gwas/reproductive_behaviour_2018/chr1to22/AFB/meta_AFB_POOLED_chr1to22_pos_snpid.txt.gz \
+# python run_depict_from_template_cfg.py --cfg_template_file /projects/timshel/DEPICT/reproductive_behavior/TEMPLATE_reproductive_behavior.cfg \
+# --gwas_summary_statistics_file /data/genetic-gwas/reproductive_behaviour_2018/chr1to22/AFB/meta_AFB_POOLED_chr1to22_pos_snpid.txt.gz \
 # --label_for_output_files AFB_pooled_chr1to22_1e-5_maca_celltype \
 # --tissue_expression_file /projects/tp/tmp-bmi-brain/data/maca/maca.per_celltype.celltype_expr.avg_expr.hsapiens_orthologs_std.tab
 

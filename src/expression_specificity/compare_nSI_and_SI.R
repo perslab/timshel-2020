@@ -18,8 +18,7 @@
 library(tidyverse)
 library(here)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 setwd(here("src/expression_specificity"))
 
@@ -47,9 +46,9 @@ df.si <- list.si$SI %>% rownames_to_column(var="gene")
 ### *OBS*:  we here use 'tabula_muris.tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz' which is preproccesed in a slightly different why than our 'new' python preprocessing
 
 ### DOCS: specificity.index.timshel() is JUST a COPY of CRAN specificity.index() that return both pSI and SI values as a list [no SI = FALSE argument]
-# source("/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/specificity.index.timshel.R") # loads 'specificity.index.timshel' function
+# source("/projects/timshel/sc-genetics/sc-genetics/src/nb-sem/specificity.index.timshel.R") # loads 'specificity.index.timshel' function
 ### CALCULATION
-# file.in <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris.tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" # tabula_muris
+# file.in <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris.tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz" # tabula_muris
 # df.avg_expr <- read_csv(file.in) %>% column_to_rownames("gene") %>% as.data.frame()
 # system.time(list.si <- specificity.index.timshel(pSI.in=df.avg_expr, p_max = 1, e_min=1e-5))
 # list(SI=df.SI, pSI=df.pSI) # named list

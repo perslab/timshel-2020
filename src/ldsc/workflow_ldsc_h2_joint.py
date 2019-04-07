@@ -97,8 +97,8 @@ def job_scheduler(list_cmds, n_parallel_jobs):
 PYTHON3_EXEC = "/tools/anaconda/3-4.4.0/envs/py3_anaconda3_PT180510/bin/python3"
 PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2"
 
-PATH_LDSC_SCRIPT = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
-PATH_LDSC_DATA_MAIN="/raid5/projects/timshel/sc-genetics/ldsc/data"
+PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
+PATH_LDSC_DATA_MAIN="/projects/timshel/sc-genetics/ldsc/data"
 
 
 FLAG_UNBUFFERED = True
@@ -227,7 +227,7 @@ for run_name, param_dict in dict_cts_conditional.items():
 	cond_ref_ld_chr_name = param_dict["ref_ld_chr_name"]
 	for gwas in list_gwas:
 		# Output name: <runname/key_prim>__<annotation_id>__<gwas>
-		fileout_prefix_ldsc_h2 = "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2_joint/{run_name}__{gwas}__JOINT__{annotation_id}".format(run_name=run_name, annotation_id=annotation_id, gwas=gwas)
+		fileout_prefix_ldsc_h2 = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc_h2_joint/{run_name}__{gwas}__JOINT__{annotation_id}".format(run_name=run_name, annotation_id=annotation_id, gwas=gwas)
 		if os.path.exists("{}.results".format(fileout_prefix_ldsc_h2)):
 			print("GWAS={}, run_name={},  annotation_id={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, run_name,  annotation_id, fileout_prefix_ldsc_h2))
 			continue
@@ -235,7 +235,7 @@ for run_name, param_dict in dict_cts_conditional.items():
 		### *OBS*: we are runnin ldsc python script with UNBUFFERED stdout and stderr
 		### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 		### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
-		cmd = """{PYTHON2_EXEC} {flag_unbuffered} {script} --h2 /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
+		cmd = """{PYTHON2_EXEC} {flag_unbuffered} {script} --h2 /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
         --ref-ld-chr {PATH_LDSC_DATA_MAIN}/baseline_v1.1_thin_annot/baseline.,{ldsc_all_genes_ref_ld_chr_name},{cond_ref_ld_chr_name} \
         --frqfile-chr {PATH_LDSC_DATA_MAIN}/1000G_Phase3_frq/1000G.EUR.QC. \
         --w-ld-chr {PATH_LDSC_DATA_MAIN}/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \

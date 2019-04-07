@@ -18,8 +18,7 @@
 library(tidyverse)
 library(here)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 setwd(here("src/ldsc"))
 
@@ -41,7 +40,7 @@ genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 
 
 ### Load - CONDITIONAL
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 filenames <- list.files(path=dir.data,  pattern=sprintf("%s__BMI_UKBB_Loh2018(.*).cell_type_results.txt", genomic_annotation_prefix))
 # [12] "celltypes.mousebrain.all__BMI_UKBB_Loh2018__CONDITIONAL__wgcna.mousebrain-190111-dodgerblue.cell_type_results.txt"
 # [13] "celltypes.mousebrain.all__BMI_UKBB_Loh2018_no_mhc_max_chisq_720.cell_type_results.txt"                            

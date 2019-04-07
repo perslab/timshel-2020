@@ -13,7 +13,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
 setwd(wd)
 
 
@@ -24,7 +24,7 @@ library(tidyverse)
 # ============================ LOAD DATA ============================== #
 # ======================================================================= #
 
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 
 filenames <- list.files(path=dir.data,  pattern="wgcna.mousebrain.*cell_type_results.txt") 
 # filenames <- list.files(path=dir.data,  pattern="wgcna.hypothalamus_mette_thesis.*cell_type_results.txt") # METTE
@@ -62,7 +62,7 @@ df <- df %>% group_by(gwas) %>% mutate(P_adj = P*n())
 ### Read geneset file
 file.multi_geneset <- "/projects/jonatan/tmp-mousebrain/tables/mousebrain_Neurons_ClusterName_2_cell_cluster_module_genes.csv" # mousebrain neurons
 # file.multi_geneset <- "/projects/jonatan/tmp-maca/tables/maca_tissue_cell_type_kME_cell_cluster_module_genes.csv" # maca
-# file.multi_geneset <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/mludwig_thesis_hypothalamus_wgcna_modules.csv" # mette hypo
+# file.multi_geneset <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/mludwig_thesis_hypothalamus_wgcna_modules.csv" # mette hypo
 df.multi_geneset <- read_csv(file.multi_geneset)
 df.multi_geneset <- df.multi_geneset %>% group_by(module) %>% summarise(cell_cluster=unique(cell_cluster), NGENES_MOUSE=n_distinct(ensembl))
 # df.multi_geneset <- df.multi_geneset %>% select(cell_cluster,module) %>% distinct() # reduce to unique origin/module_id rows | ALT WORKS

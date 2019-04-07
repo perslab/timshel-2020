@@ -13,7 +13,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-novo_bulk/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-novo_bulk/"
 setwd(wd)
 
 
@@ -36,7 +36,7 @@ library(tidyverse)
 # ============================ LOAD DATA ============================== #
 # ======================================================================= #
 
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-novo_bulk/out.magma_geneset/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-novo_bulk/out.magma_geneset/"
 
 filenames <- list.files(path=dir.data,  pattern=".*.sets.out") 
 filenames

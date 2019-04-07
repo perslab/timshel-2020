@@ -14,7 +14,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/nb-magma_celltyping"
 setwd(wd)
 
 
@@ -56,7 +56,7 @@ anno_specific_expr.avg_expr <- function(colname_ident, genes, seurat_obj) {
 # ============================  LOAD DATA  =============================== #
 # ======================================================================= #
 
-file.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus/hypothalamus.celltype_expr.avg_expr.csv.gz" # file with MOUSE gene names
+file.data <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus/hypothalamus.celltype_expr.avg_expr.csv.gz" # file with MOUSE gene names
 df.data_raw <- read_csv(file.data)
 # df.data_raw <- df.data_raw %>% distinct(gene, .keep_all = TRUE) # remove duplicate gene names --> NO DUP
 df.data_raw <- df.data_raw %>% column_to_rownames(var="gene")

@@ -17,8 +17,7 @@
 library(tidyverse)
 library(here)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 setwd(here("src/ldsc"))
 
@@ -45,18 +44,18 @@ genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 # ======================================================================= #
 
 ### Single GWAS
-file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UKBB_Loh2018.cell_type_results.txt", genomic_annotation_prefix)
-# file.ldsc_cts <- sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UPDATE_Yengo2018.cell_type_results.txt", genomic_annotation_prefix)
-# file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all__BMI_Yengo2018.cell_type_results.txt"
-# file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris.all__BMI_Yengo2018.cell_type_results.txt"
-# file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl1.all__BMI_Yengo2018.cell_type_results.txt"
-# file.ldsc_cts <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl2.all__BMI_Yengo2018.cell_type_results.txt"
+file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UKBB_Loh2018.cell_type_results.txt", genomic_annotation_prefix)
+# file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UPDATE_Yengo2018.cell_type_results.txt", genomic_annotation_prefix)
+# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all__BMI_Yengo2018.cell_type_results.txt"
+# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris.all__BMI_Yengo2018.cell_type_results.txt"
+# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl1.all__BMI_Yengo2018.cell_type_results.txt"
+# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl2.all__BMI_Yengo2018.cell_type_results.txt"
 df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
 df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
 
 
 ### Load - MULTI GWAS
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 filenames <- list.files(path=dir.data,  pattern=sprintf("%s.(.*).cell_type_results.txt", genomic_annotation_prefix))
 filenames <- filenames[!grepl(pattern="__CONDITIONAL__", filenames, perl=T)] # exclude any conditional results
 list.dfs <- lapply(file.path(dir.data, filenames), load_ldsc_cts_results, dataset_prefix)

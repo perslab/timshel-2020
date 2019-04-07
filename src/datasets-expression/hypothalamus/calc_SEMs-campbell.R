@@ -14,12 +14,12 @@
 # ======================================================================= #
 
 library(tidyverse)
+library(here)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus/"
 setwd(wd)
 
 # ======================================================================= #
@@ -29,7 +29,7 @@ setwd(wd)
 # dataset_prefix <- "campbell_lvl1"
 dataset_prefix <- "campbell_lvl2"
 
-sem_obj_mouse <- create_sem_object(sprintf("/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/%s", dataset_prefix))
+sem_obj_mouse <- create_sem_object(sprintf("/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/%s", dataset_prefix))
 sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
 # sem_obj_mouse <- calc_sem_wrapper(sem_obj_mouse)
 # sem_obj_mouse <- bin_sems(sem_obj_mouse, n_bins=101, threshold_bin_zero=0)

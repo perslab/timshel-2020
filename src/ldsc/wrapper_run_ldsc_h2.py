@@ -18,7 +18,7 @@ import subprocess
 
 
 python_exec = "/tools/anaconda/2-4.4.0/bin/python2" # runs on python2
-path_ldsc_script = "/raid5/projects/timshel/sc-genetics/ldsc/ldsc/ldsc.py" 
+path_ldsc_script = "/projects/timshel/sc-genetics/ldsc/ldsc/ldsc.py" 
 # w-ld-chr
 # ref-ld-chr --> baseline
 
@@ -98,11 +98,11 @@ for annotation_index in range(1,len(annotations)+1): # 1...52, Hilary annotation
 
 	### -baseline, -all_genes
 	cmd = """{python_exec} {script} \
-	--h2 /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
-	--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}. \
-	--out '/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.no_baseline.no_all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
-	--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
-	--frqfile-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
+	--h2 /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
+	--ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}. \
+	--out '/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.no_baseline.no_all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
+	--w-ld-chr /projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
+	--frqfile-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
 	--overlap-annot \
 	--print-coefficients""".format(
 		python_exec=python_exec,
@@ -113,11 +113,11 @@ for annotation_index in range(1,len(annotations)+1): # 1...52, Hilary annotation
 
 	### +baseline, -all_genes
 	cmd = """{python_exec} {script} \
-	--h2 /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
-	--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}.,/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline. \
-	--out '/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.baseline.no_all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
-	--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
-	--frqfile-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
+	--h2 /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
+	--ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}.,/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline. \
+	--out '/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.baseline.no_all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
+	--w-ld-chr /projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
+	--frqfile-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
 	--overlap-annot \
 	--print-coefficients""".format(
 		python_exec=python_exec,
@@ -128,11 +128,11 @@ for annotation_index in range(1,len(annotations)+1): # 1...52, Hilary annotation
 
 	### -baseline, +all_genes
 	cmd = """{python_exec} {script} \
-	--h2 /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
-	--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}.,/raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.control. \
-	--out '/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.no_baseline.all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
-	--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
-	--frqfile-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
+	--h2 /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
+	--ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}.,/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.control. \
+	--out '/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.no_baseline.all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
+	--w-ld-chr /projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
+	--frqfile-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
 	--overlap-annot \
 	--print-coefficients""".format(
 		python_exec=python_exec,
@@ -143,11 +143,11 @@ for annotation_index in range(1,len(annotations)+1): # 1...52, Hilary annotation
 	
 	### +baseline, +all_genes
 	cmd = """{python_exec} {script} \
-	--h2 /raid5/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
-	--ref-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}.,/raid5/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.,/raid5/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.control. \
-	--out '/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.baseline.all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
-	--w-ld-chr /raid5/projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
-	--frqfile-chr /raid5/projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
+	--h2 /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/BMI_Yengo2018.sumstats.gz \
+	--ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.{annotation_index}.,/projects/timshel/sc-genetics/ldsc/data/1000G_EUR_Phase3_baseline/baseline.,/projects/timshel/sc-genetics/ldsc/data/LDSC_SEG_ldscores/Multi_tissue_gene_expr_1000Gv3_ldscores/GTEx.control. \
+	--out '/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/experiment-h2.baseline.all_genes/experiment.gtex_tissues.h2.{annotation_name}.BMI_Yengo2018' \
+	--w-ld-chr /projects/timshel/sc-genetics/ldsc/data/weights_hm3_no_hla/weights. \
+	--frqfile-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_frq/1000G.EUR.QC. \
 	--overlap-annot \
 	--print-coefficients""".format(
 		python_exec=python_exec,

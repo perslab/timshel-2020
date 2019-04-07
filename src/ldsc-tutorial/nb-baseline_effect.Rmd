@@ -18,8 +18,8 @@ The analysis was done on BMI GWAS with the GTEx annotations.
 
 
 ```{r}
-df.baseline <- read_tsv("/raid5/projects/timshel/sc-genetics/ldsc/src/BMI1.GTEx.cell_type_results.txt")
-df.no_baseline <- read_tsv("/raid5/projects/timshel/sc-genetics/ldsc/src/BMI1.GTEx_no_baseline.cell_type_results.txt")
+df.baseline <- read_tsv("/projects/timshel/sc-genetics/ldsc/src/BMI1.GTEx.cell_type_results.txt")
+df.no_baseline <- read_tsv("/projects/timshel/sc-genetics/ldsc/src/BMI1.GTEx_no_baseline.cell_type_results.txt")
 ```
 
 ```{r}

@@ -17,9 +17,9 @@
 # ======================================================================= #
 
 library(tidyverse)
+library(here)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
 # ======================================================================= #
@@ -27,7 +27,7 @@ source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics l
 # ======================================================================= #
 
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus"
 setwd(wd)
 
 # dataset_prefix <- "campbell_lvl1"
@@ -37,13 +37,13 @@ dataset_prefix <- "campbell_lvl2"
 # ============================== READ METADATA =============================== #
 # ======================================================================= #
 
-# file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
+# file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
 
 if (dataset_prefix == "campbell_lvl1") {
-  file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv"
+  file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv"
   df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl1)
 } else if (dataset_prefix == "campbell_lvl2") {
-  file.metadata <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv"
+  file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv"
   df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl2)
 } else {
   stop("wrong dataset_prefix")
@@ -71,7 +71,7 @@ load(file=sprintf("%s.sem_obj.RData", dataset_prefix)) # human
 # ================================ LOAD MAGMA ================================= #
 # ======================================================================= #
 
-file.magma <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
+file.magma <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
 df.magma <- read_table(file.magma, comment = "#")
 
 ### add ensembl ids

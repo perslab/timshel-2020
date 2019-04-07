@@ -77,7 +77,7 @@ list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inferenc
 
 
 ### Source annotations
-source("/raid5/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.R")
+source("/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.R")
 
 do.parallel_annotations <- TRUE
 # do.parallel_annotations <- FALSE

@@ -13,7 +13,7 @@
 # ==============================  SETUP  =============================== #
 # ======================================================================= #
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/ldsc/"
 setwd(wd)
 
 

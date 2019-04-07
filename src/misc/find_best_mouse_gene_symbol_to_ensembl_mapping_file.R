@@ -3,7 +3,7 @@
 library(tidyverse)
 library(stringr)
 
-wd <- "/raid5/projects/timshel/sc-genetics/sc-genetics/src/misc/"
+wd <- "/projects/timshel/sc-genetics/sc-genetics/src/misc/"
 setwd(wd)
 
 # ======================================================================= #
@@ -12,7 +12,7 @@ setwd(wd)
 
 
 ### PT ensembl
-file.mapping.ens <- "/raid5/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz"
+file.mapping.ens <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz"
 df.mapping.ens <- read_tsv(file.mapping.ens)
 
 ### TP NCBI

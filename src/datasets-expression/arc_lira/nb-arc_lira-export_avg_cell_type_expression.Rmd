@@ -22,7 +22,7 @@ output:
 ```{r, include=F}
 # Here is the command to knit/render the notebook to HTML using commandline [requires pandoc installed on the system]
 # Rscript -e 'library(rmarkdown); rmarkdown::render("/path/to/test.Rmd", "html_document")'
-# Rscript -e 'library(rmarkdown); rmarkdown::render("/raid5/projects/timshel/sc-arc_lira/src/nb-poster_keystone/nb-poster_keystone.Rmd", "html_document")'
+# Rscript -e 'library(rmarkdown); rmarkdown::render("/projects/timshel/sc-arc_lira/src/nb-poster_keystone/nb-poster_keystone.Rmd", "html_document")'
 ```
 
 
@@ -39,7 +39,7 @@ blabla
 
 Set working directory
 ```{r working_directory}
-wd <- "/raid5/projects/timshel/sc-genetics/src/nb-avg_cell_type_expression"
+wd <- "/projects/timshel/sc-genetics/src/nb-avg_cell_type_expression"
 setwd(wd)
 ```
 

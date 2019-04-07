@@ -17,8 +17,7 @@
 library(tidyverse)
 library(here)
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib/"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 setwd(here("src/wgcna_modules"))
 
@@ -47,7 +46,7 @@ load_ldsc_cts_results_wgcna <- function(file.ldsc_cts) {
 
 
 ### Load - MULTI GWAS
-dir.data <- "/raid5/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
+dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
 filenames <- list.files(path=dir.data,  pattern=sprintf("%s.(.*).cell_type_results.txt", prefix_genomic_annot))
 filenames <- filenames[!grepl(pattern="__CONDITIONAL__", filenames, perl=T)] # exclude any conditional results
 list.dfs <- lapply(file.path(dir.data, filenames), load_ldsc_cts_results_wgcna)

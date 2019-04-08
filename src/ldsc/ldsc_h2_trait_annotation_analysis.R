@@ -50,7 +50,7 @@ df.ldsc
 # ======================================================================= #
 
 ### Export (selected columns)
-file.out <- here("results/h2_annotations-multi_gwas.csv.gz")
+file.out <- here("results/h2_annotations.multi_gwas.csv.gz")
 file.out
 # df.ldsc %>% select(-Category) %>% arrange(gwas) %>% write_csv(file.out)
 

@@ -62,9 +62,11 @@ ggplot(df, aes(x=name, y=Pct._h2, label=paste0(round(Pct._h2, 1), "%"))) +
   geom_point(aes(color=gwas), size=10) + 
   geom_text(size=3) +
   coord_flip() + 
-  labs(x="", y=expression("%"~h[2]~explained)) +
+  labs(x="", y=expression("%"~h^{2}~explained)) +
   guides(color=F)
-ggsave("out.plot.fig_h2.simple_with_labels.pdf", width=10, height=5)
+file.out <- "figs/fig_h2_annotations.simple_with_labels.pdf"
+# ggsave(file.out, width=10, height=5)
+
 
 
 ### FULL COMPLEXITY (enrichment + Prop._SNPs)
@@ -73,9 +75,10 @@ ggplot(df, aes(x=name, y=Pct._h2)) +
   geom_segment(aes(x=name, xend=name, y=0, yend=Pct._h2), color="grey") +
   geom_segment(aes(x=name, xend=name, y=0, yend=Prop._SNPs), color="black") +
   coord_flip() + 
-  labs(size=expression(h[2]~enrichment), x="", y=expression("%"~h[2]~explained)) +
+  labs(size=expression(h^{2}~enrichment), x="", y=expression("%"~h^{2}~explained)) +
   guides(color=F)
-ggsave("out.plot.fig_h2.complex.pdf", width=10, height=5)
+file.out <- "figs/fig_h2_annotations.complex.pdf"
+# ggsave(file.out, width=10, height=5)
 
 
 

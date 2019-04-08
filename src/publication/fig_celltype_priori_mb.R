@@ -49,7 +49,7 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/primary-mousebrain_all.multi_gwas.csv.gz")
+file.results <- here("results/prioritization_celltypes--mousebrain_all.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
 # ======================================================================= #
@@ -196,13 +196,13 @@ p.main <- ggplot() +
   # scale_color_viridis_d() + # viridis ---> does not work well
   ### theme
   theme_classic() + 
-  theme(axis.text.y=element_text(size=rel(0.3))) + # REF: https://stackoverflow.com/a/47144823/6639640
+  theme(axis.text.y=element_text(size=rel(0.2))) + # REF: https://stackoverflow.com/a/47144823/6639640
   theme(legend.position="bottom")
 ### Add margin to plot if displaying it directly (without pathwork)
 p.main.margin <- p.main + theme(plot.margin = unit(c(1,1,1,10), "cm")) # (t, r, b, l) widen left margin
 p.main.margin
 
-# file.out <- sprintf("fig_celltypepriori_mb.pdf")
+# file.out <- sprintf("figs/fig_celltypepriori_mb.pdf")
 # ggsave(p, filename=file.out, width=9, height=8)
 
 
@@ -212,6 +212,7 @@ p.main.margin
 # ======================================================================= #
 
 set_multi_gwas_heatmap_plot(df.ldsc_cts)
+p.multi_gwas
 set_h2_barplot()
 
 
@@ -245,7 +246,7 @@ p.patch <-
 p.patch
 
 ### Save
-file.out <- sprintf("fig_celltypepriori_mb_with_heatmap_and_barplot.pdf")
+file.out <- sprintf("figs/fig_celltypepriori_mb_with_heatmap_and_barplot.pdf")
 ggsave(p.patch, filename=file.out, width=12, height=10)
 
 

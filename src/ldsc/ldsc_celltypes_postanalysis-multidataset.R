@@ -73,7 +73,7 @@ df.ldsc_cts.export <- df.ldsc_cts %>% select(gwas, p.value, annotation) %>% spre
 # ======================================================================= #
 
 ### Export (selected columns)
-file.out <- here("results", sprintf("primary-%s.multi_gwas.csv.gz", dataset_prefix))
+file.out <- here("results", sprintf("prioritization_celltypes--%s.multi_gwas.csv.gz", dataset_prefix))
 file.out
 # df.ldsc_cts %>% select(-sem, -dataset, -n_obs_sem, -fdr_significant, -p.value.adj) %>% write_csv(file.out)
 

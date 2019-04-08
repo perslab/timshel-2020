@@ -20,6 +20,10 @@ import make_annot_from_geneset_all_chr
 # --chisq-max 9999 --two-step 9999 # (an arbitrarily high value) per recommendation of the Neale Lab. This is meant to adjust for the very large sample size of the UK Biobank. 
 # REF: http://www.nealelab.is/blog/2017/9/20/insights-from-estimates-of-snp-heritability-for-2000-traits-and-disorders-in-uk-biobank
 
+### FUNCTIONALITY
+# - check that gwas file exists before running job
+# - implement logger
+
 ###################################### USAGE ######################################
 # Compatibility: Python 2 and 3
 
@@ -262,7 +266,7 @@ PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2
 
 PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 FLAG_UNBUFFERED = True
-N_PARALLEL_LDSC_REGRESSION_JOBS = 3
+N_PARALLEL_LDSC_REGRESSION_JOBS = 4
 # FLAG_BINARY = True
 FLAG_BINARY = False
 
@@ -384,14 +388,14 @@ FLAG_WGCNA = False
 #  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
 #  					 }
 
-### Mean MB+TM
-dict_genomic_annot = {"celltypes.mousebrain.all":
-						{"dataset":"mousebrain",
-						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
- 					 "celltypes.tabula_muris.all":
- 					  	{"dataset":"tabula_muris",
- 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
- 					 }
+### Mean MB+TM [ES mean *PUBLICATION*]
+# dict_genomic_annot = {"celltypes.mousebrain.all":
+# 						{"dataset":"mousebrain",
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+#  					 "celltypes.tabula_muris.all":
+#  					  	{"dataset":"tabula_muris",
+#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+#  					 }
 
 
 ### top10pct (Skene and Hillary)
@@ -413,13 +417,14 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 #  					 }
 
 
-# dict_genomic_annot = {"celltypes.campbell_lvl1.all":
-# 						{"dataset":"campbell",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl1.sem_mean.txt"},
-# 					 "celltypes.campbell_lvl2.all":
-# 					   	{"dataset":"campbell",
-# 					   	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl2.sem_mean.txt"}
-# 					  }
+### Cambpell [ES mean]
+dict_genomic_annot = {"celltypes.campbell_lvl1.all":
+						{"dataset":"campbell",
+						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl1.sem_mean.txt"},
+					 "celltypes.campbell_lvl2.all":
+					   	{"dataset":"campbell",
+					   	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl2.sem_mean.txt"}
+					  }
 
 
 
@@ -539,6 +544,8 @@ for prefix_genomic_annot in list(dict_genomic_annot.keys()): # list() needed for
 		print("Exception: {}".format(e))
 		print("Will drop prefix_genomic_annot={} from dict_genomic_annot and not do any further computations on this prefix_genomic_annot.".format(prefix_genomic_annot))
 		dict_genomic_annot.pop(prefix_genomic_annot, None) # drop key from dict while iterating over it. REF: https://stackoverflow.com/questions/5384914/how-to-delete-items-from-a-dictionary-while-iterating-over-it and https://stackoverflow.com/a/11277439/6639640
+
+
 
 #########################################################################################
 ###################################### RUN LDSC PRIM ######################################

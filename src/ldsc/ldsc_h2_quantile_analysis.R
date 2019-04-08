@@ -51,8 +51,7 @@ df.ldsc <- df.ldsc %>% separate(col=run_str_full, into=c("run_name", "annotation
 # ======================================================================= #
 
 ### Export (selected columns)
-file.out <- here("results/h2_annotation_intervals-multi_gwas.csv.gz")
-# file.out
+file.out <- here("results/h2_annotation_intervals.multi_gwas.csv.gz")
 # df.ldsc %>% arrange(gwas) %>% write_csv(file.out)
 
 

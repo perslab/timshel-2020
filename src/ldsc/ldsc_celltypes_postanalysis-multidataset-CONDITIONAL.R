@@ -67,7 +67,7 @@ df.ldsc_cts.export <- df.ldsc_cts %>% select(condition, p.value, annotation) %>%
 # ======================================================================= #
 
 ### Export (selected columns)
-file.out <- here("results", sprintf("conditional-%s.BMI_UKBB_Loh2018.csv.gz", dataset_prefix))
+file.out <- here("results", sprintf("prioritization_celltypes_conditional--%s.BMI_UKBB_Loh2018.csv.gz", dataset_prefix))
 file.out
 # df.ldsc_cts %>% select(-sem, -dataset, -n_obs_sem, -fdr_significant, -p.value.adj) %>% write_csv(file.out)
 

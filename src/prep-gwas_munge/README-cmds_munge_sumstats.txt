@@ -49,7 +49,7 @@ python2 /projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --out /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
 
 
-GWAS=WHR_adjBMI_Shungin2015
+GWAS=WHRadjBMI_Shungin2015
 python2 /projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --sumstats /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_raw/WHR_Shungin2015/GIANT_2015_WHRadjBMI_COMBINED_EUR.txt.gz \
 --merge-alleles /projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \

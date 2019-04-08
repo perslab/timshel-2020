@@ -207,7 +207,7 @@ set_h2_barplot <- function() {
   ### Plot
   p.h2 <- ggplot(df.plot.h2, aes(x=gwas, y=h2)) + 
     geom_col(fill="gray") +
-    labs(y=expression(h[SLDSC]^{2})) +
+    labs(y=expression(h[S-LDSC]^{2})) +
     theme(axis.text.x=element_text(angle=45, hjust=1), 
           axis.ticks.x = element_blank(),
           axis.title.x = element_blank(),

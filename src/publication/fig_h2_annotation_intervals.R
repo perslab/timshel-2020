@@ -50,7 +50,7 @@ plot_h2_annotation_intervals <- function(df.plot_h2q) {
                                  expression(I5["(0.8-1]"]))) +
     theme(legend.text.align = 0) + # needed for aligning legend text to the left
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
-    labs(x="", y=expression("h"[2]*" enrichment"), fill="ES interval") # title=expression("h"[2]*" enrichment") 
+    labs(x="", y=expression(h^{2}*" enrichment"), fill="ES interval") # title=expression("h"[2]*" enrichment") 
   return(p)
 }
 
@@ -59,7 +59,7 @@ plot_h2_annotation_intervals <- function(df.plot_h2q) {
 # ======================================================================= #
 
 ### Export (selected columns)
-file.data <- here("results/h2_annotation_intervals-multi_gwas.csv.gz")
+file.data <- here("results/h2_annotation_intervals.multi_gwas.csv.gz")
 df.ldsc <- read_csv(file.data)
 
 ### Rename GWAS
@@ -89,7 +89,7 @@ df.plot_h2q <- df.ldsc %>% filter(gwas %in% filter.gwas, annotation %in% filter.
 p <- plot_h2_annotation_intervals(df.plot_h2q)
 p
 file.out <- sprintf("figs/fig_h2_annotation_intervals.main.mb_fdr_celltypes.%s.pdf", paste(filter.gwas, collapse="-"))
-# ggsave(filename=file.out, p, width=12, height=6)
+ggsave(filename=file.out, p, width=6, height=4)
 
 
 
@@ -119,7 +119,7 @@ df.ldsc.meta_analysis <- bind_rows(df.ldsc.meta_analysis, df.ldsc)
 # ======================================================================= #
 
 ### GWAS [*SWITCH*]
-filter.gwas <- c("BMI_UKBB_Loh2018", "META_ANALYSIS") 
+# filter.gwas <- c("BMI_UKBB_Loh2018", "META_ANALYSIS") 
 filter.gwas <- c("BMI_UKBB_Loh2018", "HEIGHT_Yengo2018", "WHRadjBMI_UKBB_Loh2018") # "RA_Okada2014", "MS_Patsopoulos2011", "SCZ_Pardinas2018"
 
 ### SELECTED ANNOTATIONS

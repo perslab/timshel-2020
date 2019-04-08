@@ -50,9 +50,33 @@ plot_h2_annotation_intervals <- function(df.plot_h2q) {
                                  expression(I5["(0.8-1]"]))) +
     theme(legend.text.align = 0) + # needed for aligning legend text to the left
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
-    labs(x="", y=expression(h^{2}*" enrichment"), fill="ES interval") # title=expression("h"[2]*" enrichment") 
+    labs(x="", y="Heritability enrichment", fill="ES interval") # title=expression("h"[2]*" enrichment") 
   return(p)
 }
+
+plot_h2_annotation_intervals.lollipop <- function(df.plot_h2q) {
+  pd <- position_dodge(0.9)
+  p <- ggplot(df.plot_h2q, aes(x=annotation, y=enr, group=q)) + 
+    geom_point(aes(color=q), size=3, position=pd) + 
+    geom_linerange(aes(x=annotation, ymin=0, ymax=enr), position=pd, color="grey",  alpha=0.5) + # REF: https://stackoverflow.com/a/21922792/6639640
+    geom_errorbar(aes(ymin=enr-enr_se, ymax=enr+enr_se), position=pd, width = 0.01, colour="black") +
+    geom_hline(yintercept = 1, linetype="dashed", color="gray") +
+    scale_color_brewer(palette = "YlOrRd",
+                      breaks = levels(as.factor(df.plot_h2q$q)), # IMPORTANT: q is q0,...q5
+                      labels = c(expression(I0["0"]),
+                                 expression(I1["(0-0.2]"]),
+                                 expression(I2["(0.2-0.4]"]),
+                                 expression(I3["(0.4-0.6]"]),
+                                 expression(I4["(0.6-0.8]"]),
+                                 expression(I5["(0.8-1]"]))) +
+    theme(legend.text.align = 0) + # needed for aligning legend text to the left
+    theme(axis.text.x = element_text(angle=45, hjust=1)) +
+    labs(x="", y="Heritability enrichment", color="ES interval") # title=expression("h"[2]*" enrichment") 
+    # WORKS --> labs(x="", y=expression(atop(h^{2}~enrichment, (proportion~h^{2}/annotation~size))), color="ES interval") # title=expression("h"[2]*" enrichment") 
+  p
+  return(p)
+}
+
 
 # ======================================================================= #
 # ================================ LOAD DATA ================================ #
@@ -79,14 +103,19 @@ df.ldsc <- df.ldsc %>% mutate(run_name = case_when(
 # ======================================================================= #
 
 ### SELECTED ANNOTATIONS
-filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+# filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+# ORDERED BY Prop-h2 from fig_h2_annotations -->
+filter.annotations <- c("DEGLU4","MEGLU10","DEGLU5","MEGLU11","TEINH12","MEGLU1","DEINH3","MEINH2","TEGLU23","TEGLU17","TEGLU4") 
 ### SELECTED GWAS
 filter.gwas <- "BMI_UKBB_Loh2018"
 ### Extract data
-df.plot_h2q <- df.ldsc %>% filter(gwas %in% filter.gwas, annotation %in% filter.annotations)
+df.plot_h2q <- df.ldsc %>% 
+  filter(gwas %in% filter.gwas, annotation %in% filter.annotations) %>%
+  mutate(annotation = factor(annotation, levels=filter.annotations)) # set order
 
 ### PLOT
-p <- plot_h2_annotation_intervals(df.plot_h2q)
+p <- plot_h2_annotation_intervals.lollipop(df.plot_h2q)
+p <- p + coord_flip()
 p
 file.out <- sprintf("figs/fig_h2_annotation_intervals.main.mb_fdr_celltypes.%s.pdf", paste(filter.gwas, collapse="-"))
 ggsave(filename=file.out, p, width=6, height=4)
@@ -120,7 +149,7 @@ df.ldsc.meta_analysis <- bind_rows(df.ldsc.meta_analysis, df.ldsc)
 
 ### GWAS [*SWITCH*]
 # filter.gwas <- c("BMI_UKBB_Loh2018", "META_ANALYSIS") 
-filter.gwas <- c("BMI_UKBB_Loh2018", "HEIGHT_Yengo2018", "WHRadjBMI_UKBB_Loh2018") # "RA_Okada2014", "MS_Patsopoulos2011", "SCZ_Pardinas2018"
+filter.gwas <- c("BMI_UKBB_Loh2018", "HEIGHT_UKBB_Loh2018", "WHRadjBMI_UKBB_Loh2018") # "RA_Okada2014", "MS_Patsopoulos2011", "SCZ_Pardinas2018"
 
 ### SELECTED ANNOTATIONS
 filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
@@ -132,7 +161,7 @@ df.plot_h2q <- df.plot_h2q %>% mutate(annotation = utils.rename_annotations.tabu
 df.plot_h2q
 
 ### PLOT
-p <- plot_h2_annotation_intervals(df.plot_h2q)
+p <- plot_h2_annotation_intervals.lollipop(df.plot_h2q)
 p <- p + facet_grid(gwas_fmt~run_name, 
                     space="free_x", scales="free_x", drop=T)
                     # switch="x") # If "x", the top labels will be displayed to the bottom. If "y", the right-hand side labels will be displayed to the left. Can also be set to "both".
@@ -144,7 +173,7 @@ p <- p + theme(panel.grid.major = element_blank(), # REF: https://stackoverflow.
                )
 p
 file.out <- sprintf("figs/fig_h2_annotation_intervals.som.fdr_celltypes.%s.pdf", paste(filter.gwas, collapse="-"))
-# ggsave(filename=file.out, p, width=12, height=8)
+ggsave(filename=file.out, p, width=12, height=8)
 
 
 

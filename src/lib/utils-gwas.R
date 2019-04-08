@@ -212,13 +212,13 @@ utils.rename_gwas <- function(gwas_ids, style, check_all_matches=F, return_as_df
       mutate(fmt=paste0(trait_name_full))
   } else if (style=="abrv_author_year") {
       df.gwas_out_fmt <- df.gwas_database.select %>% 
-        mutate(fmt=paste0(trait_abrv, " (", author, ", ", year, ")"))
+        mutate(fmt=paste0(trait_name_abrv, " (", author, ", ", year, ")"))
   } else if (style=="abrv_year") {
     df.gwas_out_fmt <- df.gwas_database.select %>% 
-      mutate(fmt=paste0(trait_abrv, " (", year, ")"))
+      mutate(fmt=paste0(trait_name_abrv, " (", year, ")"))
   } else if (style=="abrv") {
     df.gwas_out_fmt <- df.gwas_database.select %>% 
-      mutate(fmt=paste0(trait_abrv))
+      mutate(fmt=paste0(trait_name_abrv))
   } else {
     stop("Internal function error")
   }

@@ -255,53 +255,51 @@ ggsave(p.patch, filename=file.out, width=12, height=10)
 # p.patch
 
 
-# ======================================================================= #
-# ============================ CLASS annotation =============================== #
-# ======================================================================= #
-
-df.plot.anno_class <- df.plot.tax_order # copy (important to retain annotation factor order)
-### Rename
-df.plot.anno_class <- df.plot.anno_class %>% mutate(Class = case_when(
-  Class == "Oligoes" ~ "Oligodendrocytes",
-  Class == "PeripheralGlia" ~ "Peripheral Glia",
-  TRUE ~ as.character(Class))
-)
-
-### Class
-p_anno_class <- ggplot(df.plot.anno_class, aes(x=annotation, y=0, fill=Class)) + 
-  geom_tile() + 
-  coord_flip() + 
-  theme_minimal() + 
-  theme(legend.position="bottom") +
-  theme(panel.grid = element_blank(), # remove background, axis ticks and texts
-        axis.title = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        panel.background = element_blank()) 
-# p_anno_class
-
-
-# ======================================================================= #
-# =================== COMBINE PLOTS: MAIN + ANNO_CLASS ================== #
-# ======================================================================= #
-
-p_patch <- p_anno_class + p.main + plot_layout(ncol = 2, widths = c(1,10)) # guides = "collect" # "auto", "collect", "keep"
-p_patch
-# plot_annotation(tag_levels = "A")
-
-file.out <- sprintf("fig_celltypepriori_mb_with_class_anno.pdf")
-# ggsave(p_patch, filename=file.out, width=10, height=8)
-
-
-
-
-# ======================================================================= #
-# ============================ COLORS =============================== #
-# ======================================================================= #
-display.brewer.all(colorblindFriendly = TRUE)
-n_colors <- 6
-display.brewer.pal(n = n_colors, name = 'Dark2') # # View a single RColorBrewer palette by specifying its name
-brewer.pal(n = n_colors, name = "Dark2") # # Hexadecimal color specification
+# # ======================================================================= #
+# # ============================ CLASS annotation [WORKS] =============================== #
+# # ======================================================================= #
+# 
+# df.plot.anno_class <- df.plot.tax_order # copy (important to retain annotation factor order)
+# ### Rename
+# df.plot.anno_class <- df.plot.anno_class %>% mutate(Class = case_when(
+#   Class == "Oligoes" ~ "Oligodendrocytes",
+#   Class == "PeripheralGlia" ~ "Peripheral Glia",
+#   TRUE ~ as.character(Class))
+# )
+# 
+# ### Class
+# p_anno_class <- ggplot(df.plot.anno_class, aes(x=annotation, y=0, fill=Class)) + 
+#   geom_tile() + 
+#   coord_flip() + 
+#   theme_minimal() + 
+#   theme(legend.position="bottom") +
+#   theme(panel.grid = element_blank(), # remove background, axis ticks and texts
+#         axis.title = element_blank(),
+#         axis.text = element_blank(),
+#         axis.ticks = element_blank(),
+#         panel.background = element_blank()) 
+# # p_anno_class
+# 
+# 
+# # ======================================================================= #
+# # =================== COMBINE PLOTS: MAIN + ANNO_CLASS [WORKS] ================== #
+# # ======================================================================= #
+# 
+# p_patch <- p_anno_class + p.main + plot_layout(ncol = 2, widths = c(1,10)) # guides = "collect" # "auto", "collect", "keep"
+# p_patch
+# # plot_annotation(tag_levels = "A")
+# 
+# file.out <- sprintf("fig_celltypepriori_mb_with_class_anno.pdf")
+# # ggsave(p_patch, filename=file.out, width=10, height=8)
+# 
+# 
+# # ======================================================================= #
+# # ============================ COLORS =============================== #
+# # ======================================================================= #
+# display.brewer.all(colorblindFriendly = TRUE)
+# n_colors <- 6
+# display.brewer.pal(n = n_colors, name = 'Dark2') # # View a single RColorBrewer palette by specifying its name
+# brewer.pal(n = n_colors, name = "Dark2") # # Hexadecimal color specification
 
 # ======================================================================= #
 # ============================ XXXXXXXXXX =============================== #

@@ -250,7 +250,7 @@ p.patch
 
 ### Save
 file.out <- sprintf("figs/fig_celltypepriori_tm_with_heatmap_and_barplot.pdf")
-# ggsave(p.patch, filename=file.out, width=12, height=10)
+ggsave(p.patch, filename=file.out, width=12, height=10)
 
 
 ### Patch (no h2 barplot)

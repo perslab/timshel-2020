@@ -16,10 +16,6 @@ import make_annot_from_geneset_all_chr
 
 ###################################### TODO ######################################
 
-### Run without the default use of two-stage estimation and a cap on maximum chisq in estimation of the intercept term
-# --chisq-max 9999 --two-step 9999 # (an arbitrarily high value) per recommendation of the Neale Lab. This is meant to adjust for the very large sample size of the UK Biobank. 
-# REF: http://www.nealelab.is/blog/2017/9/20/insights-from-estimates-of-snp-heritability-for-2000-traits-and-disorders-in-uk-biobank
-
 ### FUNCTIONALITY
 # - check that gwas file exists before running job
 # - implement logger
@@ -267,11 +263,16 @@ PYTHON2_EXEC = "/tools/anaconda/3-4.4.0/envs/py27_anaconda3_PT170705/bin/python2
 PATH_LDSC_SCRIPT = "/projects/timshel/sc-genetics/ldsc/ldsc-timshel/ldsc.py" 
 FLAG_UNBUFFERED = True
 N_PARALLEL_LDSC_REGRESSION_JOBS = 4
-# FLAG_BINARY = True
-FLAG_BINARY = False
+FLAG_BINARY = False # True or False. If True, all annotations will be binarized (annotation_value = 1 if annotation_value > 0)
+FLAG_NO_TWO_STAGE_ESTIMATION_AND_NO_MAX_CHISQ_FILTER = False # default is False.
+# ^ Run without the default use of two-stage estimation and a cap on maximum chisq in estimation of the intercept term
+# ^ --chisq-max 9999 --two-step 9999 # (an arbitrarily high value) per recommendation of the Neale Lab. This is meant to adjust for the very large sample size of the UK Biobank. 
+# ^ REF: http://www.nealelab.is/blog/2017/9/20/insights-from-estimates-of-snp-heritability-for-2000-traits-and-disorders-in-uk-biobank
 
 
-# list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
+
+
+list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 
 # list_gwas = ["BMI_UKBB_Loh2018_no_mhc_max_chisq_80",
 # "BMI_UKBB_Loh2018_no_mhc_max_chisq_720",
@@ -281,73 +282,74 @@ FLAG_BINARY = False
 
 # list_gwas = ["1KG_phase3_EUR_null_gwas_P{}".format(x) for x in range(1,11)] # 1..10
 
-list_gwas = ["AD_Lambert2013",
-"AD_Jansen2019",
-"ADHD_PGC_Demontis2017",
-"AN_PGC_Duncan2017",
-"ASD_iPSYCH_PGC_Grove2018",
-"BIP_PGC2018",
-"BMI_female_Pulit2019",
-"BMI_Locke2015",
-"BMI_male_Pulit2019",
-"BMI_Pulit2019",
-"BMI_UKBB_Loh2018",
-"BMI_UPDATE_Yengo2018",
-"CAD_Schunkert2011",
-"CARDIOVASCULAR_UKBB_Loh2018",
-"CELIAC_Dubois2010",
-"CROHNS_Jostins2012",
-"DEPRESSED_AFFECT_Nagel2018",
-"DEPRESSION_Nagel2018",
-"DIASTOLICadjMED_UKBB_Loh2018",
-"DS_Okbay2016",
-"EA2_Okbay2016",
-"EA3_Lee2018",
-"FG_Female_Lagou2018",
-"FG_Male_Lagou2018",
-"FI_Female_Lagou2018",
-"FI_Male_Lagou2018",
-"HBA1C_MAGIC_Wheeler2017",
-"HEIGHT_UKBB_Loh2018",
-"HEIGHT_Wood2014",
-"HEIGHT_Yengo2018",
-"IBD_Jostins2012",
-"INSOMNIA_Jansen2018",
-"INTELLIGENCE_Savage2018",
-"INTELLIGENCE_Sniekers2017",
-"LIPIDS_HDL_Teslovich2010",
-"LIPIDS_HDL_Willer2013",
-"LIPIDS_LDL_Teslovich2010",
-"LIPIDS_LDL_Willer2013",
-"LIPIDS_TC_Willer2013",
-"LIPIDS_TG_Teslovich2010",
-"LIPIDS_TG_Willer2013",
-"LUPUS_Bentham2015",
-"MDD_Howard2019",
-"MDD_PGC_Wray2018",
-"MS_Patsopoulos2011",
-"NEUROTICISM_Nagel2018",
-"NEUROTICISM_Okbay2016",
-"PBC_Cordell2015",
-"RA_Okada2014",
-"RB_Linner_2019",
-"SCZ_EUR_Ripke2014",
-"SCZ_Pardinas2018",
-"SWB_Okbay2016",
-"SYSTOLICadjMED_UKBB_Loh2018",
-"T1D_Bradfield2011",
-"T2D_DIAMANTE_Mahajan2018",
-"T2D_UKBB_DIAMANTE_Mahajan2018",
-"T2D_UKBB_Loh2018",
-"T2D_Xue2018",
-"T2DadjBMI_DIAMANTE_Mahajan2018",
-"UC_Jostins2012",
-"WHR_Pulit2019",
-"WHR_Shungin2015",
-"WHRadjBMI_Pulit2019",
-"WHRadjBMI_Shungin2015",
-"WHRadjBMI_UKBB_Loh2018",
-"WORRY_Nagel2018"]
+
+# list_gwas = ["AD_Lambert2013",
+# "AD_Jansen2019",
+# "ADHD_PGC_Demontis2017",
+# "AN_PGC_Duncan2017",
+# "ASD_iPSYCH_PGC_Grove2018",
+# "BIP_PGC2018",
+# "BMI_female_Pulit2019",
+# "BMI_Locke2015",
+# "BMI_male_Pulit2019",
+# "BMI_Pulit2019",
+# "BMI_UKBB_Loh2018",
+# "BMI_UPDATE_Yengo2018",
+# "CAD_Schunkert2011",
+# "CARDIOVASCULAR_UKBB_Loh2018",
+# "CELIAC_Dubois2010",
+# "CROHNS_Jostins2012",
+# "DEPRESSED_AFFECT_Nagel2018",
+# "DEPRESSION_Nagel2018",
+# "DIASTOLICadjMED_UKBB_Loh2018",
+# "DS_Okbay2016",
+# "EA2_Okbay2016",
+# "EA3_Lee2018",
+# "FG_Female_Lagou2018",
+# "FG_Male_Lagou2018",
+# "FI_Female_Lagou2018",
+# "FI_Male_Lagou2018",
+# "HBA1C_MAGIC_Wheeler2017",
+# "HEIGHT_UKBB_Loh2018",
+# "HEIGHT_Wood2014",
+# "HEIGHT_Yengo2018",
+# "IBD_Jostins2012",
+# "INSOMNIA_Jansen2018",
+# "INTELLIGENCE_Savage2018",
+# "INTELLIGENCE_Sniekers2017",
+# "LIPIDS_HDL_Teslovich2010",
+# "LIPIDS_HDL_Willer2013",
+# "LIPIDS_LDL_Teslovich2010",
+# "LIPIDS_LDL_Willer2013",
+# "LIPIDS_TC_Willer2013",
+# "LIPIDS_TG_Teslovich2010",
+# "LIPIDS_TG_Willer2013",
+# "LUPUS_Bentham2015",
+# "MDD_Howard2019",
+# "MDD_PGC_Wray2018",
+# "MS_Patsopoulos2011",
+# "NEUROTICISM_Nagel2018",
+# "NEUROTICISM_Okbay2016",
+# "PBC_Cordell2015",
+# "RA_Okada2014",
+# "RB_Linner_2019",
+# "SCZ_EUR_Ripke2014",
+# "SCZ_Pardinas2018",
+# "SWB_Okbay2016",
+# "SYSTOLICadjMED_UKBB_Loh2018",
+# "T1D_Bradfield2011",
+# "T2D_DIAMANTE_Mahajan2018",
+# "T2D_UKBB_DIAMANTE_Mahajan2018",
+# "T2D_UKBB_Loh2018",
+# "T2D_Xue2018",
+# "T2DadjBMI_DIAMANTE_Mahajan2018",
+# "UC_Jostins2012",
+# "WHR_Pulit2019",
+# "WHR_Shungin2015",
+# "WHRadjBMI_Pulit2019",
+# "WHRadjBMI_Shungin2015",
+# "WHRadjBMI_UKBB_Loh2018",
+# "WORRY_Nagel2018"]
 
 
 
@@ -389,13 +391,13 @@ FLAG_WGCNA = False
 #  					 }
 
 ### Mean MB+TM [ES mean *PUBLICATION*]
-# dict_genomic_annot = {"celltypes.mousebrain.all":
-# 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
-#  					 "celltypes.tabula_muris.all":
-#  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
-#  					 }
+dict_genomic_annot = {"celltypes.mousebrain.all":
+						{"dataset":"mousebrain",
+						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+ 					 "celltypes.tabula_muris.all":
+ 					  	{"dataset":"tabula_muris",
+ 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
+ 					 }
 
 
 ### top10pct (Skene and Hillary)
@@ -418,13 +420,13 @@ FLAG_WGCNA = False
 
 
 ### Cambpell [ES mean]
-dict_genomic_annot = {"celltypes.campbell_lvl1.all":
-						{"dataset":"campbell",
-						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl1.sem_mean.txt"},
-					 "celltypes.campbell_lvl2.all":
-					   	{"dataset":"campbell",
-					   	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl2.sem_mean.txt"}
-					  }
+# dict_genomic_annot = {"celltypes.campbell_lvl1.all":
+# 						{"dataset":"campbell",
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl1.sem_mean.txt"},
+# 					 "celltypes.campbell_lvl2.all":
+# 					   	{"dataset":"campbell",
+# 					   	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl2.sem_mean.txt"}
+# 					  }
 
 
 
@@ -560,7 +562,9 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 		print("OBS: Running without all_genes correction.")
 		flag_all_genes = False
 	for gwas in list_gwas:
-		fileout_prefix = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}".format(gwas=gwas, prefix_genomic_annot=prefix_genomic_annot)
+		fileout_prefix = "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/{prefix_genomic_annot}__{gwas}{flag_sumstats_cap}".format(gwas=gwas, 
+			prefix_genomic_annot=prefix_genomic_annot, 
+			flag_sumstats_cap=".no_twostage_chisqmax" if FLAG_NO_TWO_STAGE_ESTIMATION_AND_NO_MAX_CHISQ_FILTER else "")
 		if os.path.exists("{}.cell_type_results.txt".format(fileout_prefix)):
 			print("GWAS={}, prefix_genomic_annot={} | LDSC outout file exists: {}. Will skip this LDSC regression...".format(gwas, prefix_genomic_annot, fileout_prefix))
 			continue
@@ -569,6 +573,7 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 		### REF: https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
 		### python -u: Force the stdout and stderr streams to be unbuffered. THIS OPTION HAS NO EFFECT ON THE STDIN STREAM [or writing of other files, e.g. the ldsc .log file]. See also PYTHONUNBUFFERED.
 		cmd = """{PYTHON2_EXEC} {flag_unbuffered} {script} --h2-cts /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/{gwas}.sumstats.gz \
+		{flag_sumstats_cap} \
 		--ref-ld-chr /projects/timshel/sc-genetics/ldsc/data/baseline_v1.1/baseline.{flag_all_genes}{ldsc_all_genes_ref_ld_chr_name} \
 		--w-ld-chr /projects/timshel/sc-genetics/ldsc/data/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC. \
 		--ref-ld-chr-cts /projects/timshel/sc-genetics/sc-genetics/src/ldsc/cts_files/{prefix_genomic_annot}.ldcts.txt \
@@ -577,12 +582,14 @@ for prefix_genomic_annot, param_dict in dict_genomic_annot.items():
 			flag_unbuffered="-u" if FLAG_UNBUFFERED else "",
 			script=PATH_LDSC_SCRIPT,
 			gwas=gwas,
+			flag_sumstats_cap="--chisq-max 9999 --two-step 9999" if FLAG_NO_TWO_STAGE_ESTIMATION_AND_NO_MAX_CHISQ_FILTER else "",
 			prefix_genomic_annot=prefix_genomic_annot,
 			flag_all_genes="," if flag_all_genes else "",
 			ldsc_all_genes_ref_ld_chr_name=ldsc_all_genes_ref_ld_chr_name,
 			fileout_prefix=fileout_prefix
 			)
 		list_cmds_ldsc_prim.append(cmd)
+
 
 
 ### Call scheduler

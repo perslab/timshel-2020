@@ -31,7 +31,7 @@ library(patchwork)
 
 library(colorspace)
 
-source(here("src/publication/lib-fig_celltype.R"))
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 
 setwd(here("src/publication"))
 

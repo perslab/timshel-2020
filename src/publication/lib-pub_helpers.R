@@ -53,7 +53,7 @@ get_prioritized_annotations_bmi <- function(dataset) {
 # ============================ CELL-TYPES: COLORS ======================= #
 # ======================================================================= #
 
-get_annotation_color_mapping <- function(dataset) {
+get_prioritized_annotations_color_mapping <- function(dataset) {
   ### EXAMPLE USAGE
   # colormap.annotations <- get_annotation_color_mapping(dataset="mousebrain")
   # ggplot(...) + scale_color_manual(values=colormap.annotation)

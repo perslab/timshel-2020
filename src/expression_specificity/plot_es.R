@@ -87,8 +87,7 @@ p
 # ================================ gene centric plots ================================ #
 # ======================================================================= #
 
-
-annotations_highlight <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign cell-types mousebrain
+annotations_highlight <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 ### Main plot
 genes_select <- c("POMC", "AGRP", "LEPR", "FTO", "BDNF", "MC4R", "BBS4", "DRD2", "DRD1")

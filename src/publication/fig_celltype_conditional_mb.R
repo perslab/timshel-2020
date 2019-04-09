@@ -38,7 +38,7 @@ df <- df %>% filter(!annotation %in% filter.exclude,
 # ======================================================================= #
 
 ### SELECTED ANNOTATIONS
-filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 df.heatmap <- df %>% filter(annotation %in% filter.annotations)
 
 # x = condition

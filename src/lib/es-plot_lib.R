@@ -17,7 +17,7 @@ library(viridis)
   
   ### DEVELOPMENT
   # sem_obj
-  # annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+  # annotations <- c("TEGLU23","DEINH3")
   # genes <- c("AGRP", "NPY")
   
   if ( is.null(annotations) & is.null(genes) ) {

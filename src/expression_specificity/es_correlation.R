@@ -30,11 +30,11 @@ setwd(here("src/expression_specificity"))
 
 ### Tabula muris
 # dataset_prefix <- "tabula_muris"
-# filter.celltypes <- c("Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
+# filter.annotations <- c("Brain_Non-Myeloid.neuron","Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
 
 ### Mousebrain
 dataset_prefix <- "mousebrain_all"
-filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 # ======================================================================= #
 # ============================ LOAD DATA =============================== #
@@ -78,11 +78,11 @@ dend %>% plot()
 
 n_labels <- length(labels(dend))
 labels_col <- rep("gray", n_labels)
-labels_col[labels(dend) %in% filter.celltypes] <- "red"
+labels_col[labels(dend) %in% filter.annotations] <- "red"
 leaves_cex <- rep(0, n_labels)
-leaves_cex[labels(dend) %in% filter.celltypes] <- 1
+leaves_cex[labels(dend) %in% filter.annotations] <- 1
 leaves_col <- rep("gray", n_labels)
-leaves_col[labels(dend) %in% filter.celltypes] <- "red"
+leaves_col[labels(dend) %in% filter.annotations] <- "red"
 
 pdf(sprintf("plot.%s.dendrogram.pdf",dataset_prefix), width=45, height=12)
 dend %>% 
@@ -112,14 +112,14 @@ corrplot(cormat.es, order = "hclust", addrect = 10)
 dev.off()
 
 ### selected FDR using corrplot
-tmp.cor <- cor(df.es %>% select(one_of(filter.celltypes), -gene), method="pearson")  # one_of(): variables in character vector. You need this when mixing unquoted names and character vector
+tmp.cor <- cor(df.es %>% select(one_of(filter.annotations), -gene), method="pearson")  # one_of(): variables in character vector. You need this when mixing unquoted names and character vector
 pdf(sprintf("plot.%s.corrplot.mixed_hclust_fdr_only.pdf",dataset_prefix), width=15, height=15)
 corrplot.mixed(tmp.cor, order = "hclust")
 dev.off()
 
 
 ### selected FDR using corrplot --> GIVES WRONG RESULT BECAUSE focus() does not return diagonal matrix
-# cormat.es.seleced <- as_cordf(cormat.es) %>% focus(filter.celltypes, mirror=T) %>% as_matrix()
+# cormat.es.seleced <- as_cordf(cormat.es) %>% focus(filter.annotations, mirror=T) %>% as_matrix()
 # corrplot.mixed(cormat.es.seleced, is.corr=FALSE) # is.corr=FALSE convert to correlation matrix
 
 
@@ -137,11 +137,11 @@ df.es_cordf <- as_cordf(cormat.es) # instead of calling correlate(df.es %>% sele
 
 ### selecting cell-types
 # df.es_cordf %>% focus(matches("^MSN"), mirror=T)
-# df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% rearrange(method="HC") %>% shave() %>% rplot(print_cor=T) # shave() looks weird when the matrix is not diagonal
-df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% rearrange(method="HC") %>% rplot(print_cor=T)
+# df.es_cordf %>% focus(filter.annotations, mirror=T) %>% rearrange(method="HC") %>% shave() %>% rplot(print_cor=T) # shave() looks weird when the matrix is not diagonal
+df.es_cordf %>% focus(filter.annotations, mirror=T) %>% rearrange(method="HC") %>% rplot(print_cor=T)
 ggsave(sprintf("plot.%s.corrr_hc.pdf",dataset_prefix), w=10, h=10)
 
-# df.es_cordf %>% focus(filter.celltypes, mirror=T) %>% select(sort(current_vars())) # ... trying to order the colnames but then rowname is included, so it becomes to much of a mess to solve
+# df.es_cordf %>% focus(filter.annotations, mirror=T) %>% select(sort(current_vars())) # ... trying to order the colnames but then rowname is included, so it becomes to much of a mess to solve
 
 ### INDEX
 # as_cordf	Coerce lists and matrices to correlation data frames

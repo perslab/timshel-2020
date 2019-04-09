@@ -61,7 +61,7 @@ rename_vector <- newnames; names(rename_vector) <- tmp_gwas_vector
 df <- df %>% mutate(gwas_fmt = recode_factor(tmp_gwas_vector, !!!rename_vector)) # Use a named character vector to recode factors with unquote splicing. | REF: https://dplyr.tidyverse.org/reference/recode.html
 
 ### SELECTED ANNOTATIONS
-filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 # filter.annotations <- c(filter.annotations, "Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
 
 ### Filter

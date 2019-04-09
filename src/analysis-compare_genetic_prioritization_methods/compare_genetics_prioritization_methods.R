@@ -133,8 +133,8 @@ ggplot(df, aes(x=annotation, y=-log10(pval), fill=method)) +
   coord_flip()
 
 ### Barplot - only FDR significant cell-types
-filter.celltypes <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign.
-ggplot(df %>% filter(annotation %in%  filter.celltypes), aes(x=annotation, y=-log10(pval), fill=method)) + 
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+ggplot(df %>% filter(annotation %in%  filter.annotations), aes(x=annotation, y=-log10(pval), fill=method)) + 
   geom_col(width=0.4, position=position_dodge(width=0.5)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip() +

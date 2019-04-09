@@ -103,8 +103,8 @@ df.ldsc <- df.ldsc %>% mutate(run_name = case_when(
 # ======================================================================= #
 
 ### SELECTED ANNOTATIONS
-# filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
-# ORDERED BY Prop-h2 from fig_h2_annotations -->
+# filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+# Prioritized cell-types ORDERED BY Prop-h2 from fig_h2_annotations
 filter.annotations <- c("DEGLU4","MEGLU10","DEGLU5","MEGLU11","TEINH12","MEGLU1","DEINH3","MEINH2","TEGLU23","TEGLU17","TEGLU4") 
 ### SELECTED GWAS
 filter.gwas <- "BMI_UKBB_Loh2018"
@@ -152,7 +152,7 @@ df.ldsc.meta_analysis <- bind_rows(df.ldsc.meta_analysis, df.ldsc)
 filter.gwas <- c("BMI_UKBB_Loh2018", "HEIGHT_UKBB_Loh2018", "WHRadjBMI_UKBB_Loh2018") # "RA_Okada2014", "MS_Patsopoulos2011", "SCZ_Pardinas2018"
 
 ### SELECTED ANNOTATIONS
-filter.annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 filter.annotations <- c(filter.annotations, "Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
 
 ### Extract data [OBS: df.ldsc.meta_analysis]

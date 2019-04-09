@@ -125,8 +125,8 @@ df_multi_geneset
 # ======================================================================= #
 
 ### Subset
-annotations.fdr_sign <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign cell-types mousebrain
-sem_obj.sub <- subset_annotations(sem_obj, annotations=annotations.fdr_sign)
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+sem_obj.sub <- subset_annotations(sem_obj, annotations=filter.annotations)
 sem_obj.sub <- calc_sem_wrapper(sem_obj.sub) # NEW
 sem_obj.sub <- calc_empirical_pvalues_wrapper(sem_obj.sub) # NEW
 sem_obj.sub <- transform_sems(sem_obj.sub, method="rank_normalize")

@@ -7,7 +7,7 @@
 library(here)
 setwd(here("src/publication"))
 files_source <- list.files(pattern="lib-(.*).R") # returns filenames (not full filepaths)
-SCRIPT_NAME <- "lib-load_functions.R" # *MUST* be kept up-to-date with the name of this script
+SCRIPT_NAME <- "lib-load_pub_lib_functions.R" # *MUST* be kept up-to-date with the name of this script
 # ======================================================================= #
 # ================================= RUN ================================= #
 # ======================================================================= #

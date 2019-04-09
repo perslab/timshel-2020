@@ -55,8 +55,8 @@ get_prioritized_annotations_bmi <- function(dataset) {
 
 get_prioritized_annotations_color_mapping <- function(dataset) {
   ### EXAMPLE USAGE
-  # colormap.annotations <- get_annotation_color_mapping(dataset="mousebrain")
-  # ggplot(...) + scale_color_manual(values=colormap.annotation)
+  # colormap.annotations <- get_prioritized_annotations_color_mapping(dataset="mousebrain")
+  # ggplot(...) + scale_color_manual(values=colormap.annotation) # a set of aesthetic values to map data values to. the values will be matched based on the names.
   
   allowed.dataset <- c("mousebrain", "tabula_muris", "campbell")
   if (!dataset %in% allowed.dataset) {
@@ -69,18 +69,18 @@ get_prioritized_annotations_color_mapping <- function(dataset) {
     # "Thalamus"="#6A3D9A",
     # "Midbrain"="#1F78B4",
     # "Hypothalamus"="#33A02C"
-    annotations <- c("TEGLU4"="#FF7F00", # CORTEX
+    ### ORDERED BY HIERARCHICAL CLUSTERING OF ESmu
+    annotations <- c("TEGLU23"="#E31A1C", # HC
+                     "TEGLU4"="#FF7F00", # CORTEX
                      "TEGLU17"="#FF7F00", # CORTEX
-                     "TEGLU23"="#E31A1C", # HC
                      "TEINH12"="#B15928", # HC/CORTEX
-                     "DEGLU4"="#6A3D9A", # THALAMUS
+                     "DEGLU5"="#1F78B4", # MIDBRAIN
                      "DEINH3"="#33A02C", # HYPOTHALAMUS
-                     # MIDBRAIN
-                     "MEGLU1"="#1F78B4",
-                     "MEINH2"="#1F78B4",
-                     "DEGLU5"="#1F78B4",
-                     "MEGLU10"="#1F78B4",
-                     "MEGLU11"="#1F78B4"
+                     "MEGLU1"="#1F78B4", # MIDBRAIN
+                     "MEINH2"="#1F78B4", # MIDBRAIN
+                     "MEGLU11"="#1F78B4", # MIDBRAIN
+                     "MEGLU10"="#1F78B4", # MIDBRAIN
+                     "DEGLU4"="#6A3D9A" # THALAMUS
                      )
   } else if (dataset == "tabula_muris") {
     stop("Not yet implemented")
@@ -89,7 +89,7 @@ get_prioritized_annotations_color_mapping <- function(dataset) {
   } else {
     stop("Internal error")
   }
-  print(sprintf("Returning n=%s annotation ids. x = annotations; names(x) = colors.", length(annotations)))
+  print(sprintf("Returning n=%s annotation ids. x = colors; names(x) = annotations", length(annotations)))
   return(annotations)
 }
 

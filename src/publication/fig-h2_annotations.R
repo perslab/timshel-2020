@@ -115,10 +115,10 @@ p <- ggplot(df, aes(x=annotation, y=Pct._h2)) +
 p <- p + 
   facet_grid(rows=vars(gwas_block), 
              space="free_y", scales="free_y", drop=T) + 
-  theme(panel.grid.major = element_blank(), # REF: https://stackoverflow.com/questions/14185754/remove-strip-background-keep-panel-border
+  theme(panel.grid.major = element_blank(), # remove gridlines REF: https://stackoverflow.com/questions/14185754/remove-strip-background-keep-panel-border
                panel.grid.minor = element_blank(),
-               strip.background = element_blank(),
                panel.border = element_rect(colour = "black"),
+               strip.background = element_blank(), # remove facet strip bg
                strip.text.y = element_blank()
 )
 

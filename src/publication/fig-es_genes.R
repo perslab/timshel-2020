@@ -40,6 +40,7 @@ show_only_nonzero_es <- FALSE
 df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
 p <- plot_es.gene_centric.single_es_metric(df.es.gene, annotations_highlight=annotations_highlight, show_only_nonzero_es=show_only_nonzero_es)
 p
+### TOOD: ---> SAVE FIG
 
 ### Mean expression
 show_only_nonzero_es <- FALSE

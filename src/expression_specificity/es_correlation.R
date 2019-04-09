@@ -64,9 +64,9 @@ plot(dend)
 # ============================ Export clustering order =============================== #
 # ======================================================================= #
 
-file_out.clustering_order <- here(sprintf("data/genes_cell_type_specific/%s.hclust_order.csv", dataset_prefix))
-df.clustering_order <- tibble(cluster_order=seq_along(labels(dend)), annotation=labels(dend))
-df.clustering_order %>% write_csv(file_out.clustering_order)
+# file_out.clustering_order <- here(sprintf("data/genes_cell_type_specific/%s.hclust_order.csv", dataset_prefix))
+# df.clustering_order <- tibble(cluster_order=seq_along(labels(dend)), annotation=labels(dend))
+# df.clustering_order %>% write_csv(file_out.clustering_order)
 
 # ======================================================================= #
 # ============================ [dendextend] plot dendrogram =============================== #

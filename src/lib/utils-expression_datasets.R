@@ -23,29 +23,6 @@ library(here)
 # =============================== TM RENAME FUNCTION ================================= #
 # ======================================================================= #
 
-# ### tissue: rename + remove some text because they contain too few cell-types
-# df.plot.tax_order %>% count(tissue, sort=T) # ---> potentially filter : n_annotations_in_tax >= 5
-# df.plot.tax_order <- df.plot.tax_order %>% mutate(tissue = case_when(
-#   tissue == "Brain_Myeloid" ~ "Brain",
-#   tissue == "Brain_Non-Myeloid" ~ "Brain",
-#   TRUE ~ stringr::str_replace(tissue, pattern="_", replacement=" ") # TRUE ~ as.character(tissue)
-# )
-# )
-
-
-# # Self-defined label formatting function
-# tm_annotation_formatter <- function(annotation_tissue_celltype) {
-#   # INPUT: annotation_tissue_celltype, string e.g. 'Marrow.Slamf1-negative_multipotent_progenitor_cell'
-#   # USAGE 1: df %>% mutate
-#   # USAGE 2: ggplot() + scale_y_discrete(label=tm_annotation_formatter)
-#   label <- stringr::str_split_fixed(annotation_tissue_celltype, pattern="\\.", n=Inf)[,2]
-#   label <- stringr::str_replace_all(label, pattern="-", " - ") # add space to any hyphens
-#   label <- stringr::str_replace_all(label, pattern="_", " ") # convert _ to space
-#   # label <- stringr::str_to_sentence(label) # title case
-#   substr(label, 1, 1) <- toupper(substr(label, 1, 1)) # capitalize first character
-#   return(label)
-# }
-
 
 utils.rename_annotations.tabula_muris <- function(annotations, style, check_all_matches=F) {
   ### DESCRIPTION
@@ -114,7 +91,6 @@ utils.rename_annotations.tabula_muris <- function(annotations, style, check_all_
 # annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5", "Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
 # annotations_fmt <- utils.rename_annotations.tabula_muris(annotations, style, check_all_matches=F)
 # annotations_fmt
-
 
 
 # ======================================================================= #

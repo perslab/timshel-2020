@@ -87,8 +87,6 @@ df.ldsc_cts.export <- df.ldsc_cts.export %>% left_join(df.metadata, by="annotati
 ### Multi CONDITION
 df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190212.%s.sem_mean.CONDITIONAL_BMI_UKBB_Loh2018.csv", dataset_prefix))
 
-
-
 # ======================================================================= #
 # ================================ PLOT: cell priori [FACET WRAP MULTI-CONDITIONAL] ================================= #
 # ======================================================================= #

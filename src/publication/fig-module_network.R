@@ -20,8 +20,8 @@ library(here)
 library(corrr)
 library(ggraph) # 2019-02-19: CRAN only has ggraph_1.0.2 | use devtools::install_github('thomasp85/ggraph') to install ggraph v1.1 since it is build on tidygraph
 # devtools::install_github('thomasp85/ggraph')
-library(igraph)
 library(tidygraph)
+library(igraph)
 
 
 

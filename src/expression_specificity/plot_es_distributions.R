@@ -17,22 +17,13 @@
 library(tidyverse)
 library(here)
 
-# library(plotly)
-
 library(gghighlight)
 library(ggrepel)
 library(viridis)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-
 setwd(here("src/expression_specificity"))
-
-# ======================================================================= #
-# ================================ FUNCTIONS ================================ #
-# ======================================================================= #
-
-source(here("src/lib/plot_expression_specificity.R"))
 
 # ======================================================================= #
 # ============================ PUBLICATION PLOT ========================= #

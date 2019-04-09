@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-### AIM: Make ES heatmaps
+### AIM: Make ES heatmaps for ALL genes
 ### OBS: runtime and be many hours because of Clustering and saving of large .pdfs
 
 

@@ -33,7 +33,7 @@ setwd(here("src/expression_specificity"))
 # ================================ FUNCTIONS ================================ #
 # ======================================================================= #
 
-source(here("src/lib/plot_expression_specificity.R"))
+# source(here("src/lib/plot_expression_specificity.R"))
 
 
 # ======================================================================= #

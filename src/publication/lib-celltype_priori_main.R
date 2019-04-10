@@ -151,8 +151,9 @@ set_multi_gwas_heatmap_plot <- function(df.ldsc_cts) {
   
   ### Rename GWAS [do this after filtering, so ensure uniqueness]
   ### IMPORANTLY recode_factor() allows us to rename the factor values but KEEP the ORDER defined by filter.gwas
-  newnames <- utils.rename_gwas(filter.gwas, style="fullname") # "fullname_author_year","fullname","abrv_author_year","abrv_year","abrv" 
-  rename_vector <- newnames; names(rename_vector) <- filter.gwas
+  tmp_gwas_vector <- filter.gwas # convenience selector. If you want a specific order of the result, this vector should contain (unique) ordered values
+  newnames <- utils.rename_gwas(tmp_gwas_vector, style="fullname") # "fullname_author_year","fullname","abrv_author_year","abrv_year","abrv" 
+  rename_vector <- newnames; names(rename_vector) <- tmp_gwas_vector
   df.plot.multi_gwas <- df.plot.multi_gwas %>% mutate(gwas_fmt = recode_factor(gwas, !!!rename_vector)) # Use a named character vector to recode factors with unquote splicing. | REF: https://dplyr.tidyverse.org/reference/recode.html
   ### fct_recode(): named character vectors where the name gives the new level, and the value gives the old level. 
   ### [did not work 1 - fct_recode] | newnames <- utils.rename_gwas(df.plot.multi_gwas$gwas, style="fullname") # "fullname_author_year","fullname","abrv_author_year","abrv_year","abrv" 

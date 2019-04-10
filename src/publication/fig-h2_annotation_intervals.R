@@ -87,9 +87,14 @@ file.data <- here("results/h2_annotation_intervals.multi_gwas.csv.gz")
 df.ldsc <- read_csv(file.data)
 
 ### Rename GWAS
-newnames <- utils.rename_gwas(df.ldsc$gwas, style="fullname_author_year") # "fullname_author_year","fullname","abrv_author_year","abrv_year","abrv" 
-rename_vector <- newnames; names(rename_vector) <- df.ldsc$gwas
-df.ldsc <- df.ldsc %>% mutate(gwas_fmt = recode_factor(gwas, !!!rename_vector)) 
+tmp_gwas_vector <- df.ldsc$gwas # convenience selector. If you want a specific order of the result, this vector should contain (unique) ordered values
+newnames <- utils.rename_gwas(tmp_gwas_vector, style="fullname_author_year") # "fullname_author_year","fullname","abrv_author_year","abrv_year","abrv" 
+rename_vector <- newnames; names(rename_vector) <- tmp_gwas_vector
+df.ldsc <- df.ldsc %>% mutate(gwas_fmt = recode_factor(gwas, !!!rename_vector)) # Use a named character vector to recode factors with unquote splicing. | REF: https://dplyr.tidyverse.org/reference/recode.html
+# OLD OK DELETE
+# newnames <- utils.rename_gwas(df.ldsc$gwas, style="fullname_author_year") # "fullname_author_year","fullname","abrv_author_year","abrv_year","abrv" 
+# rename_vector <- newnames; names(rename_vector) <- df.ldsc$gwas
+# df.ldsc <- df.ldsc %>% mutate(gwas_fmt = recode_factor(gwas, !!!rename_vector)) 
 
 ### Rename run_name
 df.ldsc <- df.ldsc %>% mutate(run_name = case_when(

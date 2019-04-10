@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-# Analyze and export LDSC results for multiple datasets (tabula muris, mousebrain, ...)
+# Export LDSC results for adipocyte
 
 
 ### OUTPUT: 
@@ -19,7 +19,7 @@ library(here)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-setwd(here("src/GE-adipocyte"))
+setwd(here("src/datasets-expression/preadipocytes"))
 
 # ======================================================================= #
 # ============================ PARAMETERS =============================== #
@@ -29,15 +29,10 @@ setwd(here("src/GE-adipocyte"))
 ### PARAMS
 genomic_annotation_prefix <- "celltypes.preadipocyte_developing_1808_branch_pc2_quantile"
 dataset_prefix <- "preadipocyte_developing_1808_branch_pc2_quantile"
+
 # ======================================================================= #
 # =============================== LOAD LDSC CTS RESULTS ================================= #
 # ======================================================================= #
-
-### Single GWAS
-# file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UPDATE_Yengo2018.cell_type_results.txt", genomic_annotation_prefix)
-# df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
-# df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
-
 
 ### Load - MULTI GWAS
 dir.data <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/"
@@ -50,7 +45,7 @@ df.ldsc_cts <- list.dfs %>% bind_rows(.id="gwas")
 df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
 
 ### format file [*not* compatible with multi-GWAS plotting]
-
+df.ldsc_cts.export <- df.ldsc_cts %>% select(gwas, p.value, annotation) %>% spread(key=gwas, value=p.value) # format file
 
 # ======================================================================= #
 # =========================== EXPORT to results ========================= #
@@ -63,15 +58,15 @@ df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
 # 
 
 # ======================================================================= #
-# =============================== EXPORT Pval summary ================================= #
+# =========================== EXPORT Pval summary ======================== #
 # ======================================================================= #
 
-### Multi GWAS
-file.out <- sprintf("out.190306.%s.sem_mean.multi_gwas.csv", dataset_prefix)
+### ALL GWAS
+file.out <- sprintf("out/genetic_prioritization.1808_branch_deciles.multi_gwas.csv")
 df.ldsc_cts.export %>% write_csv(file.out)
 
 
-### Filter
+### ALL GWAS - P-values filtered
 df.ldsc_cts.export.mod <- df.ldsc_cts %>% 
   select(gwas, p.value, annotation) %>% 
   mutate(p.value = if_else(p.value<0.05/30, p.value, NA_real_)) %>%
@@ -86,25 +81,6 @@ df.ldsc_cts.export.mod <- df.ldsc_cts.export.mod %>% select(annotation,
                                                             everything())
 
 # write
-file.out <- sprintf("out.190306.%s.sem_mean.multi_gwas.pval_adj.csv", dataset_prefix)
+file.out <- sprintf("out/genetic_prioritization.1808_branch_deciles.multi_gwas.pval_adj.csv", dataset_prefix)
 df.ldsc_cts.export.mod %>% write_csv(file.out)
-
-# ======================================================================= #
-# =============================== PLOT ================================= #
-# ======================================================================= #
-
-trait <- "WHRadjBMI_UKBB_Loh2018"
-trait <- "WHR_Pulit2019"
-trait <- "BMI_UKBB_Loh2018"
-trait <- "LIPIDS_HDL_Teslovich2010"
-df.ldsc_cts.export.mod$LIPIDS_HDL_Teslovich2010
-
-df.plot <- df.ldsc_cts %>% filter(gwas==trait)
-ggplot(df.plot, aes(x=fct_reorder(annotation,-log10(p.value)), y=-log10(p.value))) + 
-  geom_col() + 
-  geom_hline(yintercept = -log10(0.05/nrow(df.plot))) + 
-  labs(x="annotation", title=trait) +
-  coord_flip()
-  # theme(axis.title.x = element_text(angle=70))
-
 

@@ -55,10 +55,10 @@ file.data <- here("results/h2_annotations.multi_gwas.csv.gz")
 df <- read_csv(file.data)
 
 ### Rename GWAS [do this after filtering, so ensure uniqueness]
-tmp_gwas_vector <- df$gwas # convenience selector
+tmp_gwas_vector <- df$gwas # convenience selector. If you want a specific order of the result, this vector should contain (unique) ordered values
 newnames <- utils.rename_gwas(tmp_gwas_vector, style="abrv_author_year") # "fullname_author_year","fullname","abrv_author_year","abrv_year","abrv" 
 rename_vector <- newnames; names(rename_vector) <- tmp_gwas_vector
-df <- df %>% mutate(gwas_fmt = recode_factor(tmp_gwas_vector, !!!rename_vector)) # Use a named character vector to recode factors with unquote splicing. | REF: https://dplyr.tidyverse.org/reference/recode.html
+df <- df %>% mutate(gwas_fmt = recode_factor(gwas, !!!rename_vector)) # Use a named character vector to recode factors with unquote splicing. | REF: https://dplyr.tidyverse.org/reference/recode.html
 
 ### SELECTED ANNOTATIONS
 filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")

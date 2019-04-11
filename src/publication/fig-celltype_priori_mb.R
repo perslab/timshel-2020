@@ -161,13 +161,8 @@ brewer.pal(n = n_colors, name = "Paired") # # Hexadecimal color specification
 #                      "Midbrain"="#FF7F00",
 #                      "Hypothalamus"="#E31A1C"
 # )
-colormap.region <- c("Cortex"="#FF7F00",
-                     "Hippocampus/Cortex"="#B15928",
-                     "Hippocampus"="#E31A1C",
-                     "Thalamus"="#6A3D9A",
-                     "Midbrain"="#1F78B4",
-                     "Hypothalamus"="#33A02C"
-)
+
+colormap.region <- get_color_mapping.mb.region()
 
 fdr_threshold <- 0.05/nrow(df.plot.tax_order)
 p.main <- ggplot() +

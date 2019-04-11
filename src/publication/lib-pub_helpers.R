@@ -53,7 +53,8 @@ get_prioritized_annotations_bmi <- function(dataset) {
 # ============================ CELL-TYPES: COLORS ======================= #
 # ======================================================================= #
 
-get_prioritized_annotations_color_mapping <- function(dataset) {
+
+get_color_mapping.prioritized_annotations_bmi <- function(dataset) {
   ### EXAMPLE USAGE
   # colormap.annotations <- get_prioritized_annotations_color_mapping(dataset="mousebrain")
   # ggplot(...) + scale_color_manual(values=colormap.annotation) # a set of aesthetic values to map data values to. the values will be matched based on the names.
@@ -81,7 +82,7 @@ get_prioritized_annotations_color_mapping <- function(dataset) {
                      "MEGLU11"="#1F78B4", # MIDBRAIN
                      "MEGLU10"="#1F78B4", # MIDBRAIN
                      "DEGLU4"="#6A3D9A" # THALAMUS
-                     )
+                     ) # c(name=value)
   } else if (dataset == "tabula_muris") {
     stop("Not yet implemented")
   } else if (dataset == "campbell") {
@@ -93,4 +94,19 @@ get_prioritized_annotations_color_mapping <- function(dataset) {
   return(annotations)
 }
 
+
+# ======================================================================= #
+# ============================ MOUSEBRAIN FUNCTIONS ======================= #
+# ======================================================================= #
+
+
+get_color_mapping.mb.region <- function() {
+  colormap.region <- c("Cortex"="#FF7F00",
+                     "Hippocampus/Cortex"="#B15928",
+                     "Hippocampus"="#E31A1C",
+                     "Thalamus"="#6A3D9A",
+                     "Midbrain"="#1F78B4",
+                     "Hypothalamus"="#33A02C")
+  return(colormap.region)
+}
 

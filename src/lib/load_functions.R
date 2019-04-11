@@ -4,12 +4,21 @@
 # Author: Pascal N. Timshel, Pers Lab
 # Date: December 2017
 
+# ======================================================================= #
+# =============================== SETUP ================================= #
+# ======================================================================= #
+
+library(tidyverse)
+library(here)
 
 
-####################################################################################################
-########################################### FUNCTIONS ##############################################
-####################################################################################################
+### CONSTANTS
+SCRIPT_NAME <- "load_functions.R" # this script name
+dir.lib_functions = here("src/lib") # keep this up-to-date
 
+# ======================================================================= #
+# ============================= FUNCTIONS =============================== #
+# ======================================================================= #
 
 # COPY FROM: https://github.com/molgenis/molgenis-pipelines/wiki/How-to-source-another_file.R-from-within-your-R-script
 # How to source another_file.R from within your R script, mdijkstra edited this page on Sep 30, 2014
@@ -38,19 +47,14 @@ LocationOfThisScript = function() # Function LocationOfThisScript returns the lo
   return(NULL)
 }
 
-####################################################################################################
-####################################### CONSTANTS ##################################################
-####################################################################################################
 
-SCRIPT_NAME <- "load_functions.R" # this script name
-
-####################################################################################################
-########################################## MAIN ####################################################
-####################################################################################################
+# ======================================================================= #
+# =============================== MAIN ================================= #
+# ======================================================================= #
 
 print(sprintf("Started loading functions via %s...", SCRIPT_NAME))
 
-dir.lib_functions = LocationOfThisScript() # get the directory where this file lives. 
+# dir.lib_functions = LocationOfThisScript() # get the directory where this file lives. 
 print(sprintf("Lib function dir: %s", dir.lib_functions))
 
 files.lib_functions <- list.files(dir.lib_functions, pattern="*.R") # get all .R files in the current directory as a vector. Returns basename (e.g. "plot_seurat.R") and not full path
@@ -66,10 +70,9 @@ for (file2source in files.lib_functions) {
 
 print("Done loading functions")
 
-
-####################################################################################################
-######################################## CLEAN UP ##################################################
-####################################################################################################
+# ======================================================================= #
+# ============================= CLEAN UP ================================= #
+# ======================================================================= #
 
 rm(SCRIPT_NAME, tmp.filepath, LocationOfThisScript) # we don't want these variables to clutter our workspace.
 

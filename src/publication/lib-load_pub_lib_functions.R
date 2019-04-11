@@ -12,6 +12,7 @@ SCRIPT_NAME <- "lib-load_pub_lib_functions.R" # *MUST* be kept up-to-date with t
 # ================================= RUN ================================= #
 # ======================================================================= #
 for (file_source in files_source) {
+  print(sprintf("file_source is %s", file_source))
   if (file_source == SCRIPT_NAME) { # don't source this file. We need this to avoid ending up in a infinity 'file sourcing' loop!
     next
   }

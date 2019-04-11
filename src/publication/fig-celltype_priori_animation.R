@@ -1,15 +1,55 @@
+############### SYNOPSIS ###################
+# AIM: Make GIF/MP4 annitation of cell-type prioritization main figure
 
 
+# ======================================================================= #
+# =============================== SETUP ================================= #
+# ======================================================================= #
+
+library(tidyverse)
+library(here)
+
+library(gganimate)
+
+setwd(here("src/publication"))
+
+
+# ======================================================================= #
+# ============================ TODO =============================== #
+# ======================================================================= #
+
+# mousebrain animation needs to be adjusted in p.main.margin. See Tabula Muris for how to solve these issues
+
+# ======================================================================= #
+# ============================ PARAMETERS =============================== #
+# ======================================================================= #
+
+### Tabula muris
+dataset_prefix <- "tabula_muris"
+# dataset_prefix <- "mousebrain_all"
+
+# ======================================================================= #
+# ============================ DEPENDENCIES =============================== #
+# ======================================================================= #
+
+# - p.main.margin: plot obtained from fig-celltype_priori_{mb/tm}.R . This is the main plot without any heatmaps etc.
+
+### Get p.main.margin
+if (dataset_prefix == "mousebrain_all") {
+  source("fig-celltype_priori_mb.R")
+  transition_state_variable <- sym("TaxonomyRank4_reduced1")
+} else if (dataset_prefix == "tabula_muris") {
+  source("fig-celltype_priori_tm.R")
+  transition_state_variable <- sym("tissue")
+}
 
 # ======================================================================= #
 # ============================ GGANIMATE =============================== #
 # ======================================================================= #
 
-library(gganimate)
-
 ### Create animation
 p.ani <- p.main.margin + 
-  transition_states(tissue,
+  transition_states(!!transition_state_variable,
                     transition_length=1, # The relative length of the transition
                     state_length=3, # The relative length of the pause at the states.
                     wrap = TRUE # You can set it to false if you don’t want the last state to transition back to the first state (default == TRUE).
@@ -27,9 +67,8 @@ p.ani <- p.ani + labs(title = "Closest State: {closest_state}",
 # p.main.margin + transition_reveal(annotation) # Error: along data must either be integer, numeric, POSIXct, Date, difftime, orhms
 # p.main.margin + transition_states(annotation, wrap = FALSE) + shadow_mark() # Error in data.frame(..., check.names = FALSE) :  arguments imply differing number of rows: 229, 100
 
-# flag_render_video <- TRUE
+flag_render_video <- TRUE
 # flag_render_video <- FALSE
-
 
 ### RENDER video
 # DURATION of this video: ~10 seconds works very well.
@@ -57,7 +96,9 @@ p.ani.rend <- animate(p.ani,
 )
 
 
-file.out.animation <- sprintf("plot_animation.tm.%s", ifelse(flag_render_video, "mp4", "gif"))
+file.out.animation <- sprintf("figs/fig_animation.%s.%s", 
+                              dataset_prefix,
+                              ifelse(flag_render_video, "mp4", "gif"))
 anim_save(filename=file.out.animation, animation=p.ani.rend)
 
 # ======================= WIKI ======================= #

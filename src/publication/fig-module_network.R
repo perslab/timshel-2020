@@ -49,7 +49,8 @@ file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", g
 
 ### LOAD kME
 ### this file correspons to RUN_ID="wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
-file.kme <- "/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" 
+# file.kme <- "/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" 
+file.kme <- "/projects/jonatan/applied/18-mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" # NEW APRIL 2019
 df.kme <- read_csv(file.kme)
 
 ### LOAD LDSC CTS RESULTS
@@ -61,8 +62,8 @@ df.ldsc_cts
 
 
 ### Module origin metadata
-file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
-df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=ClusterName, Region)
+file.module_origin_metadata <- here("data/expression/mousebrain/mousebrain-agg_L5.metadata.csv")
+df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=annotation, Region)
 ### Module origin mapping file (log.%.multi_geneset.txt)
 df.module_geneset <- read_tsv(file.module_geneset)
 df.module_geneset <- df.module_geneset %>% rename(ensembl_gene_id=gene, module_id=annotation, module_origin=cell_cluster)
@@ -122,6 +123,10 @@ gr
 fdr_threshold <- 0.05/nrow(df.module_metadata)
 fdr_threshold
 
+### Get color map for Region
+colormap.region <- get_color_mapping.mb.region()
+
+
 ### plot (simple)
 layout <- create_layout(gr, layout = 'fr', weights=gr %>% activate(edges) %>% pull(r)) # weigthed Fruchterman-Reingold layout
 # layout <- create_layout(gr, layout = 'fr') # un-weigthed FR
@@ -139,6 +144,7 @@ p <- ggraph(layout) +
   # geom_node_point(aes(size=n_genes, color=Region)) +  # size=n_genes
   geom_node_text(aes(filter=mlog10p>-log10(fdr_threshold), label = module_id), repel = TRUE) + # REF: https://stackoverflow.com/a/50365886/6639640: tidygraph has filter property which can be used in various geoms for filtering nodes, edges, etc.
   # labs(color="Cell-type origin", size=) +
+  scale_fill_manual(values=colormap.region) + 
   guides(
     edge_width="none", 
     edge_alpha="none",
@@ -149,7 +155,9 @@ p <- ggraph(layout) +
 # sans,serif,Helvetica,
 # missing: Arial
 p 
-ggsave("out.plot.module_network.pdf", width=10, height=8)
+file.out <- "figs/fig_module_network_plot.pdf"
+ggsave(plot=p, filename=file.out, width=10, height=8)
+
 
 ### Correlation graph REFs:
 # https://drsimonj.svbtle.com/how-to-create-correlation-network-plots-with-corrr-and-ggraph
@@ -157,31 +165,35 @@ ggsave("out.plot.module_network.pdf", width=10, height=8)
 
 
 
+
+
 # ======================================================================= #
-# ================================ igraph ================================ #
+# ==================== igraph [works, but not used] ===================== #
 # ======================================================================= #
 
-gr <- graph_from_data_frame(d = df.corrr.long, vertices = df.module_metadata, directed = FALSE)
-# ^ ### If vertices is NULL, then the first two columns of d are used as a symbolic edge list and additional columns as edge attributes. 
-# ^ The names of the attributes are taken from the names of the columns.
-# ^ ### If vertices is *not NULL*, then it must be a data frame giving vertex metadata. 
-# ^ The first column of vertices is assumed to contain symbolic vertex names, this will be added to the graphs as the ‘name’ vertex attribute
-# ^ Other columns will be added as additional vertex attributes. 
-# ^ If vertices is not NULL then the symbolic edge list given in d is checked to contain only vertex names listed in vertices.
-gr
-
-
-### Map color | REF: https://www.r-graph-gallery.com/249-igraph-network-map-a-color/
-vertex_attr(gr)
-node_color_map <- brewer.pal(length(unique(V(gr)$Region)), "Set1") # Make a palette of 3 colors
-node_color <- node_color_map[as.numeric(as.factor(V(gr)$Region))] # Create a vector of color
-
-### Plot
-l <- layout_with_fr(gr, weights = E(gr)$r) #  The weight edge attribute is used by default, if present.
-plot(gr, layout = l, asp = 1, edge.width = E(gr)$r*4, vertex.label =  "",
-     vertex.color = adjustcolor(node_color, alpha.f = 0.9), 
-     vertex.size = V(gr)$mlog10p * 12, vertex.frame.width = 2)
-
+if (FALSE) { # Don't run this
+  gr <- graph_from_data_frame(d = df.corrr.long, vertices = df.module_metadata, directed = FALSE)
+  # ^ ### If vertices is NULL, then the first two columns of d are used as a symbolic edge list and additional columns as edge attributes. 
+  # ^ The names of the attributes are taken from the names of the columns.
+  # ^ ### If vertices is *not NULL*, then it must be a data frame giving vertex metadata. 
+  # ^ The first column of vertices is assumed to contain symbolic vertex names, this will be added to the graphs as the ‘name’ vertex attribute
+  # ^ Other columns will be added as additional vertex attributes. 
+  # ^ If vertices is not NULL then the symbolic edge list given in d is checked to contain only vertex names listed in vertices.
+  gr
+  
+  
+  ### Map color | REF: https://www.r-graph-gallery.com/249-igraph-network-map-a-color/
+  vertex_attr(gr)
+  node_color_map <- brewer.pal(length(unique(V(gr)$Region)), "Set1") # Make a palette of 3 colors
+  node_color <- node_color_map[as.numeric(as.factor(V(gr)$Region))] # Create a vector of color
+  
+  ### Plot
+  l <- layout_with_fr(gr, weights = E(gr)$r) #  The weight edge attribute is used by default, if present.
+  plot(gr, layout = l, asp = 1, edge.width = E(gr)$r*4, vertex.label =  "",
+       vertex.color = adjustcolor(node_color, alpha.f = 0.9), 
+       vertex.size = V(gr)$mlog10p * 12, vertex.frame.width = 2)
+  
+}
 
 # ======================================================================= #
 # ================================ LAYOUT DOCS ================================ #

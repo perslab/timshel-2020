@@ -84,7 +84,9 @@ get_color_mapping.prioritized_annotations_bmi <- function(dataset) {
                      "DEGLU4"="#6A3D9A" # THALAMUS
                      ) # c(name=value)
   } else if (dataset == "tabula_muris") {
-    stop("Not yet implemented")
+    # #FF0000 == red
+    annotations <- c("Brain_Non-Myeloid.neuron"="#FF0000", 
+                     "Brain_Non-Myeloid.oligodendrocyte_precursor_cell"="#FF0000")
   } else if (dataset == "campbell") {
     stop("Not yet implemented")
   } else {

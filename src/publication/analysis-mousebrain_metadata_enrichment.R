@@ -120,14 +120,12 @@ p <- ggplot(df.wtest_res, aes(x=category, y=-log10(enrichment_val))) +
 p
 
 
-
-
 # ======================================================================= #
 # ================== PLOT MB RESULTS [ALL TRANSMITTERS] ====================== #
 # ======================================================================= #
 
 name_gwas <- "BMI_UKBB_Loh2018"
-name_gwas <- "SCZ_Pardinas2018"
+# name_gwas <- "SCZ_Pardinas2018"
 df.plot <- df.ldsc_cts %>% filter(gwas == name_gwas)
 df.plot <- df.plot %>% arrange(Neurotransmitter_class, p.value) %>% mutate(annotation = factor(annotation, levels=annotation))
 fdr_threshold <- 0.05/nrow(df.plot)
@@ -169,7 +167,7 @@ p <- p + geom_point(aes(size=fdr_significant), color="gray50") +
         axis.ticks.x=element_blank()) # remove x-labels
 p
 print(file.out)
-file.out <- sprintf("plot_transmitter.%s.pdf", name_gwas)
-ggsave(p, filename=file.out, width=15, height=8)
+# file.out <- sprintf("plot_transmitter.%s.pdf", name_gwas)
+# ggsave(p, filename=file.out, width=15, height=8)
 
 

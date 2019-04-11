@@ -658,7 +658,6 @@ hierarchical_sem <- function(object, list.annotations) {
 ######################## SEM model fit #############################
 ######################################################################################################
 
-# source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
 library(broom)
 
 fit_sems <- function(object, df.magma, df.metadata) {

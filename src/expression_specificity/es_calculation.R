@@ -80,14 +80,14 @@ print(sprintf("RUNNING dataset_prefix=%s, version_stamp=%s", dataset_prefix, ver
 
 ### DEV | MANUAL Args
 # version_stamp <- "999999"
-# dataset_prefix2run <- c("tabula_muris","mousebrain","campbell_lvl1","campbell_lvl2")
+# dataset_prefix2run <- c("tabula_muris","mousebrain_all","campbell_lvl1","campbell_lvl2")
 # dataset_prefix <- "campbell_lvl1"
 # dataset_prefix <- "campbell_lvl2"
 # dataset_prefix <- "tabula_muris"
-# dataset_prefix <- "mousebrain"
+# dataset_prefix <- "mousebrain_all"
 
 
-if (dataset_prefix == "mousebrain") {
+if (dataset_prefix == "mousebrain_all") {
   path_prefix.es_precalc <- here("data/expression/mousebrain/mousebrain")
   type_mouse_gene_ids <- "ensembl"
 } else if (dataset_prefix == "tabula_muris") {

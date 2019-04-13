@@ -1,5 +1,5 @@
 VERSION_STAMP=190412
-for DATA_PREFIX in tabula_muris mousebrain campbell_lvl1 campbell_lvl2
+for DATA_PREFIX in tabula_muris mousebrain_all campbell_lvl1 campbell_lvl2
 do 
 	# echo $DATA_PREFIX $VERSION_STAMP &> es_calculation.log.$DATA_PREFIX.txt & 
 	time Rscript es_calculation.R $DATA_PREFIX $VERSION_STAMP &> es_calculation.log.$DATA_PREFIX.txt &

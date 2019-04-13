@@ -30,7 +30,6 @@
 library(tidyverse)
 library(here)
 
-
 library(ComplexHeatmap)
 
 # setwd(here("src/expression_specificity"))
@@ -43,7 +42,7 @@ library(ComplexHeatmap)
 # ======================= ES metrics (transformed) per anno ======================= #
 # heatmap: genes x ES_metrics
 
-make_es_heatmap.per_anno.genesXes_metrics <- function(sem_obj) {
+make_es_heatmap.per_anno.genesXes_metrics <- function(sem_obj, dataset_prefix) {
   for (anno_name in names(sem_obj[["group_by_annotation.sem_transformed"]])) {
     print(anno_name)
     df.plot <- sem_obj[["group_by_annotation.sem_transformed"]][[anno_name]] %>% 
@@ -62,7 +61,7 @@ make_es_heatmap.per_anno.genesXes_metrics <- function(sem_obj) {
                     show_row_dend = F, # do not show row dendrogram | this might solve 'Error: node stack overflow'
                     use_raster = TRUE, 
                     raster_device = "png")
-      file.out <- sprintf("heatmap_complex.sem_transformed.%s.pdf", anno_name)
+      file.out <- sprintf("heatmap_complex.sem_transformed.%s__%s.pdf", dataset_prefix, anno_name)
       pdf(file.out, width = 8, height = 20) # {ncols=5}{w=8}
       time_elapsed <- system.time(draw(h1))
       print(time_elapsed)
@@ -82,7 +81,7 @@ make_es_heatmap.per_anno.genesXes_metrics <- function(sem_obj) {
 ### heatmap: genes x annotations
 ### THIS PLOT IS TOO BIG TO REALLY MAKE USE OF IT.
 
-make_es_heatmap.es_meta.genesXannotations <- function(sem_obj) {
+make_es_heatmap.es_meta.genesXannotations <- function(sem_obj, dataset_prefix) {
   for (sem_meta_name in names(sem_obj[["sem_meta"]])) {
     # sem_meta_name <- "mean"
     print(sem_meta_name)
@@ -98,7 +97,7 @@ make_es_heatmap.es_meta.genesXannotations <- function(sem_obj) {
                   col = col_fun,
                   use_raster = TRUE, 
                   raster_device = "png")
-    file.out <- sprintf("heatmap_complex.sem_meta.%s.pdf", sem_meta_name)
+    file.out <- sprintf("heatmap_complex.sem_meta.%s__%s.pdf", dataset_prefix, sem_meta_name)
     pdf(file.out, width = 40, height = 20)
     time_elapsed <- system.time(draw(h1))
     print(time_elapsed)

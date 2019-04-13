@@ -36,5 +36,9 @@ file.data <- "/projects/jonatan/applied/18-mousebrain_7/tables/mb_ALL_GSA_SEMall
 df <- read.table(file.data, sep="\t", header=T) %>% rownames_to_column("module_id") %>% as_tibble
 df
 
+# Campbell BMI genelist pvalues:
+# /projects/jonatan/applied/17-holst-hsl/tables/cambpbell_GSA_SEMvsBMI_wilcoxon_analyt_1_mat_wilcoxonPval_genesetTests.txt
+
+
 
 

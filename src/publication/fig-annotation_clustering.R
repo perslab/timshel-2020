@@ -30,12 +30,12 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Tabula muris
-dataset_prefix <- "tabula_muris"
-filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
+# dataset_prefix <- "tabula_muris"
+# filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
 
 ### Mousebrain
-# dataset_prefix <- "mousebrain_all"
-# filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+dataset_prefix <- "mousebrain_all"
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 # ======================================================================= #
 # ======================== LOAD DATA AND PRE-PROCESS ===================== #
@@ -45,11 +45,12 @@ filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
 df.metadata <- get_metadata(dataset_prefix)
 
 ### Annotation ESmu
-file.es <- here(sprintf("data/genes_cell_type_specific/%s.mean.csv.gz", dataset_prefix))
+# file.es <- here(sprintf("data/genes_cell_type_specific/%s.mean.csv.gz", dataset_prefix))
+file.es <- here(sprintf("out/es/%s.mean.csv.gz", dataset_prefix)) # New ESmu values
 df.es <- read_csv(file.es) # genes x cell-types
 
-# ============================ Clean names =============================== #
-### DOWNSTREAM ANNOTATION SELECTIONS FAIL WHEN CLEANING NAMES
+# ============================ Format annotation names =============================== #
+### DOWNSTREAM ANNOTATION SELECTIONS FAIL WHEN formatting names because filter.annotations and colormaps are tied to non-formatted names
 # NB: this also works for mousebrain
 
 # ### Metadata

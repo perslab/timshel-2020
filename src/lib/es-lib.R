@@ -403,11 +403,6 @@ ges_sem <- function(object_data, df.ncells) {
 ############################################# MULTI_GENESET ##############################################
 ######################################################################################################
 
-clean_annotation_name <- function(annotation_name) {
-  ### Function to clean annotation name to use for LDSC pipeline
-  ### Works on both both 'scalar' and vector input
-  return(stringr::str_replace_all(annotation_name, c("/"="-", "\\s+"="_")))
-}
 
 write_multi_geneset_file <- function(object, 
                                      dataset_prefix, 
@@ -428,7 +423,6 @@ write_multi_geneset_file <- function(object,
     stop("Object has no sem_transformed slot. Calculate before running this function")
   }
   
-  check_annotation_names(object)
   print(sprintf("Running with make_clean_annotation_names=%s", make_clean_annotation_names))
   
   
@@ -583,13 +577,13 @@ read_file_fast <- function(file_path) {
 }
 
 
-write_sems <- function(object, slot, dataset_prefix) {
+write_sems <- function(object, slot, dataset_prefix, dir_out) {
   ### Function: write SEM: "sem" or "sem_transformed"
   ### We recommend that dataset_prefix contains information about specie
   stopifnot(slot %in% c("sem", "sem_transformed", "sem_meta"))
   print(sprintf("Writing slot=%s files for dataset_prefix=%s", slot, dataset_prefix))
   for (name.sem in names(object[[slot]])) {
-    file.out <- sprintf("%s.%s.csv.gz", dataset_prefix, name.sem)
+    file.out <- sprintf("%s/%s.%s.csv.gz", dir_out, dataset_prefix, name.sem)
     print(sprintf("Writing file: %s", file.out))
     object[[slot]][[name.sem]] %>% mutate(gene=object[["genes"]]) %>% select(gene, everything()) %>% write_csv(path=file.out)
     # or use data.table::fwrite() and afterwards R.utils::gzip('filename.csv',destname='filename.csv.gz')
@@ -634,23 +628,41 @@ identical_value <- function(x,y) {
 # null[mean,var,frac] --> tibbles
 # null[sem] --> list(sems)
 
-check_annotation_names <- function(object) {
-  bool.white_space <- stringr::str_detect(object[["annotations"]], pattern="\\s+")
-  bool.fwd_slash <- stringr::str_detect(object[["annotations"]], pattern="/")
-  if (any(bool.white_space)) {
-    print(sprintf("*WARNING*: object annotations contains whitespace (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.white_space)))
-  }
-  if (any(bool.fwd_slash)) {
-    print(sprintf("*WARNING*: object annotations contains forward slash ('/') (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.fwd_slash)))
-  }
-  if (!any(bool.white_space,bool.fwd_slash)) {
-    print("Annotation names passed check_annotation_names() with no remarks")
-  }
+clean_annotation_name <- function(annotations) {
+  ### Function to clean annotation name to use for LDSC pipeline
+  ### Works on both both 'scalar' and vector input
+  vec.replacement <- c("/"="-", 
+                       "\\s+"="_")
+  return(stringr::str_replace_all(annotations, vec.replacement))
 }
 
-process_annotations_and_genes <- function(object_data) {
+
+check_object_annotation_names <- function(annotations) {
+  # annotations: character vector
+  bool.white_space <- stringr::str_detect(annotations, pattern="\\s+")
+  bool.fwd_slash <- stringr::str_detect(annotations, pattern="/")
+  if (any(bool.white_space)) {
+    print(sprintf("*WARNING*:  annotations contains whitespace (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.white_space)))
+  }
+  if (any(bool.fwd_slash)) {
+    print(sprintf("*WARNING*:  annotations contains forward slash ('/') (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.fwd_slash)))
+  }
+  if (!any(bool.white_space,bool.fwd_slash)) {
+    print("Annotation names passed check_object_annotation_names() with no remarks")
+  } 
+}
+
+process_annotations_and_genes <- function(object, flag_null) {
   ### check that genes and annotations are identical
   ### **run only once because 'gene' column is removed.**
+  
+  ### **OBS APRIL 2019**: it is inefficient to make this data copy. It was implemented to support annotation name clean-up
+  if (flag_null) {
+    object_data <- object[["null"]][["data"]]
+  } else {
+    object_data <- object[["data"]]
+  }
+  
   list_annotations <- list()
   list_genes <- list()
   for (x in c("frac_expr", "mean", "var")) {
@@ -667,19 +679,43 @@ process_annotations_and_genes <- function(object_data) {
   if (anyNA(Reduce(f=identical_value, x=list_genes))) {
     stop("Genes are not identical for pre-loaded data. Input data must contain identical genes in the same order.")
   }
-  list.res <- list("object_data"=object_data, "genes"=list_genes[[1]], "annotations"=list_annotations[[1]]) # since all elements are identical, we can just pick one of them
+  
+  ### since all elements are identical, we can just pick one of them
+  annotations <- list_annotations[[1]]
+  genes <- list_genes[[1]]
+  
+  ### check annotation names 
+  check_object_annotation_names(annotations)
+  
+  if (object[["parameters"]][["clean_annotation_names"]]) {
+    ### Now we know that ALL annotations match, so now we can change the names across all slots.
+    # make_clean_annotation_names
+    print("Making clean annotations names...")
+    annotations <- clean_annotation_name(annotations)
+    colnames(object_data[["frac_expr"]]) <- annotations
+    colnames(object_data[["mean"]]) <- annotations
+    colnames(object_data[["var"]]) <- annotations
+  }
+
+  list.res <- list("object_data"=object_data, "genes"=genes, "annotations"=annotations) 
   return(list.res)
 }
 
 preprocess_and_set_slots <- function(object) {
+  # Function sets genes, annotations, data slots
   # Function check genes and annotation are identical across the different slots.
   # Gene column is removed.
-  list.res <- process_annotations_and_genes(object[["data"]])
+  list.res <- process_annotations_and_genes(object, flag_null=FALSE)
   object[["data"]] <- list.res[["object_data"]]
   
   ### Set genes and annotations
   object[["genes"]] <- list.res[["genes"]]
   object[["annotations"]] <- list.res[["annotations"]]
+  
+  ### Make clean "ncells" annotation names
+  if (object[["parameters"]][["clean_annotation_names"]]) {
+    colnames(object[["ncells"]]) <- clean_annotation_name(colnames(object[["ncells"]]))
+  }
   
   ### Last check
   stopifnot(all(object[["annotations"]] == colnames(object[["ncells"]]))) # annotation must match annotations in ncell
@@ -691,7 +727,7 @@ preprocess_and_set_slots <- function(object) {
 check_null <- function(object) {
   # Function checks that annotations and genes in the null is identical to the foreground.
   # Function should be called on object after preprocess_and_set_slots().
-  list.res <- process_annotations_and_genes(object[["null"]][["data"]])
+  list.res <- process_annotations_and_genes(object, flag_null=TRUE)
   object[["null"]][["data"]] <- list.res[["object_data"]]
   
   stopifnot(all(list.res[["genes"]] == object[["genes"]])) # null genes must be identical to foreground genes
@@ -704,6 +740,10 @@ check_null <- function(object) {
 create_sem_object <- function(file_prefix) {
   object <- list()
   class(object) <- "sem object"
+  ### Class variables/constants
+  object[["parameters"]][["clean_annotation_names"]] <- TRUE
+  
+  ### Data
   object[["data"]][["var"]] <- read_file_fast(sprintf("%s.pre_calc.var.csv.gz", file_prefix))
   object[["data"]][["frac_expr"]] <- read_file_fast(sprintf("%s.pre_calc.frac_expr.csv.gz", file_prefix))
   object[["data"]][["mean"]] <- read_file_fast(sprintf("%s.pre_calc.mean.csv.gz", file_prefix))
@@ -729,14 +769,12 @@ create_sem_object <- function(file_prefix) {
   # object[["sem"]] <- list()
   # object[["sem_transformed"]] <- list()
   
-  ### check annotation names 
-  check_annotation_names(object)
-  
-  ### pre_process
-  object <- preprocess_and_set_slots(object) 
+  ### pre_process: this sets 
+  object <- preprocess_and_set_slots(object) # function sets genes, annotations, data slots
   
   ### check null
   object <- check_null(object)
+  
   return(object)
 }
 
@@ -931,12 +969,12 @@ calc_empirical_pvalues <- function(df.obs, df.null) {
     idx.insertions <- findInterval(df.obs %>% pull(!!rlang::sym(annotation)), sort(df.null %>% pull(!!rlang::sym(annotation))))
     ### findInterval REF: https://stat.ethz.ch/R-manual/R-devel/library/base/html/findInterval.html: ... This is the same computation as for the empirical distribution function, and indeed, findInterval(t, sort(X)) is identical to n * Fn(t; X[1],..,X[n]) where Fn is the empirical distribution function of X[1],..,X[n].
     # return values of findInterval(x, vec) can take on values of {0...length(vec)}
-    n_null_gt_obs <- nrow(df.obs)-idx.insertion # number of null observations *greather than* our observed value. 
-    # ^ e.g. if an element in idx.insertion was the most extreme in the null, we have nrow(df.obs) == idx.insertion so n_null_gt_obs=0 for that element
+    n_null_gt_obs <- nrow(df.obs)-idx.insertions # number of null observations *greather than* our observed value. 
+    # ^ e.g. if an element in idx.insertions was the most extreme in the null, we have nrow(df.obs) == idx.insertions so n_null_gt_obs=0 for that element
     pvals_empirical <- (n_null_gt_obs+1)/(nrow(df.obs)+1)
     # *OBS*: Note that the above formula includes a commonly used pseudocount (North, Curtis, and Sham, 2002; Knijnenburg et al., 2009) to avoid P-values of zero.
     ### ALTERNATIVE shorter but less transparant version: 
-    # pvals_empirical <- 1-(idx.insertion/(nrow(df.obs)+1)) # *OBS*: here you should not have +1 to idx.insertion because idx.insertion==nrow(df.obs) if our observed value is the most extreme
+    # pvals_empirical <- 1-(idx.insertions/(nrow(df.obs)+1)) # *OBS*: here you should not have +1 to idx.insertions because idx.insertions==nrow(df.obs) if our observed value is the most extreme
     
     list.pvals[[annotation]] <- pvals_empirical
     list.qvals[[annotation]] <- p.adjust(pvals_empirical, method="BH")

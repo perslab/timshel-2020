@@ -1,0 +1,22 @@
+cell_type_id,taxonomy_lvl1,taxonomy_lvl2
+a01.Oligodend3,Glia,Oligodendrocyte
+a02.Oligodend2,Glia,Oligodendrocyte
+a03.EndothelialCells,Vascular,Endothelial cell
+a04.MuralCells,Vascular,Mural cell
+a05.Oligodend1,Glia,Oligodendrocyte
+a06.NG2/OPC,Glia,Oligodendrocyte
+a07.PVMMicro,Immune,Perivascular macrophages and microglia
+a08.Fibroblast,Other,Fibroblast
+a09.Ependymocytes,Glia,Ependymal cell
+a10.Astrocyte,Glia,Astrocyte
+a11.Tanycyte1,Glia,Tanycyte
+a12.Tanycyte2,Glia,Tanycyte
+a13.Neurons1,Neuron,Neuron
+a14.Neurons2,Neuron,Neuron
+a15.Neurons3,Neuron,Neuron
+a16.Neurons4,Neuron,Neuron
+a17.Neurons5,Neuron,Neuron
+a18.Neurons6,Neuron,Neuron
+a19.ParsTuber1,Endocrine,Pars tuberalis
+a20.ParsTuber2,Endocrine,Pars tuberalis
+miss,NA,NA

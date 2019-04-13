@@ -48,12 +48,13 @@ utils.rename_annotations.tabula_muris <- function(annotations, style, check_all_
   df.metadata <- df.metadata %>% mutate(tissue = case_when(
     tissue == "Brain_Myeloid" ~ "Brain",
     tissue == "Brain_Non-Myeloid" ~ "Brain",
-    TRUE ~ stringr::str_replace(tissue, pattern="_", replacement=" ") # TRUE ~ as.character(tissue)
+    TRUE ~ as.character(tissue)
     )
   )
-  ### Note: "cell_type" column is already clean: Bergmann glial cell", "brain pericyte"
+  ### Format metadata
+  df.metadata <- df.metadata %>% mutate(tissue = stringr::str_replace(tissue, pattern="_", replacement=" "))
+  df.metadata <- df.metadata %>% mutate(cell_type = stringr::str_replace(cell_type, pattern="_", replacement=" "))
 
-  
   ### Check that all are present in database
   bool.matches <- annotations %in% df.metadata$annotation
   if (check_all_matches && !all(bool.matches)) {

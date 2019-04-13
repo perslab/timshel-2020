@@ -18,19 +18,22 @@ library(here)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-setwd(here("src/GE-mousebrain"))
+
+dataset_prefix <- "mousebrain"
+path_prefix.es_precalc <- here("data/expression/mousebrain/mousebrain")
+
 
 # ======================================================================= #
 # ================================== Mouse ============================== #
 # ======================================================================= #
 
-sem_obj_mouse <- create_sem_object("/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain")
+sem_obj_mouse <- create_sem_object(path_prefix.es_precalc)
 sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
 # sem_obj_mouse <- calc_sem_wrapper(sem_obj_mouse)
 # sem_obj_mouse <- bin_sems(sem_obj_mouse, n_bins=101, threshold_bin_zero=0)
 
 print("Saving object...")
-save(sem_obj_mouse,file="mousebrain-190306.sem_obj_mouse.RData")
+# save(sem_obj_mouse, file=sprintf("%s.sem_obj_mouse.RData", dataset_prefix))
 
 # # ======================================================================= #
 # # ============================== Human =============================== #
@@ -44,7 +47,7 @@ sem_obj <- set_group_by_annotation_slots(sem_obj)
 sem_obj <- calc_sem_meta(sem_obj)
 
 print("Saving object...")
-save(sem_obj, file="mousebrain-190306.sem_obj.RData")
+save(sem_obj, file=sprintf("%s.sem_obj-190412.RData", dataset_prefix))
 print("Done saving")
 
 # ======================================================================= #

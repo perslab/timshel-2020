@@ -18,10 +18,11 @@
 # ================================ SETUP ================================ #
 # ======================================================================= #
 
+library(here)
 library(tidyverse)
 library(Seurat)
 
-wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-hypothalamus"
+wd <- here("src/datasets-expression/hypothalamus")
 setwd(wd)
 
 # ======================================================================= #
@@ -43,28 +44,29 @@ seurat_obj # 26774 genes across 21086 samples.
 
 ### MANUAL NAMING
 # SEE ALSO: /projects/timshel/sc-hypothalamus_atlas_app/sc-hypothalamus_atlas_app/data/cell_type_naming/cell_type_naming_mapping_across_studies-v1.csv
-df.taxon_mapping <- read_tsv("cell_type_id	taxonomy_lvl1	taxonomy_lvl2
-a01.Oligodend3	Glia	Oligodendrocyte
-a02.Oligodend2	Glia	Oligodendrocyte
-a03.EndothelialCells	Vascular	Endothelial cell
-a04.MuralCells	Vascular	Mural cell
-a05.Oligodend1	Glia	Oligodendrocyte
-a06.NG2/OPC	Glia	Oligodendrocyte
-a07.PVMMicro	Immune	Perivascular macrophages and microglia
-a08.Fibroblast	Other	Fibroblast
-a09.Ependymocytes	Glia	Ependymal cell
-a10.Astrocyte	Glia	Astrocyte
-a11.Tanycyte1	Glia	Tanycyte
-a12.Tanycyte2	Glia	Tanycyte
-a13.Neurons1	Neuron	Neuron
-a14.Neurons2	Neuron	Neuron
-a15.Neurons3	Neuron	Neuron
-a16.Neurons4	Neuron	Neuron
-a17.Neurons5	Neuron	Neuron
-a18.Neurons6	Neuron	Neuron
-a19.ParsTuber1	Endocrine	Pars tuberalis
-a20.ParsTuber2	Endocrine	Pars tuberalis
-miss	NA	NA") # ---> NA values
+# df.taxon_mapping <- read_tsv("cell_type_id	taxonomy_lvl1	taxonomy_lvl2
+# a01.Oligodend3	Glia	Oligodendrocyte
+# a02.Oligodend2	Glia	Oligodendrocyte
+# a03.EndothelialCells	Vascular	Endothelial cell
+# a04.MuralCells	Vascular	Mural cell
+# a05.Oligodend1	Glia	Oligodendrocyte
+# a06.NG2/OPC	Glia	Oligodendrocyte
+# a07.PVMMicro	Immune	Perivascular macrophages and microglia
+# a08.Fibroblast	Other	Fibroblast
+# a09.Ependymocytes	Glia	Ependymal cell
+# a10.Astrocyte	Glia	Astrocyte
+# a11.Tanycyte1	Glia	Tanycyte
+# a12.Tanycyte2	Glia	Tanycyte
+# a13.Neurons1	Neuron	Neuron
+# a14.Neurons2	Neuron	Neuron
+# a15.Neurons3	Neuron	Neuron
+# a16.Neurons4	Neuron	Neuron
+# a17.Neurons5	Neuron	Neuron
+# a18.Neurons6	Neuron	Neuron
+# a19.ParsTuber1	Endocrine	Pars tuberalis
+# a20.ParsTuber2	Endocrine	Pars tuberalis
+# miss	NA	NA") # ---> NA values
+df.taxon_mapping <- read_csv(here("data/expression/hypothalamus_campbell/campbell_taxon_mapping.csv"))
 
 ## Add cell type information to Seurat object
 # SEE ALSO THIS FILE (an older version): /projects/timshel/sc-hypothalamus_atlas_app/data-SCGE/campbell2017/meta/Campbell2017.metavariables.cluster_names_MAPPED.txt
@@ -139,15 +141,22 @@ seurat_obj@meta.data %>% count(cell_type_all_lvl1)
 # a20.ParsTuber2         238
 
 
+### April 13th 2019:
+# n03	30 ---> SHOULD BE n03.Th/Sst
+# n07	279 ---> SHOULD BE n07.Arx/Nr5a2
+# n08	287 ---> SHOULD BE n08.Th/Slc6a3
+# n27	431 ---> SHOULD BE n27.Tbx19
+
+
 seurat_obj@meta.data %>% count(cell_type_all_lvl2)
 # n01.Hdc	50
 # n02.Gm8773/Tac1	83
-# n03	30
+# n03	30 ---> SHOULD BE n03.Th/Sst
 # n04.Sst/Nts	70
 # n05.Nfix/Htr2c	35
 # n06.Oxt	36
-# n07	279
-# n08	287
+# n07	279 ---> SHOULD BE n07.Arx/Nr5a2
+# n08	287 ---> SHOULD BE n08.Th/Slc6a3
 # n09.Th/Slc6a3	202
 # n10.Ghrh	504
 # n11.Th/Cxcl12	327
@@ -166,7 +175,7 @@ seurat_obj@meta.data %>% count(cell_type_all_lvl2)
 # n24.Sst/Pthlh	246
 # n25.Th/Lef1	229
 # n26.Htr3b	486
-# n27	431
+# n27	431 ---> SHOULD BE n27.Tbx19
 # n28.Qrfp	66
 # n29.Nr5a1/Adcyap1	745
 # n30.Nr5a1/Nfib	316

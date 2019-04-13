@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-# Get cell_type annotations
+# Cell-type metadata
 
 ### OUTPUT: 
 # ....
@@ -15,12 +15,13 @@
 # ======================================================================= #
 
 library(tidyverse)
+library(here)
 
 # ======================================================================= #
 # ============================  PARAMS  ============================== #
 # ======================================================================= #
 
-wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
+wd <- here("src/datasets-expression/tabula_muris/")
 setwd(wd)
 
 # ======================================================================= #
@@ -28,7 +29,8 @@ setwd(wd)
 # ======================================================================= #
 
 ### Load data
-file.RData.cell_atlas <- "/data/pub-others/tabula_muris/figshare/180126-facs/maca.seurat_obj.facs.figshare_180126.RData" # 6.1 GB | seurat_obj
+# file.RData.cell_atlas <- "/data/pub-others/tabula_muris/figshare/180126-facs/maca.seurat_obj.facs.figshare_180126.RData" # 6.1 GB | seurat_obj
+file.RData.cell_atlas <- "/data/pub-others/tabula_muris/figshare/180920-Robj/tabula_muris.seurat_obj.facs.figshare_180920.RData"
 load(file.RData.cell_atlas) 
 
 # ======================================================================= #
@@ -37,9 +39,11 @@ load(file.RData.cell_atlas)
 
 
 df.metadata <- seurat_obj@meta.data %>% group_by(tissue_celltype) %>% summarise(n_cells = n()) # count
-df.metadata <- df.metadata %>% separate(tissue_celltype, into=c("tissue", "cell_type"), sep="\\.", remove=F, extra="merge")# split
-df.metadata %>% write_csv(path="tabula_muris_facs.tissue_celltype.metadata.csv")
-# /projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/
+df.metadata <- df.metadata %>% separate(tissue_celltype, into=c("tissue", "cell_type"), sep="\\.", remove=F, extra="merge") # split
+
+file.out <- "tabula_muris_facs.tissue_celltype.celltype_metadata.csv"
+df.metadata %>% write_csv(path=file.out)
+
 
 # ======================================================================= #
 # ============================  XXXX  ============================== #

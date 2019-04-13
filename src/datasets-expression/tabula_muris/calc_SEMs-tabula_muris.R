@@ -23,13 +23,16 @@ source(here("src/lib/load_functions.R")) # load sc-genetics library
 # wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/"
 # setwd(wd)
 
+
+dataset_prefix <- "tabula_muris"
+path_prefix.es_precalc <- here("data/expression/tabula_muris/tabula_muris") 
+
 # ======================================================================= #
 # ================================== Mouse ============================== #
 # ======================================================================= #
 
-dataset_prefix <- "tabula_muris"
 
-sem_obj_mouse <- create_sem_object(sprintf("/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/%s", dataset_prefix))
+sem_obj_mouse <- create_sem_object(path_prefix.es_precalc)
 sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
 # [1] "Number of genes with NA in anova pvalue: 390. (This number is not used for anything. We just report it for your information)"
 # [1] "Number of sporadic_expressed_genes: 2365"
@@ -60,7 +63,7 @@ sem_obj <- set_group_by_annotation_slots(sem_obj)
 sem_obj <- calc_sem_meta(sem_obj)
 
 print("Saving object...")
-save(sem_obj, file=sprintf("%s.sem_obj-190306.RData", dataset_prefix))
+save(sem_obj, file=sprintf("%s.sem_obj-190412.RData", dataset_prefix))
 
 # ======================================================================= #
 # ============================== LOAD =============================== #

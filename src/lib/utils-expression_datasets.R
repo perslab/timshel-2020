@@ -52,8 +52,8 @@ utils.rename_annotations.tabula_muris <- function(annotations, style, check_all_
     )
   )
   ### Format metadata
-  df.metadata <- df.metadata %>% mutate(tissue = stringr::str_replace(tissue, pattern="_", replacement=" "))
-  df.metadata <- df.metadata %>% mutate(cell_type = stringr::str_replace(cell_type, pattern="_", replacement=" "))
+  df.metadata <- df.metadata %>% mutate(tissue = stringr::str_replace_all(tissue, pattern="_", replacement=" "))
+  df.metadata <- df.metadata %>% mutate(cell_type = stringr::str_replace_all(cell_type, pattern="_", replacement=" "))
 
   ### Check that all are present in database
   bool.matches <- annotations %in% df.metadata$annotation

@@ -18,8 +18,9 @@ library(tidyverse)
 library(here)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 
-setwd(here("src/wgcna_modules"))
+setwd(here("src/publication"))
 
 
 

@@ -121,7 +121,7 @@ df.plot.tax_order %>% count(tissue, sort=T) # ---> potentially filter : n_annota
 df.plot.tax_order <- df.plot.tax_order %>% mutate(tissue = case_when(
   tissue == "Brain_Myeloid" ~ "Brain",
   tissue == "Brain_Non-Myeloid" ~ "Brain",
-  TRUE ~ stringr::str_replace(tissue, pattern="_", replacement=" ") # TRUE ~ as.character(tissue)
+  TRUE ~ stringr::str_replace_all(tissue, pattern="_", replacement=" ") # TRUE ~ as.character(tissue)
   )
 )
 

@@ -150,7 +150,7 @@ p <- ggraph(layout) +
     edge_alpha="none",
     edge_color=guide_legend(title=expression(rho)),
     color=guide_legend(title="Module cell-type origin"),
-    size = guide_legend(title=expression(-log[10](P[LDSC])))) +
+    size = guide_legend(title=expression(-log[10](P[S-LDSC])))) +
   theme_graph(base_family="Helvetica") # theme_graph() --> font family 'Arial Narrow' not found in PostScript font database
 # sans,serif,Helvetica,
 # missing: Arial

@@ -121,6 +121,7 @@ df.plot_h2q <- df.ldsc %>%
 ### PLOT
 p <- plot_h2_annotation_intervals.lollipop(df.plot_h2q)
 p <- p + coord_flip()
+p <- p + theme(axis.text.x = element_text(angle=0, hjust=0.5))
 p
 file.out <- sprintf("figs/fig_h2_annotation_intervals.main.mb_fdr_celltypes.%s.pdf", paste(filter.gwas, collapse="-"))
 ggsave(filename=file.out, p, width=6, height=4)

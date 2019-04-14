@@ -66,9 +66,7 @@ p <- ggplot(df.gather, aes(x=annotation, y=p.value.mlog10)) +
   geom_segment(aes(x=annotation, xend=annotation, y=0, yend=p.value.mlog10), color="grey") +
   geom_point(aes(color=p.value.mlog10), size=5) + 
   scale_color_viridis_c(direction=-1) + 
-  labs(x="", 
-       y=expression(-log[10](P[enrichment])),
-       title="M1 genes enrichment in cell-type ES genes") +
+  labs(x="", y=expression(-log[10](P[enrichment]))) + # title="M1 genes enrichment in cell-type ES genes"
   guides(color=FALSE) +
   # theme(axis.text.x=element_text(angle=45, hjust=1)) + 
   theme(plot.title = element_text(size = rel(0.6))) +

@@ -57,10 +57,10 @@ plot_h2_annotation_intervals <- function(df.plot_h2q) {
 plot_h2_annotation_intervals.lollipop <- function(df.plot_h2q) {
   pd <- position_dodge(0.9)
   p <- ggplot(df.plot_h2q, aes(x=annotation, y=enr, group=q)) + 
-    geom_point(aes(color=q), size=3, position=pd) + 
-    geom_linerange(aes(x=annotation, ymin=0, ymax=enr), position=pd, color="grey",  alpha=0.5) + # REF: https://stackoverflow.com/a/21922792/6639640
-    geom_errorbar(aes(ymin=enr-enr_se, ymax=enr+enr_se), position=pd, width = 0.01, colour="black") +
     geom_hline(yintercept = 1, linetype="dashed", color="gray") +
+    geom_linerange(aes(x=annotation, ymin=0, ymax=enr), position=pd, color="grey",  alpha=0.5) + # REF: https://stackoverflow.com/a/21922792/6639640
+    geom_point(aes(color=q), size=3, position=pd) + 
+    geom_errorbar(aes(ymin=enr-enr_se, ymax=enr+enr_se), position=pd, width = 0.01, colour="black") +
     scale_color_brewer(palette = "YlOrRd",
                       breaks = levels(as.factor(df.plot_h2q$q)), # IMPORTANT: q is q0,...q5
                       labels = c(expression(I0["0"]),

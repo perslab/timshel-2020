@@ -100,8 +100,8 @@ df <- df %>% mutate(Pct._h2=Prop._h2*100,
 
 ### y=pct_h2; color=prop_snps
 p <- ggplot(df, aes(x=annotation, y=Pct._h2)) + 
-  geom_point(aes(color=Prop._SNPs), size=10) + 
   geom_segment(aes(x=annotation, xend=annotation, y=0, yend=Pct._h2), color="grey") +
+  geom_point(aes(color=Prop._SNPs), size=10) + 
   geom_errorbar(aes(ymin=Pct._h2-Pct._h2_std_error, ymax=Pct._h2+Pct._h2_std_error), width = 0.01, colour="black") +
   geom_text(aes(label=paste0(round(Pct._h2, 1), "%")), size=2.5, color="white") +
   geom_text(data=df %>% filter(gwas_block=="B_block"), aes(y=25, label=gwas_fmt), size=4, color="black", hjust=0) +

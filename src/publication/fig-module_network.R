@@ -40,8 +40,10 @@ genomic_annotation_prefix <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continu
 
 
 ### Set LDSC specific files
-file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
-file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", genomic_annotation_prefix, genomic_annotation_prefix)
+# file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
+file.ldsc_cts <- here("results/prioritization_modules--mousebrain.BMI_UKBB_Loh2018.csv.gz")
+# file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", genomic_annotation_prefix, genomic_annotation_prefix)
+file.module_geneset <- here("results/modules--metadata.txt")
 
 # ======================================================================= #
 # ================================ READ DATA ================================ #
@@ -50,7 +52,8 @@ file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", g
 ### LOAD kME
 ### this file correspons to RUN_ID="wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
 # file.kme <- "/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" 
-file.kme <- "/projects/jonatan/applied/18-mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" # NEW APRIL 2019
+# file.kme <- "/projects/jonatan/applied/18-mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" # NEW APRIL 2019
+file.kme <- here("results/modules-kme_table.csv.gz")
 df.kme <- read_csv(file.kme)
 
 ### LOAD LDSC CTS RESULTS

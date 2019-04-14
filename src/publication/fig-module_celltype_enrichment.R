@@ -32,7 +32,8 @@ setwd(here("src/publication"))
 ### JT April 8th 2019
 # Module-cell-type enrichment - wilcox analytical p-values:
 # matrix of p-values (celltypes vs all WGCNA modules) 
-file.data <- "/projects/jonatan/applied/18-mousebrain_7/tables/mb_GSA_SEMall_WGCNAtop_2_analyt_mat_wilcoxonPval_genesetTests.txt"
+# file.data <- "/projects/jonatan/applied/18-mousebrain_7/tables/mb_GSA_SEMall_WGCNAtop_2_analyt_mat_wilcoxonPval_genesetTests.txt"
+file.data <- here("results/es_gene_enrichment-wgcna_modules.pvals.txt")
 df <- read.table(file.data, sep="\t", header=T) %>% rownames_to_column("module_id") %>% as_tibble
 df
 

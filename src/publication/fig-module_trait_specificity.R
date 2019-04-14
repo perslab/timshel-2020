@@ -70,13 +70,14 @@ p <- ggplot(df.plot, aes(x=gwas_fmt, y=p.value.mlog10)) +
   geom_point(aes(color=p.value.mlog10), size=5) + 
   scale_color_viridis_c(direction=-1) + 
   labs(x="", y=expression(-log[10](P[S-LDSC]))) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  theme(axis.text.x = element_text(angle = 35, hjust = 1, size=rel(0.9))) + 
   guides(color=FALSE) +
-  theme(plot.margin = unit(c(1,1,1,2), "cm"))
+  coord_cartesian(clip="off") + 
+  theme(plot.margin = unit(c(2,1,1,2), "cm")) # trbl
 p
 
 file.out <- "figs/fig_module_trait_specificity.pdf"
-ggsave(file.out, plot=p, width=9, height=5)
+ggsave(file.out, plot=p, width=15, height=6)
 
 ### BARPLOT
 # p <- ggplot(df.plot, aes(x=gwas_fmt, y=p.value.mlog10)) + 

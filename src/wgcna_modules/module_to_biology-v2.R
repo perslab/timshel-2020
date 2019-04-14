@@ -14,12 +14,12 @@
 # =============================== SETUP ================================ #
 # ======================================================================= #
 
+library(here)
 library(tidyverse)
 library(gProfileR)
 # library(GOplot)
 
-wd <- "/projects/timshel/sc-genetics/sc-genetics/src/wgcna_modules/"
-setwd(wd)
+setwd(here("src/wgcna_modules"))
 
 # ======================================================================= #
 # =============================== PARAMS ================================ #
@@ -45,7 +45,7 @@ prefix_genomic_annot <- "wgcna.mousebrain-190218.fdr_sign_celltypes.continuous" 
 
 ### Map:  ENTREZ --> ENSEMBL
 map_entrez2ensembl <- function(df.magma) {
-  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
+  file.mapping <- here("data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz")
   df.mapping <- read_tsv(file.mapping)
 
   genes_mapped <- df.mapping$ensembl_gene_id[match(df.magma$GENE, df.mapping$entrezgene)]
@@ -96,14 +96,17 @@ do_gprofiler <- function(df, ordered_query){
 # ======================================================================= #
 
 # file.magma_gwas <- "/scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
-file.magma_gwas <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
+# file.magma_gwas <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
+file.magma_gwas <- here("out/magma/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out") # 100 KB window
 # file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.1e-5.depict_tissues_loci.txt" # 1e-5
-file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.5e-8.depict_tissues_loci.txt" # 5e-8
-file.genes_mendelian <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_s21_mendelian_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
-file.genes_rare_variant <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/turcot2018_table1_rare_variants.mapped.txt" # human_genes = ensembl_gene_id
-file.genes_mouse_obesity <- "/projects/timshel/sc-genetics/sc-genetics/data/genes_obesity/yazdi2015_table1_mouse_obesity_genes.mapped.txt" # human_genes = ensembl_gene_id
+# file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.5e-8.depict_tissues_loci.txt" # 5e-8
+file.gwas_loci <- here("out/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.depict_tissues_loci.txt")
 
-file.ortholog_genes_background <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz" # human_genes = ensembl_gene_id
+file.genes_mendelian <- here("data/genes_obesity/turcot2018_s21.mendelian_obesity_genes.mapped.txt") # human_genes = ensembl_gene_id
+file.genes_rare_variant <- here("data/genes_obesity/turcot2018_table1.rare_variants.mapped.txt") # human_genes = ensembl_gene_id
+file.genes_mouse_obesity <- here("data/genes_obesity/yazdi2015_table1.mouse_obesity_genes.mapped.txt") # human_genes = ensembl_gene_id
+
+file.ortholog_genes_background <- here("data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz") # human_genes = ensembl_gene_id
 
 # ======================================================================= #
 # ============================ *SWITCH* ================================ #
@@ -124,7 +127,7 @@ if (name.dataset == "tabula_muris") {
 } else if (name.dataset == "mousebrain") {
   ### Mousebrain
   file.module_origin_metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
-  df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=ClusterName,
+  df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=annotation,
                                                                                 module_origin_ncells=NCells, 
                                                                                 module_origin_desc=Description)
 }
@@ -139,14 +142,14 @@ df.ortholog_genes_background <- read_tsv(file.ortholog_genes_background) # conta
 
 
 ### MAGMA
-df.magma_gwas.raw <- map_entrez2ensembl(read_table(file.magma_gwas)) # magma annotation window: 10kb up, 1.5kb down
+df.magma_gwas.raw <- map_entrez2ensembl(read_tsv(file.magma_gwas)) # magma annotation window: 10kb up, 1.5kb down
 # [1] "Number of genes mapped: 17467"
 # [1] "Number of genes not mapped: 158"
 df.magma_gwas <- df.magma_gwas.raw %>% transmute(ensembl_gene_id=ensembl_gene_id,
-                                             magma_pval = P,
-                    magma_pval_rank_all_genes = rank(P)) %>%
+                                             magma_zstat = ZSTAT,
+                    magma_zstat_rank_all_genes = rank(ZSTAT)) %>%
   filter(ensembl_gene_id %in% df.ortholog_genes_background$ensembl_gene_id) %>% # filter to ortholog genes
-  mutate(magma_pval_rank_orthologs = rank(magma_pval)) 
+  mutate(magma_zstat_rank_orthologs = rank(magma_zstat)) 
 # df.magma_gwas %>% arrange(P)
 
 ### GWAS LOCI
@@ -279,7 +282,7 @@ df.bio_modules <- df.bio_genes.all %>%
     n_genes_mendelian=sum(flag_gene_mendelian),
     n_genes_rare_variant=sum(flag_gene_rare_variant),
     n_genes_mouse_obesity=sum(flag_gene_mouse_obesity),
-    mean_minus_log10_magma_pval=mean(-log10(magma_pval), na.rm=T)
+    mean_magma_zstat=mean(magma_zstat, na.rm=T)
   )
 
 ### add ALL modules from ldsc (full join) [this makes us independent on the module_ldsc_pval filtering we did for the df.bio_genes]
@@ -311,7 +314,8 @@ do.excel_export(df.gprofiler.ordered.meta, sheet_name="GO analysis - GSEA", xlsx
 do.excel_export(df.gprofiler.unordered.meta, sheet_name="GO analysis", xlsx.workbook)
 do.excel_export(df.bio_genes, sheet_name="Module bio. gene-based", xlsx.workbook)
 do.excel_export(df.bio_modules, sheet_name="Module bio. summary", xlsx.workbook)
-saveWorkbook(xlsx.workbook, file = sprintf("out.module_to_biology.%s-%s.xlsx", gwas, prefix_genomic_annot), overwrite = TRUE) # write file
+file.out <- here("results/", sprintf("module--biology.%s-%s.xlsx", gwas, prefix_genomic_annot))
+saveWorkbook(xlsx.workbook, file=file.out, overwrite=TRUE) # write file
 
 
 

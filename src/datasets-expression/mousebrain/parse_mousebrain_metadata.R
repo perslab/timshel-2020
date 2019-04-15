@@ -95,7 +95,9 @@ class.monoamines <- c("Adrenaline",
                       "Noradrenaline", 
                       "Dopamine",
                       "Serotonin")
-class.other <- c("Nitric oxide", "Acetylcholine")
+class.ach <- c("Acetylcholine")
+class.no <- c("Nitric oxide")
+# class.other <- c("Nitric oxide", "Acetylcholine")
 
 ### Make assignment
 df.metadata.neurons <- df.metadata.neurons %>% 
@@ -105,7 +107,9 @@ df.metadata.neurons <- df.metadata.neurons %>%
     grepl(pattern=paste(class.ex, collapse="|"), Neurotransmitter) ~ "Ex",
     grepl(pattern=paste(class.in, collapse="|"), Neurotransmitter) ~ "In",
     grepl(pattern=paste(class.monoamines, collapse="|"), Neurotransmitter) ~ "Monoamines",
-    grepl(pattern=paste(class.other, collapse="|"), Neurotransmitter) ~ "Other",
+    grepl(pattern=paste(class.ach, collapse="|"), Neurotransmitter) ~ "Acetylcholine",
+    grepl(pattern=paste(class.no, collapse="|"), Neurotransmitter) ~ "Nitric oxide",
+    # grepl(pattern=paste(class.other, collapse="|"), Neurotransmitter) ~ "Other",
     TRUE ~ "Undefined class" # In case our class.* vectors does not capture the transmitter
   )
   )

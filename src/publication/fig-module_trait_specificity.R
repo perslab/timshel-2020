@@ -67,8 +67,11 @@ p <- ggplot(df.plot, aes(x=gwas_fmt, y=p.value.mlog10)) +
   geom_hline(yintercept=-log10(fdr_threshold), color="gray", linetype="dashed") +
   # geom_col(data=df.plot %>% filter(p.value<fdr_threshold), fill="red", position=position_dodge()) + 
   geom_segment(aes(x=gwas_fmt, xend=gwas_fmt, y=0, yend=p.value.mlog10), color="grey") +
-  geom_point(aes(color=p.value.mlog10), size=5) + 
-  scale_color_viridis_c(direction=-1) + 
+  geom_point(color="gray", size=5) + 
+  geom_point(data=df.plot %>% filter(p.value <= fdr_threshold), color="black", size=5) + 
+  ### color by pvalue
+  # geom_point(aes(color=p.value.mlog10), size=5) + 
+  # scale_color_viridis_c(direction=-1) + 
   labs(x="", y=expression(-log[10](P[S-LDSC]))) +
   theme(axis.text.x = element_text(angle = 35, hjust = 1, size=rel(0.9))) + 
   guides(color=FALSE) +

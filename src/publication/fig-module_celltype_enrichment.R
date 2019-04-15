@@ -33,7 +33,7 @@ setwd(here("src/publication"))
 # Module-cell-type enrichment - wilcox analytical p-values:
 # matrix of p-values (celltypes vs all WGCNA modules) 
 # file.data <- "/projects/jonatan/applied/18-mousebrain_7/tables/mb_GSA_SEMall_WGCNAtop_2_analyt_mat_wilcoxonPval_genesetTests.txt"
-file.data <- here("results/es_gene_enrichment-wgcna_modules.pvals.txt")
+file.data <- here("results/es_enrichment--wgcna_modules.pvals.txt")
 df <- read.table(file.data, sep="\t", header=T) %>% rownames_to_column("module_id") %>% as_tibble
 df
 
@@ -65,8 +65,12 @@ p <- ggplot(df.gather, aes(x=annotation, y=p.value.mlog10)) +
   # geom_col() + 
   geom_hline(yintercept=-log10(0.05/n_distinct(df.gather$annotation)), linetype="dashed", color="gray") + 
   geom_segment(aes(x=annotation, xend=annotation, y=0, yend=p.value.mlog10), color="grey") +
-  geom_point(aes(color=p.value.mlog10), size=5) + 
-  scale_color_viridis_c(direction=-1) + 
+  ### Color by 'region'
+  geom_point(aes(color=annotation), size=5) + 
+  scale_color_manual(values=get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")) +
+  ### Color by p-value
+  # geom_point(aes(color=p.value.mlog10), size=5) + 
+  # scale_color_viridis_c(direction=-1) + 
   labs(x="", y=expression(-log[10](P[enrichment]))) + # title="M1 genes enrichment in cell-type ES genes"
   guides(color=FALSE) +
   # theme(axis.text.x=element_text(angle=45, hjust=1)) + 

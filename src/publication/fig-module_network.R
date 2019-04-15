@@ -131,6 +131,7 @@ colormap.region <- get_color_mapping.mb.region()
 
 
 ### plot (simple)
+set.seed(1)
 layout <- create_layout(gr, layout = 'fr', weights=gr %>% activate(edges) %>% pull(r)) # weigthed Fruchterman-Reingold layout
 # layout <- create_layout(gr, layout = 'fr') # un-weigthed FR
 # layout <- create_layout(gr, layout = 'kk')

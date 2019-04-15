@@ -104,8 +104,8 @@ df.metadata.neurons <- df.metadata.neurons %>%
   mutate(Neurotransmitter_class=case_when( # *IMPORTANT*: because of how case_when works, the below order list the 'precedence' of transmitter class assignment
     # "Like an if statement, the arguments to case_when are evaluated in order, so you must proceed from the most specific to the most general."
     grepl(pattern=paste(class.ex, collapse="|"), Neurotransmitter) & grepl(pattern=paste(class.in, collapse="|"), Neurotransmitter) ~  "Ex/In",
-    grepl(pattern=paste(class.ex, collapse="|"), Neurotransmitter) ~ "Ex",
-    grepl(pattern=paste(class.in, collapse="|"), Neurotransmitter) ~ "In",
+    grepl(pattern=paste(class.ex, collapse="|"), Neurotransmitter) ~ "Excitatory",
+    grepl(pattern=paste(class.in, collapse="|"), Neurotransmitter) ~ "Inhibitory",
     grepl(pattern=paste(class.monoamines, collapse="|"), Neurotransmitter) ~ "Monoamines",
     grepl(pattern=paste(class.ach, collapse="|"), Neurotransmitter) ~ "Acetylcholine",
     grepl(pattern=paste(class.no, collapse="|"), Neurotransmitter) ~ "Nitric oxide",

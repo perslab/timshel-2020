@@ -231,19 +231,50 @@ get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metri
 }
 
 plot_es.gene_centric.single_es_metric <- function(df, 
-                                                  annotations_highlight, 
+                                                  n_top_annotations_highlight=NULL, # integer specifying how many annotations to highlight
+                                                  annotations_highlight=NULL, # character vector of annotations to highlight. If NULL, 
+                                                  annotations_colormap=NULL, # named vector: x=hex-colors, names(x)=annotations
                                                   show_only_nonzero_es=F, 
-                                                  scale.es_mu=T, # y-scale (0-1 for es_mu)
-                                                  scale.log=F # y-scale log-transform
+                                                  scale.zero_to_one=T, # y-scale (0-1 for es_mu)
+                                                  scale.log=F, # y-scale log-transform
+                                                  size.highlight.text=rel(3.5),
+                                                  size.highlight.points=rel(2)
                                                   ) {
   # this function supports multiple genes (genes_select as vector)
   # this function supports multiple annotations (annotations_highlight as vector)
+  ### INPUT df
+  # gene_name annotation es_weight
+  # 1 POMC      ABC           -2.03 
+  # 2 AGRP      ABC           -0.616
+  # 3 LEPR      ABC            1.71 
   
   ### For DEV
-  # df <- df.es
+  # df <- df.es.gene
   # annotations_highlight <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12") # BMI_UKBB_Loh2018 FDR sign cell-types mousebrain
+  # annotations_colormap <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
+  # n_top_annotations_highlight <- 3
   # show_only_nonzero_es <- F
+  # scale.zero_to_one <- T
+  # scale.log <- F
+
+  ### Error checks
+  if (!is.null(n_top_annotations_highlight) & !is.null(annotations_highlight)) {
+    stop("You must decide between n_top_annotations_highlight and annotations_highlight.")
+  }
+  if (is.null(annotations_highlight) & !is.null(annotations_colormap)) {
+    stop("You must supply annotations_highlight when using annotations_colormap.")
+  }
+  if (!is.null(annotations_highlight) & !is.null(annotations_colormap)) {
+    if (length(annotations_highlight) != length(annotations_colormap)) {
+      stop("annotations_highlight and annotations_colormap must have same length.")
+      # This is to avoid downstream errors, but might not strictly be needed in all cases
+    }
+  }
+  if (!is.null(n_top_annotations_highlight) & !is.null(annotations_colormap)) {
+    stop("You must decide between n_top_annotations_highlight and annotations_highlight: only supply one or the arguments.")
+  }
   
+
   if (show_only_nonzero_es) {
     df <- df %>% filter(es_weight > 0)  
   }
@@ -257,39 +288,76 @@ plot_es.gene_centric.single_es_metric <- function(df,
     arrange(gene_name, es_weight) %>%
     # 3. Add order column of row numbers
     mutate(x_order = row_number())
+  # gene_name annotation es_weight x_order
+  # 1 AGRP      MOL2           -4.37       1
+  # 2 AGRP      ACNT1          -3.75       2
+  # 3 AGRP      MOL1           -3.66       3
+  # 
+  ### Set flag_highlight
+  if (!is.null(annotations_highlight)) {
+    if (!all(annotations_highlight %in% df$annotation)) {
+      print("*WARNING*: not all annotations_highlight were found in the input data frame.")
+    }
+    df <- df %>% mutate(flag_highlight = if_else(annotation %in% annotations_highlight, TRUE, FALSE))
+  } else {
+    df <- df %>% 
+      group_by(gene_name) %>%
+      mutate(flag_highlight = if_else(rank(-es_weight) <= n_top_annotations_highlight, TRUE, FALSE)) %>%
+      ungroup()
+  }
   
-  ### Plot
+  ### Init plot
   p <- ggplot(df, aes(x=x_order, y=es_weight, label=annotation)) + 
-    geom_point(size=2, color="gray") + 
-    # geom_point(data=df %>% filter(annotation %in% annotations_highlight), color="black", size=3) +  # highlight black
-    geom_point(data=df %>% filter(annotation %in% annotations_highlight), aes(color=es_weight), size=3) +  # highlight color scale
-    geom_segment(aes(x=x_order, xend=x_order, y=0, yend=es_weight), color="grey") +
-    geom_label_repel(data=df %>% filter(annotation %in% annotations_highlight)) +
+    geom_segment(aes(x=x_order, xend=x_order, y=0, yend=es_weight), color="grey", alpha=0.3) +
+    geom_point(size=size.highlight.points, color="gray")
+  ### colors
+  if (!is.null(annotations_colormap)) {
+    p <- p + 
+      geom_point(data=df %>% filter(flag_highlight), aes(color=annotation), size=size.highlight.points) +
+      geom_text_repel(data=df %>% filter(flag_highlight), aes(color=annotation), size=size.highlight.text, segment.alpha=0.5)
+  } else {
+    p <- p +
+      geom_point(data=df %>% filter(flag_highlight), color="dodgerblue", size=size.highlight.points) +  # highlight color scale
+      geom_text_repel(data=df %>% filter(flag_highlight), color="dodgerblue", size=size.highlight.text, segment.alpha=0.5)
+  }
+  ### Theme
+  p <- p +  
+    theme_classic() + # 'base theme'
+    theme(axis.ticks.x = element_blank()) +
+    theme(axis.text.x = element_text(angle = 75, hjust = 1)) +
+    theme(axis.text.x=element_text(size = rel(0.15))) # smaller x-axis labels
+  # theme(axis.text.x=element_blank()) # hide x-axis labels
+  ### facet wrap
+  if (n_distinct(df$gene_name) > 1) {
+  p <- p +  
     facet_wrap(~gene_name, 
                scales = "free" # x scale must be set 'free' because we use x='x_order', so every position is different
-    ) +
-    ### Axis
-    labs(x="Cell-type", y="ES weight") + 
-    ### Add categories to axis | replace the numeric values (x_order) on each x-axis with the appropriate label
-    scale_x_continuous(
-      breaks = df$x_order,
-      labels = df$annotation,
-      expand = c(0,0) # this is needed (for some reason) to make the x-axis labels properly aligned to the data
-    ) +
-    theme_classic() +
-    theme(axis.text.x = element_text(angle = 75, hjust = 1)) +
-    theme(axis.text.x=element_text(size = rel(0.5))) # smaller x-axis labels
-  # theme(axis.text.x=element_blank()) # hide x-axis labels
-  
-  p <- p + scale_color_viridis_c(direction=-1)
-  if (scale.es_mu) {
-    p <- p + scale_color_viridis_c(limits=c(0,1), direction=-1) + 
-      scale_y_continuous(limits=c(0,1))
+    ) + 
+    theme(strip.background=element_blank())
+  }
+  ### Axis
+  p <- p +  labs(x="Cell-type", y="ES weight")
+  ### Add categories to axis | replace the numeric values (x_order) on each x-axis with the appropriate label
+  p <- p +  scale_x_continuous(
+    breaks = df$x_order,
+    labels = df$annotation,
+    expand = c(0,0) # this is needed (for some reason) to make the x-axis labels properly aligned to the data
+  )
+  ### Scale and colors
+  if (scale.zero_to_one) {
+    p <- p + scale_y_continuous(limits=c(0,1))
+  }
+  # if (scale.zero_to_one & is.null(annotations_colormap)) {
+  #   p <- p + scale_color_viridis_c("ES weight", limits=c(0,1), direction=-1)
+  # }
+  if (!is.null(annotations_colormap)) {
+    p <- p + scale_color_manual(values=annotations_colormap)
+    p <- p + guides(color=F) # hide legend
   }
   if (scale.log) {
+    # p <- p + scale_color_viridis_c("ES weight", direction=-1)
     p <- p + scale_y_log10()
   }
-  
   return(p)
 }
 

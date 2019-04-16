@@ -19,36 +19,37 @@
 #=============================================== USAGE ================================================== #
 # ======================================================================================================= #
 
-# ======================================================================================================= #
-# ==========================================       CONFIG      =========================================== #
-# ======================================================================================================= #
-
-wd <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/"
-setwd(wd)
 
 # ======================================================================================================= #
 # ==========================================       SETUP      =========================================== #
 # ======================================================================================================= #
 
 # suppressMessages(library(rolypoly))
+suppressMessages(library(here))
 suppressMessages(library(tidyverse))
 suppressMessages(library(ggplot2))
 
 suppressMessages(library(doParallel))
 suppressMessages(library(foreach))
 
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
+# ======================================================================================================= #
+# ==========================================       CONFIG      =========================================== #
+# ======================================================================================================= #
+
+### Main output dir
+DIR_OUT.PARENT <- here("out/rolypoly") # output will be <DIR_OUT.COMBINED_TAR>tar.gz
 
 # ======================================================================================================= #
 # ============================================== GET FILES ============================================== #
 # ======================================================================================================= #
 
 ### LDSC munge GWAS | new 2019-01-30
-DIR.DATA_INFERENCE <- "/scratch/rolypoly_out_scratch/out.rolypoly_objs-v3.univariate/"
-DIR_OUT.PREFIX <- "inference_rp_ldscmunge"
-DIR_OUT.COMBINED_TAR <- "export-combined.rp.v3"
+DIR.DATA_INFERENCE <- "/scratch/rolypoly_out_scratch/out.rolypoly_objs-v3.univariate/" # LATER: CHANGE THIS TO here("out/rolypoly_out_scratch/...")
+DIR_OUT.COMBINED_TAR <- "export-combined.rp.v3" # output will be <DIR_OUT.PARENT>/<DIR_OUT.COMBINED_TAR>.tar.gz
+DIR_OUT.PREFIX <- "inference_rp_ldscmunge" # all sub-dirs in DIR_OUT.COMBINED_TAR will get this prefix.
+# ^ ***OBS***: the prefix is used to MOVE AND REMOVE dirs SO BE CAREFUL!!!
 list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inference.RData")
 
 ### Main
@@ -77,7 +78,7 @@ list.inference_files <- list.files(path=DIR.DATA_INFERENCE,  pattern="*.inferenc
 
 
 ### Source annotations
-source("/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.R")
+# source("/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/constants-annotation_name_mapping.R")
 
 do.parallel_annotations <- TRUE
 # do.parallel_annotations <- FALSE
@@ -123,22 +124,24 @@ extract_data <- function(list.rp_inference) {
 
 add_annotations <- function(df, name.expr_data) {
   ### OUTPUT: adds columns 'category' and 'name_clean' to df
-  if (grepl("gtex", name.expr_data)) {
-    df.category <- df.category.gtex
-  } else if (grepl("maca", name.expr_data)) {
-    df.category <- df.category.maca
-  } else if (grepl("depict", name.expr_data)) {
-    df.category <- df.category.depict
-  } else if (grepl("mousebrain", name.expr_data)) {
-    df.category <- df.category.mousebrain
-  # } else if (grepl("tabula_muris", name.expr_data)) {
-  #   df.category <- df.category.tabula_muris
-  #  ---> NOT DONE YET
-  } else {
-    print("WARNING: add_annotations() got unknown pattern for name.expr_data. Will do dummy operation. Plot might not have meaningful coloring.")
+  
+  ### tryCatch to catch error if df.category does not exist
+  df.category <- tryCatch({
+    if (grepl("gtex", name.expr_data)) {
+      df.category <- df.category.gtex
+    } else if (grepl("maca", name.expr_data)) {
+      df.category <- df.category.maca
+    } else if (grepl("depict", name.expr_data)) {
+      df.category <- df.category.depict
+    } else if (grepl("mousebrain", name.expr_data)) {
+      df.category <- df.category.mousebrain
+    } else {
+      stop("Got unexpected name for name.expr_data")
+    }
+  }, error = function(e) {
+    print("WARNING: add_annotations() failed loading df.category or got unknown pattern for name.expr_data. Will do dummy operation. Plot might not have meaningful coloring.")
     df.category <- df %>% transmute(name_r=annotation, name_clean=annotation, category="dummy_category") # 'dummy' operation, but to make it work for ANY dataset (i.e that does not match the 'grepl' pattern)
-    # stop("Got unexpected name for name.expr_data")
-  }
+  })
   df.res <- left_join(df, df.category, by=c("annotation"="name_r"))
   return(df.res)
 }
@@ -259,22 +262,31 @@ list.dummy <- foreach (i=seq_along(list.inference_files)) %loop_function% {
 }
   
 
-list.dummy[[1]]
 
+
+
+PATH.COMBINED_TAR <- file.path(DIR_OUT.PARENT,DIR_OUT.COMBINED_TAR) # full filepath
 
 ##### EXTRACT DATA #######
-cmd0 <- sprintf("rm -r %s %s.tar.gz", DIR_OUT.COMBINED_TAR, DIR_OUT.COMBINED_TAR) # REMOVE ANY OLD FOLDER. This is ok - we can always regerate it
+cmd0 <- sprintf("rm -r %s %s.tar.gz", PATH.COMBINED_TAR, PATH.COMBINED_TAR) # REMOVE ANY EXISTING FOLDER. This is ok - we can always regerate it
+print(cmd0)
 system(cmd0)
 
-cmd <- sprintf("mkdir -p %s", DIR_OUT.COMBINED_TAR) # make dir
+cmd <- sprintf("mkdir -p %s", PATH.COMBINED_TAR) # make dir
+print(cmd)
 system(cmd)
-cmd1 <- sprintf("mv %s* %s/", DIR_OUT.PREFIX, DIR_OUT.COMBINED_TAR) # move dirs
-system(cmd1)
-cmd2 <- sprintf("tar -czvf %s.tar.gz %s", DIR_OUT.COMBINED_TAR, DIR_OUT.COMBINED_TAR)
-system(cmd2)
-dir()
 
-print(sprintf("time scp ygg:%s/%s.tar.gz ~/Downloads/", getwd(), DIR_OUT.COMBINED_TAR))
+cmd1 <- sprintf("mv %s* %s/", DIR_OUT.PREFIX, PATH.COMBINED_TAR) # move dirs from CWD to output path
+print(cmd1)
+system(cmd1)
+
+cmd2 <- sprintf("tar -C %s -czvf %s.tar.gz %s", DIR_OUT.PARENT, PATH.COMBINED_TAR, DIR_OUT.COMBINED_TAR)
+# ^ -C directory: In c and r mode, this changes the directory before adding the following files
+# ^ REF: https://unix.stackexchange.com/questions/168357/creating-a-tar-archive-without-including-parent-directory
+print(cmd2)
+system(cmd2)
+
+print(sprintf("time scp ygg:%s.tar.gz ~/Downloads/", PATH.COMBINED_TAR))
 
 
 # DIR.export-combined.v3.nboot100

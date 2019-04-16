@@ -56,13 +56,13 @@ df.magma
 # ======================================================================= #
 # ================================ DEPICT ================================ #
 # ======================================================================= #
-file.depict <- here("src/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.mousebrain_sem_mean_tissueenrichment.txt")
+file.depict <- here("out/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.mousebrain_sem_mean_tissueenrichment.txt")
 df.depict <- read_tsv(file.depict)
 # problems(df.depict) # ---> we accept the parsing errors and correct for them below
 df.depict <- df.depict %>% select(annotation=`MeSH term`,
                      pval=Name) # fdr=`MeSH first level term`
 
-file.depict_zscore <- here("src/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.mousebrain_z_score_two_step_tissueenrichment.txt")
+file.depict_zscore <- here("out/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.mousebrain_z_score_two_step_tissueenrichment.txt")
 df.depict_zscore <- read_tsv(file.depict_zscore)
 df.depict_zscore <- df.depict_zscore %>% select(annotation=`MeSH term`,
                                   pval=Name)
@@ -73,7 +73,7 @@ df.depict_zscore <- df.depict_zscore %>% select(annotation=`MeSH term`,
 # ================================ ROLYPPOLY ================================ #
 # ======================================================================= #
 # read CSV in this folder
-file.rolypoly <- "/projects/timshel/sc-genetics/sc-genetics/src/RP-meta/export-combined.rp.v3/inference_rp_ldscmunge.BMI_UPDATE_Yengo2018_no_mhc.tss.100kb.none.nboot500/table.pvals.mousebrain_all.sem_mean.csv"
+file.rolypoly <- here("out/rolypoly/export-combined.rp.v3/inference_rp_ldscmunge.BMI_UPDATE_Yengo2018_no_mhc.tss.100kb.none.nboot500/table.pvals.mousebrain_all.sem_mean.csv")
 df.rolypoly <- read_csv(file.rolypoly)
 df.rolypoly <- df.rolypoly %>% select(annotation, pval=bp_value)
 

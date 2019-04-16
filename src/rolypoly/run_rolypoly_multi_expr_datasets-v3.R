@@ -9,8 +9,13 @@
 # * added --expr_data_list to read specific expression datasets
 # + LIKELY MORE CHANGES
 
-### v3 change log (2019-01-30 update to accomodate new data)
+### v3 change log | 2019-01-30 update to accomodate new data
 # * df.gwas.rp <- read_gwas(file.gwas=GWAS_FILE, .. ) --> update colnames
+
+### v3 change log | 2019-04-16
+# * added here()
+# * misc clean-up, non-breaking changes
+
 
 ### OUTPUT: 
 # ....
@@ -90,8 +95,8 @@ option_list <- list(
               help="Number of bootstrap iterations to run. Diego used approx 500-1000. Use at minimum 200 unless testing"),
   make_option("--gwas_linking_only", action="store_true", default=FALSE, 
               help="Only run GWAS linking step"),
-  make_option("--ldsc_input_mode", action="store_true", default=FALSE, 
-              help="Run in 'ldsc input mode': set the 'se' column in the GWAS data to a constant value. (Typically the input 'se' column will be all NA's"),
+  # make_option("--ldsc_input_mode", action="store_true", default=FALSE, 
+  #             help="Run in 'ldsc input mode': set the 'se' column in the GWAS data to a constant value. (Typically the input 'se' column will be all NA's"),
   make_option("--test_run", action="store_true", default=FALSE, 
               help="Run in 'test mode': run on a subset of the GWAS data"),
   make_option("--n_cores", type="integer", default=10,
@@ -113,7 +118,7 @@ OUTDIR <- opt$outdir
 GWAS_LINKED_FILE <- opt$gwas_linked_file
 EXPR_DATA_LIST <- opt$expr_data_list
 GWAS_LINKING_ONLY <- opt$gwas_linking_only
-LDSC_INPUT_MODE <- opt$ldsc_input_mode # *OBS* tmp
+# LDSC_INPUT_MODE <- opt$ldsc_input_mode # *OBS* tmp
 FLAG_TEST_RUN <- opt$test_run 
 N_CORES <- opt$n_cores
 N_BOOTSTRAP_ITERS <- opt$n_bootstrap
@@ -208,16 +213,13 @@ print(list.run_parameters)
 # ==========================================       SETUP      =========================================== #
 # ======================================================================================================= #
 
+suppressMessages(library(here))
 
 suppressMessages(library(rolypoly))
 suppressMessages(library(tidyverse))
 suppressMessages(library(doParallel))
 
-dir.sc_genetics.data <- "/projects/timshel/sc-genetics/sc-genetics/data" # no trailing slash
-dir.ldfiles <- file.path(dir.sc_genetics.data, "rolypoly/EUR_LD_FILTERED_NONAN_R") # Linkage disequilibrium files
-
-dir.sc_genetics_lib <- "/projects/timshel/sc-genetics/sc-genetics/src/lib"
-source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 ### Check that correct version of RolyPoly is loaded
 if (!exists('is_rolypoly_pascaltimshel_fork', mode='function')) {
@@ -225,6 +227,16 @@ if (!exists('is_rolypoly_pascaltimshel_fork', mode='function')) {
   # exists() returns TRUE only if function is found.
   stop("You have not loaded the pascaltimshel forked version of rolypoly. Univariate functionality is only supported in pascaltimshel forked version. Will exit...")
 }
+
+# ======================================================================================================= #
+# ============================================ DIRS AND FILES  ============================================ #
+# ======================================================================================================= #
+
+dir.sc_genetics.data <- here("data") # no trailing slash
+dir.ldfiles <- here("data/rolypoly/EUR_LD_FILTERED_NONAN_R") # Linkage disequilibrium files
+
+# file.gene_annot <- file.path(dir.sc_genetics.data, "gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz") # all 1-1 human-mouse ortholog
+file.gene_annot <- file.path(dir.sc_genetics.data, "gene_annotations/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.txt.gz") # all human genes
 
 
 # ======================================================================================================= #
@@ -321,10 +333,11 @@ if (!flag.loaded_gwas_linked_rdata) { # only load GWAS data if not already loade
   #                         col_maf="snp_maf" 
   # )
   
-  if (LDSC_INPUT_MODE) {
-    print("RUNNING IN LDSC_INPUT_MODE. Will se values for 'se' column")
-    df.gwas.rp$se <- 0.001
-  }
+  # if (LDSC_INPUT_MODE) {
+  #   stop("LDSC_INPUT_MODE is deprecated.")
+  #   print("RUNNING IN LDSC_INPUT_MODE. Will se values for 'se' column")
+  #   df.gwas.rp$se <- 0.001
+  # }
   
   if (FLAG_TEST_RUN) {
     print("RUNNING IN GWAS TEST MODE!")
@@ -340,22 +353,12 @@ if (!flag.loaded_gwas_linked_rdata) { # only load GWAS data if not already loade
 # ======================================================================================================= #
 
 
-### t-test data
-# file.expr <- file.path(dir.sc_genetics.data, "expression/arc_lira/arc_lira.celltype_expr.ttest.hsapiens_orthologs.csv.gz") # arc_lira
-# file.expr <- file.path(dir.sc_genetics.data, "expression/maca/maca.per_tissue.celltype_expr.ttest.hsapiens_orthologs.csv.gz") # maca per_tissue
-
-### average expression
-# file.expr <- file.path(dir.sc_genetics.data, "expression/maca/maca.per_tissue.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz") # maca per_tissue
-# file.expr <- file.path(dir.sc_genetics.data, "expression/maca/maca.per_tissue_celltype.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz") # maca per_tissue_celltype
-
-
 if (is.null(EXPR_DATA_LIST)) {
   stop("2019-01-30 update: --expr_data_list argument must be passed.")
-  
-  #files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*avg_expr.hsapiens_orthologs*") # matching on avg_expr
-  files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*.hsapiens_orthologs*") # matching on all data sets
-  files.paths <- file.path(dir.sc_genetics.data, "expression", files)
-  names(files.paths) <- files # named vector
+  # files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*avg_expr.hsapiens_orthologs*") # matching on avg_expr
+  # files <- list.files(file.path(dir.sc_genetics.data, "expression"), recursive=T, pattern="*.hsapiens_orthologs*") # matching on all data sets
+  # files.paths <- file.path(dir.sc_genetics.data, "expression", files)
+  # names(files.paths) <- files # named vector
   
   # example:
   # arc_lira/arc_lira.celltype_expr.avg_expr.hsapiens_orthologs.csv.gz 
@@ -377,8 +380,6 @@ print(files.paths)
 # ========================================== GENE ANNOTATION =========================================== #
 # ======================================================================================================= #
 
-# file.gene_annot <- file.path(dir.sc_genetics.data, "gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz") # all 1-1 human-mouse ortholog
-file.gene_annot <- file.path(dir.sc_genetics.data, "gene_annotations/gene_annotation.hsapiens_all_genes.GRCh37.ens_v91.txt.gz") # all human genes
 
 df.gene_annot <- read_gene_annotation(file.gene_annot, protein_coding_only=PARAM.PROTEIN_CODING_ONLY, delim="\t")
 # df.gene_annot %>% head()
@@ -389,26 +390,12 @@ df.gene_annot <- read_gene_annotation(file.gene_annot, protein_coding_only=PARAM
 
 
 wrapper.read_expression_data <- function(file.expr) {
-  if (grepl("ttest.hsapiens_orthologs", file.expr)) {
-    scale_genes=FALSE
-  } else if (grepl("avg_expr.hsapiens_orthologs", file.expr)) {
-    scale_genes=TRUE
-  } else if (grepl("kme.hsapiens_orthologs", file.expr)) {
-    scale_genes=FALSE
-  } else if (grepl("depict_152tissues", file.expr)) { # *OBS*: semi-hack
-    scale_genes=FALSE
-  } else {
-    scale_genes=FALSE
-    # stop(sprintf("Error: detected unexpected data processing pattern stamp in expression data set file %s. Accepted patterns are 'tstat', 'avg_expr', 'kme'.", file.expr))
-  }
   df.expr <- read_expression_data(file.expr=file.expr,
-                                  scale_genes=scale_genes,
+                                  scale_genes=FALSE,
                                   pos_transformation=PARAM.POS_TRANSFORMATION,
                                   genes.filter=df.gene_annot$ensembl_gene_id,
                                   col_genes="gene",
                                   delim=",")
-
-  
   return(df.expr)
 }
 
@@ -429,8 +416,6 @@ list.df_expr <- lapply(files.paths, wrapper.read_expression_data) # returns name
 # ======================================================================================================= #
 # ========================================== BLOCK ANNOTATION =========================================== #
 # ======================================================================================================= #
-
-
 
 
 # COLUMNS in df.gene_annot --> ensembl_gene_id chromosome_name start_position end_position   gene_biotype

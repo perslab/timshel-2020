@@ -7,7 +7,6 @@
 
 # ======================= MOUSEBRAIN ======================= #
 
-
 ### PREP
 # df.tmp.meta <- read_csv("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain-agg_L5.metadata.csv")
 # df.tmp.meta <- df.tmp.meta %>% select(c("ClusterName",
@@ -22,15 +21,18 @@
 # df.tmp.meta %>% write_csv("constants-annotation_name_mapping.mousebrain.csv")
 
 ### 
-df.category.mousebrain <- read_csv("constants-annotation_name_mapping.mousebrain.csv") # *OBS*: file must be in current directory.
+# df.category.mousebrain <- read_csv("constants-annotation_name_mapping.mousebrain.csv") # *OBS*: file must be in current directory.
 
+file.metadata <- here("/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv") # PT formatted/cleaned meta-data
 ### Set new names
-df.category.mousebrain <- df.category.mousebrain %>% 
+df.category.mousebrain <- suppressMessages(read_csv(file.metadata)) %>% 
   mutate(
-    name_r = ClusterName,
-    name_clean = ClusterName, # paste0(Class, "-", ClusterName),
+    name_r = annotation,
+    name_clean = annotation, # paste0(Class, "-", ClusterName),
     category = Class
   ) 
+
+rm(file.metadata)
 
 # ======================= Tabula Muris (v. 180920 - final release) ======================= #
 # 
@@ -342,7 +344,7 @@ df.category.depict <- df.category.depict %>%
     name_clean = tmp_clean3
   ) 
 
-
+rm(tmp_clean1, tmp_clean2, tmp_clean3)
 
 
 

@@ -22,7 +22,7 @@ library(gghighlight)
 
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
-
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 
 setwd(here("src/analysis-compare_genetic_prioritization_methods"))
 
@@ -40,7 +40,7 @@ flag_include_depict <- FALSE
 # ======================================================================= #
 # ================================ LDSC ================================ #
 # ======================================================================= #
-file.ldsc <- here("out/out.ldsc/celltypes.mousebrain.all__BMI_UKBB_Loh2018.cell_type_results.txt")
+file.ldsc <- here("out/ldsc/cts/celltypes.mousebrain.all__BMI_UKBB_Loh2018.cell_type_results.txt")
 df.ldsc <- load_ldsc_cts_results(file.ldsc, dataset_prefix="mousebrain.all")
 df.ldsc <- df.ldsc %>% filter(sem=="sem_mean") # just make sure we only have sem_mean results
 df.ldsc <- df.ldsc %>% select(annotation, pval=p.value)
@@ -48,7 +48,8 @@ df.ldsc
 # ======================================================================= #
 # ================================ MAGMA ================================ #
 # ======================================================================= #
-file.magma <- here("src/model-fit_gene_based_scores/out.cell_prioritization.mousebrain.BMI_UKBB_Loh2018_no_mhc.sem_meta_mean.csv")
+# file.magma <- here("src/model-fit_gene_based_scores/out.cell_prioritization.mousebrain.BMI_UKBB_Loh2018_no_mhc.sem_meta_mean.csv")
+file.magma <- here("out/magma/celltype_models/out.cell_prioritization.mousebrain.BMI_UKBB_Loh2018_no_mhc.sem_meta_mean.csv")
 df.magma <- read_csv(file.magma)
 df.magma <- df.magma %>% select(annotation, pval=p.value)
 df.magma

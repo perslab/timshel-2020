@@ -19,8 +19,9 @@ library(tidyverse)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
-setwd(wd)
+# wd <- "/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain"
+# setwd(wd)
+setwd(here("src/model-fit_gene_based_scores"))
 
 dataset_prefix <- "mousebrain"
 
@@ -43,38 +44,6 @@ cols_metadata_keep <- c("ClusterName",
 file.metadata <- "/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv"
 df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
 
-
-# ======================================================================= #
-# ============================== TESTING =============================== #
-# ======================================================================= #
-
-# sem_obj.sub <- subset_annotations(sem_obj, c("EPMB","HYPEN","EPEN","EPSC","CHOR"))
-# sem_obj.sub <- calc_sem(sem_obj.sub, "ges")
-# sem_obj.sub <- calc_sem_wrapper(sem_obj.sub)
-# sem_obj.sub <- bin_sems(sem_obj.sub, n_bins=101, threshold_bin_zero=0)
-# sem_obj.sub.human <- map_to_human(sem_obj.sub, type_mouse_gene_ids="ensembl")
-# sem_obj.sub.human <- set_group_by_annotation_slots(sem_obj.sub.human)
-# sem_obj.sub.human <- calc_sem_meta_from_bins(sem_obj.sub.human)
-# 
-# write_sems(sem_obj, slot="sem", name.dataset="mousebrain.mouse.all")
-# write_sems(sem_obj, slot="sem_bin", name.dataset="mousebrain.mouse.all")
-# write_sems(sem_obj.human, slot="sem", name.dataset="mousebrain.human.all")
-# write_sems(sem_obj.human, slot="sem_bin", name.dataset="mousebrain.human.all")
-
-# ======================================================================= #
-# ======================== NEW WORKFLOW (empirical) ===================== #
-# ======================================================================= #
-
-# source(sprintf("%s/load_functions.R", dir.sc_genetics_lib)) # load sc-genetics library
-# 
-# sem_obj_mouse <- create_sem_object("/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain")
-# sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
-# sem_obj.mouse.sub <- subset_annotations(sem_obj_mouse, c("EPMB","HYPEN","EPEN","EPSC","CHOR"))
-# sem_obj.sub <- map_to_human(sem_obj.mouse.sub, type_mouse_gene_ids="ensembl")
-# # sem_obj.sub <- calc_sem(sem_obj.sub, "ges")
-# sem_obj.sub <- calc_sem_wrapper(sem_obj.sub)
-# sem_obj.sub <- calc_empirical_pvalues_wrapper(sem_obj.sub, threshold_pval=0.05)
-
 # ======================================================================= #
 # ================================ SAVE/LOAD ================================= #
 # ======================================================================= #
@@ -96,7 +65,8 @@ load(file="mousebrain.sem_obj.RData") # human
 # ================================ LOAD MAGMA ================================= #
 # ======================================================================= #
 
-file.magma <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
+# file.magma <- "/projects/timshel/sc-genetics/sc-genetics/src/magma-fit_models/BMI_Yengo2018.resid.correct_all.gsa.genes.out"
+file.magma <- here("out/magma/gene_based_scores/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out")
 df.magma <- read_table(file.magma, comment = "#")
 
 ### add ensembl ids

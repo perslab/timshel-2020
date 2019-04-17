@@ -163,7 +163,7 @@ p <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) +
   geom_point(aes(color=Neurotransmitter_class)) +
   geom_text_repel(data=df.plot %>% filter(flag_highlight), aes(label=annotation), size=rel(2)) +
   geom_hline(yintercept=-log10(fdr_threshold), color="gray", linetype="dashed") + 
-  labs(x="Cell Type", y=expression(-log[10](P[S-LDSC])), color="") + # color="Neurotransmitter class"
+  labs(x="Cell-type", y=expression(-log[10](P[S-LDSC])), color="") + # color="Neurotransmitter class"
   scale_color_brewer(palette="Set2", labels=df.plot.labels$n_label) + 
   theme_classic() + 
   theme(legend.position="bottom") + 

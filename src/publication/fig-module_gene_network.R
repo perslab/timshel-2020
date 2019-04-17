@@ -54,7 +54,7 @@ datExpr = read.csv(paste0(dirFiles, prefixOut,"_", module, "_", celltype, "_datE
 # ^ cells x genes
 
 ### MAGMA
-file.magma_gwas <- here("out/magma/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out") # 100 KB window
+file.magma_gwas <- here("out/magma/gene_based_scores/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out") # 100 KB window
 df.magma <- read_tsv(file.magma_gwas)
 
 # ======================================================================= #
@@ -161,13 +161,14 @@ p <- ggraph(layout) +
     edge_width="none", 
     edge_alpha="none",
     edge_color=guide_legend(title=expression(rho)),
-    fill=guide_legend(title="MAGMA Z-stat"),
+    fill=guide_legend(title="MAGMA Z-Stat"),
     size = guide_legend(title="kME")
     ) +
-  theme_graph(base_family="Helvetica") # theme_graph() --> font family 'Arial Narrow' not found in PostScript font database
-# sans,serif,Helvetica,
+  theme_graph(base_family="Helvetica") + # theme_graph() --> font family 'Arial Narrow' not found in PostScript font database
+  theme(legend.position="right")
+  # sans,serif,Helvetica,
 # missing: Arial
 p 
 file.out <- "figs/fig_module_gene_networkplot.pdf"
-ggsave(plot=p, filename=file.out, width=7, height=5)
+ggsave(plot=p, filename=file.out, width=7, height=8)
 

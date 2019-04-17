@@ -25,12 +25,7 @@ packrat/src/
 ### R
 *.RData
 
-################## PROJECT SPECIFC ##################
-out
-data
-
 ################## RESULT FILES ##################
-
 
 ### Tables
 *.csv
@@ -41,6 +36,17 @@ data
 *.png
 *.gif
 *.mp4
+
+################## PROJECT SPECIFC ##################
+out
+data
+
+### "Un-ignore" publication folder | REF: https://stackoverflow.com/questions/5261959/unignore-subdirectories-of-ignored-directories-in-git
+### This must come AFTER ignoring "results files" (e.g. .pdf)
+!/src/publication/*
+!/src/publication/**/*
+
+
 
 ################## TMP ##################
 

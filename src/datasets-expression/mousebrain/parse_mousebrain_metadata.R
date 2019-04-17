@@ -19,7 +19,7 @@
 library(tidyverse)
 library(here)
 
-setwd(here("src/GE-mousebrain"))
+setwd(here("src/datasets-expression/mousebrain"))
 
 # ======================================================================= #
 # ================================ READ DATA ================================ #
@@ -72,16 +72,17 @@ if ( !(n_distinct(df.taxonomy_metadata$TaxonomyRank4_reduced1) == n_distinct(df.
 df.metadata <- df.metadata %>% left_join(df.taxonomy_metadata, by="TaxonomyRank4") # add taxonomy meta data [*OBS*: joining by TaxonomyRank4 and not annotation]
 
 # ======================================================================= #
-# ============================ Neurons only ============================= #
+# ============================ SELECTION ============================= #
 # ======================================================================= #
-# We here subset on neurons only because it makes it easier to interpret the counts from the Neurotransmitter classes
 
+df.metadata.select <- df.metadata 
+
+# We here subset on neurons only because it makes it easier to interpret the counts from the Neurotransmitter classes when we compare to Linnarson assignments
 ### Subset on Neurons only
-df.metadata.neurons <- df.metadata %>% filter(Class=="Neurons")
+# df.metadata.select <- df.metadata %>% filter(Class=="Neurons")
 
 ### Replace NA values in Neurotransmitter. This makes everything downstream easier.
-df.metadata.neurons <- df.metadata.neurons %>% mutate(Neurotransmitter = if_else(is.na(Neurotransmitter), "Missing", Neurotransmitter))
-
+# df.metadata.select <- df.metadata.select %>% mutate(Neurotransmitter = if_else(is.na(Neurotransmitter), "Missing", Neurotransmitter))
 
 # ======================================================================= #
 # ============================ ASSIGN EX/IN ============================= #
@@ -100,22 +101,24 @@ class.no <- c("Nitric oxide")
 # class.other <- c("Nitric oxide", "Acetylcholine")
 
 ### Make assignment
-df.metadata.neurons <- df.metadata.neurons %>% 
-  mutate(Neurotransmitter_class=case_when( # *IMPORTANT*: because of how case_when works, the below order list the 'precedence' of transmitter class assignment
-    # "Like an if statement, the arguments to case_when are evaluated in order, so you must proceed from the most specific to the most general."
+# *IMPORTANT*: because of how case_when works, the below order list the 'precedence' of transmitter class assignment
+# "Like an if statement, the arguments to case_when are evaluated in order, so you must proceed from the most specific to the most general."
+df.metadata.select <- df.metadata.select %>% 
+  mutate(Neurotransmitter_class=case_when(
     grepl(pattern=paste(class.ex, collapse="|"), Neurotransmitter) & grepl(pattern=paste(class.in, collapse="|"), Neurotransmitter) ~  "Ex/In",
     grepl(pattern=paste(class.ex, collapse="|"), Neurotransmitter) ~ "Excitatory",
     grepl(pattern=paste(class.in, collapse="|"), Neurotransmitter) ~ "Inhibitory",
     grepl(pattern=paste(class.monoamines, collapse="|"), Neurotransmitter) ~ "Monoamines",
     grepl(pattern=paste(class.ach, collapse="|"), Neurotransmitter) ~ "Acetylcholine",
     grepl(pattern=paste(class.no, collapse="|"), Neurotransmitter) ~ "Nitric oxide",
-    # grepl(pattern=paste(class.other, collapse="|"), Neurotransmitter) ~ "Other",
-    TRUE ~ "Undefined class" # In case our class.* vectors does not capture the transmitter
+    Class!="Neurons" ~ "Non-neuron", # this should come BEFORE is.na(Neurotransmitter)
+    is.na(Neurotransmitter) ~ "Missing neurotransmitter", # 
+    TRUE ~ "Other neurotransmitter" # In case our class.* vectors does not capture the transmitter
   )
   )
 
 ### Add Linnarsons (incomplete) asssignment based on "Description"
-df.metadata.neurons <- df.metadata.neurons %>% 
+df.metadata.select <- df.metadata.select %>% 
   mutate(Neurotransmitter_class_linnarson=case_when(
     str_detect(Description, pattern=regex("Excitatory", ignore_case=T)) ~ "Ex",
     str_detect(Description, pattern=regex("Inhibitory", ignore_case=T)) ~ "In",
@@ -125,18 +128,20 @@ df.metadata.neurons <- df.metadata.neurons %>%
   )
 
 ### Cross validate
-df.metadata.neurons %>% count(Neurotransmitter_class)
-# 1 Ex                       102
-# 2 Ex/In                      4
-# 3 In                        78
-# 4 Monoamines                12
-# 5 Other                     13
-# 6 Undefined class            5
-df.metadata.neurons %>% count(Neurotransmitter_class_linnarson)
+df.metadata.select %>% count(Neurotransmitter_class)
+# 1 Acetylcholine                7
+# 2 Ex/In                        4
+# 3 Excitatory                 102
+# 4 Inhibitory                  78
+# 5 Missing neurotransmitter     5
+# 6 Monoamines                  12
+# 7 Nitric oxide                 6
+# 8 Non-neuron                  51
+df.metadata.select %>% count(Neurotransmitter_class_linnarson)
 # 1 NA                                 106
 # 2 Ex                                  60
 # 3 In                                  48
-df.metadata.neurons %>% count(Neurotransmitter_class, Neurotransmitter_class_linnarson)
+df.metadata.select %>% count(Neurotransmitter_class, Neurotransmitter_class_linnarson)
 # Neurotransmitter_class Neurotransmitter_class_linnarson     n
 # 1 Ex                     NA                                  42
 # 2 Ex                     Ex                                  60 OK
@@ -153,7 +158,7 @@ df.metadata.neurons %>% count(Neurotransmitter_class, Neurotransmitter_class_lin
 # ======================================================================= #
 
 ### STEP 1 | Separate rows
-df.nt <- df.metadata.neurons %>% 
+df.nt <- df.metadata.select %>% 
   mutate(Neurotransmitter_split = str_split(Neurotransmitter, pattern=regex(",\\s*(?![^()]*\\))"))) %>% # split by comma, but not inside parentheses. REF: https://stackoverflow.com/a/26634150
   # ^ we cannot use separate_rows() because it does not accept regex. # REF: https://stackoverflow.com/a/31514711
   unnest(Neurotransmitter_split) # unnest our list column
@@ -207,14 +212,14 @@ df.nt.spread
 # 1 CBGRC                 NA         NA       NA    NA    NA    NA      NA             NA            NA        NA      1     NA     NA
 # 2 CBINH1                NA         NA       NA     1    NA    NA      NA              1            NA        NA     NA     NA     NA
 ### Add Neurotransmitter_class
-# df.nt.spread <- df.nt.spread %>% left_join(df.metadata.neurons %>% select(annotation, Neurotransmitter_class, Neurotransmitter_class_linnarson), by="annotation")
+# df.nt.spread <- df.nt.spread %>% left_join(df.metadata.select %>% select(annotation, Neurotransmitter_class, Neurotransmitter_class_linnarson), by="annotation")
 ### Add prefix to neurotransmitter columns.
 df.nt.spread <- df.nt.spread %>% rename_at(vars(-annotation), ~ paste0("nt.", .))
 df.nt.spread
 
 
-### STEP 4 | Add Neurotransmitter_class info by joining df.nt.spread ('matrix') and df.metadata.neurons (EX/IN assignment).
-df.metadata.neurons <- df.metadata.neurons %>% left_join(df.nt.spread, by="annotation")
+### STEP 4 | Add Neurotransmitter_class info by joining df.nt.spread ('matrix') and df.metadata.select (EX/IN assignment).
+df.metadata.select <- df.metadata.select %>% left_join(df.nt.spread, by="annotation")
 # ^ this is currently not used because we export all annotations (df.metadata)
 
 # ======================================================================= #
@@ -231,7 +236,7 @@ df.metadata <- df.metadata %>%
 # ======================================================================= #
 
 ### Join with all annotations
-df.metadata <- df.metadata %>% left_join(df.metadata.neurons %>% select(annotation, Neurotransmitter_class, Neurotransmitter_class_linnarson), by="annotation") # add Neurotransmitter_class columns
+df.metadata <- df.metadata %>% left_join(df.metadata.select %>% select(annotation, Neurotransmitter_class, Neurotransmitter_class_linnarson), by="annotation") # add Neurotransmitter_class columns
 df.metadata <- df.metadata %>% left_join(df.nt.spread, by="annotation") # add nt.* columns
 
 ### Write file

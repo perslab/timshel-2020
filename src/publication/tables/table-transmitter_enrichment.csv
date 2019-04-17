@@ -1,0 +1,7 @@
+gwas,metadata_col,category,enrichment_val,n_obs
+BMI_UKBB_Loh2018,Neurotransmitter_class,Excitatory,0.023639358619287995,102
+BMI_UKBB_Loh2018,Neurotransmitter_class,Inhibitory,0.24244458385215154,78
+BMI_UKBB_Loh2018,Neurotransmitter_class,Acetylcholine,0.6657614643795633,7
+BMI_UKBB_Loh2018,Neurotransmitter_class,Undefined neurotransmitter,0.9119774190553391,9
+BMI_UKBB_Loh2018,Neurotransmitter_class,Nitric oxide,0.989384337368229,6
+BMI_UKBB_Loh2018,Neurotransmitter_class,Monoamines,0.9955722039659364,12

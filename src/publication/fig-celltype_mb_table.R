@@ -104,7 +104,7 @@ df %>% write_csv(file.out)
 
 ### ES table for all genes (SOM)
 df.all_table <- get_annotation_es.table(sem_obj, annotations=filter.annotations, es_metric="es_mu")
-file.out <- "tables/table-es_mu_bmi_celltypes.csv.gz"
+file.out <- "tables/table-es_mu.mousebrain_bmi_celltypes.csv.gz"
 df.all_table %>% write_csv(file.out)
 
 

@@ -27,9 +27,9 @@ setwd(here("src/ldsc"))
 
 
 ### PARAMS
-dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "mousebrain_all"
 # dataset_prefix <- "tabula_muris"
-# dataset_prefix <- "campbell_lvl1"
+dataset_prefix <- "campbell_lvl1"
 # dataset_prefix <- "campbell_lvl2"
 
 genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)

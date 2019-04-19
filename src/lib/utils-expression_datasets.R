@@ -18,7 +18,48 @@ library(tidyverse)
 library(here)
 
 
+# ======================================================================= #
+# ============================== READ METADATA =============================== #
+# ======================================================================= #
 
+get_metadata <- function(dataset_prefix) {
+  ### DESCRIPTION: function to load expression meta-data
+  
+  if (dataset_prefix == "campbell_lvl1") {
+    file.metadata <- here("/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv")
+    df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl1)
+    df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
+  } else if (dataset_prefix == "campbell_lvl2") {
+    file.metadata <- here("/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv")
+    df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl2)
+    df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
+  } else if (dataset_prefix == "mousebrain_all") {
+    cols_metadata_keep <- c("ClusterName",
+                            "Class",
+                            "Description",
+                            "NCells",
+                            "Neurotransmitter",
+                            "Probable_location",
+                            "Region",
+                            "TaxonomyRank1",
+                            "TaxonomyRank2",
+                            "TaxonomyRank3",
+                            "TaxonomyRank4")
+    file.metadata <- here("/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv") # PT formatted/cleaned meta-data
+    # df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
+    df.metadata <-  suppressMessages(read_csv(file.metadata))
+    df.metadata <- df.metadata %>% mutate(color_by_variable = Class)
+  } else if (dataset_prefix == "tabula_muris") {
+    file.metadata <- here("/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv")
+    df.metadata <- suppressMessages(read_csv(file.metadata))
+    df.metadata <- df.metadata %>% mutate(annotation = tissue_celltype)
+    df.metadata <- df.metadata %>% mutate(color_by_variable = tissue)
+    df.metadata <- df.metadata %>% mutate(annotation = stringr::str_replace_all(annotation, pattern="\\s+", replacement="_"))
+  } else {
+    stop("wrong dataset_prefix")
+  }
+  return(df.metadata)
+}
 # ======================================================================= #
 # =============================== TM RENAME FUNCTION ================================= #
 # ======================================================================= #
@@ -103,47 +144,25 @@ utils.rename_annotations.campbell2015 <- function(annotation_ids, style, check_a
   stop("NOT IMPLEMENTED YET")
 }
 
-
 # ======================================================================= #
-# ============================== READ METADATA =============================== #
+# ========================= MOUSEBRAIN FUNCTION ===================== #
 # ======================================================================= #
 
-get_metadata <- function(dataset_prefix) {
-  ### DESCRIPTION: function to load expression meta-data
+
+get_annotations.mousebrain.hypothalamus <- function() {
+  print("Will fetch cell-types annotated with 'Hypothalamus' in Region")
+  df.metadata <- get_metadata("mousebrain_all")
   
-  if (dataset_prefix == "campbell_lvl1") {
-    file.metadata <- here("/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv")
-    df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl1)
-    df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
-  } else if (dataset_prefix == "campbell_lvl2") {
-    file.metadata <- here("/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv")
-    df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl2)
-    df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
-  } else if (dataset_prefix == "mousebrain_all") {
-    cols_metadata_keep <- c("ClusterName",
-                            "Class",
-                            "Description",
-                            "NCells",
-                            "Neurotransmitter",
-                            "Probable_location",
-                            "Region",
-                            "TaxonomyRank1",
-                            "TaxonomyRank2",
-                            "TaxonomyRank3",
-                            "TaxonomyRank4")
-    file.metadata <- here("/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv") # PT formatted/cleaned meta-data
-    # df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
-    df.metadata <- read_csv(file.metadata)
-    df.metadata <- df.metadata %>% mutate(color_by_variable = Class)
-  } else if (dataset_prefix == "tabula_muris") {
-    file.metadata <- here("/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv")
-    df.metadata <- read_csv(file.metadata)
-    df.metadata <- df.metadata %>% mutate(annotation = tissue_celltype)
-    df.metadata <- df.metadata %>% mutate(color_by_variable = tissue)
-    df.metadata <- df.metadata %>% mutate(annotation = stringr::str_replace_all(annotation, pattern="\\s+", replacement="_"))
-  } else {
-    stop("wrong dataset_prefix")
-  }
-  return(df.metadata)
+  df.mb_hypo <- df.metadata %>% filter(grepl("Hypothalamus", Region, ignore.case=TRUE))
+  ### ALTERNATIVE: Separate rows [also works and gives same result]
+  # df.mb_hypo <- df.metadata %>% 
+  #   separate_rows(Region, sep = ",") %>% 
+  #   mutate(Region = str_trim(Region, side="both")) %>% # trim any leading/trailing whitespace to avoid e.g. " Striatum ventral" and "Striatum ventral" being separate Regions.
+  #   filter(Region=="Hypothalamus")
+  #
+  stopifnot(length(unique(df.mb_hypo$annotation))==nrow(df.mb_hypo)) # ensure all annotations are unique
+  annotations.hypo <- df.mb_hypo %>% pull(annotation)
+  print(sprintf("Returning vector of n=%s annotations", length(annotations.hypo)))
+  return(annotations.hypo)
 }
 

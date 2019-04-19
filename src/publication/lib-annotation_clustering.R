@@ -13,10 +13,89 @@ library(ggraph) # 2019-02-19: CRAN only has ggraph_1.0.2 | use devtools::install
 # devtools::install_github('thomasp85/ggraph')
 library(tidygraph)
 
+library(RColorBrewer)
+
 
 # ======================================================================= #
 # ====================== [gggraph] plot dendrogram ==================== #
 # ======================================================================= #
+
+# ============= MB+CAMPBELL PLOT ==================== #
+# SIMILAR TO plot_es_dendrogram() but with the approximate following changes
+# - no "flag_priorized"  and highligthig
+# - increased text size
+# - added color label
+# base_family = 'Helvetica' to avoid ggsave problem
+plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
+  
+  # ====================== Get dataset-specific params (color mappings) ==================== #
+  sym_var.node_color <- sym("dataset")
+  sym_var.node_color_edge_elbow2 <- sym("node.dataset")
+  
+  ### Create color mapping for 'all nodes'
+  # [only needed because we manually want to set colors of annotations, and geom_node_text() and geom_node_point() use the same 'color scale']
+  colormap.nodes <- scales::hue_pal()(n_distinct(df.metadata %>% pull(!!sym_var.node_color))) # these are default ggplot colors
+  # colormap.nodes <- brewer.pal(name="Dark2", n=max(3,n_distinct(df.metadata %>% pull(!!sym_var.node_color)))) # these are default ggplot colors
+  names(colormap.nodes) <- sort(unique(df.metadata %>% pull(!!sym_var.node_color))) # we sort to ensure consistency of results
+
+  # ====================== make tidygraph ==================== #
+  gr <- as_tbl_graph(dend)
+  ### add meta-data
+  gr <- gr %>% 
+    activate(nodes) %>% 
+    left_join(df.metadata, by=c("label"="annotation")) # OK --> Warning message: Column `label`/`annotation` joining factor and character vector, coercing into character vector 
+
+  # ====================== Dendrogram ==================== #
+  ### REF rotate/angle geom_node_text for ggraph circular plot : https://stackoverflow.com/questions/43153004/how-to-read-a-text-label-in-ggraph-radial-graph
+  layout <- create_layout(gr, layout = "dendrogram", circular=circular) # circular
+  # head(as.tibble(layout)) # ---> contains x,y coordinates.
+  p <- ggraph(layout) + 
+    geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) + # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
+    geom_node_point(aes(color=!!sym_var.node_color), size=1) # color prioritized annotation leaf nodes points
+    ### Circular
+    ### The linear and circular plot only differ by their geom_node_text()
+    ### And coord_fixed()
+    if (circular) {
+      p <- p + geom_node_text(aes(filter=((leaf==TRUE)), # leaf node labels
+                                  color=!!sym_var.node_color, label=label,
+                                  x=x*1.05, y=y*1.05,
+                                  angle = -((-node_angle(x, y)+90)%%180)+90),
+                              hjust='outward',
+                              size=rel(1.2),
+                              show.legend=F)
+      p <- p + coord_fixed( # equal x and y axis scale is appropriate for circular plot
+        clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+      )
+    } else {
+      p <- p + 
+        geom_node_text(aes(filter=((leaf==TRUE)), # leaf node labels
+                           color=!!sym_var.node_color, label=label),
+                       size=rel(1.2), 
+                       angle=90, hjust=1, nudge_y=-0.2, 
+                       show.legend=F)
+      p <- p + coord_cartesian(
+        clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+      )
+    }
+  p <- p + 
+    ### Color nodes points by main figure colors
+    ### Apparently, geom_node_text() and geom_node_point() use the same scale_color_*, so the argument to values=X need to contain color mapping for both coloring
+    scale_color_manual(values=colormap.nodes) + 
+    ### Guides: don't display
+    guides(edge_color="none", node.color="none") + # node_color="none", node_color=guide_legend()
+    theme_graph(base_family = 'Helvetica') # base_family="Helvetica"
+  ### ^ REF: FIX ggsave() problem: https://github.com/thomasp85/ggraph/issues/152
+  # Error in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y,  : 
+  # invalid font type
+  # In addition: There were 50 or more warnings (use warnings() to see the first 50)
+  return(p)
+}
+
+
+
+
+# ====================== MOUSEBRAIN PLOT ==================== #
+
 plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
   
   # ====================== Get dataset-specific params (color mappings) ==================== #

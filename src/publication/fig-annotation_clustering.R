@@ -18,6 +18,7 @@
 library(tidyverse)
 library(here)
 
+library(corr)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 source(here("src/publication/lib-load_pub_lib_functions.R"))
@@ -87,13 +88,13 @@ plot(dend)
 ### Circular
 p.circular <- plot_es_dendrogram(dend, df.metadata, dataset_prefix, circular=TRUE)
 p.circular <- p.circular + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) all margin
-file.out <- sprintf("figs/fig_%s.dendrogram.circular.pdf", dataset_prefix)
+file.out <- sprintf("figs/fig_clustering.%s.dendrogram.circular.pdf", dataset_prefix)
 ggsave(plot=p.circular, filename=file.out, width=6, height=6)
 
 ### 'Linear'
 p.linear <- plot_es_dendrogram(dend, df.metadata, dataset_prefix, circular=FALSE)
 p.linear <- p.linear + theme(plot.margin = unit(c(1,1,4,1), "cm")) # (t, r, b, l) widen bottom margin
-file.out <- sprintf("figs/fig_%s.dendrogram.linear.pdf", dataset_prefix)
+file.out <- sprintf("figs/fig_clustering.%s.dendrogram.linear.pdf", dataset_prefix)
 ggsave(plot=p.linear, filename=file.out, width=9, height=4)
 
 # if (dataset_prefix == "mousebrain_all") {
@@ -130,18 +131,18 @@ plot_corrplot_selected <- function(){
 }
 
 ### All cell-types
-pdf(sprintf("figs/fig_%s.corrplot.hclust.pdf",dataset_prefix), width=15, height=15)
+pdf(sprintf("figs/fig_clustering.%s.corrplot.all.pdf",dataset_prefix), width=15, height=15)
 plot_corrplot_all()
 dev.off()
 
 ### Selected cell-types
 tmp.cor <- cor(df.es %>% select(one_of(filter.annotations), -gene), method="pearson")  # one_of(): variables in character vector. You need this when mixing unquoted names and character vector
-pdf(sprintf("figs/fig_%s.corrplot.mixed_hclust_priori_celltypes_only.pdf",dataset_prefix), width=15, height=15)
+pdf(sprintf("figs/fig_clustering.%s.corrplot.bmi_celltypes.pdf",dataset_prefix), width=15, height=15)
 plot_corrplot_selected()
 dev.off()
 
 ### COMBINING PLOTS
-pdf(sprintf("figs/fig_%s.corrplot.combined.pdf",dataset_prefix), width=15, height=15)
+pdf(sprintf("figs/fig_clustering.%s.corrplot.combined.pdf",dataset_prefix), width=15, height=15)
 par(mfrow=c(1,2), # mfrow=c(nrows, ncols)
     oma=c(2,7,7,2) # bottom, left, top, and right.
     ) 

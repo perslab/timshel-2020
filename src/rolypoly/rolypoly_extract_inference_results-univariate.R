@@ -128,13 +128,17 @@ add_annotations <- function(df, name.expr_data) {
   ### tryCatch to catch error if df.category does not exist
   df.category <- tryCatch({
     if (grepl("gtex", name.expr_data)) {
-      df.category <- df.category.gtex
+      #df.category <- df.category.gtex
+      df.category <- utils.rolypoly_get_data("gtex")
     } else if (grepl("maca", name.expr_data)) {
-      df.category <- df.category.maca
+      # df.category <- df.category.maca
+      df.category <- utils.rolypoly_get_data("maca")
     } else if (grepl("depict", name.expr_data)) {
-      df.category <- df.category.depict
+      # df.category <- df.category.depict
+      df.category <- utils.rolypoly_get_data("depict")
     } else if (grepl("mousebrain", name.expr_data)) {
-      df.category <- df.category.mousebrain
+      #df.category <- df.category.mousebrain
+      df.category <- utils.rolypoly_get_data("mousebrain")
     } else {
       stop("Got unexpected name for name.expr_data")
     }

@@ -44,6 +44,86 @@ library(viridis)
 
 
 # ==================================================================================== #
+# ================================ ES TABLES ================================ #
+# ==================================================================================== #
+
+get_annotation_es.top_n <- function(sem_obj, annotations, n_top_genes, es_metric) {
+  # returns data frame with top n ES genes for a given metric
+  # output data frame will have the column "es_genes_top_fmt"
+  ### DEV
+  # annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+  # n_top_genes <- 10
+  # es_metric <- "es_mu"
+  
+  .check_valid_es_metrics(es_metric)
+  stopifnot(length(es_metric)==1) # only one es metric allowed
+  
+  
+  list.res <- list()
+  for (annotation in annotations) {
+    print(sprintf("Fetching data for annotation = %s", annotation))
+    df.es <- get_es.annotation_centric(sem_obj, annotation=annotation) %>% # TODO: suppress print messages
+      filter(es_metric == (!!es_metric) ) # !!sym(es_metric) does not work here [Error: object 'es_mu' not found]. REF: https://github.com/tidyverse/dplyr/issues/3139
+    # gene            gene_name gene_idx_fixed es_metric es_weight gene_idx_sorted_within_metric
+    # <chr>           <chr>              <int> <chr>         <dbl>                         <int>
+    # 1 ENSG00000196344 ADH7                1319 es_mu         0.999                         15071
+    # 2 ENSG00000171540 OTP                 1322 es_mu         0.998                         15070
+    # 3 ENSG00000159723 AGRP                1895 es_mu         0.997                         15069
+    df.es <- df.es %>% arrange(desc(es_weight)) %>% slice(1:n_top_genes)
+    df.es <- df.es %>% select(gene, gene_name, es_weight)
+    list.res[[annotation]] <- df.es
+  }
+  df.res <- bind_rows(list.res, .id="annotation")
+  df.res <- df.res %>% 
+    group_by(annotation) %>%
+    arrange(desc(es_weight)) %>% 
+    mutate(es_genes_top_fmt = paste0(gene_name, collapse=", ")) %>% # genes are ordered by es_weight so they will appear in the correct order
+    ungroup()
+  # if (!return_full_results) {
+  #   df.res <- df.res %>% select(annotation, es_genes_top_fmt) %>% distinct()
+  # }
+  return(df.res)
+}
+
+get_annotation_es.table <- function(sem_obj, annotations, es_metric) {
+  # returns data frame: genes x annotation
+  ### DEV
+  # annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+  # n_top_genes <- 10
+  # es_metric <- "es_mu"
+  
+  .check_valid_es_metrics(es_metric)
+  stopifnot(length(es_metric)==1) # only one es metric allowed
+  
+  
+  list.res <- list()
+  for (annotation in annotations) {
+    print(sprintf("Fetching data for annotation = %s", annotation))
+    df.es <- get_es.annotation_centric(sem_obj, annotation=annotation) %>% # TODO: suppress print messages
+      filter(es_metric == (!!es_metric) ) # !!sym(es_metric) does not work here [Error: object 'es_mu' not found]. REF: https://github.com/tidyverse/dplyr/issues/3139
+    # gene            gene_name gene_idx_fixed es_metric es_weight gene_idx_sorted_within_metric
+    # <chr>           <chr>              <int> <chr>         <dbl>                         <int>
+    # 1 ENSG00000196344 ADH7                1319 es_mu         0.999                         15071
+    # 2 ENSG00000171540 OTP                 1322 es_mu         0.998                         15070
+    # 3 ENSG00000159723 AGRP                1895 es_mu         0.997                         15069
+    df.es <- df.es %>% select(gene, gene_name, es_weight)
+    list.res[[annotation]] <- df.es
+  }
+  df.res <- bind_rows(list.res, .id="annotation")
+  # annotation gene            gene_name es_weight
+  # 1 TEGLU23    ENSG00000141668 CBLN2         0    
+  # 2 TEGLU23    ENSG00000204624 DISP3         0.228
+  # 3 TEGLU23    ENSG00000187848 P2RX2         0    
+  df.res.spread <- df.res %>% spread(key="annotation", value="es_weight")
+  # gene            gene_name DEGLU4 DEGLU5  DEINH3 MEGLU1 MEGLU10 MEGLU11 MEINH2  TEGLU17 TEGLU23 TEGLU4 TEINH12
+  # 1 ENSG00000000003 TSPAN6     0     0      0        0       0       0     0      0        0       0       0     
+  # 2 ENSG00000000005 TNMD       0.501 0.390  0.127    0.881   0       0     0.495  0        0       0.857   0.105 
+  # 3 ENSG00000000457 SCYL3      0.102 0      0.00221  0       0       0     0.0304 0.168    0.254   0.0362  0     
+  return(df.res.spread)
+}
+
+
+# ==================================================================================== #
 # ================================ Annotation centric ================================ #
 # ==================================================================================== #
 ### Annotation centric: 
@@ -113,7 +193,7 @@ plot_es.annotation_centric <- function(df.es, genes_highlight) {
 }
 
 # ============================================================================== #
-# ================================ gene UTILS ================================ #
+# ================================ UTILS ================================ #
 # ============================================================================== #
 
 .get_genes_select_idx <- function(sem_obj, genes_select) {
@@ -134,6 +214,13 @@ plot_es.annotation_centric <- function(df.es, genes_highlight) {
   genes_match.names <- df.genes$gene_name[genes_match.idx] # extract after excluding NAs
   names(genes_match.idx) <- genes_match.names # set names
   return(genes_match.idx)
+}
+
+.check_valid_es_metrics <- function(es_metric) {
+  es_metrics_allowed <- c("expr_mean", "es_mu", "tstat", "ges", "si", "specificity")
+  if (!any(es_metric %in% es_metrics_allowed)) {
+    stop(sprintf("Argument for es_metric=%s did not match es_metrics_allowed: [%s]", es_metric, paste(es_metrics_allowed, collapse=", ")))
+  }
 }
 
 # ============================================================================== #
@@ -189,11 +276,9 @@ get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metri
   ### OBS: this function uses only sem_meta$mean datas
   # this function supports multiple genes (genes_select as vector)
   
-  es_metrics_allowed <- c("expr_mean", "es_mu", "tstat", "ges", "si", "specificity")
+  .check_valid_es_metrics(es_metric)
   stopifnot(length(es_metric)==1) # only one es metric allowed
-  if (!any(es_metric %in% es_metrics_allowed)) {
-    stop(sprintf("Argument for es_metric did not match es_metrics_allowed: [%s]", paste(es_metrics_allowed, collapse=", ")))
-  }
+
   
   ### Get matching genes
   genes_match.idx <- .get_genes_select_idx(sem_obj, genes_select)

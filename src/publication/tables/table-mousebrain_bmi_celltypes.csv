@@ -1,0 +1,16 @@
+p.value,annotation,Description,NCells,Neurotransmitter,Probable_location,Region,es_genes_top_fmt
+9.28934614171e-6,TEGLU23,"Excitatory neurons, hippocampus CA3",484,"Glutamate (VGLUT1)
+Nitric oxide",CA3,Hippocampus,"KRT2, SLC26A4, SLC9A4, CCBE1, TBATA, LPL, IYD, NEUROD6, PTGS2, CD109"
+1.10982885249e-5,DEINH3,"Inhibitory neurons, hypothalamus",323,GABA,Subthalamic nucleus,Hypothalamus,"LHX8, C12orf50, SPATA20, POU6F2, GPR139, SIX3, DLX6, LYPD6B, FLT3, ARX"
+1.9027591752e-5,MEGLU1,"Excitatory neurons, midbrain",263,Glutamate (VGLUT1),"Superior colliculus
+red nucleus",Midbrain,"PITX2, FOXD2, ONECUT3, POU4F2, SHOX2, TDRD5, NR5A2, TFAP2B, FOXA2, BARHL2"
+2.51563167433e-5,MEINH2,"Inhibitory neurons, midbrain",461,GABA,Midbrain,Midbrain,"PAX7, GATA3, TAL1, SOX14, DMBX1, TFAP2B, PAX5, AGMAT, SIX3, LHX5"
+2.90386097198e-5,DEGLU5,"Excitatory neurons, midbrain",426,Glutamate (VGLUT1),Anterior pretectal nucleus,Midbrain,"BHLHE23, C1QL4, TFAP2D, C1QL2, ESRRB, SHOX2, KCNJ5, TCF7L2, GALP, LHX9"
+3.25819977017e-5,MEGLU10,"Excitatory neurons, midbrain",419,"Glutamate (VGLUT1)
+Nitric oxide",Inferior colliculus,Midbrain,"TFAP2D, EN1, LHX9, BARHL1, SHOX2, DEFB1, POU4F2, TCF7L2, GLRA3, STK32B"
+4.71024943321e-5,TEGLU17,"Excitatory neurons, cerebral cortex",784,Glutamate (VGLUT1),Piriform pyramidal,Cortex,"TRIM54, UCN, IGFN1, PNMT, MAS1, ABI3BP, SLC30A3, PCSK9, KCNV1, ATP6AP1L"
+8.1096978232e-5,MEGLU11,"Excitatory neurons, midbrain",249,Glutamate (VGLUT1),Inferior colliculus,Midbrain,"TFAP2D, LHX9, EN1, SHOX2, KLHL41, DEFB1, PLA2G2F, OSTN, TNP1, TMEM215"
+1.18591162457e-4,TEGLU4,"Excitatory neurons, cerebral cortex",664,Glutamate (VGLUT1),"Cortex pyramidal layer 5
+Cingulate/Retrosplenial area (superficial and deep)",Cortex,"FEZF2, MAS1, NPR3, KCNG1, THPO, NOV, CCKBR, KCNJ4, ATP12A, KCNH3"
+1.4955140497e-4,DEGLU4,"Excitatory neurons, thalamus",101,Glutamate (VGLUT2),Parafascicular nucleus,Thalamus,"GCM2, CDX1, KCNJ5, EPHA1, FZD5, TNFSF4, LYPD6B, WNT9B, CTXN3, MEGF11"
+1.52326755697e-4,TEINH12,"Non-border Cck interneurons, cortex/hippocampus",280,"GABA,Glutamate (VGLUT3)","Hippocampus,Cortex",Hippocampus/Cortex,"KRT73, FREM1, SLC17A8, NPAS1, SP8, EGLN3, STK32B, TNFAIP8L3, ADARB2, EDARADD"

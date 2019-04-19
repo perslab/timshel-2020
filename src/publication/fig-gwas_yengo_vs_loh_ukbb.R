@@ -17,6 +17,7 @@
 library(tidyverse)
 library(here)
 
+library(ggpubr) 
 library(ggrepel)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
@@ -69,7 +70,7 @@ p <- ggplot(df.plot, aes(x=BMI_UKBB_Loh2018, y=BMI_UPDATE_Yengo2018)) +
   ) + 
   guides(color=F) +
   coord_fixed()
-
+p <- p + ggpubr::stat_cor(method = "pearson")
 p
 
 file.out <- "figs/fig-gwas.yengo_vs_loh.mousebrain.pdf"

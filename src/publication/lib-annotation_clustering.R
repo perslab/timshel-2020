@@ -49,45 +49,52 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
   ### REF rotate/angle geom_node_text for ggraph circular plot : https://stackoverflow.com/questions/43153004/how-to-read-a-text-label-in-ggraph-radial-graph
   layout <- create_layout(gr, layout = "dendrogram", circular=circular) # circular
   # head(as.tibble(layout)) # ---> contains x,y coordinates.
-  p <- ggraph(layout) + 
-    geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) + # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
-    geom_node_point(aes(color=!!sym_var.node_color), size=1) # color prioritized annotation leaf nodes points
-    ### Circular
-    ### The linear and circular plot only differ by their geom_node_text()
-    ### And coord_fixed()
-    if (circular) {
-      p <- p + geom_node_text(aes(filter=((leaf==TRUE)), # leaf node labels
-                                  color=!!sym_var.node_color, label=label,
-                                  x=x*1.05, y=y*1.05,
-                                  angle = -((-node_angle(x, y)+90)%%180)+90),
-                              hjust='outward',
-                              size=rel(1.2),
-                              show.legend=F)
-      p <- p + coord_fixed( # equal x and y axis scale is appropriate for circular plot
-        clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
-      )
-    } else {
-      p <- p + 
-        geom_node_text(aes(filter=((leaf==TRUE)), # leaf node labels
-                           color=!!sym_var.node_color, label=label),
-                       size=rel(1.2), 
-                       angle=90, hjust=1, nudge_y=-0.2, 
-                       show.legend=F)
-      p <- p + coord_cartesian(
-        clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
-      )
-    }
+  p <- ggraph(layout)
+  ### Circular
+  if (circular) {
+    p <- p + geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
+    p <- p + geom_node_text(aes(filter=(leaf==TRUE), # leaf node labels
+                                color=!!sym_var.node_color, label=label,
+                                x=x*1.05, y=y*1.05,
+                                angle = -((-node_angle(x, y)+90)%%180)+90),
+                            hjust='outward',
+                            size=rel(1.2),
+                            show.legend=F)
+    p <- p + coord_fixed( # equal x and y axis scale is appropriate for circular plot
+      clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+    )
+    p <- p + theme_graph(base_family="Helvetica")
+    p <- p + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) extra margins
+  } else { ### Linear
+    p <- p + geom_edge_elbow2(aes(y=node.height, color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
+    p <- p + geom_node_text(aes(filter=(leaf==TRUE), # leaf node labels
+                         color=!!sym_var.node_color, label=label),
+                     size=rel(1.2), 
+                     angle=90, hjust=1, nudge_y=-0.05, 
+                     show.legend=F)
+    p <- p + labs(y=expression(Distance~(rho)))
+    p <- p + coord_cartesian(clip="off", # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+                               ylim=c(0,max(layout$height)+0.1), # set y-limits. For some reason ggraph get's this completely wrong on its own...
+                               expand=F # don't add extra 'expansion'.
+                               ) 
+    ### ensure that annotation are placed some distance away from the y-axis.
+    n_leaf_nodes <- length(order.dendrogram(dend)) # stats::order.dendrogram: A vector with length equal to the number of leaves in the dendrogram is returned
+    p <- p + xlim(c(-1,n_leaf_nodes+1)) 
+    p <- p + theme_classic(base_family="Helvetica")
+    p <- p + theme(axis.line.x=element_blank(), # remove all x-axis 
+               axis.title.x=element_blank(),
+               axis.ticks.x=element_blank(),
+               axis.text.x=element_blank())
+    p  <- p  + theme(plot.margin = unit(c(1,1,4,1), "cm")) # (t, r, b, l) widen bottom margin
+  }
+  ### Add points (after drawing edges)
+  p <- p + geom_node_point(aes(filter=(leaf==TRUE), color=!!sym_var.node_color), size=1) # color prioritized annotation leaf nodes points
+  ### Guides
   p <- p + 
     ### Color nodes points by main figure colors
     ### Apparently, geom_node_text() and geom_node_point() use the same scale_color_*, so the argument to values=X need to contain color mapping for both coloring
     scale_color_manual(values=colormap.nodes) + 
-    ### Guides: don't display
-    guides(edge_color="none", node.color="none") + # node_color="none", node_color=guide_legend()
-    theme_graph(base_family = 'Helvetica') # base_family="Helvetica"
-  ### ^ REF: FIX ggsave() problem: https://github.com/thomasp85/ggraph/issues/152
-  # Error in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y,  : 
-  # invalid font type
-  # In addition: There were 50 or more warnings (use warnings() to see the first 50)
+    guides(edge_color="none", node.color="none") # node_color="none", node_color=guide_legend()
   return(p)
 }
 
@@ -140,16 +147,11 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
   ### REF rotate/angle geom_node_text for ggraph circular plot : https://stackoverflow.com/questions/43153004/how-to-read-a-text-label-in-ggraph-radial-graph
   layout <- create_layout(gr, layout = "dendrogram", circular=circular) # circular
   # head(as.tibble(layout)) # ---> contains x,y coordinates.
-  p <- ggraph(layout) + 
-    # geom_edge_elbow() + # draw all lines [don't use this with geom_edge_elbow2() as it will draw the same lines twice]
-    geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) + # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
-    geom_node_point(aes(filter=(flag_prioritized==TRUE), color=label), size=1.5) # color prioritized annotation leaf nodes points
-    # geom_node_point(aes(filter=(flag_prioritized==TRUE)), color="red") + # ALT: use this if you want to color prioritized annotations *red*
-    
+  p <- ggraph(layout)
   ### Circular
-  ### The linear and circular plot only differ by their geom_node_text()
-  ### And coord_fixed()
+  ### The linear and circular plot differ by: aes(y=node.height), geom_node_text() and coord_fixed()
   if (circular) {
+    p <- p + geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
     p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
                        color=!!sym_var.node_color, label=label,
                        x=x*1.05, y=y*1.05,
@@ -168,34 +170,78 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
     p <- p + coord_fixed( # equal x and y axis scale is appropriate for circular plot
       clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
     )
+    p <- p + theme_graph(base_family="Helvetica")
+    p <- p + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) extra margins
   } else {
-    p <- p + 
-      geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
-                              color=!!sym_var.node_color, label=label),
-                      size=rel(0.8), 
-                      angle=90, hjust=1, nudge_y=-0.2, 
-                      show.legend=F) +
-      geom_node_text(aes(filter=(flag_prioritized==TRUE), # leaf node labels, prioritized cell-types
-                             color=!!sym_var.node_color, label=label),
-                     size=rel(1), 
-                     angle=90, hjust=1, nudge_y=-0.2, 
-                     show.legend=F)
-    p <- p + coord_cartesian(
-      clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+    p <- p + geom_edge_elbow2(aes(y=node.height, color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
+    p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
+                                color=!!sym_var.node_color, label=label),
+                        size=rel(1),
+                        angle=90, hjust=1, nudge_y=-0.05,
+                        show.legend=F)
+    p <- p + geom_node_text(aes(filter=(flag_prioritized==TRUE), # leaf node labels, prioritized cell-types
+                               color=!!sym_var.node_color, label=label),
+                       size=rel(1.3),
+                       angle=90, hjust=1, nudge_y=-0.05,
+                       show.legend=F)
+    p <- p + labs(y=expression(Distance~(rho)))
+    p <- p + coord_cartesian(clip="off", # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+                             ylim=c(0,max(layout$height)+0.1), # set y-limits. For some reason ggraph get's this completely wrong on its own...
+                             expand=F # don't add extra 'expansion'.
     )
+    ### ensure that annotation are placed some distance away from the y-axis.
+    n_leaf_nodes <- length(order.dendrogram(dend)) # stats::order.dendrogram: A vector with length equal to the number of leaves in the dendrogram is returned
+    p <- p + xlim(c(-1,n_leaf_nodes+1)) 
+    # p <- p + scale_x_continuous(expand=expand_scale(add = 2, mult = c(4, .1)))
+    # p <- p + scale_x_discrete(expand=expand_scale(add = 2, mult = c(4, .1)))
+    # ^ ggraph does not respond do expand argument for scale_x_*() ---> MAYBE THIS IS BECAUSE coord_cartesian(expand=F) is set. 
+    # TODO: try setting: coord_cartesian(expand=T) + scale_y_continuous(expand=0).
+    # ^	Vector of range expansion constants used to add some padding around the data, to ensure that they are placed some distance away from the axes.  
+    # Default: c(0, 0.6) for discrete variables.
+    # Default: c(0.05, 0) for continuous variables
+    # ^ REF: https://stackoverflow.com/a/52922323/6639640
+    # ^ REF: https://ggplot2.tidyverse.org/reference/scale_discrete.html
+    p <- p + theme_classic(base_family="Helvetica")
+    p <- p + theme(axis.line.x=element_blank(), # remove all x-axis 
+                   axis.title.x=element_blank(),
+                   axis.ticks.x=element_blank(),
+                   axis.text.x=element_blank())
+    p  <- p  + theme(plot.margin = unit(c(1,1,4,1), "cm")) # (t, r, b, l) widen bottom margin
   }
+  ### Add points (after drawing edges)
+  p <- p + geom_node_point(aes(filter=((flag_prioritized==TRUE) & (leaf==TRUE)), color=label), size=1) # color prioritized annotation leaf nodes points
+  ### Guides
   p <- p + 
     ### Color nodes points by main figure colors
     ### Apparently, geom_node_text() and geom_node_point() use the same scale_color_*, so the argument to values=X need to contain color mapping for both coloring
     scale_color_manual(values=colormap.nodes, guide=FALSE) + 
-  ### Guides: don't display
     guides(node_color="none",
-           edge_color="none") + 
-    theme_graph() # base_family="Helvetica"
+           edge_color="none")
+  ### Potential errors:
+  ### ^ without base_family = 'Helvetica' REF: FIX ggsave() problem: https://github.com/thomasp85/ggraph/issues/152
+  # Error in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y,  : 
+  # invalid font type
+  # In addition: There were 50 or more warnings (use warnings() to see the first 50)
   return(p)
 }
 
-           
+
+### NON-CIRCULAR - BEFORE geom_edge_elbow2(aes(y=node.height,...)
+#   p <- p + 
+#     geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
+#                             color=!!sym_var.node_color, label=label),
+#                     size=rel(0.8), 
+#                     angle=90, hjust=1, nudge_y=-0.2, 
+#                     show.legend=F) +
+#     geom_node_text(aes(filter=(flag_prioritized==TRUE), # leaf node labels, prioritized cell-types
+#                            color=!!sym_var.node_color, label=label),
+#                    size=rel(1), 
+#                    angle=90, hjust=1, nudge_y=-0.2, 
+#                    show.legend=F)
+#   p <- p + coord_cartesian(
+#     clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+#   )
+# }
   
 
 # ======================================================================= #

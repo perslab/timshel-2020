@@ -91,27 +91,28 @@ cormat.es <- cor(df.es %>% select(-gene), method="pearson")
 ### Compute distances and hierarchical clustering
 # dd.eucledian <- dist(t(df.es %>% select(-gene)), method = "euclidean") # computes distances between the rows of a data matrix
 dd.corr <- as.dist(1-cormat.es)
-hc <- hclust(dd.corr, method = "ward.D2") # Hierarchical clustering 
+hc <- hclust(dd.corr, method = "average") # Hierarchical clustering 
+# single linkage = nearest neighbour. 
+# complete linkage = farthest neighbour
+# ward distance does not have easy interpretable dedrogram 'height' for correlation distances.
 dend <- as.dendrogram(hc) # Turn the object into a dendrogram.
+plot(dend)
 
 
 # ======================================================================= #
 # =========================== plot dendrogram =========================== #
 # ======================================================================= #
 
-# source(here("src/publication/lib-load_pub_lib_functions.R"))
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 
 ### 'Linear'
 p.linear <- plot_es_dendrogram.mb_campbell(dend, df.metadata.join, circular=FALSE)
-p.linear <- p.linear + theme(plot.margin = unit(c(1,1,4,1), "cm")) # (t, r, b, l) widen bottom margin
-p.linear
 file.out <- sprintf("figs/fig_clustering.%s.dendrogram.linear.pdf", dataset_prefix="integrated_campbell_mousebrain")
 ggsave(plot=p.linear, filename=file.out, width=9, height=4)
 
+
 # ### Circular
 # p.circular <- plot_es_dendrogram.mb_campbell(dend, df.metadata.join, circular=TRUE)
-# p.circular <- p.circular + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) all margin
-# p.circular
 # file.out <- sprintf("figs/fig_%s.dendrogram.circular.pdf", dataset_prefix="integrated_campbell_mousebrain")
 # ggsave(plot=p.circular, filename=file.out, width=6, height=6)
 

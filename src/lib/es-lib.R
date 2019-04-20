@@ -583,7 +583,13 @@ write_sems <- function(object, slot, dataset_prefix, dir_out) {
   stopifnot(slot %in% c("sem", "sem_transformed", "sem_meta"))
   print(sprintf("Writing slot=%s files for dataset_prefix=%s", slot, dataset_prefix))
   for (name.sem in names(object[[slot]])) {
-    file.out <- sprintf("%s/%s.%s.csv.gz", dir_out, dataset_prefix, name.sem)
+    file.suffix <- name.sem # default value
+    if (slot == "sem_transformed") {
+      file.suffix <- sprintf("es_ws.%s", name.sem)
+    } else if (slot == "sem") {
+      file.suffix <- sprintf("es_w.%s", name.sem)
+    }
+    file.out <- sprintf("%s/%s.%s.csv.gz", dir_out, dataset_prefix, file.suffix)
     print(sprintf("Writing file: %s", file.out))
     object[[slot]][[name.sem]] %>% mutate(gene=object[["genes"]]) %>% select(gene, everything()) %>% write_csv(path=file.out)
     # or use data.table::fwrite() and afterwards R.utils::gzip('filename.csv',destname='filename.csv.gz')

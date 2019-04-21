@@ -148,9 +148,9 @@ p.bar <- ggplot(df.barplot, aes(x=annotation, y=ESmu, fill=!!var_color_by)) +
   scale_y_continuous(expand=c(0, 0)) + 
   coord_cartesian(clip="off") + 
   theme_classic() + # 'base theme'
-  theme(axis.ticks.x = element_blank()) +
-  theme(axis.text.x = element_blank()) +
-  theme(axis.line.x = element_blank())
+  theme(axis.ticks.x = element_blank(), # wipe away all x-axis elements
+        axis.text.x = element_blank(),
+        axis.line.x = element_blank())
   # theme(axis.text.x= element_text(angle=75, hjust=1, size=rel(0.15))) # smaller x-axis labels
 p.bar <- p.bar + theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen margin
 p.bar

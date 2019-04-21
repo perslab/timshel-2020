@@ -19,7 +19,7 @@ library(here)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
-setwd(here("src/gene_set_enrichment"))
+setwd(here("src/geneset_enrichment"))
 
 # ======================================================================= #
 # =============================== LOAD DATA ============================== #
@@ -57,5 +57,6 @@ df.join <- bind_rows(list.bind, .id="dataset")
 # =============================== EXPORT DATA ============================== #
 # ======================================================================= #
 
-file.out <- here("results/es_enrichment--bmi_gene_lists.pvals.txt")
+file.out <- here("results/es_enrichment--bmi_gene_lists.pvals.csv")
 df.join %>% write_csv(file.out)
+

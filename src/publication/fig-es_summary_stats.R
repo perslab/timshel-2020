@@ -9,6 +9,7 @@
 
 ### REFERENCE:
 
+
 # ======================================================================= #
 # ================================ SETUP ================================ #
 # ======================================================================= #
@@ -16,26 +17,40 @@
 library(tidyverse)
 library(here)
 
+library(patchwork)
+
 source(here("src/lib/load_functions.R")) # load sc-genetics library
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 
 setwd(here("src/publication"))
 
-# ======================================================================= #
-# ============================ PARAMETERS =============================== #
-# ======================================================================= #
-
-### Tabula muris
-# dataset_prefix <- "tabula_muris"
-### Mousebrain
-dataset_prefix <- "mousebrain_all"
 
 # ======================================================================= #
-# =========================== LOAD DATA ========================= #
+# =========================== FUNCTIONS ========================= #
 # ======================================================================= #
 
-# load("/projects/timshel/sc-genetics/sc-genetics/src/GE-mousebrain/mousebrain.sem_obj.RData")
+# wrapper_get_n_es_genes_summary_stats <- function()
+
+
+# ======================================================================= #
+# ================================ PARAMS ============================== #
+# ======================================================================= #
+
+dataset_prefix <- "tabula_muris"
+var_color_by <- sym("tissue")
+
+# dataset_prefix <- "mousebrain_all"
+# var_color_by <- sym("Class")
+
+# ======================================================================= #
+# ================================ LOAD DATA ============================ #
+# ======================================================================= #
+
+load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
+
+# load(here("out/es/mousebrain_all.es_obj.RData"))
 # sem_obj.mb <- sem_obj
-# load("/projects/timshel/sc-genetics/sc-genetics/src/GE-maca/tabula_muris.sem_obj.RData")
+# load(here("out/es/tabula_muris.es_obj.RData"))
 # sem_obj.tm <- sem_obj
 
 
@@ -43,45 +58,131 @@ dataset_prefix <- "mousebrain_all"
 # =========================== Number of ES genes ========================= #
 # ======================================================================= #
 
-### Summary of number of ES genes
-df.summary <- get_empirical_pvalues_summary(sem_obj, threshold=0.05, slot="sem_pvalues")
-df.summary.stats <- sapply(df.summary %>% select(-annotation), summary) %>% # matrix with rownames from summary (Min., 1st Qu., Median, ..)
+### Summary of number of ES genes for each metric
+df.n_es <- get_empirical_pvalues_summary(sem_obj, threshold=0.05, slot="sem_pvalues")
+# annotation tstat   ges    si specificity
+# 1 ABC         2701  2477  1265        2351
+# 2 ACBG        1502  1056  2126        2170
+# 3 ACMB        2939  2126  2169        2588
+# 4 ACNT1       1721  1343  2414        3364
+
+### Calculate number of ES mu genes
+df.es_mu_genes <- sem_obj[["sem_meta"]][["mean"]] %>% 
+  gather(key="annotation", value="es_weight") %>% 
+  group_by(annotation) %>% 
+  summarise(es_mu = sum(es_weight>0)) %>%
+  ungroup()
+
+### Join
+df.n_es <- df.n_es %>% left_join(df.es_mu_genes, by="annotation")
+df.n_es
+
+### Rename
+vec.rename <- c(DET="tstat", GES="ges", EP="specificity", NSI="si", ESmu="es_mu")
+df.n_es <- df.n_es %>% rename(!!vec.rename)
+
+# ======================================================================= #
+# ============================ SUMMARIZE ============================= #
+# ======================================================================= #
+
+df.n_es.sum_stats <- sapply(df.n_es %>% select(-annotation), summary) %>% # matrix with rownames from summary (Min., 1st Qu., Median, ..)
   as.data.frame() %>%
   rownames_to_column(var="statistic") %>%
   as.tibble()
-df.summary.stats
-df.summary.stats %>% select(-statistic) %>% summarise_all(.funs=funs(ratio = max(.)/min(.))) # min/max ratio
+df.n_es.sum_stats
+# df.n_es.sum_stats %>% select(-statistic) %>% summarise_all(.funs=list(ratio ~max(.)/min(.))) # min/max ratio
 
 ### Example output
-# statistic tstat   ges    si specificity
-# 1 Min.       643   471   137         390 
-# 2 1st Qu.   1138   922.  526.        962.
-# 3 Median    1692  1476   817        1517 
-# 4 Mean      1940. 1687.  877.       1519.
-# 5 3rd Qu.   2526. 2265  1228.       1892.
-# 6 Max.      5178  4764  2010        3822 
+# statistic tstat   ges    si specificity es_mu
+# 1 Min.       567   320   127         412  1329 
+# 2 1st Qu.   2276  1497   440         803  2955 
+# 3 Median    3393  2702   672        1078  4020 
+# 4 Mean      3452. 3055.  963.       1348. 4119.
+# 5 3rd Qu.   4455  4436  1295        1780  5174 
+# 6 Max.      7160  7625  2796        3761  8147 
 
-### TODO: write out table
+# ======================================================================= #
+# ============================ EXPORT TABLE(S) ============================= #
+# ======================================================================= #
 
-# =============================================================================================== #
-# =============================== meta-SEM mean: counts per bin ================================= #
-# =============================================================================================== #
-# ***OBS*** this code is only valid for "binned" es objects
+### Write file
+file.out <- sprintf("tables/table-n_es_genes.%s.csv", dataset_prefix)
+df.n_es %>% write_csv(file.out)
 
-### meta-SEM mean: counts per bin
-# df.sem_meta.bin_counts <- sem_obj.hier.Class[["Neurons"]][["sem_meta"]][["mean"]] %>% gather(key="annotation", value="sem_meta_bin") %>% group_by(annotation) %>% count(sem_meta_bin)
-df.sem_meta.bin_counts <- sem_obj[["sem_meta"]][["mean"]] %>% gather(key="annotation", value="sem_meta_bin") %>% group_by(annotation) %>% count(sem_meta_bin)
-df.sem_meta.bin_counts <- df.sem_meta.bin_counts %>% filter(!sem_meta_bin == 0) # remove zero-bin
+file.out <- sprintf("tables/table-n_es_genes.%s.sum_stats.csv", dataset_prefix)
+df.n_es.sum_stats %>% write_csv(file.out)
 
-# plot: number of non-zero genes per cell-type (with meta-data) [*this is a nice plot*]
-df.sem_meta.bin_counts.summary <- df.sem_meta.bin_counts %>% 
-  group_by(annotation) %>% 
-  summarise(sum = sum(n)) %>% 
-  left_join(df.metadata, by=c("annotation"))
-df.sem_meta.bin_counts.summary %>% group_by(Class) %>% summarise(mean = mean(sum))
+# ======================================================================= #
+# =============================== BAR PLOT ================================== #
+# ======================================================================= #
 
-df.sem_meta.bin_counts.summary %>% 
-  ggplot(aes(x=annotation, y=sum, fill=Class)) + geom_col() + geom_hline(yintercept = mean(df.sem_meta.bin_counts.summary$sum), color="red") + labs(y="number of non-zero bin genes per cell-type")
+### Add meta-data
+df.metadata <- get_metadata(dataset_prefix)
+df.barplot <- df.n_es %>% left_join(df.metadata, by="annotation")
+
+### order annotations
+df.barplot <- df.barplot %>% arrange(!!var_color_by) %>% mutate(annotation=factor(annotation, levels=annotation))
+
+p.bar <- ggplot(df.barplot, aes(x=annotation, y=ESmu, fill=!!var_color_by)) +
+  geom_col() + 
+  geom_hline(yintercept=mean(df.barplot$ESmu), color="blue", linetype="dashed") +
+  geom_text(aes(label=annotation), angle=90, hjust=0, size=rel(1.5)) +
+  labs(x="Cell-type", y="Number of ES genes") + 
+  scale_y_continuous(expand=c(0, 0)) + 
+  coord_cartesian(clip="off") + 
+  theme_classic() + # 'base theme'
+  theme(axis.ticks.x = element_blank()) +
+  theme(axis.text.x = element_blank()) +
+  theme(axis.line.x = element_blank())
+  # theme(axis.text.x= element_text(angle=75, hjust=1, size=rel(0.15))) # smaller x-axis labels
+p.bar
+p.bar <- p.bar + theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen bottom margin
+p.bar
+
+file.out <- sprintf("figs/fig_n_es_genes.barplot.%s.pdf", dataset_prefix)
+ggsave(plot=p.bar, filename=file.out, width=10, height=5)
+
+# ======================================================================= #
+# =============================== HIST PLOT ================================== #
+# ======================================================================= #
+
+n_mean <- mean(df.barplot$ESmu)
+p.hist <- ggplot(df.barplot, aes(x=ESmu)) +
+  geom_histogram(color="black", fill="darkgray", alpha=0.8) + 
+  geom_vline(xintercept=n_mean, color="blue", linetype="dashed") + 
+  labs(x="Number of ES genes", y="Count") +
+  scale_y_continuous(expand=c(0, 0))
+
+p.hist.standalone <- p.hist + annotate("text",  x=n_mean, y = Inf, label=sprintf("mean=%s",round(n_mean)), vjust=3, hjust=-0.1, color="blue")
+p.hist.standalone
+file.out <- sprintf("figs/fig_n_es_genes.histogram.%s.pdf", dataset_prefix)
+ggsave(plot=p.hist.standalone, filename=file.out, width=10, height=5)
+
+
+y_limits <- layer_scales(p.bar)$y$range$range # get y-axis of barplot | REF: https://stackoverflow.com/a/35372274/6639640
+p.hist.mod <- p.hist +
+  annotate("text",  x=n_mean, y=0, label=sprintf("mean=%s",round(n_mean)), vjust=-0.5, hjust=-0.2, size=3, color="blue", fontface="bold") +
+  scale_x_continuous(expand=c(0, 0)) + 
+  theme(axis.title.y=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.line.y=element_blank()) +
+  coord_flip() + 
+  xlim(y_limits)
+p.hist.mod
+
+# ======================================================================= #
+# =============================== PATCHWORK ================================== #
+# ======================================================================= #
+
+p.patch <- (p.bar+theme(legend.position="left")) + 
+  p.hist.mod + 
+  plot_layout(nrow=1, widths=c(1, 0.2)) & theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen bottom margin
+p.patch
+
+file.out <- sprintf("figs/fig_n_es_genes.combined.%s.pdf", dataset_prefix)
+ggsave(plot=p.patch, filename=file.out, width=10, height=5)
+
 
 
 # ======================================================================= #

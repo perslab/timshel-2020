@@ -172,7 +172,7 @@ plot_es.annotation_centric <- function(df.es, genes_highlight) {
   ### rename
   df.es <- df.es %>% mutate(es_metric = case_when(
     es_metric == "es_mu" ~ expression(ES[mu]),
-    es_metric == "expr_mean" ~ "Mean expr",
+    es_metric == "expr_mean" ~ "Mean norm. expr.",
     es_metric == "ges" ~ "GES",
     es_metric == "specificity" ~ "EP",
     es_metric == "si" ~ "NSI",

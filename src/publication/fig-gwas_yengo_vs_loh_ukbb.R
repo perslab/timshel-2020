@@ -85,7 +85,7 @@ p <- p + ggpubr::stat_cor(method = "pearson")
 p <- p + facet_grid(~gwas_fmt) + theme(strip.background=element_blank(), strip.text=element_text(face="bold"))
 p 
 
-file.out <- "figs/fig-gwas.giant_vs_loh_bmi_results.mousebrain.pdf"
+file.out <- "figs/fig_gwas.giant_vs_loh_bmi_results.mousebrain.pdf"
 ggsave(plot=p, filename=file.out, width=10, height=6)
 
 
@@ -127,7 +127,7 @@ p <- ggplot(df.plot, aes(x=BMI_UKBB_Loh2018, y=BMI_UPDATE_Yengo2018)) +
 p <- p + ggpubr::stat_cor(method = "pearson")
 p
 
-file.out <- "figs/fig-gwas.yengo_vs_loh.mousebrain.pdf"
+file.out <- "figs/fig_gwas.yengo_vs_loh.mousebrain.pdf"
 ggsave(plot=p, filename=file.out, width=8, height=6)
 
 

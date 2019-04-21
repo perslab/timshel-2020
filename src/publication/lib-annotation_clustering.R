@@ -31,11 +31,16 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
   # ====================== Get dataset-specific params (color mappings) ==================== #
   sym_var.node_color <- sym("dataset")
   sym_var.node_color_edge_elbow2 <- sym("node.dataset")
+  n_color_categories <- n_distinct(df.metadata %>% pull(!!sym_var.node_color))
   
   ### Create color mapping for 'all nodes'
   # [only needed because we manually want to set colors of annotations, and geom_node_text() and geom_node_point() use the same 'color scale']
-  colormap.nodes <- scales::hue_pal()(n_distinct(df.metadata %>% pull(!!sym_var.node_color))) # these are default ggplot colors
-  # colormap.nodes <- brewer.pal(name="Dark2", n=max(3,n_distinct(df.metadata %>% pull(!!sym_var.node_color)))) # these are default ggplot colors
+  # colormap.nodes <- scales::hue_pal()(n_distinct(df.metadata %>% pull(!!sym_var.node_color))) # these are default ggplot colors
+  colormap.nodes <- brewer.pal(name="Set1", n=9) # n=9 max for Set1 | "Set2"/"Dark2" ok for colorblind
+  if (n_color_categories < length(n_color_categories)) {
+    stop(sprintf("Too few colors in current colormap for n=%s categories", n_color_categories))
+  }
+  colormap.nodes <- colormap.nodes[1:n_color_categories] # select the colors we need
   names(colormap.nodes) <- sort(unique(df.metadata %>% pull(!!sym_var.node_color))) # we sort to ensure consistency of results
 
   # ====================== make tidygraph ==================== #

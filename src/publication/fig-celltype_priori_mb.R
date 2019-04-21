@@ -101,105 +101,35 @@ df.ldsc_cts
 # ======================================================================= #
 
 ### Create 'plotting' data frame
-df.plot.tax_order <- df.ldsc_cts %>%filter(gwas == "BMI_UKBB_Loh2018")  # filter BMI results
+df.plot <- df.ldsc_cts %>% filter(gwas == "BMI_UKBB_Loh2018")  # filter BMI results
+
+### Add pvalue
+df.plot <- df.plot %>% mutate(p.value.mlog10 = -log10(p.value))
 
 ### Rename
-df.plot.tax_order <- df.plot.tax_order %>% mutate(Region = case_when(
+df.plot <- df.plot %>% mutate(Region = case_when(
   Region == "Midbrain dorsal" ~ "Midbrain",
   Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
   Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
   TRUE ~ as.character(Region))
 )
 
-### Create data frame with taxonomy text data
-df.tax_text_position <- df.plot.tax_order %>% 
-  group_by(TaxonomyRank4_reduced1) %>% 
-  summarize(n_annotations_in_tax=n()) %>% # count how many annotations in each tax
-  left_join(df.metadata %>% select(TaxonomyRank4_reduced1, tax_order_idx_mb_fig1c) %>% distinct(), by="TaxonomyRank4_reduced1") %>% # add 'tax_order_idx_mb_fig1c' to be able to sort factor correctly.
-    # ^ OBS: we use 'distinct()' because df.metadata contains (intentional) duplicated rows for some combinations of {TaxonomyRank4_reduced1, tax_order_idx_mb_fig1c}.
-  mutate(TaxonomyRank4_reduced1 = factor(TaxonomyRank4_reduced1, levels=TaxonomyRank4_reduced1[order(tax_order_idx_mb_fig1c)])) # IMPORTANT: order factor by the SAME ORDER as 'annotation' column is ordered by in df.plot.tax_order
-### Add information of the text's position in the plot
-df.tax_text_position <- df.tax_text_position %>% 
-  arrange(TaxonomyRank4_reduced1) %>%
-  mutate(pos_mid=cumsum(n_annotations_in_tax)-n_annotations_in_tax/2,
-         pos_start=cumsum(n_annotations_in_tax)-n_annotations_in_tax,
-         pos_end=cumsum(n_annotations_in_tax),
-         idx=1:n()) # idx is used for identifying every n'th tax
-df.tax_text_position <- df.tax_text_position %>% mutate(flag_draw_rect=if_else(idx %% 2 == 0, TRUE, FALSE)) 
 
-### Remove some text because they contain too few cell-types
-df.tax_text_position %>% arrange(n_annotations_in_tax) # ---> potentially filter : n_annotations_in_tax >= 5
-df.tax_text_position <- df.tax_text_position %>% mutate(TaxonomyRank4_reduced1 = case_when(
-  TaxonomyRank4_reduced1 == "Other CNS neurons" ~ "",
-  # TaxonomyRank4_reduced1 == "Other glia" ~ "",
-  TRUE ~ as.character(TaxonomyRank4_reduced1))
-)
+### Get tax text
+df.tax_text_position <- get_celltype_taxonomy_text_position.mb(df.metadata, df.plot)
 
+### PLOT
+p.main <- get_celltype_priori_base_tax_plot.mb(df.plot, df.tax_text_position)
+### add more data
+p.main <- p.main + geom_point(data=df.plot, aes(x=annotation, y=-log10(p.value)), color="gray")
+p.main <- p.main + geom_point(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region))
+p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5, show.legend=F)
+p.main <- p.main + scale_color_manual(values=colormap.region)
+p.main <- p.main + theme(legend.position="bottom")
+p.main
 
-### Colors
-n_colors <- 12
-display.brewer.pal(n = n_colors, name = 'Paired') # # View a single RColorBrewer palette by specifying its name
-brewer.pal(n = n_colors, name = "Paired") # # Hexadecimal color specification
-
-# colormap.region <- c("Cortex"="#1B9E77",
-#                      "Thalamus"="#D95F02",
-#                      "Midbrain"="#7570B3",
-#                      "Hypothalamus"="#E7298A",
-#                      "Hippocampus"="#66A61E",
-#                      "Hippocampus/Cortex"="#E6AB02")
-# colormap.region <- c("Cortex"="#1F78B4",
-#                      "Hippocampus/Cortex"="#A6CEE3",
-#                      "Hippocampus"="#33A02C",
-#                      "Thalamus"="#FDBF6F",
-#                      "Midbrain"="#FF7F00",
-#                      "Hypothalamus"="#E31A1C"
-#                      )
-# colormap.region <- c("Cortex"="#1F78B4",
-#                      "Hippocampus/Cortex"="#CAB2D6",
-#                      "Hippocampus"="#6A3D9A",
-#                      "Thalamus"="#B15928",
-#                      "Midbrain"="#FF7F00",
-#                      "Hypothalamus"="#E31A1C"
-# )
-
-colormap.region <- get_color_mapping.mb.region()
-
-fdr_threshold <- 0.05/nrow(df.plot.tax_order)
-p.main <- ggplot() +
-  ### add ggplot 'baselayer'. This makes our 'canvas' and needs to go first (for some reason I don't fully understand...)
-  geom_point(data=df.plot.tax_order, aes(x=annotation, y=-log10(p.value)), color="gray") +
-  ### add tax info and gray rects (add gray rect before the data points, so avoid them 'covering' the points)
-  geom_text(data=df.tax_text_position, aes(x=pos_mid, y=-0.5, label=TaxonomyRank4_reduced1), hjust="right", size=rel(3)) +
-  geom_rect(data=df.tax_text_position %>% filter(flag_draw_rect), aes(xmin=pos_start, xmax=pos_end, ymin=-3, ymax=Inf), color="gray", alpha=0.1) +
-  ### cell-types
-  geom_point(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region)) +
-  ggrepel::geom_text_repel(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5, show.legend=F) +
-  ### extra
-  geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
-  ### axes
-  labs(x="", y=expression(-log[10](P[S-LDSC]))) +
-  # coord
-  coord_flip(ylim = c( 0, max(-log10(df.plot.tax_order$p.value)) ), # This focuses the y-axis on the range of interest
-             clip = 'off') +   # This keeps the labels from disappearing 
-  # ^ clip = 'off': it allows drawing of data points anywhere on the plot, including in the plot margins. If limits are set via xlim and ylim and some data points fall outside those limits, then those data points may show up in places such as the axes, the legend, the plot title, or the plot margins.
-  # ^ clip = 'off': disable cliping so df.tax_text_position text annotation can be outside of plot | REF https://stackoverflow.com/a/51312611/6639640
-  ### guides
-  #...
-  ### color
-  scale_color_manual(values=colormap.region)  +
-  # scale_color_brewer(palette="Dark2") +
-  # scale_color_viridis_d() + # viridis ---> does not work well
-  ### theme
-  theme_classic() + 
-  theme(axis.text.y=element_text(size=rel(0.2))) + # REF: https://stackoverflow.com/a/47144823/6639640
-  theme(legend.position="bottom")
-### Add margin to plot if displaying it directly (without pathwork)
-p.main.margin <- p.main + theme(plot.margin = unit(c(1,1,1,10), "cm")) # (t, r, b, l) widen left margin
-p.main.margin
-
-# file.out <- sprintf("figs/fig_celltypepriori_mb.pdf")
-# ggsave(p, filename=file.out, width=9, height=8)
-
+file.out <- sprintf("figs/fig_celltypepriori.mb.pdf")
+ggsave(p.main, filename=file.out, width=9, height=8)
 
 
 # ======================================================================= #
@@ -217,7 +147,7 @@ set_h2_barplot()
 
 ### Make blank plot to funciton as a 'dummy margin plot'
 # REASON: SEE my notes on "Patchwork 'outer' margin issue"
-p.blank <- ggplot(df.plot.tax_order, aes(x=annotation, y=-log10(p.value))) + 
+p.blank <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) + 
   geom_blank() + 
   theme(panel.grid = element_blank(),axis.line = element_blank(),axis.title = element_blank(),axis.text = element_blank(),axis.ticks = element_blank(),panel.background = element_blank())
 
@@ -241,7 +171,7 @@ p.patch <-
 p.patch
 
 ### Save
-file.out <- sprintf("figs/fig_celltypepriori_mb_with_heatmap_and_barplot.pdf")
+file.out <- sprintf("figs/fig_celltypepriori.mb.with_heatmap_and_barplot.pdf")
 ggsave(p.patch, filename=file.out, width=12, height=10)
 
 
@@ -254,7 +184,7 @@ ggsave(p.patch, filename=file.out, width=12, height=10)
 # # ============================ CLASS annotation [WORKS] =============================== #
 # # ======================================================================= #
 # 
-# df.plot.anno_class <- df.plot.tax_order # copy (important to retain annotation factor order)
+# df.plot.anno_class <- df.plot # copy (important to retain annotation factor order)
 # ### Rename
 # df.plot.anno_class <- df.plot.anno_class %>% mutate(Class = case_when(
 #   Class == "Oligoes" ~ "Oligodendrocytes",
@@ -291,10 +221,34 @@ ggsave(p.patch, filename=file.out, width=12, height=10)
 # # ======================================================================= #
 # # ============================ COLORS =============================== #
 # # ======================================================================= #
-# display.brewer.all(colorblindFriendly = TRUE)
-# n_colors <- 6
-# display.brewer.pal(n = n_colors, name = 'Dark2') # # View a single RColorBrewer palette by specifying its name
-# brewer.pal(n = n_colors, name = "Dark2") # # Hexadecimal color specification
+
+
+### Colors
+# n_colors <- 12
+# display.brewer.pal(n = n_colors, name = 'Paired') # # View a single RColorBrewer palette by specifying its name
+# brewer.pal(n = n_colors, name = "Paired") # # Hexadecimal color specification
+
+# colormap.region <- c("Cortex"="#1B9E77",
+#                      "Thalamus"="#D95F02",
+#                      "Midbrain"="#7570B3",
+#                      "Hypothalamus"="#E7298A",
+#                      "Hippocampus"="#66A61E",
+#                      "Hippocampus/Cortex"="#E6AB02")
+# colormap.region <- c("Cortex"="#1F78B4",
+#                      "Hippocampus/Cortex"="#A6CEE3",
+#                      "Hippocampus"="#33A02C",
+#                      "Thalamus"="#FDBF6F",
+#                      "Midbrain"="#FF7F00",
+#                      "Hypothalamus"="#E31A1C"
+#                      )
+# colormap.region <- c("Cortex"="#1F78B4",
+#                      "Hippocampus/Cortex"="#CAB2D6",
+#                      "Hippocampus"="#6A3D9A",
+#                      "Thalamus"="#B15928",
+#                      "Midbrain"="#FF7F00",
+#                      "Hypothalamus"="#E31A1C"
+# )
+
 
 # ======================================================================= #
 # ============================ XXXXXXXXXX =============================== #

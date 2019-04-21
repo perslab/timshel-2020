@@ -256,3 +256,95 @@ set_h2_barplot <- function() {
 }
 
 
+
+
+
+
+# ======================================================================= #
+# ============================ MOUSEBRAIN UTILS ========================= #
+# ======================================================================= #
+
+
+# ============================ TAXONOMY TEXT ========================= #
+
+get_celltype_taxonomy_text_position.mb <- function(df.metadata, df.plot) {
+  ### INPUT: df.metadata with the columns
+  # - TaxonomyRank4_reduced1
+  # - tax_order_idx_mb_fig1c
+  ### df.plot is only parsed as an extra safety check that annotations will be ordered correctly on the plot
+  
+  order.as_is <- df.plot$annotation %>% levels()
+  order.as_should_be <- with(df.plot, annotation[order(tax_order_idx_mb_fig1c, as.character(annotation))])
+  
+  if (!all(order.as_is==order.as_should_be)) {
+    print("Annotations should be ordered by taxonomy (from MB Fig1c).")
+    print("This is how the df.plot should be ordered (secondary order by their annotation name not needed):")
+    print("df.plot <- df.plot %>% mutate(annotation=factor(annotation, levels=unique(annotation[order(tax_order_idx_mb_fig1c, as.character(annotation))])))")
+    stop("Error: df.plot annotation column is not ordered correctly by TaxonomyRank4_reduced1")
+  }
+  
+  ### Create data frame with taxonomy text data
+  df.tax_text_position <- df.metadata %>% 
+    group_by(TaxonomyRank4_reduced1) %>% 
+    summarize(n_annotations_in_tax=n()) %>% # count how many annotations in each tax
+    left_join(df.metadata %>% select(TaxonomyRank4_reduced1, tax_order_idx_mb_fig1c) %>% distinct(), by="TaxonomyRank4_reduced1") %>% # add 'tax_order_idx_mb_fig1c' to be able to sort factor correctly.
+    # ^ OBS: we use 'distinct()' because df.metadata contains (intentional) duplicated rows for some combinations of {TaxonomyRank4_reduced1, tax_order_idx_mb_fig1c}.
+    mutate(TaxonomyRank4_reduced1 = factor(TaxonomyRank4_reduced1, levels=TaxonomyRank4_reduced1[order(tax_order_idx_mb_fig1c)])) # IMPORTANT: order factor by the SAME ORDER as 'annotation' column is ordered by in df.plot
+  
+  ### Add information of the text's position in the plot
+  df.tax_text_position <- df.tax_text_position %>% 
+    arrange(TaxonomyRank4_reduced1) %>%
+    mutate(pos_mid=cumsum(n_annotations_in_tax)-n_annotations_in_tax/2,
+           pos_start=cumsum(n_annotations_in_tax)-n_annotations_in_tax,
+           pos_end=cumsum(n_annotations_in_tax),
+           idx=1:n()) # idx is used for identifying every n'th tax
+  df.tax_text_position <- df.tax_text_position %>% mutate(flag_draw_rect=if_else(idx %% 2 == 0, TRUE, FALSE)) 
+  
+  ### Remove some text because they contain too few cell-types
+  df.tax_text_position %>% arrange(n_annotations_in_tax) # ---> potentially filter : n_annotations_in_tax >= 5
+  df.tax_text_position <- df.tax_text_position %>% mutate(TaxonomyRank4_reduced1 = case_when(
+    TaxonomyRank4_reduced1 == "Other CNS neurons" ~ "",
+    # TaxonomyRank4_reduced1 == "Other glia" ~ "",
+    TRUE ~ as.character(TaxonomyRank4_reduced1))
+  )
+  # TaxonomyRank4_reduced1     n_annotations_in_tax tax_order_idx_mb_fig1c pos_mid pos_start pos_end   idx flag_draw_rect
+  # 1 Immune/Microglia                              5                      1     2.5         0       5     1 FALSE         
+  # 2 Vascular                                     10                      2    10           5      15     2 TRUE 
+  return(df.tax_text_position)
+}
+
+# ============================ TAXONOMY TEXT ========================= #
+get_celltype_priori_base_tax_plot.mb <- function(df.plot, df.tax_text_position) {
+  ### INPUT: df.plot should contain the following columns:
+  # annotation
+  # p.value.mlog10
+  fdr_threshold <- 0.05/nrow(df.plot)
+  p.main <- ggplot() +
+    ### add ggplot 'baselayer'. This makes our 'canvas' and needs to go first (for some reason I don't fully understand...)
+    geom_blank(data=df.plot, aes(x=annotation, y=p.value.mlog10)) +
+    ### add tax info and gray rects (add gray rect before the data points, so avoid them 'covering' the points)
+    geom_text(data=df.tax_text_position, aes(x=pos_mid, y=-0.5, label=TaxonomyRank4_reduced1), hjust="right", size=rel(3)) +
+    geom_rect(data=df.tax_text_position %>% filter(flag_draw_rect), aes(xmin=pos_start, xmax=pos_end, ymin=-3, ymax=Inf), color="gray", alpha=0.1) +
+    ### cell-types
+    geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
+    ### axes
+    labs(x="", y=expression(-log[10](P[S-LDSC]))) +
+    # coord
+    coord_flip(ylim = c( 0, max(df.plot$p.value.mlog10) ), # This focuses the y-axis on the range of interest
+               clip = 'off') +   # This keeps the labels from disappearing 
+    # ^ clip = 'off': it allows drawing of data points anywhere on the plot, including in the plot margins. If limits are set via xlim and ylim and some data points fall outside those limits, then those data points may show up in places such as the axes, the legend, the plot title, or the plot margins.
+    # ^ clip = 'off': disable cliping so df.tax_text_position text annotation can be outside of plot | REF https://stackoverflow.com/a/51312611/6639640
+    ### theme
+    theme_classic() + 
+    theme(axis.text.y=element_text(size=rel(0.2)),
+          axis.ticks.y=element_blank())
+  p.main <- p.main + theme(plot.margin = unit(c(1,1,1,10), "cm")) # (t, r, b, l) widen left margin
+  return(p.main)
+}
+
+
+
+
+
+
+

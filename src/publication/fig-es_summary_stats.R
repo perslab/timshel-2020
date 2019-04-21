@@ -36,11 +36,11 @@ setwd(here("src/publication"))
 # ================================ PARAMS ============================== #
 # ======================================================================= #
 
-# dataset_prefix <- "tabula_muris"
-# var_color_by <- sym("tissue")
+dataset_prefix <- "tabula_muris"
+var_color_by <- sym("tissue")
 
-dataset_prefix <- "mousebrain_all"
-var_color_by <- sym("Class")
+# dataset_prefix <- "mousebrain_all"
+# var_color_by <- sym("Class")
 
 # ======================================================================= #
 # ================================ LOAD DATA ============================ #
@@ -200,7 +200,8 @@ p.blank <- ggplot(tibble(x=seq(1,10), y=rep(1, 10))) + geom_blank()
 ### Patch
 p.patch <- p.blank + 
   ((p.bar+theme(legend.position="left")) + p.hist.mod + plot_layout(nrow=1, widths=c(1, 0.2))) +
-  plot_layout(ncol=1, heights=c(0.1, 1))
+  p.blank + 
+  plot_layout(ncol=1, heights=c(0.1, 1, 0.1))
 p.patch
 # & theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen margin --> does not work for pathwork
 

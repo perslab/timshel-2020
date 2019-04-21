@@ -174,7 +174,7 @@ p.main <- ggplot() +
   ### extra
   geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
   ### axes
-  labs(x="", y=expression(-log[10](P))) +
+  labs(x="", y=expression(-log[10](P[S-LDSC]))) +
   # coord
   coord_flip(ylim = c( 0, max(-log10(df.plot.tax_order$p.value)) ), # This focuses the y-axis on the range of interest
              clip = 'off') +   # This keeps the labels from disappearing 

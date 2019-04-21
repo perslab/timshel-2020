@@ -121,8 +121,7 @@ df.metadata <- get_metadata(dataset_prefix)
 df.barplot <- df.n_es %>% left_join(df.metadata, by="annotation")
 
 ### order annotations by var_color_by
-# factor_order <- df.barplot %>% pull(!!var_color_by) %>% unique() %>% sort() # unique sorted
-df.barplot <- df.barplot %>% mutate(!!var_color_by:=factor(!!var_color_by, levels=unique(!!var_color_by))) # this is not really needed now, but we use it later
+df.barplot <- df.barplot %>% mutate(!!var_color_by:=factor(!!var_color_by, levels=sort(unique(!!var_color_by)))) # this is not really needed now, but we use it later
 df.barplot <- df.barplot %>% 
   arrange(!!var_color_by) %>% # arrange() respect factor orders
   mutate(annotation=factor(annotation, levels=annotation))

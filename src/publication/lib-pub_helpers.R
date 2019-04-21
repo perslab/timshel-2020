@@ -32,6 +32,7 @@ library(here)
 
 reorder_factor_levels_to_first_last_pairs <- function(factor_levels) {
   ### reorder vector. works for input vectors of both equal and unequal lengths
+  ### this function is usefull for adding bigger contrast between neighboring colored categories.
   ### input
   # factor_levels: ordered factor levels (unique). The factor levels should be ordered in the same order as your x/y annotations are ordered
   ### output

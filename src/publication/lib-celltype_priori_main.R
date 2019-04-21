@@ -174,7 +174,7 @@ set_multi_gwas_heatmap_plot <- function(df.ldsc_cts) {
     # scale_fill_distiller(palette="Greys", direction=1, limits=c(0,1.8), na.value = "white") + # tau norm plot
     colorspace::scale_fill_continuous_sequential(palette="Blues 2", rev=TRUE, limits=c(0,5), oob=scales::squish, na.value = "white") + # "Blues 2","Blues 3","Purples 3"
     # ^ oob: Function that handles limits outside of the scale limits (out of bounds). scales::squish "squishes" values into the range specified by limits
-    labs(fill=expression(-log[10](P))) +
+    labs(fill=expression(-log[10](P[S-LDSC]))) +
     theme_minimal() + # set this first
     theme(panel.grid.major=element_blank(), 
           panel.grid.minor=element_blank()) + # remove grid

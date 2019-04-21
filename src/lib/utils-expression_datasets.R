@@ -31,7 +31,7 @@ get_metadata <- function(dataset_prefix) {
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
   } else if (dataset_prefix == "campbell_lvl2") {
     file.metadata <- here("/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv")
-    df.metadata <- read_csv(file.metadata) %>% rename(annotation = cell_type_all_lvl2)
+    df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl2)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
   } else if (dataset_prefix == "mousebrain_all") {
     cols_metadata_keep <- c("ClusterName",

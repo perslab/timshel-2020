@@ -100,6 +100,9 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
     ### Apparently, geom_node_text() and geom_node_point() use the same scale_color_*, so the argument to values=X need to contain color mapping for both coloring
     scale_color_manual(values=colormap.nodes) + 
     guides(edge_color="none", node.color="none") # node_color="none", node_color=guide_legend()
+  ### Legend
+  p <- p + 
+    theme(legend.position="top")
   return(p)
 }
 

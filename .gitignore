@@ -45,7 +45,8 @@ data
 ### This must come AFTER ignoring "results files" (e.g. .pdf)
 !/src/publication/*
 !/src/publication/**/*
-
+!/results/*
+!/results/**/*
 
 
 ################## TMP ##################

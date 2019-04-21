@@ -199,8 +199,8 @@ p.main <- p.main + guides(fill=F, color=F)
 p.main.margin <- p.main + theme(plot.margin = unit(c(1,1,1,5), "cm")) # (t, r, b, l) widen left margin
 p.main.margin
 
-# file.out <- sprintf("figs/fig_celltypepriori_tm.pdf")
-# ggsave(p.main.margin, filename=file.out, width=9, height=8)
+file.out <- sprintf("figs/fig_celltypepriori.tm.pdf")
+ggsave(p.main.margin, filename=file.out, width=9, height=8)
 
 
 # ======================================================================= #
@@ -249,7 +249,7 @@ p.patch <-
 p.patch
 
 ### Save
-file.out <- sprintf("figs/fig_celltypepriori_tm_with_heatmap_and_barplot.pdf")
+file.out <- sprintf("figs/fig_celltypepriori.tm.with_heatmap_and_barplot.pdf")
 ggsave(p.patch, filename=file.out, width=12, height=10)
 
 

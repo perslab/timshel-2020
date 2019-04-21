@@ -36,11 +36,11 @@ setwd(here("src/publication"))
 # ================================ PARAMS ============================== #
 # ======================================================================= #
 
-dataset_prefix <- "tabula_muris"
-var_color_by <- sym("tissue")
+# dataset_prefix <- "tabula_muris"
+# var_color_by <- sym("tissue")
 
-# dataset_prefix <- "mousebrain_all"
-# var_color_by <- sym("Class")
+dataset_prefix <- "mousebrain_all"
+var_color_by <- sym("Class")
 
 # ======================================================================= #
 # ================================ LOAD DATA ============================ #
@@ -120,14 +120,32 @@ df.n_es.sum_stats %>% write_csv(file.out)
 df.metadata <- get_metadata(dataset_prefix)
 df.barplot <- df.n_es %>% left_join(df.metadata, by="annotation")
 
-### order annotations
-df.barplot <- df.barplot %>% arrange(!!var_color_by) %>% mutate(annotation=factor(annotation, levels=annotation))
+### order annotations by var_color_by
+# factor_order <- df.barplot %>% pull(!!var_color_by) %>% unique() %>% sort() # unique sorted
+df.barplot <- df.barplot %>% mutate(!!var_color_by:=factor(!!var_color_by, levels=unique(!!var_color_by))) # this is not really needed now, but we use it later
+df.barplot <- df.barplot %>% 
+  arrange(!!var_color_by) %>% # arrange() respect factor orders
+  mutate(annotation=factor(annotation, levels=annotation))
+
+### Add var_color_by_fct_reorder variable: var_color_by ordered to "first last pairs"
+# ----> HERE THE LEGEND BECOMES IN THE SAME 'not nice' ORDER.
+# factor_levels <- df.barplot %>% pull(!!var_color_by) %>% levels() # levels are ordered in the same order as annotations are ordered
+# df.barplot <- df.barplot %>% mutate(var_color_by_fct_reorder=factor(!!var_color_by, levels=reorder_factor_levels_to_first_last_pairs(factor_levels)))
+# df.barplot$var_color_by_fct_reorder %>% levels()
+
+### Define color mapping
+###  supply specific ordered colors to scala_color_manual(), but that seems more difficult
+factor_levels <- df.barplot %>% pull(!!var_color_by) %>% levels() # levels are ordered in the same order as annotations are ordered
+colormap <- colorspace::qualitative_hcl(n=length(factor_levels), palette = "Dark 3")
+names(colormap) <- reorder_factor_levels_to_first_last_pairs(factor_levels)
+
 
 p.bar <- ggplot(df.barplot, aes(x=annotation, y=ESmu, fill=!!var_color_by)) +
   geom_col() + 
   geom_hline(yintercept=mean(df.barplot$ESmu), color="blue", linetype="dashed") +
   geom_text(aes(label=annotation), angle=90, hjust=0, size=rel(1.5)) +
   labs(x="Cell-type", y="Number of ES genes") + 
+  scale_fill_manual(values=colormap) + 
   scale_y_continuous(expand=c(0, 0)) + 
   coord_cartesian(clip="off") + 
   theme_classic() + # 'base theme'
@@ -135,8 +153,7 @@ p.bar <- ggplot(df.barplot, aes(x=annotation, y=ESmu, fill=!!var_color_by)) +
   theme(axis.text.x = element_blank()) +
   theme(axis.line.x = element_blank())
   # theme(axis.text.x= element_text(angle=75, hjust=1, size=rel(0.15))) # smaller x-axis labels
-p.bar
-p.bar <- p.bar + theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen bottom margin
+p.bar <- p.bar + theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen margin
 p.bar
 
 file.out <- sprintf("figs/fig_n_es_genes.barplot.%s.pdf", dataset_prefix)
@@ -175,13 +192,24 @@ p.hist.mod
 # =============================== PATCHWORK ================================== #
 # ======================================================================= #
 
-p.patch <- (p.bar+theme(legend.position="left")) + 
-  p.hist.mod + 
-  plot_layout(nrow=1, widths=c(1, 0.2)) & theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen bottom margin
-p.patch
+### Make blank plot
+# REASON: SEE my notes on "Patchwork 'outer' margin issue"
+p.blank <- ggplot(tibble(x=seq(1,10), y=rep(1, 10))) + geom_blank()
 
+
+### Patch
+p.patch <- p.blank + 
+  ((p.bar+theme(legend.position="left")) + p.hist.mod + plot_layout(nrow=1, widths=c(1, 0.2))) +
+  plot_layout(ncol=1, heights=c(0.1, 1))
+p.patch
+# & theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen margin --> does not work for pathwork
+
+### Save
 file.out <- sprintf("figs/fig_n_es_genes.combined.%s.pdf", dataset_prefix)
 ggsave(plot=p.patch, filename=file.out, width=10, height=5)
+
+### Here we order the factor levels of the "var_color_by" to be able to give them different colors.
+# NB: we are not reordering annotation levels.
 
 
 

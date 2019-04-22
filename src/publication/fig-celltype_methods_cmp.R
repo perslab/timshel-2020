@@ -70,6 +70,44 @@ df.export <- df %>% spread(key="method", value="pval")
 file.out <- sprintf("tables/table_celltype_priori_method_comparison.mousebrain.pvals.csv")
 # df.export %>% write_csv(file.out)
 
+
+# ======================================================================= #
+# ================================ PLOT SCATTERPLOT ================================ #
+# ======================================================================= #
+
+df.plot <- df %>% 
+  mutate(pval = -log10(pval)) %>%
+  spread(key="method", value="pval")
+df.plot
+
+### Cell-types to highlight
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+colormap.annotations <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
+
+### PLOT
+fdr_threshold.mlog10 <- -log10(0.05/nrow(df.plot))
+p <- ggplot(df.plot, aes(x=ldsc, y=magma)) + 
+  geom_point(color="gray") + 
+  ### Lines
+  geom_abline() + 
+  geom_hline(yintercept=fdr_threshold.mlog10, linetype="dashed", color="gray") +
+  geom_vline(xintercept=fdr_threshold.mlog10, linetype="dashed", color="gray") +
+  ### MAGMA FDR
+  geom_point(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), color="black", size=3) +
+  geom_text_repel(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), aes(label=annotation), color="black") + 
+  # LDSC FDR
+  geom_point(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(color=annotation), size=3) +
+  geom_text_repel(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(label=annotation, color=annotation)) + 
+  labs(x=expression(-log[10](P[S-LDSC])), y=expression(-log[10](P[MAGMA]))) + 
+  scale_color_manual(values=colormap.annotations) + 
+  guides(color=F) + 
+  ggpubr::stat_cor(method="pearson")
+p
+
+file.out <- "figs/fig_celltypepriori_method_comparison.mb_fdr_scatter.pdf"
+ggsave(plot=p, filename=file.out, width=8, height=5)
+
+
 # ======================================================================= #
 # ================================ PLOT BARPLOT ================================ #
 # ======================================================================= #

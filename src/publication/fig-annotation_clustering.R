@@ -86,7 +86,7 @@ plot(dend)
 # ====================== [gggraph] plot dendrogram ==================== #
 # ======================================================================= #
 
-source(here("src/publication/lib-load_pub_lib_functions.R"))
+# source(here("src/publication/lib-load_pub_lib_functions.R"))
 
 ### Circular
 p.circular <- plot_es_dendrogram(dend, df.metadata, dataset_prefix, circular=TRUE)

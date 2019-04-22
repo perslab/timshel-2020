@@ -51,13 +51,11 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
     left_join(df.metadata, by=c("label"="annotation")) # OK --> Warning message: Column `label`/`annotation` joining factor and character vector, coercing into character vector 
 
   # ====================== Dendrogram ==================== #
-  ### REF rotate/angle geom_node_text for ggraph circular plot : https://stackoverflow.com/questions/43153004/how-to-read-a-text-label-in-ggraph-radial-graph
-  layout <- create_layout(gr, layout = "dendrogram", circular=circular) # circular
-  # head(as.tibble(layout)) # ---> contains x,y coordinates.
+  layout <- create_layout(gr, layout = "dendrogram", height=height, circular=circular) # circular
   p <- ggraph(layout)
+  p <- p + geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) 
   ### Circular
   if (circular) {
-    p <- p + geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
     p <- p + geom_node_text(aes(filter=(leaf==TRUE), # leaf node labels
                                 color=!!sym_var.node_color, label=label,
                                 x=x*1.05, y=y*1.05,
@@ -65,22 +63,21 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
                             hjust='outward',
                             size=rel(1.2),
                             show.legend=F)
-    p <- p + coord_fixed( # equal x and y axis scale is appropriate for circular plot
-      clip = 'off' # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
+    p <- p + coord_fixed( 
+      clip = 'off'
     )
     p <- p + theme_graph(base_family="Helvetica")
     p <- p + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) extra margins
   } else { ### Linear
-    p <- p + geom_edge_elbow2(aes(y=node.height, color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
     p <- p + geom_node_text(aes(filter=(leaf==TRUE), # leaf node labels
                          color=!!sym_var.node_color, label=label),
                      size=rel(1.2), 
                      angle=90, hjust=1, nudge_y=-0.05, 
                      show.legend=F)
     p <- p + labs(y=expression(Distance~(rho)))
-    p <- p + coord_cartesian(clip="off", # This keeps the labels from disappearing. It allows drawing of data points anywhere on the plot, including in the plot margins.
-                               ylim=c(0,max(layout$height)+0.1), # set y-limits. For some reason ggraph get's this completely wrong on its own...
-                               expand=F # don't add extra 'expansion'.
+    p <- p + coord_cartesian(clip="off", 
+                               ylim=c(0,max(layout$height)+0.1), 
+                               expand=F 
                                ) 
     ### ensure that annotation are placed some distance away from the y-axis.
     n_leaf_nodes <- length(order.dendrogram(dend)) # stats::order.dendrogram: A vector with length equal to the number of leaves in the dendrogram is returned
@@ -153,13 +150,14 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
   
   # ====================== Dendrogram ==================== #
   ### REF rotate/angle geom_node_text for ggraph circular plot : https://stackoverflow.com/questions/43153004/how-to-read-a-text-label-in-ggraph-radial-graph
-  layout <- create_layout(gr, layout = "dendrogram", circular=circular) # circular
+  ### FIX HEIGHT issues: ggraph(dend, layout = 'dendrogram', height = height) | REF: https://github.com/thomasp85/ggraph/issues/175 
+  layout <- create_layout(gr, layout = "dendrogram", height=height, circular=circular) # circular
   # head(as.tibble(layout)) # ---> contains x,y coordinates.
   p <- ggraph(layout)
+  p <- p + geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
   ### Circular
   ### The linear and circular plot differ by: aes(y=node.height), geom_node_text() and coord_fixed()
   if (circular) {
-    p <- p + geom_edge_elbow2(aes(color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
     p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
                        color=!!sym_var.node_color, label=label,
                        x=x*1.05, y=y*1.05,
@@ -181,7 +179,7 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
     p <- p + theme_graph(base_family="Helvetica")
     p <- p + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) extra margins
   } else {
-    p <- p + geom_edge_elbow2(aes(y=node.height, color=!!sym_var.node_color_edge_elbow2)) # draw all lines | color 'leaf edges' | REF: see under "2-variant" | https://www.data-imaginist.com/2017/ggraph-introduction-edges/
+    # p <- p + geom_edge_elbow2(aes(y=node.height, color=!!sym_var.node_color_edge_elbow2)) # gives correct height if 'height' is not set in ggraph
     p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
                                 color=!!sym_var.node_color, label=label),
                         size=rel(1),

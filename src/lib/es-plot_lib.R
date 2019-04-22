@@ -273,7 +273,6 @@ get_es.gene_centric.all_es_metrics <- function(sem_obj, genes_select) {
 
 
 get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metric) {
-  ### OBS: this function uses only sem_meta$mean datas
   # this function supports multiple genes (genes_select as vector)
   
   .check_valid_es_metrics(es_metric)

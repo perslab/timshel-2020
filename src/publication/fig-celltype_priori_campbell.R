@@ -47,7 +47,8 @@ df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation")
 vector_rename <- c("n03"="n03.Th/Sst",
                    "n07"="n07.Arx/Nr5a2",
                    "n08"="n08.Th/Slc6a3",
-                   "n27"="n27.Tbx19")
+                   "n27"="n27.Tbx19",
+                   "n29.Nr5a1-Adcyap1"="n29.Nr5a1/Bdnf")
 df.ldsc_cts <- df.ldsc_cts %>% mutate(annotation=recode(annotation, !!!vector_rename))
 
 ### Make new 'clean name' annotation 

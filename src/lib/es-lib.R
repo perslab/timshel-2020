@@ -1041,6 +1041,41 @@ get_empirical_pvalues_summary <- function(object, threshold, slot="sem_pvalues")
   return(df.summary)
 }
 
+get_es_w_threshold <- function(object, threshold_pval=0.05) {
+  ### Get the minimal "empirical significant" ESw for each annotation and es metric.
+  
+  ### DEV
+  # object <- sem_obj
+  # sem_name <- "si"
+  # threshold_pval <- 0.05
+  # list.res <- list()
+  
+  if (is.null(object[["sem"]]) | is.null(object[["sem_pvalues"]]) ) { # ensure that slots exists
+    stop("Object has no sem or sem_pvalues slot. Calculate them before running this function")
+  }
+  for (sem_name in names(object[["sem"]])) {
+    df.sem <- as.data.frame(object[["sem"]][[sem_name]]) # make a data frame of ESw values so we can use [[]] indexing. *OBS*: inefficient to copy data, but damn it for now.
+    df.sem[object[["sem_pvalues"]][[sem_name]] > threshold_pval] <- NA # set ESw values above threshold_pval to NA so we can later find the minimum value
+    list.res[[sem_name]] <- apply(df.sem, 2, min, na.rm=T) # apply to each column
+    # enframe(apply(df.sem, 2, min, na.rm=T))
+    # name                                  value
+    # 1 Bladder.bladder_cell                  0.761
+    # 2 Bladder.bladder_urothelial_cell       0.761
+    # enframe() converts named atomic vectors or lists to one- or two-column data frames
+  }
+  df <- bind_cols(list.res)
+  # A tibble: 115 x 4
+  # tstat   ges    si specificity
+  # 1.88  1.76 0.761      0.0131
+  # 1.93  1.81 0.761      0.0132
+  df <- df %>% mutate(annotation=object[["annotations"]])
+  # tstat   ges    si specificity annotation                           
+  # 1  1.88  1.76 0.761      0.0131 Bladder.bladder_cell                 
+  # 2  1.93  1.81 0.761      0.0132 Bladder.bladder_urothelial_cell  
+  return(df)
+}
+
+
 transform_sems <- function(object, method, n_bins=101, threshold_pval=0.05) {
   ### Function sets the slot 'sem_transformed' containing binned data for each of the sems in the 'sem' slot
   # 

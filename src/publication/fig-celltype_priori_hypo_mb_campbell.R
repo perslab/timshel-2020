@@ -113,7 +113,10 @@ tmp.split_str <- str_split(df.ldsc_cts$annotation, pattern="\\.") # list
 df.ldsc_cts <- df.ldsc_cts %>% mutate(annotation_clean=tmp.split_str %>% purrr::map_chr(1))
 ### Add text column
 df.ldsc_cts <- df.ldsc_cts %>% mutate(text=tmp.split_str %>% purrr::map_chr(2))
-df.ldsc_cts <- df.ldsc_cts %>% mutate(text=str_replace_all(text,"-", "\\"))
+df.ldsc_cts <- df.ldsc_cts %>% mutate(text=str_replace_all(text,"-", "/")) # replace "-" with forwardslash ("/")
+df.ldsc_cts <- df.ldsc_cts %>% mutate(text=str_replace_all(text,"_", " "))
+# df.ldsc_cts <- df.ldsc_cts %>% mutate(text=str_replace_all(text,"-", "\\\\")) # replace "-" with backslash ("\") [yes it is a little insane] | REF: https://github.com/STAT545-UBC/Discussion/issues/394
+
 
 
 ### Rename Neuron to Neurons to match with mousebrain
@@ -276,7 +279,7 @@ p.patch <- p.dendro + p.priori + plot_spacer() + plot_layout(nrow=1, widths=c(0.
 p.patch
 
 file.out <- "figs/fig_celltypepriori.integrated_mb_campbell.priori_with_dendrogram.pdf"
-ggsave(plot=p.patch, filename=file.out, width=8, height=8)
+ggsave(plot=p.patch, filename=file.out, width=11, height=8)
 
 
 ### [OK DELETE] Debug alingment of plots:

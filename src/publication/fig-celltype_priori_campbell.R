@@ -55,8 +55,8 @@ tmp.split_str <- str_split(df.ldsc_cts$annotation, pattern="\\.") # list
 df.ldsc_cts <- df.ldsc_cts %>% mutate(annotation_clean=tmp.split_str %>% purrr::map_chr(1))
 ### Add text column
 df.ldsc_cts <- df.ldsc_cts %>% mutate(text=tmp.split_str %>% purrr::map_chr(2))
-df.ldsc_cts <- df.ldsc_cts %>% mutate(text=str_replace_all(text,"-", "\\"))
-
+df.ldsc_cts <- df.ldsc_cts %>% mutate(text=str_replace_all(text,"-", "/")) # replace "-" with forwardslash ("/")
+df.ldsc_cts <- df.ldsc_cts %>% mutate(text=str_replace_all(text,"_", " "))
 
 ### Clean taxonomy 
 df.ldsc_cts <- df.ldsc_cts %>% mutate(taxonomy_lvl2=str_replace_all(taxonomy_lvl2, "_", " "))

@@ -58,10 +58,6 @@ sem_obj.tm <- sem_obj
 # ======================== EXTRACT AND PROCESS DATA ===================== #
 # ======================================================================= #
 
-# annotation <- "Pancreas.pancreatic A cell" # GCG
-# gene_highlight <- "GCG"
-# # "Pancreatic Alpha-cells (glucagon+)"
-
 ### Get data
 df.es.mb_agrp <- get_es.annotation_centric(sem_obj.mb, annotation="DEINH6")
 df.es.mb_msn <- get_es.annotation_centric(sem_obj.mb, annotation="MSN3") # or MSN2, MSN4
@@ -97,139 +93,124 @@ rename_vector <- newnames; names(rename_vector) <- tmp_vector
 df.es <- df.es %>% mutate(es_metric_fmt = recode_factor(es_metric, !!!rename_vector)) # Use a named character vector to recode factors with unquote splicing. | REF: https://dplyr.tidyverse.org/reference/recode.html
 
 ### Rename + order annotation
-order.annotations <- rev(c("Hypothalamus\nArgp+ cells"="mb_agrp", "Striatum\nMedium Spiny Neurons"="mb_msn", "Liver\nHepatocytes"="tm_hepato", "Pancreas\nAlpha-cells"="tm_alpha"))
+order.annotations <- rev(c("Hypothalamus\nArgp+ neurons"="mb_agrp", "Striatum\nMedium spiny neurons"="mb_msn", "Liver\nHepatocytes"="tm_hepato", "Pancreas\nAlpha-cells"="tm_alpha"))
 tmp_vector <- order.annotations # convenience selector. If you want a specific order of the result, this vector should contain (unique) ordered values
 newnames <- names(order.annotations)
 rename_vector <- newnames; names(rename_vector) <- tmp_vector
 df.es <- df.es %>% mutate(annotation_fmt = recode_factor(annotation, !!!rename_vector)) # Use a named character vector to recode factors with unquote splicing. | REF: https://dplyr.tidyverse.org/reference/recode.html
-df.es
+
+
+
 # ======================================================================= #
-# ============================ geom_density_ridges ========================= #
+# ============================ GET ESw thresholds ========================= #
 # ======================================================================= #
 
+df.es_threshold.mb <- get_es_w_threshold(sem_obj.mb, threshold_pval=0.05)
+df.es_threshold.tm <- get_es_w_threshold(sem_obj.tm, threshold_pval=0.05)
+df.es_threshold <- bind_rows(df.es_threshold.mb, df.es_threshold.tm) # ok to bind because annotation are unique
 
-# ============================ TODO ========================= #
-### write function to get 'ES gene' threshold for each ES metric (tstat, ges, si, specificity).
-# --> this will be used for fill coloring of density.
-### ADD SEGMENT FOR "ES GENE THRESHOLD"
+# ======================================================================= #
+# ========================== PLOT geom_density_ridges =================== #
+# ======================================================================= #
 
-### [OK] CHANGE AGRP SEGMENT TO A POINT
-### [OK] ADD GCG AS FACET WRAP
-###### LAYOUT
-### [OK] Rename before faceting
-### [*NOW*] plot "ESmu plot" with highlighted cell-types
-### make patchwork
-
-# ============================ facet_wrap ========================= #
+### Pre-process
 df.plot <- df.es
 df.plot <- df.plot %>% filter(es_weight > 0)
 df.plot.genes_select <- df.plot %>% filter(dataset=="mb" & gene_name %in% c("AGRP", "DRD2") |
                                            dataset=="tm" & gene_name %in% c("GCG", "APOA2")
-                                           )
-# "RBFOX3" "FOS" "JUN"
+                                           ) # "RBFOX3" "FOS" "JUN"
+
+
+### Define gene color mapping
+factor_levels <- unique(df.plot.genes_select$gene_name)
+colormap <- colorspace::qualitative_hcl(n=length(factor_levels), palette = "Dark 3")
+names(colormap) <- factor_levels
+
+### LOG-scale
 p <- ggplot(df.plot) + 
-  geom_density_ridges(aes(x=es_weight_log, y=es_metric_fmt), color="white", alpha=0.6) +
-  geom_point(data=df.plot.genes_select, aes(x=es_weight_log, y=as.numeric(as.factor(es_metric_fmt)),
+  geom_density_ridges(aes(x=es_weight, y=es_metric_fmt), color="white", alpha=0.6) +
+  geom_point(data=df.plot.genes_select, aes(x=es_weight, y=as.numeric(as.factor(es_metric_fmt)),
                                             color=gene_name)) +
-  # scale_x_continuous(limits=c(-1,2), expand = c(0.01, 0)) + 
+  scale_x_continuous(trans=scales::log10_trans(), # same as "log10"
+                     breaks = c(1e-4, 1e-2, 1, 1e2, 1e4),
+                     # breaks = scales::trans_breaks("log10", function(x){10^x}),
+                     labels = scales::trans_format("identity", function(x){formatC(x, format="fg", big.mark=",")})
+                     # ^ scales::trans_format: nice formated y-labels ala 1, 100, 1,000, 100,000 
+                     # labels = scales::trans_format("log10", scales::math_format(10^.x))
+                     ) + 
   labs(x=expression(Gene~ES[w]), y="ES metric", color="Gene") + 
-  theme_ridges() + 
+  scale_color_manual(values=colormap) + 
   facet_wrap(~annotation_fmt, nrow=1) +
-  theme(strip.background=element_blank())
-  
+  theme_classic() + 
+  # theme_ridges() + 
+  theme(strip.background=element_blank()) + 
+  theme(axis.line.y=element_blank(),
+        axis.ticks.y=element_blank())
+
 p
 
+file.out <- "figs/fig_es_conceptual.ggridges.pdf"
+ggsave(plot=p, filename=file.out, width=10, height=5)
 
-
-# ============================ MB plot ========================= #
-
-df.plot <- df.es %>% filter(dataset == "mb")
-df.plot <- df.plot %>% filter(es_weight > 0)
-p <- ggplot(df.plot) + 
-  geom_density_ridges(aes(x=es_weight_log, y=es_metric_fmt), color="white", alpha=0.6) +
-  geom_segment(data=df.plot %>% filter(gene_name == "AGRP"), aes(x=es_weight_log, xend=es_weight_log, 
-                                                                 y=as.numeric(as.factor(es_metric_fmt)), yend=as.numeric(as.factor(es_metric_fmt))+0.2), color="red") +
-  # scale_x_continuous(limits=c(-1,2), expand = c(0.01, 0)) + 
-  labs(x=expression(Gene~ES[w]), y="ES metric")
-  # theme_ridges()
-p
-
-
-### THINGS TO USE
-# - BUILD CUSTOM quantile_fun: how to match to the correct ESmetric? only values and props are passed
-# - custom vertical line: https://stackoverflow.com/questions/48393348/add-custom-vertical-line-joyplots-ggridges
-# - theme_ridges() \ theme_ridges(grid = FALSE, center = TRUE)
-
-
+# ============================ TODO ========================= #
+### [!!] ADD SEGMENT FOR "ES GENE THRESHOLD"
+### [OK] plot "ESmu plot" with highlighted cell-types
+### [!!] make patchwork: ggridges + ESmu plot
+### [!!] JUST MAKE QUICK COMPILATION AND REFINE LATER [E.g. colors of annotations]
 
 # ======================================================================= #
-# ===================== TESTING geom_density_ridges ===================== #
+# ========================== PLOT ESmu =================== #
 # ======================================================================= #
 
 
-p <- ggplot(df.plot, aes(x=es_weight_log_select, y=es_metric, fill=factor(..quantile..))) +
-  stat_density_ridges(
-    geom = "density_ridges_gradient", calc_ecdf = TRUE,
-    quantiles = 4, quantile_lines = TRUE
-  ) +
-  scale_fill_viridis(discrete = TRUE, name = "Quartiles")
-p
+### AGRP
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.mb, 
+                                                   genes_select=c("AGRP"), 
+                                                   es_metric="es_mu")
+p.mb_agrp <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight="DEINH6",
+                                           annotations_colormap=NULL)
+p.mb_agrp
+
+### MSN
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.mb, 
+                                                   genes_select=c("DRD2"), 
+                                                   es_metric="es_mu")
+p.mb_msn <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                                   annotations_highlight="MSN3",
+                                                   annotations_colormap=NULL)
+p.mb_msn
+
+### Alpha
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.tm, 
+                                                   genes_select=c("GCG"), 
+                                                   es_metric="es_mu")
+p.tm_alhpa <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                                  annotations_highlight="Pancreas.pancreatic_A_cell",
+                                                  annotations_colormap=NULL)
+p.tm_alhpa
 
 
-ggplot(iris, aes(x = Sepal.Length, y = Species)) +
-  geom_density_ridges(
-    jittered_points = TRUE, quantile_lines = TRUE, scale = 0.9, alpha = 0.7,
-    vline_size = 1, vline_color = "red", vline_alpha = 1,
-    point_size = 0.4, point_alpha = 1,
-    position = position_raincloud(adjust_vlines = TRUE)
-  )
-
-
-# default scales
-ggplot(iris, aes(x=Sepal.Length, y=Species, fill = Species, color = Species)) +
-  geom_density_ridges(
-    aes(vline_color = Species, vline_linetype = Species),
-    alpha = .4, quantile_lines = TRUE
-  ) +
-  theme_ridges()
-
-# stat_density_ridges(mapping = NULL, data = NULL,
-#                     geom = "density_ridges", position = "identity", na.rm = FALSE,
-#                     show.legend = NA, inherit.aes = TRUE, bandwidth = NULL,
-#                     from = NULL, to = NULL, jittered_points = FALSE,
-#                     quantile_lines = FALSE, calc_ecdf = FALSE, quantiles = 4,
-#                     quantile_fun = quantile, ...)
-
-
-
-# ======================================================================= #
-# ============================ PLOT 1: facet_wrap ========================= #
-# ======================================================================= #
-
-### 
-df.plot <- df.es
-# df.plot <- df.plot %>% filter(es_metric=="tstat")
-# df.plot <- df.plot %>% filter(es_metric == "mean nES")
-df.plot <- df.plot %>% filter(es_weight > 0)
-p <- ggplot(df.plot, aes(x=es_weight)) + 
-  geom_density() + 
-  scale_x_log10() +
-  facet_wrap(~es_metric, scales = "free")
-p
+### Liver
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.tm, 
+                                                   genes_select=c("APOA2"), 
+                                                   es_metric="es_mu")
+p.tm_hepato <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                                    annotations_highlight="Liver.hepatocyte",
+                                                    annotations_colormap=NULL)
+p.tm_hepato
 
 # ======================================================================= #
-# ============================ TMP COLOR density ========================= #
+# ================================ PATCHWORK ============================ #
+# ======================================================================= #
+# p.mb_agrp
+# p.mb_msn
+# p.tm_alhpa
+# p.tm_hepato
+
+p.mb_agrp + p.mb_msn + p.tm_alhpa + p.tm_hepato + plot_layout(nrow=1)
+
+# ======================================================================= #
+# ================================= XXXXX =============================== #
 # ======================================================================= #
 
-
-# =======================  ======================= #
-### REF: https://stackoverflow.com/questions/3494593/shading-a-kernel-density-plot-between-two-points
-set.seed(1)
-draws <- rnorm(100)^2
-q75 <- quantile(draws, .75)
-q95 <- quantile(draws, .95)
-dens <- density(draws)
-dd <- with(dens,data.frame(x,y)) # 'dens' contains elements 'x' and 'y'
-qplot(x,y,data=dd,geom="line")+
-  geom_ribbon(data=subset(dd,x>q75 & x<q95),aes(ymax=y),ymin=0,
-              fill="red",colour=NA,alpha=0.5)

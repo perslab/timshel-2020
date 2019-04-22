@@ -71,7 +71,7 @@ df.heatmap <- df.heatmap %>% mutate(annotation = factor(annotation, levels=annot
 df.heatmap <- df.heatmap %>% mutate(condition = factor(condition, levels=c("baseline", annotations.ordered)))
 
 ### Get annotation colors
-colormap.annotations <- get_prioritized_annotations_color_mapping(dataset="mousebrain")
+colormap.annotations <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
 
 # PVAL_THRESHOLD <- 0.05/265 # pvalue cut-off in main MB fig
 # PVAL_THRESHOLD <- 0.05/11 

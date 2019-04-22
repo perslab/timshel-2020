@@ -125,7 +125,7 @@ p <- ggplot(df.plot, aes(x=category, y=-log10(enrichment_val))) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 p
 file.out <- "figs/fig_transmitter_enrichment.barplot.pdf"
-ggsave(filename=file.out, plot=p)
+ggsave(filename=file.out, plot=p, width=7, height=4)
 
 
 # =============================================================================== #
@@ -171,7 +171,7 @@ p <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) +
         axis.ticks.x=element_blank()) # remove x-labels
 p
 file.out <- "figs/fig_transmitter_enrichment.celltypes.pdf"
-ggsave(p, filename=file.out, width=8, height=4)
+ggsave(p, filename=file.out, width=10, height=4)
 
 
 

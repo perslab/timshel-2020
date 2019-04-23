@@ -317,7 +317,9 @@ get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metri
 plot_es.gene_centric.single_es_metric <- function(df, 
                                                   n_top_annotations_highlight=NULL, # integer specifying how many annotations to highlight
                                                   annotations_highlight=NULL, # character vector of annotations to highlight. If NULL, 
-                                                  annotations_colormap=NULL, # named vector: x=hex-colors, names(x)=annotations
+                                                  # if annotations_highlight is a named vector, annotations will be renamed
+                                                  # using names(annotations_highlight) as new_names and the annotations_highlight to match the original names.
+                                                  annotations_colormap=NULL, # named vector: x=colors, names(x)=annotations
                                                   show_only_nonzero_es=F, 
                                                   scale.zero_to_one=T, # y-scale (0-1 for es_mu)
                                                   scale.log=F, # y-scale log-transform
@@ -388,6 +390,16 @@ plot_es.gene_centric.single_es_metric <- function(df,
       group_by(gene_name) %>%
       mutate(flag_highlight = if_else(rank(-es_weight) <= n_top_annotations_highlight, TRUE, FALSE)) %>%
       ungroup()
+  }
+  
+  if (rlang::is_named(annotations_highlight)) { # ALT: if (!is.null(names(annotations_highlight))) {}
+    print("Received named annotations_highlight. Will rename annotations (incl. annotations_colormap if given)")
+    rename_vector <- names(annotations_highlight)
+    names(rename_vector) <- annotations_highlight
+    df <- df %>% mutate(annotation = recode(annotation, !!!rename_vector)) # x=new_names; names(x)=old_names
+    if (!is.null(annotations_colormap)) {
+      names(annotations_colormap) <- recode(names(annotations_colormap), !!!rename_vector)
+    }
   }
   
   ### Init plot

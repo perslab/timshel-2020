@@ -1048,11 +1048,12 @@ get_es_w_threshold <- function(object, threshold_pval=0.05) {
   # object <- sem_obj
   # sem_name <- "si"
   # threshold_pval <- 0.05
-  # list.res <- list()
+  
   
   if (is.null(object[["sem"]]) | is.null(object[["sem_pvalues"]]) ) { # ensure that slots exists
     stop("Object has no sem or sem_pvalues slot. Calculate them before running this function")
   }
+  list.res <- list()
   for (sem_name in names(object[["sem"]])) {
     df.sem <- as.data.frame(object[["sem"]][[sem_name]]) # make a data frame of ESw values so we can use [[]] indexing. *OBS*: inefficient to copy data, but damn it for now.
     df.sem[object[["sem_pvalues"]][[sem_name]] > threshold_pval] <- NA # set ESw values above threshold_pval to NA so we can later find the minimum value

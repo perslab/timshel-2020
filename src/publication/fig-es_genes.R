@@ -96,13 +96,14 @@ p <- plot_es.gene_centric.single_es_metric(df.es.gene,
                                            annotations_colormap=colormap.annotation)
 p <- p + labs(y=expression(ES[mu]))
 p
-ggsave(filename="figs/fig_es.mb.drdx_genes.pdf", plot=p, width=8, height=8) # A4 8.3 x 11.7
+ggsave(filename="figs/fig_es.mb.drdx_genes.pdf", plot=p, width=12, height=5) # A4 8.3 x 11.7
 
 
 
-# ======================= Standard model genes [appetite regulation] ======================= #
+# ======================= Standard model genes [BMI + appetite regulation] ======================= #
 
 genes_select <- c("Npy", "Agrp", "Pomc", "Cartpt", "Lepr", "Insr", "Trh", "Cck", "Glp1r") 
+genes_select <- c(genes_select, "Ntrk2")
 genes_select <- c(genes_select, "Bdnf", "Cadm2", "Negr1") # known GWAS genes
 genes_select <- c(genes_select, "Gdf15", "Gfral", "Hdac5", "Fam46a") # Hindbrain
 genes_select <- c(genes_select, "Cckar", "Cckbr") # Cckar (Cck1), Cckbr (Cck2) # Schwartz thinks this is an important cell-type. ---> Cckbr is specifically expressed in "n29.Nr5a1/Bdnf" cell-type 
@@ -113,8 +114,27 @@ p <- plot_es.gene_centric.single_es_metric(df.es.gene,
                                            annotations_highlight=annotations_highlight,
                                            annotations_colormap=colormap.annotation)
 p <- p + labs(y=expression(ES[mu]))
-p
 ggsave(filename="figs/fig_es.mb.standard_model_genes_and_more.pdf", plot=p, width=10, height=12) # A4 8.3 x 11.7
+
+
+# ======================= ALL GENES [*KEEP ME UPDATED*] ======================= #
+
+genes_select <- c("MC1R", "MC2R", "MC3R", "MC4R", "MC5R", "ADCY3")
+genes_select <- c(genes_select, "FTO", "IRX3", "IRX5")
+genes_select <- c(genes_select, "DRD2", "DRD1", "DRD3")
+genes_select <- c(genes_select, "Npy", "Agrp", "Pomc", "Cartpt", "Lepr", "Insr", "Trh", "Cck", "Glp1r") 
+genes_select <- c(genes_select, "Ntrk2")
+genes_select <- c(genes_select, "Bdnf", "Cadm2", "Negr1") # known GWAS genes
+genes_select <- c(genes_select, "Gdf15", "Gfral", "Hdac5", "Fam46a") # Hindbrain
+genes_select <- c(genes_select, "Cckar", "Cckbr") # Cckar (Cck1), Cckbr (Cck2) # Schwartz thinks this is an important cell-type. ---> Cckbr is specifically expressed in "n29.Nr5a1/Bdnf" cell-type 
+genes_select <- c(genes_select, "Sim1", "Pdyn") # Li et al., 2019, Neuron (https://doi.org/10.1016/j.neuron.2019.02.028)
+genes_select <- toupper(genes_select)
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight=annotations_highlight,
+                                           annotations_colormap=colormap.annotation)
+p <- p + labs(y=expression(ES[mu]))
+ggsave(filename="figs/fig_es.mb.all_genes.pdf", plot=p, width=8.3*2, height=11.7*2) # A4 8.3 x 11.7
 
 
 # ======================================================================= #

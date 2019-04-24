@@ -63,14 +63,14 @@ bin_vector <- function(vector_in, n_bins, threshold_bin_zero=0){
   return(bin_values)
 }
 
-rank_normalize_vecor <- function(vector_in, threshold_bin_zero=0){
+rank_normalize_vecor <- function(vector_in, threshold_bin_zero=-Inf){
   # INPUT: a vector of numeric values to rank normalize
   # OUTPUT: a numeric vector with values {0 ... 1}
   # *REMARK #1*: note that vector_in <= threshold_bin_zero will be given the value 0.
   # *REMARK #2*: note that NA values in vector_in will be given the value 0.
   values <- rep(0,length(vector_in))
   bool.not_bin_zero <- (vector_in > threshold_bin_zero) & (!is.na(vector_in)) # bool index for elements that should not be assigned value 0
-  values[bool.not_bin_zero] <- base::rank(vector_in[bool.not_bin_zero])/length(vector_in[bool.not_bin_zero])
+  values[bool.not_bin_zero] <- base::rank(vector_in[bool.not_bin_zero], ties.method="average")/length(vector_in[bool.not_bin_zero])
   return(values)
 }
 
@@ -580,18 +580,30 @@ read_file_fast <- function(file_path) {
 write_sems <- function(object, slot, dataset_prefix, dir_out) {
   ### Function: write SEM: "sem" or "sem_transformed"
   ### We recommend that dataset_prefix contains information about specie
-  stopifnot(slot %in% c("sem", "sem_transformed", "sem_meta"))
+  stopifnot(slot %in% c("sem","sem_transformed", "sem_meta", "sem_pvalues", "null"))
   print(sprintf("Writing slot=%s files for dataset_prefix=%s", slot, dataset_prefix))
-  for (name.sem in names(object[[slot]])) {
+  
+  if (slot == "null") {
+    object.data <- object[["null"]][["sem"]]
+  } else {
+    object.data <- object[[slot]]
+  }
+  
+  for (name.sem in names(object.data)) {
     file.suffix <- name.sem # default value
     if (slot == "sem_transformed") {
       file.suffix <- sprintf("es_ws.%s", name.sem)
+    } else if (slot == "sem_pvalues") {
+      file.suffix <- sprintf("p_emp.%s", name.sem)
     } else if (slot == "sem") {
       file.suffix <- sprintf("es_w.%s", name.sem)
+    } else if (slot == "null") {
+      file.suffix <- sprintf("es_w_null.%s", name.sem)
     }
+
     file.out <- sprintf("%s/%s.%s.csv.gz", dir_out, dataset_prefix, file.suffix)
     print(sprintf("Writing file: %s", file.out))
-    object[[slot]][[name.sem]] %>% mutate(gene=object[["genes"]]) %>% select(gene, everything()) %>% write_csv(path=file.out)
+    object.data[[name.sem]] %>% mutate(gene=object[["genes"]]) %>% select(gene, everything()) %>% write_csv(path=file.out)
     # or use data.table::fwrite() and afterwards R.utils::gzip('filename.csv',destname='filename.csv.gz')
   }
 }

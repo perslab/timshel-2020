@@ -39,8 +39,11 @@ load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
 # ================================ Write SEMs ================================= #
 # ======================================================================= #
 
+
 write_sems(sem_obj, slot="sem_transformed", dataset_prefix=dataset_prefix, dir_out=path_out) 
 write_sems(sem_obj, slot="sem", dataset_prefix=dataset_prefix, dir_out=path_out) 
+write_sems(sem_obj, slot="sem_pvalues", dataset_prefix=dataset_prefix, dir_out=path_out) 
+write_sems(sem_obj, slot="null", dataset_prefix=dataset_prefix, dir_out=path_out) 
 # sem_meta = mean, median, sd
 # sem_transformed = ESw*
 # sem = ESw

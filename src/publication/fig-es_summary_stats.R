@@ -17,8 +17,6 @@
 library(tidyverse)
 library(here)
 
-library(patchwork)
-
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 source(here("src/publication/lib-load_pub_lib_functions.R"))
 
@@ -36,11 +34,15 @@ setwd(here("src/publication"))
 # ================================ PARAMS ============================== #
 # ======================================================================= #
 
-dataset_prefix <- "tabula_muris"
-var_color_by <- sym("tissue")
+# dataset_prefix <- "tabula_muris"
+# var_color_by <- sym("tissue")
 
 # dataset_prefix <- "mousebrain_all"
 # var_color_by <- sym("Class")
+
+dataset_prefix <- "campbell_lvl2"
+var_color_by <- sym("taxonomy_lvl2")
+
 
 # ======================================================================= #
 # ================================ LOAD DATA ============================ #

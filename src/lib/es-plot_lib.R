@@ -306,6 +306,9 @@ get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metri
   ### Transform to long format
   df.es_mean.gene_filter <- df.es_mean.gene_filter %>% gather(key="annotation", value=es_weight, -gene_name)
   
+  ### order genes by their order in genes_select [this makes it easier to get a nicely ordered facet plot in plot_es.gene_centric.single_es_metric()]
+  df.es_mean.gene_filter <- df.es_mean.gene_filter %>% mutate(gene_name=factor(gene_name, levels=genes_select))
+  
   return(df.es_mean.gene_filter)
   # gene_name annotation es_weight
   # AGRP      ABC                0
@@ -402,6 +405,7 @@ plot_es.gene_centric.single_es_metric <- function(df,
     }
   }
   
+  
   ### Init plot
   p <- ggplot(df, aes(x=x_order, y=es_weight, label=annotation)) + 
     geom_segment(aes(x=x_order, xend=x_order, y=0, yend=es_weight), color="grey", alpha=0.3) +
@@ -425,9 +429,15 @@ plot_es.gene_centric.single_es_metric <- function(df,
   # theme(axis.text.x=element_blank()) # hide x-axis labels
   ### facet wrap
   if (n_distinct(df$gene_name) > 1) {
+  ### Alternative to stringr::str_to_title
+  # capitalize <- function(string) {
+  #   substr(string, 1, 1) <- toupper(substr(string, 1, 1))
+  #   return(string)
+  # }
   p <- p +  
     facet_wrap(~gene_name, 
-               scales = "free" # x scale must be set 'free' because we use x='x_order', so every position is different
+               scales = "free", # x scale must be set 'free' because we use x='x_order', so every position is different
+               labeller = as_labeller(stringr::str_to_title) # capitalize first letter
     ) + 
     theme(strip.background=element_blank())
   }

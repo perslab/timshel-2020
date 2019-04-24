@@ -51,7 +51,7 @@ p <- plot_es.gene_centric.single_es_metric(df.es.gene,
                                            annotations_colormap=colormap.annotation)
 p <- p + labs(y=expression(ES[mu]))
 p
-file.out <- "figs/fig_es.main.pomc_agrp_lepr_mc4r.pdf"
+file.out <- "figs/fig_es.main.mb.pomc_agrp_lepr_mc4r.pdf"
 ggsave(plot=p, filename=file.out, width=8.5, height=5)
 
 
@@ -63,9 +63,59 @@ p <- plot_es.gene_centric.single_es_metric(df.es.gene,
                                            scale.zero_to_one=F,
                                            scale.log=F)
 p <- p + labs(y="log avg UMI (counts per 10,000)")
-file.out <- "figs/fig_es.som.pomc_agrp_lepr_mc4r.avg_expr.pdf"
+file.out <- "figs/fig_es.mb.pomc_agrp_lepr_mc4r.avg_expr.pdf"
 ggsave(plot=p, filename=file.out, width=8.5, height=5)
 p
+
+# ======================================================================= #
+# =================== SOM FIG: INDIVUDAL GENES *COMBINED* ================ #
+# ======================================================================= #
+
+### SETTINGS
+annotations_highlight <- get_prioritized_annotations_bmi(dataset="mousebrain")
+colormap.annotation <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
+sem_obj <- sem_obj.mb
+
+
+### MOUSEBRAIN
+genes_select <- c("MC1R", "MC2R", "MC3R", "MC4R", "MC5R", "ADCY3")
+genes_select <- c(genes_select, "FTO", "IRX3", "IRX5")
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                             annotations_highlight=annotations_highlight,
+                                             annotations_colormap=colormap.annotation)
+p <- p + labs(y=expression(ES[mu]))
+p
+ggsave(filename="figs/fig_es.mb.mcxr_fto_genes.pdf", plot=p, width=8, height=8) # A4 8.3 x 11.7
+
+
+genes_select <- c("DRD2", "DRD1", "DRD3")
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight=annotations_highlight,
+                                           annotations_colormap=colormap.annotation)
+p <- p + labs(y=expression(ES[mu]))
+p
+ggsave(filename="figs/fig_es.mb.drdx_genes.pdf", plot=p, width=8, height=8) # A4 8.3 x 11.7
+
+
+
+# ======================= Standard model genes [appetite regulation] ======================= #
+
+genes_select <- c("Npy", "Agrp", "Pomc", "Cartpt", "Lepr", "Insr", "Trh", "Cck", "Glp1r") 
+genes_select <- c(genes_select, "Bdnf", "Cadm2", "Negr1") # known GWAS genes
+genes_select <- c(genes_select, "Gdf15", "Gfral", "Hdac5", "Fam46a") # Hindbrain
+genes_select <- c(genes_select, "Cckar", "Cckbr") # Cckar (Cck1), Cckbr (Cck2) # Schwartz thinks this is an important cell-type. ---> Cckbr is specifically expressed in "n29.Nr5a1/Bdnf" cell-type 
+genes_select <- c(genes_select, "Sim1", "Pdyn") # Li et al., 2019, Neuron (https://doi.org/10.1016/j.neuron.2019.02.028)
+genes_select <- toupper(genes_select)
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight=annotations_highlight,
+                                           annotations_colormap=colormap.annotation)
+p <- p + labs(y=expression(ES[mu]))
+p
+ggsave(filename="figs/fig_es.mb.standard_model_genes_and_more.pdf", plot=p, width=10, height=12) # A4 8.3 x 11.7
+
 
 # ======================================================================= #
 # =============== SOM: ES metrics comparisons, top_n cell-types ========== #
@@ -74,12 +124,12 @@ p
 
 
 list.es_metrics <- list(
-                "DET"="tstat", 
-                "GES"="ges", 
-                "NSI"="si", 
-                "EP"="specificity",
-                "ESmu"="es_mu", 
-                "log avg UMI\n(counts per 10,000)"="expr_mean")
+  "DET"="tstat", 
+  "GES"="ges", 
+  "NSI"="si", 
+  "EP"="specificity",
+  "ESmu"="es_mu", 
+  "log avg UMI\n(counts per 10,000)"="expr_mean")
 
 ### MOUSEBRAIN
 sem_obj <- sem_obj.mb
@@ -98,7 +148,7 @@ for (i in seq(list.es_metrics)) {
 }
 p.patch <- patchwork::wrap_plots(list.res[-1], ncol=1) & theme(strip.text=element_blank())
 p.patch <- list.res[[1]] + p.patch + plot_layout(ncol=1, heights=c(heights=c(1/7, 1))) & labs(x="")
-ggsave(filename = "figs/fig_es.som.es_metrics.mb_pomc_agrp.pdf", plot=p.patch, width=8, height=8) # A4 8.3 x 11.7
+ggsave(filename = "figs/fig_es.mb.es_metrics.pomc_agrp.pdf", plot=p.patch, width=8, height=8) # A4 8.3 x 11.7
 
 
 ### TABULA MURIS
@@ -118,7 +168,7 @@ for (i in seq(list.es_metrics)) {
 }
 p.patch <- patchwork::wrap_plots(list.res[-1], ncol=1) & theme(strip.text=element_blank())
 p.patch <- list.res[[1]] + p.patch + plot_layout(ncol=1, heights=c(1/10, 1)) & labs(x="")
-ggsave(filename = "figs/fig_es.som.es_metrics.tm_gcg_adipoq.pdf", plot=p.patch, width=8, height=8) # A4 8.3 x 11.7
+ggsave(filename = "figs/fig_es.tm.es_metrics.gcg_adipoq.pdf", plot=p.patch, width=8, height=8) # A4 8.3 x 11.7
 
 
 
@@ -127,61 +177,6 @@ ggsave(filename = "figs/fig_es.som.es_metrics.tm_gcg_adipoq.pdf", plot=p.patch, 
 #   theme(strip.text=element_blank()) &
 #   labs(x="")
 
-
-# ======================================================================= #
-# =================== SOM FIG: INDIVUDAL GENES *COMBINED* ================ #
-# ======================================================================= #
-
-### SETTINGS
-annotations_highlight <- get_prioritized_annotations_bmi(dataset="mousebrain")
-colormap.annotation <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
-sem_obj <- sem_obj.mb
-
-
-### MOUSEBRAIN
-genes_select <- c("MC1R", "MC2R", "MC3R", "MC4R", "MC5R", "ADCY3")
-genes_select <- c(genes_select, "DRD2", "DRD1")
-genes_select <- c(genes_select, "FTO", "IRX3", "IRX5")
-df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
-p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
-                                             annotations_highlight=annotations_highlight,
-                                             annotations_colormap=colormap.annotation,
-                                             scale.zero_to_one=F,
-                                             size.highlight.text=rel(1.5),
-                                             size.highlight.points=rel(1.5))
-ggsave(filename="figs/fig_es.som.es_metrics.mb_ALL_genes.pdf", plot=p, width=8, height=8) # A4 8.3 x 11.7
-
-
-
-# ======================================================================= #
-# ========================= SOM FIG **DOTPLOT**: GENE LISTS ============= #
-# ======================================================================= #
-# TODO: implement dotplot. 
-# dim = genes x selected cell-types
-# size = ESmu
-# color = blue
-
-# ======================= BMI gene lists ======================= #
-### TODO
-# 1) PLOT MENDELIAN + RARE VARIANT GENES
-# 2) [MAYBE] PLOT LOCKE2015 NEAREST Genes
-
-### COOKBOOK
-# load gene lists
-# map from Ensembl to gene symbol
-# call plot functions
-
-
-# ======================= Standard model genes [appetite regulation] ======================= #
-
-genes_select <- c("Npy", "Agrp", "Pomc", "Cartpt", "Lepr", "Insr", "Trh", "Cck", "Glp1r") 
-genes_select <- c(genes_select, "Gdf15", "Gfral", "Glp1r", "Hdac5", "Fam46a") 
-genes_select <- toupper(genes_select)
-# 
-# df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
-# p <- plot_es.gene_centric.single_es_metric(df.es.gene, annotations_highlight=annotations_highlight)
-# p
-#
 
 
 # ======================================================================= #

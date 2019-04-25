@@ -29,8 +29,8 @@ gwas <- "BMI_UKBB_Loh2018"
 # gwas <- "BMI_UPDATE_Yengo2018"
 
 name.dataset <- "mousebrain"
-prefix_genomic_annot <- "wgcna.mousebrain-190218.fdr_sign_celltypes.continuous" # deepsplit1
-# prefix_genomic_annot <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
+# prefix_genomic_annot <- "wgcna.mousebrain-190218.fdr_sign_celltypes.continuous" # deepsplit1
+prefix_genomic_annot <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous" # lavenderblush
 ### prefix_genomic_annot <- "wgcna.mousebrain-190111.fdr_sign_celltypes.continuous"
 ### prefix_genomic_annot <- "wgcna.mousebrain-181214.fdr_sign_celltypes.continuous"
 
@@ -97,7 +97,7 @@ do_gprofiler <- function(df, ordered_query){
 
 # file.magma_gwas <- "/scratch/tmp-magma_gwas/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
 # file.magma_gwas <- "/nfsdata/projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_magma/BMI_Yengo2018.txt.10UP.1.5DOWN.genes.out"
-file.magma_gwas <- here("out/magma/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out") # 100 KB window
+file.magma_gwas <- here("out/magma/gene_based_scores/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out") # 100 KB window
 # file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.1e-5.depict_tissues_loci.txt" # 1e-5
 # file.gwas_loci <- "/projects/timshel/DEPICT/BMI_Yengo2018/results/BMI_Yengo2018.5e-8.depict_tissues_loci.txt" # 5e-8
 file.gwas_loci <- here("out/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.depict_tissues_loci.txt")
@@ -314,7 +314,7 @@ do.excel_export(df.gprofiler.ordered.meta, sheet_name="GO analysis - GSEA", xlsx
 do.excel_export(df.gprofiler.unordered.meta, sheet_name="GO analysis", xlsx.workbook)
 do.excel_export(df.bio_genes, sheet_name="Module bio. gene-based", xlsx.workbook)
 do.excel_export(df.bio_modules, sheet_name="Module bio. summary", xlsx.workbook)
-file.out <- here("results/", sprintf("module--biology.%s-%s.xlsx", gwas, prefix_genomic_annot))
+file.out <- here("results/", sprintf("modules--biology.%s-%s.xlsx", gwas, prefix_genomic_annot))
 saveWorkbook(xlsx.workbook, file=file.out, overwrite=TRUE) # write file
 
 

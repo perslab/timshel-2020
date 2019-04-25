@@ -76,7 +76,8 @@ for (dataset_prefix in dataset_prefixes) {
   
   
   # =================== COMBINE ================== #
-  df.join <- df.bmi %>% left_join(df.h2, df.other_gwas.spread, by="annotation")
+  df.join <- df.bmi %>% left_join(df.h2, by="annotation")
+  df.join <- df.join %>% left_join(df.other_gwas.spread, by="annotation")
   df.join <- df.join %>% arrange(p.value) # sort by BMI p-value
   df.join <- df.join %>% select("Annotation"=annotation, 
                                 "Coefficient p-value"=p.value, 

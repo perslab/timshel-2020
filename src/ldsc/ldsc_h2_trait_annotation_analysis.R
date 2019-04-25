@@ -64,7 +64,7 @@ df.export <- df.ldsc %>% group_by(gwas) %>%
   arrange(gwas, rank) %>%
   select(-Category)
 df.export
-df.export %>% write_csv("out.h2_annotations.all.csv")
+# df.export %>% write_csv("out.h2_annotations.all.csv")
 
 df.export <- df.ldsc %>% group_by(gwas) %>% 
   mutate(rank = rank(-`Coefficient_z-score`)) %>% 
@@ -72,13 +72,13 @@ df.export <- df.ldsc %>% group_by(gwas) %>%
   arrange(gwas, rank) %>%
   select(-Category)
 df.export
-df.export %>% write_csv("out.h2_annotations.top5.csv")
+# df.export %>% write_csv("out.h2_annotations.top5.csv")
 
 ### export WGCNA
 df.export <- df.ldsc %>% 
   filter(run_name=="wgcna.mousebrain-190111") %>%
   select(-Category)
-df.export %>% write_csv("out.h2_annotations.wgcna.csv")
+# df.export %>% write_csv("out.h2_annotations.wgcna.csv")
 
 
 # ======================================================================= #

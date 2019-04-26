@@ -176,7 +176,7 @@ list_gwas = ["BMI_UKBB_Loh2018"]
 
 
 ############################# ALL ANNOTATIONS ###############################
-# used for getting annotation h2 estimates for all Mousebrain annotations
+# used for getting annotation h2 estimates for all annotations
 
 ################## MOUSEBRAIN ##################
 dict_annotations = collections.defaultdict(dict)
@@ -188,6 +188,16 @@ for annotation in list_annotations:
 # ALT using dict comprehension: dict_annotations = {key:{"name_context":"mousebrain_all.{}.sem_mean".format(key)} for key in list_annotations}
 dict_annotations_mb_all = dict_annotations
 
+
+
+################## TABULA MURIS ##################
+dict_annotations = collections.defaultdict(dict)
+df = pd.read_csv("/projects/timshel/sc-genetics/sc-genetics/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv")
+list_annotations = df["tissue_celltype"].tolist()
+for annotation in list_annotations:
+	dict_annotations[annotation]["name_context"] = "tabula_muris.{}.sem_mean".format(annotation)
+	dict_annotations[annotation]["file_path_prefix"] = "/scratch/sc-ldsc/celltypes.tabula_muris.all/per_annotation/celltypes.tabula_muris.all__{}".format(dict_annotations[annotation]["name_context"])
+dict_annotations_tm_all = dict_annotations
 
 ############################# SELECTED ANNOTATIONS [used for quantile analysis] ###############################
 
@@ -235,10 +245,15 @@ dict_annotations_wgcna_select_quantile = dict_annotations
 
 
 ### Used for h2 analysis of all MB annotations
-dict_run = {"celltypes.mousebrain":
-						{"dataset":"mousebrain",
-						"dict_annotations":dict_annotations_mb_all}
+# dict_run = {"celltypes.mousebrain":
+# 						{"dataset":"mousebrain",
+# 						"dict_annotations":dict_annotations_mb_all}
+# 			}
+dict_run = {"celltypes.tabula_muris":
+						{"dataset":"tabula_muris",
+						"dict_annotations":dict_annotations_tm_all}
 			}
+
 
 ### Used for h2 quantile analysis
 # dict_run = {"celltypes.mousebrain":

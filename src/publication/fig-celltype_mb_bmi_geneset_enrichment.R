@@ -57,6 +57,19 @@ df.ldsc_cts <- df.ldsc_cts %>% filter(gwas == filter.gwas)
 df.metadata <- get_metadata(dataset_prefix)
 df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation")
 
+
+# ======================================================================= #
+# == EXPORT TABLE WITH META-DATA FOR TOP GENESET ENRICHED MB CELL-TYPES  === #
+# ======================================================================= #
+
+df.export <- df.ldsc_cts %>% left_join(df.enrich, by="annotation")
+df.export <- df.export %>% select(annotation, combined_rare_mendelian_obesity, Region, Probable_location, Description)
+df.export <- df.export %>% mutate(fdr_significant=if_else(combined_rare_mendelian_obesity < 0.05/n(), TRUE, FALSE))
+df.export <- df.export %>% arrange(combined_rare_mendelian_obesity)
+file.out <- "tables/table-celltype_bmi_geneset_enrichment.mb.csv"
+df.export %>% write_csv(file.out)
+
+
 # ======================================================================= #
 # ================================= PLOT ================================ #
 # ======================================================================= #
@@ -89,4 +102,7 @@ p <- p + theme_classic()
 p
 file.out <- sprintf("figs/fig_celltype_geneset_enrichment.mb.bmi_celltypes.pdf")
 ggsave(p, filename=file.out, width=4, height=4)
+
+
+
 

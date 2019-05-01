@@ -85,6 +85,33 @@ sem_obj.mb <- sem_obj
 load(here("out/es/tabula_muris.es_obj.RData"))
 sem_obj.tm <- sem_obj
 
+load(here("out/es/campbell_lvl2.es_obj.RData"))
+sem_obj.arc <- sem_obj
+
+
+# ======================================================================= #
+# ============================= CAMPBELL ================================ #
+# ======================================================================= #
+sem_obj <- sem_obj.arc
+
+annotations_highlight <- c("n29.Nr5a1-Adcyap1")
+names(annotations_highlight) <- "n29.Nr5a1/Bdnf"
+annotations_colormap <- c("n29.Nr5a1-Adcyap1"="black")
+length(annotations_colormap)
+
+genes_select <- c("CCKBR")
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight=annotations_highlight,
+                                           annotations_colormap=annotations_colormap,
+                                           size.highlight.text=rel(3.5),
+                                           size.highlight.points=rel(2))
+p <- p + labs(y=expression(ES[mu]))
+p
+file.out <- "figs/fig_es.cambell.n29.pdf"
+ggsave(plot=p, filename=file.out, width=3, height=2)
+
+
 # ======================================================================= #
 # ============================= MAIN FIG ================================ #
 # ======================================================================= #
@@ -122,6 +149,32 @@ p <- p + labs(y="log avg UMI (counts per 10,000)")
 file.out <- "figs/fig_es.mb.pomc_agrp_lepr_mc4r.avg_expr.pdf"
 ggsave(plot=p, filename=file.out, width=8.5, height=5)
 p
+
+
+# ======================================================================= #
+# =================== SOM FIG: BMI GENE SET ================ #
+# ======================================================================= #
+
+### SETTINGS
+annotations_highlight <- get_prioritized_annotations_bmi(dataset="mousebrain")
+colormap.annotation <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
+sem_obj <- sem_obj.mb
+
+### LOAD GENE LISTS 
+file.geneset <- here("data/genes_obesity/combined_gene_list.rare_and_mendelian_obesity_genes.txt")
+df.geneset <- read_tsv(file.geneset)
+df.geneset
+
+genes_select <- df.geneset %>% pull(gene_symbol) %>% toupper()
+print(length(genes_select)) # 50
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight=annotations_highlight,
+                                           annotations_colormap=colormap.annotation,
+                                           size.highlight.text=rel(1.5),
+                                           size.highlight.points=rel(1.5))
+p <- p + labs(y=expression(ES[mu]))
+ggsave(filename="figs/fig_es.mb.bmi_geneset.pdf", plot=p, width=10, height=12) # A4 8.3 x 11.7
 
 
 # ======================================================================= #

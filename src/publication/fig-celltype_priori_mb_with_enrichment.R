@@ -155,6 +155,25 @@ p.enrich.mod <- p.enrich +
 p.enrich.mod
 
 
+# ================== PLOT ENRICHMENT FOR BMI-CELL-TYPES ONLY [+FLIP] ==================== #
+filter.annotations_bmi <- get_prioritized_annotations_bmi(dataset="mousebrain")
+
+p.enrich.bmi <- ggplot() +
+  geom_col(data=df.plot %>% filter(annotation %in% filter.annotations_bmi), 
+           aes(x=annotation, y=-log10(combined_rare_mendelian_obesity), fill=!!var_color_by),
+           width=0.8) +
+  geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
+  labs(x="", y=expression(-log[10](P[enrichment]))) +
+  coord_flip(clip = 'off') + # This keeps the labels from disappearing 
+  guides(fill=F) +
+  scale_fill_manual(values=colormap) +
+  theme_classic() + 
+  scale_y_reverse()
+p.enrich.bmi
+
+file.out <- "figs/fig_celltype_geneset_enrichment.mb_bmi_only.pdf"
+ggsave(plot=p.enrich.bmi, filename=file.out, width=3, height=4)
+
 # ======================================================================= #
 # ================================ PATCHWORK ================================ #
 # ======================================================================= #

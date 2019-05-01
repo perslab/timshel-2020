@@ -59,13 +59,15 @@ def calculate_anova_sporadically_expressed_genes(df, annotations, out_prefix):
 
 
 
-def calculate_per_anno_summary_stats(df, annotations, out_prefix, permute_annotations):
+def calculate_per_anno_summary_stats(df, annotations, out_prefix, permute_annotations, seed=1):
 	"""
 	Pre-calculation of mean, variance and fraction expressed per annotation.
 	
 	Args:
-		df:           DataFrame. genes x cells. Must have row index with gene IDs and column index. Any column indexes in the data frame will not be used (annotations argument defines the grouping of the data frame), so the DataFrame can have any kind of column index.
-		annotations   1d array-like. Defines the annotations in df. Must have same length as number of columns in df.
+		df:          		 DataFrame. genes x cells. Must have row index with gene IDs and column index. Any column indexes in the data frame will not be used (annotations argument defines the grouping of the data frame), so the DataFrame can have any kind of column index.
+		annotations 		 1d array-like. Defines the annotations in df. Must have same length as number of columns in df.
+		permute_annotations	 boolean. If true, annotations will be permuted for 'null generation'.
+		seed: 	     		 int. Sets seed for annotation permutation. It is necessary to change the seed, if you want to generate different null backgrounds. Argument used if permute_annotations=T.
 	Returns:
 		DataFrame of mean, variance and fraction expressed. Each DataFrame has the same index (genes) and columns (unique annotations).
 		DataFrame of number of cells per annotation. Single column ("n") and index is unique annotations. 
@@ -88,8 +90,8 @@ def calculate_per_anno_summary_stats(df, annotations, out_prefix, permute_annota
 	# REF: https://stackoverflow.com/a/39237712/6639640
 	
 	if permute_annotations:
-		print("Doing null computation. Permuting labels with seed(1).")
-		np.random.seed(1)
+		print("Doing null computation. Permuting labels with seed({}).".format(seed)
+		np.random.seed(seed)
 		annotations = np.random.permutation(annotations) # permute labels
 
 	annotations_unique = np.unique(annotations) # returns SORTED unique elements of an array. We sort to make sure the output column is always in the same order

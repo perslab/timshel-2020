@@ -95,15 +95,19 @@ annotations_highlight <- get_prioritized_annotations_bmi(dataset="mousebrain")
 colormap.annotation <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
 sem_obj <- sem_obj.mb
 
+
 ### MAIN PLOT: ESmu
-genes_select <- c("POMC", "AGRP", "LEPR", "MC4R")
+genes_select <- c("POMC", "AGRP", "LEPR", "MC4R", "CCK")
+# genes_select <- c("POMC", "AGRP", "LEPR", "MC4R", "CCK", "NTRK2")
 df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
 p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
                                            annotations_highlight=annotations_highlight,
-                                           annotations_colormap=colormap.annotation)
+                                           annotations_colormap=colormap.annotation,
+                                           size.highlight.text=rel(2.5),
+                                           size.highlight.points=rel(2))
 p <- p + labs(y=expression(ES[mu]))
 p
-file.out <- "figs/fig_es.main.mb.pomc_agrp_lepr_mc4r.pdf"
+file.out <- "figs/fig_es.main.mb.pomc_agrp_lepr_mc4r_cck.pdf"
 ggsave(plot=p, filename=file.out, width=8.5, height=5)
 
 

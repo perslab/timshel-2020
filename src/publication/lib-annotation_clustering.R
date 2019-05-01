@@ -108,7 +108,7 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
 
 # ====================== MOUSEBRAIN PLOT ==================== #
 
-plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
+plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_prioritized=F, circular) {
   
   # ====================== Get dataset-specific params (color mappings) ==================== #
   if (dataset_prefix == "mousebrain_all") {
@@ -158,14 +158,16 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
   ### Circular
   ### The linear and circular plot differ by: aes(y=node.height), geom_node_text() and coord_fixed()
   if (circular) {
-    p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
-                       color=!!sym_var.node_color, label=label,
-                       x=x*1.05, y=y*1.05,
-                       angle = -((-node_angle(x, y)+90)%%180)+90),
-                  hjust='outward',
-                  size=rel(1),
-                  show.legend=F) +
-    geom_node_text(aes(filter=(flag_prioritized==TRUE), # leaf node labels, prioritized cell-types
+    if (!label_only_prioritized) {
+      p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
+                         color=!!sym_var.node_color, label=label,
+                         x=x*1.05, y=y*1.05,
+                         angle = -((-node_angle(x, y)+90)%%180)+90),
+                    hjust='outward',
+                    size=rel(1),
+                    show.legend=F)
+    }
+    p <- p + geom_node_text(aes(filter=(flag_prioritized==TRUE), # leaf node labels, prioritized cell-types
                        color=!!sym_var.node_color, label=label,
                        x=x*1.05, y=y*1.05,
                        angle = -((-node_angle(x, y)+90)%%180)+90),
@@ -180,11 +182,13 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, circular) {
     p <- p + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) extra margins
   } else {
     # p <- p + geom_edge_elbow2(aes(y=node.height, color=!!sym_var.node_color_edge_elbow2)) # gives correct height if 'height' is not set in ggraph
-    p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
-                                color=!!sym_var.node_color, label=label),
-                        size=rel(1),
-                        angle=90, hjust=1, nudge_y=-0.05,
-                        show.legend=F)
+    if (!label_only_prioritized) {
+      p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
+                                  color=!!sym_var.node_color, label=label),
+                          size=rel(1),
+                          angle=90, hjust=1, nudge_y=-0.05,
+                          show.legend=F)
+    }
     p <- p + geom_node_text(aes(filter=(flag_prioritized==TRUE), # leaf node labels, prioritized cell-types
                                color=!!sym_var.node_color, label=label),
                        size=rel(1.3),

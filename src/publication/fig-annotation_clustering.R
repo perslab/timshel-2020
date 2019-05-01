@@ -31,12 +31,12 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Tabula muris
-dataset_prefix <- "tabula_muris"
-filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
+# dataset_prefix <- "tabula_muris"
+# filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
 
 ### Mousebrain
-# dataset_prefix <- "mousebrain_all"
-# filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+dataset_prefix <- "mousebrain_all"
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 # ======================================================================= #
 # ======================== LOAD DATA AND PRE-PROCESS ===================== #
@@ -91,6 +91,11 @@ plot(dend)
 ### Circular
 p.circular <- plot_es_dendrogram(dend, df.metadata, dataset_prefix, circular=TRUE)
 file.out <- sprintf("figs/fig_clustering.%s.dendrogram.circular.pdf", dataset_prefix)
+ggsave(plot=p.circular, filename=file.out, width=6, height=6)
+
+### Circular - label on leaf
+p.circular <- plot_es_dendrogram(dend, df.metadata, dataset_prefix, label_only_prioritized=TRUE, circular=TRUE)
+file.out <- sprintf("figs/fig_clustering.%s.dendrogram.circular_priori_label.pdf", dataset_prefix)
 ggsave(plot=p.circular, filename=file.out, width=6, height=6)
 
 ### 'Linear'

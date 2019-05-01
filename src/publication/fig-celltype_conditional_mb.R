@@ -73,13 +73,13 @@ df.heatmap <- df.heatmap %>% mutate(condition = factor(condition, levels=c("base
 ### Get annotation colors
 colormap.annotations <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
 
-# PVAL_THRESHOLD <- 0.05/265 # pvalue cut-off in main MB fig
+PVAL_THRESHOLD <- 0.05/265 # pvalue cut-off in main MB fig
 # PVAL_THRESHOLD <- 0.05/11 
 p <- ggplot(df.heatmap, aes(x=condition, y=annotation, fill=-log10(p.value))) +
   geom_tile() + 
-  # geom_text(data=df.heatmap %>% filter(p.value >= PVAL_THRESHOLD), label="*", color="black", hjust=0.5, vjust=0.75) + # add asterisk if fdr significant
+  geom_text(data=df.heatmap %>% filter(p.value <= PVAL_THRESHOLD), label="*", color="black", hjust=0.5, vjust=0.75) + # add asterisk if fdr significant
   colorspace::scale_fill_continuous_sequential(palette="Blues 2", rev=TRUE, na.value = "white") + # "Blues 2","Blues 3","Purples 3"
-  labs(x="Conditional cell-type", y="", fill=expression(-log[10](P))) +
+  labs(x="Conditional cell-type", y="", fill=expression(-log[10](P[S-LDSC]))) +
   theme_minimal() +
   theme(panel.grid.major=element_blank(), 
         panel.grid.minor=element_blank()) + # remove grid
@@ -93,8 +93,10 @@ p <- p + facet_grid(cols=vars(block), space="free_x", scales="free_x", drop=T) +
         strip.text.x=element_blank())
 p
 
+file.out <- sprintf("figs/fig_celltypepriori_mb_conditional-4x6.pdf")
+ggsave(p, filename=file.out, height=4, width=6)
 file.out <- sprintf("figs/fig_celltypepriori_mb_conditional.pdf")
-ggsave(p, filename=file.out, width=6, height=4)
+ggsave(p + theme(legend.position="top"), filename=file.out, height=6.5, width=5)
 
 # ======================================================================= #
 # ========= PLOT: cell priori [FACET WRAP MULTI-CONDITIONAL] ============== #

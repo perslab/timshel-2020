@@ -17,7 +17,8 @@
 library(tidyverse)
 library(here)
 
-library(patchwork)
+library(ggpubr)
+
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 source(here("src/publication/lib-load_pub_lib_functions.R"))
@@ -59,19 +60,66 @@ df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation")
 
 
 # ======================================================================= #
-# == EXPORT TABLE WITH META-DATA FOR TOP GENESET ENRICHED MB CELL-TYPES  === #
+# ========= EXPORT ENRICHMENT RESULT TABLE WITH MB META-DATA ============ #
 # ======================================================================= #
 
 df.export <- df.ldsc_cts %>% left_join(df.enrich, by="annotation")
-df.export <- df.export %>% select(annotation, combined_rare_mendelian_obesity, Region, Probable_location, Description)
-df.export <- df.export %>% mutate(fdr_significant=if_else(combined_rare_mendelian_obesity < 0.05/n(), TRUE, FALSE))
-df.export <- df.export %>% arrange(combined_rare_mendelian_obesity)
-file.out <- "tables/table-celltype_bmi_geneset_enrichment.mb.csv"
-df.export %>% write_csv(file.out)
-
+df.export <- df.export %>% select(annotation, 
+                                  p.value.enrichment_combined_rare_mendelian_obesity=combined_rare_mendelian_obesity,
+                                  p.value.ldsc=p.value, 
+                                  Region, Probable_location, Description)
+df.export <- df.export %>% mutate(fdr_significant_enrichment=if_else(p.value.enrichment_combined_rare_mendelian_obesity < 0.05/n(), TRUE, FALSE))
+df.export <- df.export %>% arrange(p.value.enrichment_combined_rare_mendelian_obesity)
+# file.out <- "tables/table-celltype_bmi_geneset_enrichment.mb.csv"
+# df.export %>% write_csv(file.out)
 
 # ======================================================================= #
-# ================================= PLOT ================================ #
+# ============ SCATTERPLOT - S-LDSC VS OBESITY ENRICHMENT ============ #
+# ======================================================================= #
+
+df.plot <- df.export
+
+fdr_threshold <- 0.05/nrow(df.plot)
+fdr_threshold.mlog10 <- -log10(fdr_threshold)
+
+df.plot <- df.plot %>% mutate(
+  significance_group = case_when(
+    ((p.value.ldsc < fdr_threshold) & (p.value.enrichment_combined_rare_mendelian_obesity < fdr_threshold)) ~ "Geneset and S-LDSC",
+    (p.value.ldsc < fdr_threshold) ~ "S-LDSC (common obesity variation)",
+    (p.value.enrichment_combined_rare_mendelian_obesity < fdr_threshold) ~ "Geneset (rare obesity variation)",
+    TRUE ~ "ns"
+  )
+)
+
+df.plot %>% count(significance_group)
+# significance_group     n
+# 1 both                   2
+# 2 enrich                13
+# 3 ldsc                   9
+# 4 ns                   241
+df.plot
+
+p <- ggplot(df.plot, aes(x=-log10(p.value.ldsc), y=-log10(p.value.enrichment_combined_rare_mendelian_obesity)))
+p <- p + geom_point(color="gray")
+p <- p + geom_point(data=df.plot %>% filter(significance_group != "ns"), aes(color=significance_group))
+p <- p + geom_text_repel(data=df.plot %>% filter(significance_group != "ns"), aes(label=annotation), show.legend=F)
+p <- p + geom_abline()
+p <- p + geom_hline(yintercept=fdr_threshold.mlog10, linetype="dashed", color="gray")
+p <- p + geom_vline(xintercept=fdr_threshold.mlog10, linetype="dashed", color="gray")
+p <- p + ggpubr::stat_cor(method = "pearson")
+p <- p + labs(y=expression(-log[10](P[enrichment])), x=expression(-log[10](P[S-LDSC])), color="")
+### Theme
+p <- p + theme_classic()
+p <- p + theme(legend.position = "top")
+p
+file.out <- sprintf("figs/fig_celltype_geneset_enrichment_vs_ldsc.mb.pdf")
+ggsave(p, filename=file.out, width=7, height=5)
+
+# p <- p + geom_text_repel(data=df.export %>% filter((-log10(p.value.ldsc) > fdr_threshold.mlog10) | (-log10(p.value.enrichment_combined_rare_mendelian_obesity) > fdr_threshold.mlog10)), 
+#                          aes(label=annotation), color="black")
+
+# ======================================================================= #
+# ============ ENRICHMENT BARPLOT - LDSC FDR CELL-TYPES ONLY ============ #
 # ======================================================================= #
 
 df.plot <- df.ldsc_cts

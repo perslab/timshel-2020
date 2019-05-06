@@ -17,7 +17,7 @@
 library(tidyverse)
 library(here)
 
-library(ggpubr) 
+library(ggpubr)
 library(ggrepel)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library

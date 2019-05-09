@@ -17,6 +17,8 @@
 library(tidyverse)
 library(here)
 
+library(patchwork)
+
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 source(here("src/publication/lib-load_pub_lib_functions.R"))
 
@@ -114,6 +116,40 @@ df.n_es %>% write_csv(file.out)
 file.out <- sprintf("tables/table-n_es_genes.%s.sum_stats.csv", dataset_prefix)
 df.n_es.sum_stats %>% write_csv(file.out)
 
+
+# ======================================================================= #
+# ============================ VIOLIN PLOT ============================== #
+# ======================================================================= #
+
+### Add meta-data
+df.metadata <- get_metadata(dataset_prefix)
+df.violin <- df.n_es %>% left_join(df.metadata, by="annotation")
+
+### order *var_color_by* by var_color_by (mutate it to make it an ordered factor)
+df.violin <- df.violin %>% mutate(!!var_color_by:=factor(!!var_color_by, levels=sort(unique(!!var_color_by)))) # this is not really needed now, but we use it later
+
+### Define color mapping [after converting var_color_by to a factor]
+factor_levels <- df.violin %>% pull(!!var_color_by) %>% levels() # levels are ordered in the same order as annotations are ordered
+colormap <- colorspace::qualitative_hcl(n=length(factor_levels), palette = "Dark 3")
+names(colormap) <- reorder_factor_levels_to_first_last_pairs(factor_levels)
+
+### Plot
+p.violin <- ggplot(df.violin, aes(x=!!var_color_by, y=ESmu, fill=!!var_color_by)) +
+  geom_violin() + 
+  geom_jitter(height=0, width=0.1) +
+  geom_hline(yintercept=mean(df.violin$ESmu), color="blue", linetype="dashed") +
+  labs(x="", y="Number of ES genes") + 
+  scale_fill_manual(values=colormap) + 
+  guides(fill=F) + 
+  theme_classic() + # 'base theme'
+  theme(axis.text.x= element_text(angle=25, hjust=1, size=rel(1))) # smaller x-axis labels
+# p.violin <- p.violin + theme(plot.margin = unit(c(1,1,3,1), "cm")) # (t, r, b, l) widen margin
+p.violin
+
+file.out <- sprintf("figs/fig_n_es_genes.violin.%s.pdf", dataset_prefix)
+ggsave(plot=p.violin, filename=file.out, width=10, height=5)
+
+
 # ======================================================================= #
 # =============================== BAR PLOT ================================== #
 # ======================================================================= #
@@ -134,13 +170,14 @@ df.barplot <- df.barplot %>%
 # df.barplot <- df.barplot %>% mutate(var_color_by_fct_reorder=factor(!!var_color_by, levels=reorder_factor_levels_to_first_last_pairs(factor_levels)))
 # df.barplot$var_color_by_fct_reorder %>% levels()
 
-### Define color mapping
-###  supply specific ordered colors to scala_color_manual(), but that seems more difficult
+
+### Define color mapping [after converting var_color_by to a factor]
 factor_levels <- df.barplot %>% pull(!!var_color_by) %>% levels() # levels are ordered in the same order as annotations are ordered
 colormap <- colorspace::qualitative_hcl(n=length(factor_levels), palette = "Dark 3")
 names(colormap) <- reorder_factor_levels_to_first_last_pairs(factor_levels)
 
 
+### Plot
 p.bar <- ggplot(df.barplot, aes(x=annotation, y=ESmu, fill=!!var_color_by)) +
   geom_col() + 
   geom_hline(yintercept=mean(df.barplot$ESmu), color="blue", linetype="dashed") +
@@ -187,10 +224,11 @@ p.hist.mod <- p.hist +
       axis.line.y=element_blank()) +
   coord_flip() + 
   xlim(y_limits)
+
 p.hist.mod
 
 # ======================================================================= #
-# =============================== PATCHWORK ================================== #
+# ======================= PATCHWORK: BAR+HIST =========================== #
 # ======================================================================= #
 
 ### Make blank plot

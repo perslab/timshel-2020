@@ -98,10 +98,11 @@ p <- p + labs(x="", y="", fill=expression(ES[mu]))
 p <- p + colorspace::scale_fill_continuous_sequential(palette="Greens 2", rev=TRUE, na.value = "white", limits=c(0,1)) # "Blues 2","Blues 3","Purples 3"
 p <- p + theme_classic()
 p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))
+p <- p + coord_flip()
 p
 
 file.out <- sprintf("figs/fig_es.heatmap.mendelian_rare_genes.pdf")
-ggsave(p, filename=file.out, width=5, height=8)
+ggsave(p, filename=file.out, width=10, height=4)
 
 
 # ======================================================================= #

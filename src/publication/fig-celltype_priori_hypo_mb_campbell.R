@@ -142,6 +142,12 @@ list.bind <- list("Mousebrain"=df.mb %>% select(annotation, annotation_clean, p.
 
 df.join <- bind_rows(list.bind, .id="dataset")
 
+df.join %>% count(dataset)
+# dataset        n
+# 1 Campbell      64
+# 2 Mousebrain    17
+# --> Total = 81
+
 ### Add pvalue
 df.join <- df.join %>% mutate(p.value.mlog10 = -log10(p.value))
 

@@ -436,8 +436,8 @@ plot_es.gene_centric.single_es_metric <- function(df,
   # }
   p <- p +  
     facet_wrap(~gene_name, 
-               scales = "free", # x scale must be set 'free' because we use x='x_order', so every position is different
-               labeller = as_labeller(stringr::str_to_title) # capitalize first letter
+               scales = "free" # x scale must be set 'free' because we use x='x_order', so every position is different
+               # labeller = as_labeller(stringr::str_to_title) # capitalize first letter
     ) + 
     theme(strip.background=element_blank())
   }

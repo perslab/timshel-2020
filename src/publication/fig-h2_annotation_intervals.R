@@ -26,6 +26,7 @@ library(RColorBrewer)
 # display.brewer.pal(n=6, name="YlOrRd")
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 
 setwd(here("src/publication"))
 
@@ -42,16 +43,27 @@ plot_h2_annotation_intervals <- function(df.plot_h2q) {
     geom_hline(yintercept = 1, linetype="dashed", color="gray") +
     scale_fill_brewer(palette = "YlOrRd",
                       breaks = levels(as.factor(df.plot_h2q$q)), # IMPORTANT: q is q0,...q5
-                      labels = c(expression(I0["0"]),
-                                 expression(I1["(0-0.2]"]),
-                                 expression(I2["(0.2-0.4]"]),
-                                 expression(I3["(0.4-0.6]"]),
-                                 expression(I4["(0.6-0.8]"]),
-                                 expression(I5["(0.8-1]"]))) +
+                      labels = c("0",
+                                 "(0-0.2]",
+                                 "(0.2-0.4]",
+                                 "(0.4-0.6]",
+                                 "(0.6-0.8]",
+                                 "(0.8-1]")) +
     theme(legend.text.align = 0) + # needed for aligning legend text to the left
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
-    labs(x="", y="Heritability enrichment", fill="ES interval") # title=expression("h"[2]*" enrichment") 
+    labs(x="", y="Heritability enrichment", fill=expression(ES[mu]~interval)) # title=expression("h"[2]*" enrichment") 
   return(p)
+  
+  # Before May 9th, but works
+  # scale_fill_brewer(palette = "YlOrRd",
+  #                   breaks = levels(as.factor(df.plot_h2q$q)), # IMPORTANT: q is q0,...q5
+  #                   labels = c(expression(I0["0"]),
+  #                              expression(I1["(0-0.2]"]),
+  #                              expression(I2["(0.2-0.4]"]),
+  #                              expression(I3["(0.4-0.6]"]),
+  #                              expression(I4["(0.6-0.8]"]),
+  #                              expression(I5["(0.8-1]"])))
+  # scale_color_brewer() --> plot_h2_annotation_intervals.lollipop
 }
 
 plot_h2_annotation_intervals.lollipop <- function(df.plot_h2q) {
@@ -63,15 +75,15 @@ plot_h2_annotation_intervals.lollipop <- function(df.plot_h2q) {
     geom_errorbar(aes(ymin=enr-enr_se, ymax=enr+enr_se), position=pd, width = 0.01, colour="black") +
     scale_color_brewer(palette = "YlOrRd",
                       breaks = levels(as.factor(df.plot_h2q$q)), # IMPORTANT: q is q0,...q5
-                      labels = c(expression(I0["0"]),
-                                 expression(I1["(0-0.2]"]),
-                                 expression(I2["(0.2-0.4]"]),
-                                 expression(I3["(0.4-0.6]"]),
-                                 expression(I4["(0.6-0.8]"]),
-                                 expression(I5["(0.8-1]"]))) +
+                      labels = c("0",
+                      "(0-0.2]",
+                      "(0.2-0.4]",
+                      "(0.4-0.6]",
+                      "(0.6-0.8]",
+                      "(0.8-1]")) +
     theme(legend.text.align = 0) + # needed for aligning legend text to the left
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
-    labs(x="", y="Heritability enrichment", color="ES interval") # title=expression("h"[2]*" enrichment") 
+    labs(x="", y="Heritability enrichment", color=expression(ES[mu]~interval)) # title=expression("h"[2]*" enrichment") 
     # WORKS --> labs(x="", y=expression(atop(h^{2}~enrichment, (proportion~h^{2}/annotation~size))), color="ES interval") # title=expression("h"[2]*" enrichment") 
   p
   return(p)

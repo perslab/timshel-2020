@@ -121,6 +121,11 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_pri
     colormap.annotations_highlight <- get_color_mapping.prioritized_annotations_bmi(dataset="tabula_muris")
     sym_var.node_color <- sym("tissue")
     sym_var.node_color_edge_elbow2 <- sym("node.tissue")
+  } else if (dataset_prefix == "campbell_lvl2") {
+    filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell_lvl2")
+    colormap.annotations_highlight <- get_color_mapping.prioritized_annotations_bmi(dataset="campbell_lvl2")
+    sym_var.node_color <- sym("taxonomy_lvl2")
+    sym_var.node_color_edge_elbow2 <- sym("node.taxonomy_lvl2")
   } else {
     stop(sprintf("Wrong dataset_prefix: %s", dataset_prefix))
   }

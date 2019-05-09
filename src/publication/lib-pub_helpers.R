@@ -91,7 +91,7 @@ reorder_factor_levels_to_first_last_pairs <- function(factor_levels) {
 
 get_prioritized_annotations_bmi <- function(dataset) {
   ### BMI_UKBB_Loh2018 dataset FDR significant
-  allowed.dataset <- c("mousebrain", "tabula_muris", "campbell")
+  allowed.dataset <- c("mousebrain", "tabula_muris", "campbell_lvl2")
   if (!dataset %in% allowed.dataset) {
     stop("Got wrong dataset argument. Allowed values are: [%s]", paste(allowed.dataset, collapse=", "))
   }
@@ -99,8 +99,8 @@ get_prioritized_annotations_bmi <- function(dataset) {
     annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
   } else if (dataset == "tabula_muris") {
     annotations <- c("Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
-  } else if (dataset == "campbell") {
-    stop("Not yet implemented")
+  } else if (dataset == "campbell_lvl2") {
+    annotations <- c("n29.Nr5a1-Adcyap1") # Cleaned name is n29.Nr5a1/Bdnf
   } else {
     stop("Internal error")
   }
@@ -118,7 +118,7 @@ get_color_mapping.prioritized_annotations_bmi <- function(dataset) {
   # colormap.annotations <- get_prioritized_annotations_color_mapping(dataset="mousebrain")
   # ggplot(...) + scale_color_manual(values=colormap.annotation) # a set of aesthetic values to map data values to. the values will be matched based on the names.
   
-  allowed.dataset <- c("mousebrain", "tabula_muris", "campbell")
+  allowed.dataset <- c("mousebrain", "tabula_muris", "campbell_lvl2")
   if (!dataset %in% allowed.dataset) {
     stop("Got wrong dataset argument. Allowed values are: [%s]", paste(allowed.dataset, collapse=", "))
   }
@@ -146,8 +146,8 @@ get_color_mapping.prioritized_annotations_bmi <- function(dataset) {
     # #FF0000 == red
     annotations <- c("Brain_Non-Myeloid.neuron"="#FF0000", 
                      "Brain_Non-Myeloid.oligodendrocyte_precursor_cell"="#FF0000")
-  } else if (dataset == "campbell") {
-    stop("Not yet implemented")
+  } else if (dataset == "campbell_lvl2") {
+    annotations <- c("n29.Nr5a1-Adcyap1"="#FF0000") # Cleaned name is n29.Nr5a1/Bdnf
   } else {
     stop("Internal error")
   }

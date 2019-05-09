@@ -35,8 +35,14 @@ setwd(here("src/publication"))
 # filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
 
 ### Mousebrain
-dataset_prefix <- "mousebrain_all"
-filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+# dataset_prefix <- "mousebrain_all"
+# filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+
+### Campbell
+dataset_prefix <- "campbell_lvl2"
+filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell_lvl2")
+
+
 
 # ======================================================================= #
 # ======================== LOAD DATA AND PRE-PROCESS ===================== #

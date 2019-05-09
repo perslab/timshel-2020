@@ -1,0 +1,40 @@
+annotation,gwas_fdr,Class,Description,NCells,Neurotransmitter,Probable_location,Region,LeafOrder,TaxonomyRank1,TaxonomyRank2,TaxonomyRank3,TaxonomyRank4,Comment,TaxonomyRank4_reduced1,tax_order_idx_mb_fig1c,Neurotransmitter_class,Neurotransmitter_class_linnarson,nt.Acetylcholine,nt.Adrenaline,nt.Dopamine,nt.GABA,nt.GLYT1,nt.GLYT2,nt.Nitric oxide,nt.Noradrenaline,nt.Serotonin,nt.VGLUT1,nt.VGLUT2,nt.VGLUT3,nt.<NA>,color_by_variable
+DEGLU4,"BMI (Loh, 2018)
+Educational Attainment (Lee, 2018)
+Neuroticism (Nagel, 2018)
+Worry (Nagel, 2018)",Neurons,"Excitatory neurons, thalamus",101,Glutamate (VGLUT2),Parafascicular nucleus,Thalamus,140,Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon excitatory neurons,nan,Di- and mesencephalon excitatory neurons,14,Excitatory,Ex,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,Neurons
+DEGLU5,"BMI (Loh, 2018)
+Worry (Nagel, 2018)",Neurons,"Excitatory neurons, midbrain",426,Glutamate (VGLUT1),Anterior pretectal nucleus,Midbrain dorsal,123,Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon excitatory neurons,"doi:10.1007/s00429-011-0348-3 Very similar to Thalamus cluster, changed",Di- and mesencephalon excitatory neurons,14,Excitatory,Ex,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,Neurons
+DEINH3,"BMI (Loh, 2018)",Neurons,"Inhibitory neurons, hypothalamus",323,GABA,Subthalamic nucleus,Hypothalamus,152,Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon inhibitory neurons,nan,Di- and mesencephalon inhibitory neurons,13,Inhibitory,In,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,Neurons
+MEGLU1,"BMI (Loh, 2018)
+Worry (Nagel, 2018)",Neurons,"Excitatory neurons, midbrain",263,Glutamate (VGLUT1),"Superior colliculus, red nucleus",Midbrain dorsal,124,Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon excitatory neurons,Should split in two clusters(other side has Cbln1),Di- and mesencephalon excitatory neurons,14,Excitatory,Ex,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,Neurons
+MEGLU10,"BMI (Loh, 2018)",Neurons,"Excitatory neurons, midbrain",419,"Glutamate (VGLUT1), Nitric oxide",Inferior colliculus,Midbrain dorsal,128,Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon excitatory neurons,Poor markers,Di- and mesencephalon excitatory neurons,14,Excitatory,Ex,NA,NA,NA,NA,NA,NA,1,NA,NA,1,NA,NA,NA,Neurons
+MEGLU11,"BMI (Loh, 2018)
+Intelligence (Savage, 2018)
+Worry (Nagel, 2018)",Neurons,"Excitatory neurons, midbrain",249,Glutamate (VGLUT1),Inferior colliculus,Midbrain dorsal,129,Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon excitatory neurons,nan,Di- and mesencephalon excitatory neurons,14,Excitatory,Ex,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,Neurons
+MEINH2,"BMI (Loh, 2018)",Neurons,"Inhibitory neurons, midbrain",461,GABA,Midbrain,"Midbrain dorsal,Midbrain ventral",151,Neurons,CNS neurons,Di- and mesencephalon neurons,Di- and mesencephalon inhibitory neurons,Magnocellular because they are huge,Di- and mesencephalon inhibitory neurons,13,Inhibitory,In,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,Neurons
+TEGLU17,"Bipolar Disorder (PGC, 2018)
+BMI (Loh, 2018)
+Educational Attainment (Lee, 2018)
+Insomnia (Jansen, 2018)
+Intelligence (Savage, 2018)
+Neuroticism (Nagel, 2018)
+Schizophrenia (Pardinas, 2018)
+Worry (Nagel, 2018)",Neurons,"Excitatory neurons, cerebral cortex",784,Glutamate (VGLUT1),Piriform pyramidal,Cortex,17,Neurons,CNS neurons,Telencephalon projecting neurons,Telencephalon projecting excitatory neurons,nan,Telencephalon projecting excitatory neurons,24,Excitatory,Ex,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,Neurons
+TEGLU23,"Bipolar Disorder (PGC, 2018)
+BMI (Loh, 2018)
+Educational Attainment (Lee, 2018)
+Intelligence (Savage, 2018)
+Schizophrenia (Pardinas, 2018)
+Worry (Nagel, 2018)",Neurons,"Excitatory neurons, hippocampus CA3",484,"Glutamate (VGLUT1), Nitric oxide",CA3,Hippocampus,24,Neurons,CNS neurons,Telencephalon projecting neurons,Telencephalon projecting excitatory neurons,nan,Telencephalon projecting excitatory neurons,24,Excitatory,Ex,NA,NA,NA,NA,NA,NA,1,NA,NA,1,NA,NA,NA,Neurons
+TEGLU4,"Bipolar Disorder (PGC, 2018)
+BMI (Loh, 2018)
+Educational Attainment (Lee, 2018)
+Intelligence (Savage, 2018)
+Neuroticism (Nagel, 2018)
+Schizophrenia (Pardinas, 2018)
+Worry (Nagel, 2018)",Neurons,"Excitatory neurons, cerebral cortex",664,Glutamate (VGLUT1),"Cortex pyramidal layer 5, Cingulate/Retrosplenial area (superficial and deep)",Cortex,22,Neurons,CNS neurons,Telencephalon projecting neurons,Telencephalon projecting excitatory neurons,nan,Telencephalon projecting excitatory neurons,24,Excitatory,Ex,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,Neurons
+TEINH12,"Bipolar Disorder (PGC, 2018)
+BMI (Loh, 2018)
+Intelligence (Savage, 2018)
+Worry (Nagel, 2018)",Neurons,"Non-border Cck interneurons, cortex/hippocampus",280,"GABA,Glutamate (VGLUT3)","Hippocampus,Cortex","Hippocampus,Cortex",58,Neurons,CNS neurons,Telencephalon interneurons,Telencephalon inhibitory interneurons,nan,Telencephalon inhibitory interneurons,19,Ex/In,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,1,NA,Neurons

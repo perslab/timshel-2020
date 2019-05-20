@@ -124,7 +124,7 @@ sem_obj <- sem_obj.mb
 
 
 ### MAIN PLOT: ESmu
-genes_select <- c("POMC", "AGRP", "LEPR", "MC4R", "CCK")
+genes_select <- c("POMC", "AGRP", "LEPR", "MC4R")
 # genes_select <- c("POMC", "AGRP", "LEPR", "MC4R", "CCK", "NTRK2")
 df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
 p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
@@ -134,7 +134,7 @@ p <- plot_es.gene_centric.single_es_metric(df.es.gene,
                                            size.highlight.points=rel(2))
 p <- p + labs(y=expression(ES[mu]))
 p
-file.out <- "figs/fig_es.main.mb.pomc_agrp_lepr_mc4r_cck.pdf"
+file.out <- "figs/fig_es.main.mb.pomc_agrp_lepr_mc4r.pdf"
 ggsave(plot=p, filename=file.out, width=8.5, height=5)
 
 
@@ -209,6 +209,31 @@ p
 ggsave(filename="figs/fig_es.mb.drdx_genes.pdf", plot=p, width=12, height=5) # A4 8.3 x 11.7
 
 
+# ======================= "MC4R", "ADCY3" ======================= #
+
+
+genes_select <- c("MC4R", "ADCY3")
+df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight=annotations_highlight,
+                                           annotations_colormap=colormap.annotation)
+p <- p + labs(y=expression(ES[mu]))
+p
+ggsave(filename="figs/fig_es.mb.mc4r_adcy3_genes.pdf", plot=p, width=8.5, height=5) # A4 8.3 x 11.7
+
+df <- df.es.gene %>% spread(key=gene_name, value=es_weight)
+df <- df %>% mutate(flag_highlight = if_else(annotation %in% annotations_highlight, TRUE, FALSE))
+p <- ggplot(df, aes(x=MC4R, y=ADCY3, label=annotation)) 
+p <- p + geom_point()
+p <- p + geom_point(data=df %>% filter(flag_highlight), aes(color=annotation), size=3)
+p <- p + geom_text_repel(data=df %>% filter(flag_highlight), aes(color=annotation), size=3, segment.alpha=0.5)
+p <- p + scale_color_manual(values=colormap.annotation)
+p <- p + guides(color=F) # hide legend
+p <- p + lims(x=c(0,1), y=c(0,1))
+p <- p + labs(x=expression(ES[mu]~MC4R), y=expression(ES[mu]~ADCY3))
+p
+
+ggsave(filename="figs/fig_es.mb.mc4r_adcy3_genes_scatter.pdf", plot=p, width=7, height=4) # A4 8.3 x 11.7
 
 # ======================= Standard model genes [BMI + appetite regulation] ======================= #
 

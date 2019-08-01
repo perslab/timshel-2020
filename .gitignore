@@ -49,12 +49,8 @@ data
 !/results/**/*
 
 
-################## TMP ##################
 
-### Expression data
-src/datasets-expression/novo_bulk/out.magma_geneset/
-
-### LDSC
+### LDSC tutorial
 src/ldsc/experiments/test.BMI_Yengo2018.*
 src/ldsc-tutorial/BMI1.GTEx*
 src/ldsc-tutorial/tutorial-james/*
@@ -66,17 +62,11 @@ src/depict/results/*
 
 
 ### MAGMA
-src/magma-geneset/out.maca/
-src/magma-geneset/out.mousebrain_neurons/
-
 src/magma-celltyping/data-*
 src/magma-celltyping/export.out.*
 
-src/magma-explore/data-effect_of_magma_internal_covariates.13985_homolog_genes/*
-src/magma-explore/BMI_Yengo2018.resid.correct_all.*
 
-src/magma-gene_scores/out_magma_BMI/
-
+################## TMP ##################
 
 ### TMP
 src/tmp-leftover_code/

@@ -358,37 +358,6 @@ list_gwas = ["BMI_UKBB_Loh2018"] # BMI_UPDATE_Yengo2018
 FLAG_WGCNA = False
 
 
-### Mean MB [mousebrain_all_190306_es_fix]
-# dict_genomic_annot = {"celltypes.mousebrain_190306_es_fix.all":
-# 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_190306_es_fix.txt.gz"},
-#  					 }
-
-
-### Mousebrain hierarchical (11 FDR cell-types + neurons)
-# dict_genomic_annot = {"celltypes.mousebrain.bmi_loh2018_11fdr_celltypes":
-# 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_bmi_loh2018_11fdr_celltypes.sem_mean.txt.gz"},
-#  					 "celltypes.mousebrain.neurons":
-#  					  	{"dataset":"mousebrain",
-#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_neurons.sem_mean.txt.gz"}
-#  					 }
-
-
-# ### Adipocyte (sem_mean only)
-# dict_genomic_annot = {"celltypes.preadipocyte_developing_1808_branch":
-# 						{"dataset":"dataset_with_no_all_genes",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch.sem_mean.txt.gz"},
-#  					 "celltypes.preadipocyte_developing_1808_branch_pc2_quantile":
-#  					  	{"dataset":"dataset_with_no_all_genes",
-#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.preadipocyte_developing_1808_branch_pc2_quantile.sem_mean.txt.gz"}
-#  					 }
-
-# ### Mean TM ONLY [for null]
-# dict_genomic_annot = {"celltypes.tabula_muris.all":
-#  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
-#  					 }
 
 ### Mean MB+TM [ES mean *PUBLICATION*]
 dict_genomic_annot = {"celltypes.mousebrain.all":
@@ -398,25 +367,6 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
  					  	{"dataset":"tabula_muris",
  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}
  					 }
-
-
-### top10pct (Skene and Hillary)
-# dict_genomic_annot = {"celltypes.mousebrain_top10pct.all":
-# 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_top10pct_binary.txt.gz"},
-#  					 "celltypes.tabula_muris_top10pct.all":
-#  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_top10pct_binary.txt.gz"}
-#  					 }
-
-# ### Raw SEMs
-# dict_genomic_annot = {"celltypes.mousebrain_raw_sems.all":
-# 						{"dataset":"mousebrain",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all_raw_sems.txt.gz"},
-#  					 "celltypes.tabula_muris_raw_sems.all":
-#  					  	{"dataset":"tabula_muris",
-#  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris_raw_sems.txt.gz"}
-#  					 }
 
 
 ### Cambpell [ES mean]
@@ -437,28 +387,6 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 ################## WGCNA ##################
 # FLAG_WGCNA = True
 
-
-### Modules from FDR significant cell-types [v4, 190218] | WGCNA med deepSplit 1 + n=11 BMI_UKBB_Loh2018 FDR cell-types 
-# Feb 18 4:22 PM
-# - koerslen hedder Neurons_sub_ClusterName_7.3_run1
-# - data.frame med module genes: /projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_cell_cluster_module_genes.csv.gz
-# - kMEs: /projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_kMs_full_join.csv.gz
-# Nogle observationer:
-# - Baade lavenderblush og lightpink3 er 100% bevarede (nu som henholdsvis ‘palevioletred’ og ‘brown’ - beklager, har ikke ville begynde at rette i det gamle script :S)
-# - antal moduler er faldet til 126
-
-# dict_genomic_annot = {"wgcna.mousebrain-190218.fdr_sign_celltypes.continuous": 
-# 					  	{"dataset":"mousebrain", 
-# 					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.3_run1_cell_cluster_module_genes.csv.gz"}
-# 					 }
-
-
-### Mousebrain - trait specificity for lavenderblush and lightpink3 [190218]
-# dict_genomic_annot = {"wgcna.mousebrain-190213.fdr_sign_celltypes.continuous": 
-# 					  	{"dataset":"mousebrain", 
-# 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes--lavenderblush--lightpink3.csv"}
-# 					 }
-
 ### Modules from FDR significant cell-types [v3, 190213] | NEW: WGCNA run on n=11 BMI_UKBB_Loh2018 FDR cell-types 
 # Feb 13 [6:15 PM]
 # Hej Pascal,
@@ -467,64 +395,10 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 # /projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes.csv.gz
 # Dodgerblue modulet gaar igen uden aendring, nu under navnet “lavenderblush”.
 # (har i senere aendringer i scriptet soerget for at alle random seeds, inklusive navne, er reproducible) 
-# dict_genomic_annot = {"wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous": 
-# 						{"dataset":"tabula_muris", 
-# 						"file_multi_gene_set":"/projects/jonatan/tabula_muris_3/tables/tabula_muris_3_cell_cluster_module_genes.csv.gz"},
-# 					  "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous": 
+# dict_genomic_annot = {"wgcna.mousebrain-190213.fdr_sign_celltypes.continuous": 
 # 					  	{"dataset":"mousebrain", 
 # 					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_cell_cluster_module_genes.csv.gz"}
 # 					 }
-
-
-# ### Modules from FDR significant cell-types [v2, 190111] + KME CUT-OFF
-# ### NOTES kME reassign disabled; deepSplit = 2
-# dict_genomic_annot = {}
-# for cutoff_kme in [0.25, 0.30, 0.40, 0.50]:
-# 	for dataset_name in ["tabula_muris", "mousebrain"]:
-# 		key_name = "wgcna.{}-190111.fdr_sign_celltypes_min_kme_{:.0f}.continuous".format(dataset_name, cutoff_kme*100) # *100 to avoid dots in name
-# 		if dataset_name == "tabula_muris": 
-# 			file_prefix_cluster = "tabula_muris_3_cell_cluster_module_genes"
-# 		elif dataset_name == "mousebrain": 
-# 			file_prefix_cluster = "mb_Neurons_ClusterName_7_cell_cluster_module_genes"
-# 		else:
-# 			raise Exception(".")
-# 		dict_genomic_annot[key_name] = {"dataset":dataset_name, 
-# 									"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/{}.min_kme_{:.2f}.csv.gz".format(file_prefix_cluster, cutoff_kme)
-# 									}
-
-
-# ### Modules from FDR significant cell-types [v2, 190111]
-# ### NOTES kME reassign disabled; deepSplit = 2
-# dict_genomic_annot = {"wgcna.tabula_muris-190111.fdr_sign_celltypes.continuous": 
-# 						{"dataset":"tabula_muris", 
-# 						"file_multi_gene_set":"/projects/jonatan/tabula_muris_3/tables/tabula_muris_3_cell_cluster_module_genes.csv.gz"},
-# 					  "wgcna.mousebrain-190111.fdr_sign_celltypes.continuous": 
-# 					  	{"dataset":"mousebrain", 
-# 					  	"file_multi_gene_set":"/projects/jonatan/mousebrain_7/tables/mb_Neurons_ClusterName_7_cell_cluster_module_genes.csv.gz"}
-# 					 }
-
-
-
-# ### Modules from FDR significant cell-types [v1, 181214]
-# ### NOTES: too many modules generated. ~50 modules per cell-type
-# dict_genomic_annot = {"wgcna.tabula_muris-181214.fdr_sign_celltypes.continuous": 
-# 						{"dataset":"tabula_muris", 
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/tabula_muris-181214.tabula_muris_2_cell_cluster_module_genes.fdr_sign_celltypes.csv"},
-# 					  "wgcna.mousebrain-181214.fdr_sign_celltypes.continuous": 
-# 					  	{"dataset":"mousebrain", 
-# 					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/data/gene_lists/mousebrain-181214.mb_ClusterName_6_cell_cluster_module_genes.fdr_sign_celltypes.csv"}
-# 					 }
-
-### All modules
-# dict_genomic_annot = {"wgcna.tabula_muris-181214.continuous":"/projects/jonatan/tabula_muris_2/tables/tabula_muris_2_cell_cluster_module_genes.csv.gz",
-# 					  "wgcna.mousebrain-181214.continuous":"/projects/jonatan/tmp_mousebrain_6/tables/mb_ClusterName_6_cell_cluster_module_genes.csv.gz"}
-
-### TEST
-# dict_genomic_annot = {"wgcna.tmp_test_file_multi_gene_set_wgcna200": 
-# 						{"dataset":"tabula_muris", 
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/test_file_multi_gene_set_wgcna200.csv"},
-# 					}
-
 
 
 #########################################################################################

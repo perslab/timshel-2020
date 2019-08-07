@@ -881,7 +881,7 @@ map_to_human <- function(object, type_mouse_gene_ids) {
 
 calc_sem_wrapper <- function(object) {
   ### Function: wrapper to calculate all SEMs
-  sems <- c("det", "ges", "nsi", "ep")
+  sems <- c("DET", "GES", "NSI", "EP")
   for (sem in sems) {
     object <- calc_sem(object, sem_name=sem)
     object <- calc_sem(object, sem_name=sem, null=T)
@@ -903,13 +903,13 @@ calc_sem <- function(object, sem_name, null=F) {
     object_data <- object[["data"]]
   }
   
-  if (sem_name == "det") {
+  if (sem_name == "DET") {
     df_sem <- calc_det(object_data, object[["ncells"]])
-  } else if (sem_name == "ges") {
+  } else if (sem_name == "GES") {
     df_sem <- calc_ges(object_data, object[["ncells"]])
-  } else if (sem_name == "nsi") {
+  } else if (sem_name == "NSI") {
     df_sem <- calc_nsi(object_data[["mean"]])
-  } else if (sem_name == "ep") {
+  } else if (sem_name == "EP") {
     df_sem <- calc_ep(object_data[["mean"]])
   # } else if (sem_name == "zscore") {
   #   df_sem <- calc_zscore(object)

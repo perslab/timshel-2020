@@ -236,7 +236,7 @@ R.utils::gzip(file.out.data, overwrite=TRUE) # gzip
 
 ### Write cell meta-data
 df.metadata <- seurat_obj@meta.data %>% as.tibble()
-file.out.meta <- here("tmp-data/expression/campbell2017.cell_metadata.csv")
+file.out.meta <- here("tmp-data/expression/campbell2017.metadata.csv")
 data.table::fwrite(df.metadata, file=file.out.meta,  # fwrite cannot write gziped files
                    nThread=24, verbose=T) # write file ---> write to scratch 
 

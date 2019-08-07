@@ -7,8 +7,6 @@ import numpy as np
 from scipy import stats # f_oneway
 
 
-def test_function(input_str):
-	print(input_str)
 
 def ctc_log_normalize(df):
 	"""
@@ -51,10 +49,11 @@ def calculate_anova_sporadically_expressed_genes(df, annotations, out_prefix):
 		df_anova.loc[gene_id, "statistic"] = f.statistic
 	df_anova.sort_values("pvalue",ascending=False, inplace=True)
 
+	print("Writing out file...")
 	df_anova.to_csv("{}.pre_calc.sporadically_expressed_genes.anova.csv.gz".format(out_prefix), compression="gzip")
 
 	n_genes_sporadically_expressed = np.sum(df_anova['pvalue'] > 0.00001) # 0.00001 is Skene cut-off
-	print("Number of genes sporadically expressed (pvalue > 0.00001, Skene cut-off): {}".format(n_genes_sporadically_expressed))
+	print("Number of genes sporadically expressed (pvalue > 0.00001): {}".format(n_genes_sporadically_expressed))
 	return(df_anova)
 
 
@@ -90,7 +89,7 @@ def calculate_per_anno_summary_stats(df, annotations, out_prefix, permute_annota
 	# REF: https://stackoverflow.com/a/39237712/6639640
 	
 	if permute_annotations:
-		print("Doing null computation. Permuting labels with seed({}).".format(seed)
+		print("Doing null computation. Permuting labels with seed({}).".format(seed))
 		np.random.seed(seed)
 		annotations = np.random.permutation(annotations) # permute labels
 

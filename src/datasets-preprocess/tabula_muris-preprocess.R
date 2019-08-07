@@ -139,7 +139,7 @@ dim(df) # 23341 44949
 colnames(df)[1:10]; rownames(df)[1:10]
 df <- df %>% rownames_to_column(var="gene") %>% select(gene, everything()) %>% as.tibble() # set rownames as column
 ### df <- GetAssayData(object = seurat_obj, slot = "raw.data") # returns dgCMatrix
-file.out.data <- here("tmp-data/expression/tabula_muris.umi.csv"
+file.out.data <- here("tmp-data/expression/tabula_muris.umi.csv")
 data.table::fwrite(df, file=file.out.data,  # fwrite cannot write gziped files
                    nThread=24, verbose=T) # write file ---> write to scratch 
 R.utils::gzip(file.out.data, overwrite=TRUE) # gzip

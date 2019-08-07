@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-# Expression specificity library.
+# Expression Specificity library.
 
 
 ### OUTPUT: 
@@ -34,12 +34,6 @@ library(tidyverse)
 ######################################## Binning ############################################
 ######################################################################################################
 
-# wrapper_binning <- function(df, n_bins=101, threshold_bin_zero=0){
-#   print(sprintf("Binning data frame with n_bins=%s", n_bins))
-#   df.binned <- df %>% transmute_all(funs(bin_vector), n_bins, threshold_bin_zero) # *OBS* output tibble looses rownames
-#   # rownames(df.binned) <- rownames(df) # set rownmaes *IMPORTANT*
-#   return(df.binned)
-# }
 
 bin_vector <- function(vector_in, n_bins, threshold_bin_zero=0){
   # Function to compute bins 
@@ -80,21 +74,7 @@ rank_normalize_vecor <- function(vector_in, threshold_bin_zero=-Inf){
 ######################################################################################################
 
 
-# wrapper_specificity_quantiles <- function(df.avg_expr, dataset_prefix) {
-#   ### INPUT: data frame or matrix of average expression. genes x celltypes. with rownames and columnnames.
-#   # SEE calculate_specificity() for notes on sensitivity to log_transformation.
-#   ### OUTPUT: data frame with specificity quantiles.
-#   
-#   df.specificity <- calculate_specificity(df.avg_expr)
-#   write_csv(df.specificity %>% rownames_to_column(var="gene"), sprintf("%s.specificity.sem.csv.gz", dataset_prefix))
-#   
-#   df.specificity.quantiles <- df.specificity %>% transmute_all(funs(transform_to_quantiles), threshold_bin_zero=0) # *OBS* output tibble looses rownames
-#   rownames(df.specificity.quantiles) <- rownames(df.specificity) # set rownmaes *IMPORTANT*
-#   write_csv(df.specificity.quantiles %>% rownames_to_column(var="gene"), sprintf("%s.specificity_quantiles.sem.csv.gz", dataset_prefix))
-# }
-
-
-calculate_specificity <- function(df.avg_expr){
+calc_ep <- function(df.avg_expr){
   ### INPUT:
   # df.avg_expr:      data frame or matrix of average expression. genes x celltypes. with rownames and columnnames.
   #                   It is NOT recommended to input  average expression in log space, but the specificity measure is robust to log-transformation, so it will only make very small difference.
@@ -143,9 +123,8 @@ calculate_specificity <- function(df.avg_expr){
 ############################################# SI ##############################################
 ######################################################################################################
 
-# ^ XXXX then when we rank the genes while ignoring NA values (na.last="keep"), the gene will get a low rank or maybe even be NA.
 
-normalized_specificity_index <- function (df) {
+calc_nsi <- function (df) {
   ### Input: data.frame. genes x cell-types. Any rownames are not used
   ### Output: normalized SI data.frame with same dimensions as input df.
   ### Algorithm inspired by specificity.index() function from pSI CRAN package.
@@ -314,7 +293,7 @@ calculate_pem <- function(df.avg_expr){
 ################################## SEM CALC that takes SEM as input  ##################################
 ######################################################################################################
 
-zscore_sem <- function(object_data) {
+calc_zscore <- function(object_data) {
   print("Calculating z-score")
   df.zscores.gene_wise <- as.data.frame(t(scale(t(as.data.frame(object_data[["mean"]])), center = TRUE, scale = TRUE))) # returns a DATA FRAME with columns=annotations, rownames=genes.
   df.zscores.gene_wise.na <- df.zscores.gene_wise %>% filter_all(any_vars(is.na(.))) # we (sometimes) have NA values. Don't know why. It could be because some genes have zero-variance
@@ -324,7 +303,7 @@ zscore_sem <- function(object_data) {
   return(df.zscores.gene_wise)
 }
 
-tstat_sem <- function(object_data, df.ncells) {
+calc_det <- function(object_data, df.ncells) {
   ### vectorized calculation of pooled variance for each gene
   # formula: sum_i{var[i]*(n[i]-1)}/sum_i{n[i]-1}, where i is the group.
   
@@ -362,7 +341,7 @@ tstat_sem <- function(object_data, df.ncells) {
 
 
 
-ges_sem <- function(object_data, df.ncells) {
+calc_ges <- function(object_data, df.ncells) {
   ### Calculate Gene Enrichment Score
   ### Ref: Zeisel, Cell 2018
   ### formula: (mean[celltype]+epsilon_1)/(mean[other]+epsilon_1) * (frac[celltype]+epsilon_2)/(frac[other]+epsilon_2)
@@ -600,7 +579,6 @@ write_sems <- function(object, slot, dataset_prefix, dir_out) {
     } else if (slot == "null") {
       file.suffix <- sprintf("es_w_null.%s", name.sem)
     }
-
     file.out <- sprintf("%s/%s.%s.csv.gz", dir_out, dataset_prefix, file.suffix)
     print(sprintf("Writing file: %s", file.out))
     object.data[[name.sem]] %>% mutate(gene=object[["genes"]]) %>% select(gene, everything()) %>% write_csv(path=file.out)
@@ -608,16 +586,6 @@ write_sems <- function(object, slot, dataset_prefix, dir_out) {
   }
 }
 
-### OLD
-# write_sem <- function(df, dataset_prefix, name.sem, ortholog_mapping=NULL) {
-#   print(sprintf("Writing files for SEM = %s", name.sem))
-#   write_csv(df %>% rownames_to_column(var="gene"), sprintf("%s.%s.sem.csv.gz", dataset_prefix, name.sem))
-#   
-#   if (!is.null(ortholog_mapping)) {
-#     df.human <- mouse_to_human_ortholog_gene_expression_mapping(df, type_mouse_gene_ids=ortholog_mapping)
-#     write_csv(df.human %>% rownames_to_column(var="gene"), sprintf("%s.%s.hsapiens_orthologs.sem.csv.gz", dataset_prefix, name.sem))
-#   }
-# }
 
 identical_value <- function(x,y) {
   # returns NA if any values are not identical
@@ -913,7 +881,7 @@ map_to_human <- function(object, type_mouse_gene_ids) {
 
 calc_sem_wrapper <- function(object) {
   ### Function: wrapper to calculate all SEMs
-  sems <- c("tstat", "ges", "si", "specificity") # "zscore"
+  sems <- c("det", "ges", "nsi", "ep")
   for (sem in sems) {
     object <- calc_sem(object, sem_name=sem)
     object <- calc_sem(object, sem_name=sem, null=T)
@@ -935,16 +903,16 @@ calc_sem <- function(object, sem_name, null=F) {
     object_data <- object[["data"]]
   }
   
-  if (sem_name == "tstat") {
-    df_sem <- tstat_sem(object_data, object[["ncells"]])
+  if (sem_name == "det") {
+    df_sem <- calc_det(object_data, object[["ncells"]])
   } else if (sem_name == "ges") {
-    df_sem <- ges_sem(object_data, object[["ncells"]])
-  } else if (sem_name == "si") {
-    df_sem <- normalized_specificity_index(object_data[["mean"]])
-  } else if (sem_name == "specificity") {
-    df_sem <- calculate_specificity(object_data[["mean"]])
+    df_sem <- calc_ges(object_data, object[["ncells"]])
+  } else if (sem_name == "nsi") {
+    df_sem <- calc_nsi(object_data[["mean"]])
+  } else if (sem_name == "ep") {
+    df_sem <- calc_ep(object_data[["mean"]])
   # } else if (sem_name == "zscore") {
-  #   df_sem <- zscore_sem(object)
+  #   df_sem <- calc_zscore(object)
   # } else if (sem_name == "mean") { # makes no sense to include. 
   #   df_sem <- object[["mean"]]
   # } else if (sem_name == "frac_expr") { # makes no sense to include
@@ -1158,7 +1126,7 @@ calc_sem_meta <- function(object) {
     list.tmp.sd[[annotation]] <- apply(object[["group_by_annotation.sem_transformed"]][[annotation]], 1, sd)
   }
   object[["sem_meta"]][["median"]] <- bind_cols(list.tmp.median)
-  object[["sem_meta"]][["mean"]] <- bind_cols(list.tmp.mean)
+  object[["sem_meta"]][["mu"]] <- bind_cols(list.tmp.mean)
   object[["sem_meta"]][["sd"]] <- bind_cols(list.tmp.sd)
   return(object)
 }
@@ -1225,7 +1193,8 @@ get_genetic_and_sem_data <- function(object, slot, df.magma) {
 }
 
 fit_sems <- function(object, slot, df.magma, df.metadata=NULL, exclude_bin_zero=F) {
-
+  ### Description: fit linear model between sem and MAGMA ZSTAT
+  
   df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
   
   ### Run regressions
@@ -1278,6 +1247,8 @@ fit_sems <- function(object, slot, df.magma, df.metadata=NULL, exclude_bin_zero=
 
 
 fit_sems_tstat <- function(object, slot, df.magma, df.metadata=NULL) {
+  ### Description: compute t-test for MAGMA ZSTAT between genes grouped by sem zero-values and non-zero-values 
+  
   ### Add genetic data to sem_meta
   df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
   
@@ -1312,23 +1283,4 @@ fit_sems_tstat <- function(object, slot, df.magma, df.metadata=NULL) {
   return(df.model_sumstats)
 }
 
-######################################################################################################
-########################################### PLOTS ####################################################
-######################################################################################################
-
-boxplot_bin_zero <- function(object, slot, df.magma, df.metadata, annotation=NULL) {
-  if (is.null(annotation)) {
-    annotation <- sample(object[["annotations"]], size=1)
-    print(sprintf("Chose random annotation: %s", annotation))
-  }
-  ### Add genetic data to sem_meta
-  df.regression <- get_genetic_and_sem_data(object, slot, df.magma)
-
-  df.tmp <- df.regression %>% select(ZSTAT, !!rlang::sym(annotation)) # two-column
-  idx.zero <- df.tmp %>% pull(!!rlang::sym(annotation)) == 0
-  df.tmp <- df.tmp %>% mutate(group = if_else(idx.zero, "bin_zero", "non_zero_bin"))
-  p <- ggplot(df.tmp, aes(x=group, y=ZSTAT)) + geom_boxplot() + labs(title=annotation)
-  print(p)
-  return(df.tmp)
-}
 

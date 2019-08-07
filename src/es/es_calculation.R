@@ -64,8 +64,13 @@ wrapper_calc_es <- function(path_prefix.es_precalc, path_out, dataset_prefix, ve
   
   # ================================ Write SEMs ================================= #
   
-  write_sems(sem_obj, slot="sem_meta", dataset_prefix=dataset_prefix, dir_out=path_out) # sem_meta writes out mean, median, sd
+  ## write_sems(slot='sem_meta'): writes out mean, median, sd
+  write_sems(sem_obj, slot="sem_meta", dataset_prefix=dataset_prefix, dir_out=path_out)
   print("Done with function")
+
+  ### Write multi_geneset_file for LDSC
+  df_multi_geneset <- write_multi_geneset_file(sem_obj, dataset_prefix, use_raw_sem_values=F) # no raw values
+  # df_multi_geneset <- write_multi_geneset_file(sem_obj, dataset_prefix=sprintf("%s_raw_sems", dataset_prefix), use_raw_sem_values=T) # *OBS*: only set use_raw_sem_values=T if you want raw (untransformed) SEM values exported.
 }
 
 
@@ -87,29 +92,17 @@ print(sprintf("RUNNING dataset_prefix=%s, version_stamp=%s", dataset_prefix, ver
 # dataset_prefix <- "mousebrain_all"
 
 
-if (dataset_prefix == "mousebrain_all") {
-  path_prefix.es_precalc <- here("data/expression/mousebrain/mousebrain")
+path_prefix.es_precalc <- here("tmp-data/expression-precalc/", dataset_prefix) 
+if (dataset_prefix == "mousebrain") {
   type_mouse_gene_ids <- "ensembl"
 } else if (dataset_prefix == "tabula_muris") {
-  path_prefix.es_precalc <- here("data/expression/tabula_muris/tabula_muris") 
   type_mouse_gene_ids <- "mgi"
 } else if (dataset_prefix %in% c("campbell_lvl1", "campbell_lvl2")) {
-  path_prefix.es_precalc <- here("data/expression/hypothalamus_campbell/", dataset_prefix) 
   type_mouse_gene_ids <- "mgi"
 } else {
   stop(sprintf("Got wrong dataset_prefix %s", dataset_prefix))
 }
 
-# ======================================================================= #
-# =============================== TMP DEV ================================ #
-# ======================================================================= #
-
-# source(here("src/lib/load_functions.R")) # load sc-genetics library
-# sem_obj_mouse <- create_sem_object(path_prefix.es_precalc)
-# sem_obj_mouse[["annotations"]]
-# sem_obj_mouse[["data"]][["mean"]]
-# stringr::str_detect(sem_obj_mouse[["annotations"]], pattern="/")
-# stringr::str_replace_all(sem_obj_mouse[["annotations"]], c("/"="-", "\\s+"="_"))
 
 # ======================================================================= #
 # =============================== RUN ================================ #
@@ -118,20 +111,3 @@ if (dataset_prefix == "mousebrain_all") {
 wrapper_calc_es(path_prefix.es_precalc, path_out, dataset_prefix, version_stamp, type_mouse_gene_ids)
 
 print("Script done!")
-
-# ======================================================================= #
-# ============================== MAKE ES HEATMAPS ========================== #
-# ======================================================================= #
-
-### Run functions
-# make_es_heatmap.per_anno.genesXes_metrics(sem_obj, dataset_prefix)
-# make_es_heatmap.es_meta.genesXannotations(sem_obj, dataset_prefix)
-# print("Script done")
-
-
-# ======================================================================= #
-# ======================== Hierarchical analysis ======================== #
-# ======================================================================= #
-
-# SEE MOUSEBRAIN SCRIPT
-

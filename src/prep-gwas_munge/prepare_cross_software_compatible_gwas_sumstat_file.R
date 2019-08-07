@@ -26,7 +26,7 @@
 library(tidyverse)
 library(here)
 
-setwd(here("src/analysis-compare_genetic_prioritization_methods/"))
+setwd(here("src/prep-gwas_munge/"))
 
 
 # gwas_name <- "BMI_UPDATE_Yengo2018"
@@ -153,7 +153,7 @@ for (chisq_cutoff in chisq_cutoffs) {
 # We munged GWAS file include 1,217,311 HapMap3 SNPs.
 # SNPsnap --->  missing = 39,694
 # LDSC 1kg --> missing = 26,990
-# Both mapping files result in more or the same mapping rate.
+# Both mapping files result in more or less the same mapping rate.
 
 # ### SNPSNAP
 # file.snp_mapping <- here("data/snp_mapping/snpsnap_EUR_1KG_phase3-chrpos_mapping.tab.gz")

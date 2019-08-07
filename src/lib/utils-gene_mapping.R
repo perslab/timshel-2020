@@ -11,7 +11,7 @@
 
 ############################################
 
-
+library(here)
 library(tidyverse)
 
 
@@ -31,9 +31,9 @@ mouse_to_human_ortholog_gene_mapping <- function(gene_ids, type_mouse_gene_ids) 
     stop(sprintf("Got wrong argument for type_mouse_gene_ids: %s", type_mouse_gene_ids))
   }
   print("Reading gene mapping files...")
-  file.gene_name_mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz"
+  file.gene_name_mapping <- here("data/gene_annotations/Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz")
   df.gene_name_mapping <- suppressMessages(read_delim(file.gene_name_mapping, delim="\t"))
-  file.ortholog_mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
+  file.ortholog_mapping <- here("data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz")
   df.ortholog_mapping <- suppressMessages(read_delim(file.ortholog_mapping, delim="\t"))
   # ==========================  Map: MGI to EnsemblID  ==================== #
   # TODO: consider moving this step to a seperate function
@@ -137,12 +137,11 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr, type_mouse_
   # ======================================================================= #
   print("Reading gene mapping files...")
   
-  # file.gene_name_mapping <- "../data/gene_annotations/Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz"
-  file.gene_name_mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz"
+
+  file.gene_name_mapping <- here("data/gene_annotations/Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz")
   df.gene_name_mapping <- suppressMessages(read_delim(file.gene_name_mapping, delim="\t"))
   
-  # file.ortholog_mapping <- "../data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
-  file.ortholog_mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
+  file.ortholog_mapping <- here("data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz")
   df.ortholog_mapping <- suppressMessages(read_delim(file.ortholog_mapping, delim="\t"))
   # ======================================================================= #
   # ==========================  Map: MGI to EnsemblID  ==================== #
@@ -235,7 +234,7 @@ human_to_mouse_ortholog_gene_expression_mapping <- function(df, colname_geneids_
   ### INPUT df: a tibble/data.frame with the column 'colname_geneids_from' with human ensembl gene ids.
   ### OUTOUT df: a tibble with MOUSE ensembl gene ids added to the column 'colname_geneids_to'. Genes that did not map have NA values.
   
-  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz"
+  file.mapping <- here("data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz")
   df.mapping <- suppressMessages(read_delim(file.mapping, delim="\t"))
   # ensembl_gene_id chromosome_name start_position  end_position    mmusculus_homolog_ensembl_gene  mmusculus_homolog_orthology_confidence
   # ENSG00000138593 15      49280673        49338760        ENSMUSG00000035093      1
@@ -269,7 +268,7 @@ add_ensembl_ids_from_entrez <- function(df, colname_geneids_from="entrez", colna
   
   df <- as.data.frame(df) # convert to df to ensure the the below operations work.
   
-  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz"
+  file.mapping <- here("data/gene_annotations/gene_id_mapping.hsapiens.ensembl_entrez.txt.gz")
   df.mapping <- suppressMessages(read_tsv(file.mapping))
   
   genes_mapped <- df.mapping$ensembl_gene_id[match(df[,colname_geneids_from], df.mapping$entrezgene)]
@@ -302,7 +301,7 @@ hs_add_gene_symbol_from_ensembl_ids <- function(df, colname_geneids_from="ensemb
   
   df <- as.data.frame(df) # convert to df to ensure the the below operations work.
   
-  file.mapping <- "/projects/timshel/sc-genetics/sc-genetics/data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz"
+  file.mapping <- here("data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz")
   df.mapping <- suppressMessages(read_tsv(file.mapping))
   
   genes_mapped <- df.mapping$gene_name_optimal[match(df[,colname_geneids_from], df.mapping$ensembl_gene_id)]

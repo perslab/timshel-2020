@@ -1,0 +1,68 @@
+trait_name_full,trait_name_abrv,author,year,gwas_id
+Multiple Sclerosis,MS,Patsopoulos,2011,MS_Patsopoulos2011
+Alzheimer's Disease,AD,Lambert,2013,AD_Lambert2013
+Alzheimer's Disease,AD,Jansen,2019,AD_Jansen2019
+Attention Deficit Hyperactivity Disorder,ADHD,Demontis,2017,ADHD_PGC_Demontis2017
+Anorexia Nervosa ,AN,Duncan,2017,AN_PGC_Duncan2017
+Autism Spectrum Disorder,ASD,Grove,2018,ASD_iPSYCH_PGC_Grove2018
+Bipolar Disorder,BIP,PGC,2018,BIP_PGC2018
+Major Depression Disorder,MDD,Howard,2019,MDD_Howard2019
+Major Depression Disorder,MDD,Wray,2018,MDD_PGC_Wray2018
+Schizophrenia,SCZ,Pardinas,2018,SCZ_Pardinas2018
+Schizophrenia,SCZ,Ripke,2014,SCZ_EUR_Ripke2014
+Educational Attainment,EA2,Okbay,2016,EA2_Okbay2016
+Educational Attainment,EA3,Lee,2018,EA3_Lee2018
+Insomnia,INS,Jansen,2018,INSOMNIA_Jansen2018
+Intelligence,INT,Sniekers,2017,INTELLIGENCE_Sniekers2017
+Intelligence,INT,Savage,2018,INTELLIGENCE_Savage2018
+Risk Tolerance,RT,Linner,2019,RB_Linner_2019
+Depressive Symptoms,DS,Okbay,2016,DS_Okbay2016
+Neuroticism,NEU,Okbay,2016,NEUROTICISM_Okbay2016
+Subjective Well Being,SWB,Okbay,2016,SWB_Okbay2016
+Neuroticism,NEU,Nagel,2018,NEUROTICISM_Nagel2018
+Depression,DEP,Nagel,2018,DEPRESSION_Nagel2018
+Depressed Affect,DEP_AFFECT,Nagel,2018,DEPRESSED_AFFECT_Nagel2018
+Worry,WORRY,Nagel,2018,WORRY_Nagel2018
+BMI,BMI,Yengo,2018,BMI_UPDATE_Yengo2018
+Height,HEIGHT,Yengo,2018,HEIGHT_Yengo2018
+BMI,BMI,Locke,2015,BMI_Locke2015
+Height,HEIGHT,Wood,2014,HEIGHT_Wood2014
+Waist-hip Ratio,WHR,Shungin,2015,WHR_Shungin2015
+Waist-hip Ratio (adj. BMI),WHRadjBMI,Shungin,2015,WHRadjBMI_Shungin2015
+Waist-hip Ratio,WHR,Pulit,2019,WHR_Pulit2019
+Waist-hip Ratio (adj. BMI),WHRadjBMI,Pulit,2019,WHRadjBMI_Pulit2019
+BMI,BMI,Pulit,2019,BMI_Pulit2019
+BMI (male),BMI_M,Pulit,2019,BMI_male_Pulit2019
+BMI (female),BMI_F,Pulit,2019,BMI_female_Pulit2019
+BMI,BMI,Loh,2018,BMI_UKBB_Loh2018
+Waist-hip Ratio (adj. BMI),WHRadjBMI,Loh,2018,WHRadjBMI_UKBB_Loh2018
+Height,HEIGHT,Loh,2018,HEIGHT_UKBB_Loh2018
+Type 2 Diabetes,T2D,Loh,2018,T2D_UKBB_Loh2018
+Type 2 Diabetes (adj. BMI),T2DadjBMI,Mahajan,2018,T2DadjBMI_DIAMANTE_Mahajan2018
+Type 2 Diabetes,T2D,Mahajan,2018,T2D_UKBB_DIAMANTE_Mahajan2018
+Type 2 Diabetes,T2D,Mahajan,2018,T2D_DIAMANTE_Mahajan2018
+Type 2 Diabetes,T2D,Xue,2018,T2D_Xue2018
+Fasting Insulin (male),FI_M,Lagou,2018,FI_Male_Lagou2018
+Fasting Glucose (male),FG_M,Lagou,2018,FG_Male_Lagou2018
+Fasting Insulin (female),FI_F,Lagou,2018,FI_Female_Lagou2018
+Fasting Glucose (female),FG_F,Lagou,2018,FG_Female_Lagou2018
+HbA1c,HBA1C,Wheeler,2017,HBA1C_MAGIC_Wheeler2017
+High Density Lipoprotein,HDL,Willer,2013,LIPIDS_HDL_Willer2013
+Low Density Lipoprotein,LDL,Willer,2013,LIPIDS_LDL_Willer2013
+Triglycerides,TG,Willer,2013,LIPIDS_TG_Willer2013
+Total Cholesterol,TC,Willer,2013,LIPIDS_TC_Willer2013
+Type 1 Diabetes,T1D,Bradfield,2011,T1D_Bradfield2011
+High Density Lipoprotein,HDL,Teslovich,2010,LIPIDS_HDL_Teslovich2010
+Low Density Lipoprotein,LDL,Teslovich,2010,LIPIDS_LDL_Teslovich2010
+Triglycerides,TG,Teslovich,2010,LIPIDS_TG_Teslovich2010
+Celiac Disease,CELIAC,Dubois,2010,CELIAC_Dubois2010
+Ulcerative Colitis,UC,Jostins,2012,UC_Jostins2012
+Crohn's Disease,CROHNS,Jostins,2012,CROHNS_Jostins2012
+Inflammatory Bowel Disease,IBD,Jostins,2012,IBD_Jostins2012
+Primary Biliary Cirrhosis,PBC,Cordell,2015,PBC_Cordell2015
+Systemic Lupus Erythematosus,SLE,Bentham,2015,LUPUS_Bentham2015
+Rheumatoid Arthritis,RA,Okada,2014,RA_Okada2014
+Coronary Artery Disease,CAD,Schunkert,2011,CAD_Schunkert2011
+Diastolic Blood Pressure (adj. medicine),BP_DIA,Loh,2018,DIASTOLICadjMED_UKBB_Loh2018
+Systolic Blood Pressure (adj. medicine),BP_SYS,Loh,2018,SYSTOLICadjMED_UKBB_Loh2018
+Cardiovascular Diseases,CVD,Loh,2018,CARDIOVASCULAR_UKBB_Loh2018

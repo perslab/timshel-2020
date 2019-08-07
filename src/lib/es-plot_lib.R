@@ -7,40 +7,6 @@ library(gghighlight)
 library(ggrepel)
 library(viridis)
 
-# ===================================================================================================== #
-# ================================ Hybrid: annotation or genes centric ================================ #
-# ===================================================================================================== #
-
-.get_es_data <- function(sem_obj, annotations=NULL, genes=NULL) {
-  ### General purpose ES data extractor.
-  ### *** FUNCTION NOT FINISHED - it becomes too complicated/inefficient. ***
-  
-  ### DEVELOPMENT
-  # sem_obj
-  # annotations <- c("TEGLU23","DEINH3")
-  # genes <- c("AGRP", "NPY")
-  
-  if ( is.null(annotations) & is.null(genes) ) {
-    stop("You must provide one of 'annotations' or 'genes' arguments")
-  } 
-  # if ( !is.null(annotations) & !is.null(genes) ) {
-  #   stop("You must provide ONLY one of 'annotations' or 'genes' arguments")
-  # }
-  # 
-  if (!is.null(annotations) & is.null(sem_obj[["group_by_annotation.sem"]][[annotation]])) {
-    stop(sprintf("Annotation = '%s' not found in data", annotation))
-  }
-  
-  ### Get 'default' values
-  if (is.null(annotations)) {
-    annotations <- sem_obj$annotations
-  }
-  if (is.null(genes)) {
-    genes <- sem_obj$genes
-  }
-  
-  # bind_rows(sem_obj[["group_by_annotation.sem"]][annotations], .id="annotation")
-}
 
 
 # ==================================================================================== #
@@ -129,6 +95,7 @@ get_annotation_es.table <- function(sem_obj, annotations, es_metric) {
 ### Annotation centric: 
 # Plot ES of all genes for **one annotation** (annotation). 
 # You can highlight genes in the plot function.
+# This function is used in "fig-es_conceptual.R"
 
 get_es.annotation_centric <- function(sem_obj, annotation) {
   ### OBS: this function only supports extracting one annotation.

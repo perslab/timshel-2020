@@ -26,11 +26,11 @@ get_metadata <- function(dataset_prefix) {
   ### DESCRIPTION: function to load expression meta-data
   
   if (dataset_prefix == "campbell_lvl1") {
-    file.metadata <- here("/data/expression/hypothalamus_campbell/campbell_lvl1.cell_type_metadata.csv")
+    file.metadata <- here("/data/expression/campbell2017/campbell_lvl1.cell_type_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl1)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
   } else if (dataset_prefix == "campbell_lvl2") {
-    file.metadata <- here("/data/expression/hypothalamus_campbell/campbell_lvl2.cell_type_metadata.csv")
+    file.metadata <- here("/data/expression/campbell2017/campbell_lvl2.cell_type_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl2)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
   } else if (dataset_prefix == "mousebrain_all") {
@@ -45,7 +45,7 @@ get_metadata <- function(dataset_prefix) {
                             "TaxonomyRank2",
                             "TaxonomyRank3",
                             "TaxonomyRank4")
-    file.metadata <- here("/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv") # PT formatted/cleaned meta-data
+    file.metadata <- here("/data/expression/mousebrain/mousebrain.metadata.csv") # PT formatted/cleaned meta-data
     # df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
     df.metadata <-  suppressMessages(read_csv(file.metadata))
     df.metadata <- df.metadata %>% mutate(color_by_variable = Class)

@@ -16,30 +16,27 @@
 ### R studio
 .Rproj.user
 # ^ folder where project-specific temporary files (e.g. auto-saved source documents, window-state, etc.) are stored
-packrat/lib*/
-packrat/src/
-
 
 ################## Data files ##################
 
 ### R
-*.RData
+# *.RData
 
 ################## RESULT FILES ##################
 
 ### Tables
-*.csv
-*.xlsx
+# *.csv
+# *.xlsx
 
 ### Plots
-*.pdf
-*.png
-*.gif
-*.mp4
+# *.pdf
+# *.png
+# *.gif
+# *.mp4
 
 ################## PROJECT SPECIFC ##################
-out
-data
+# out
+# data
 
 ### "Un-ignore" publication folder | REF: https://stackoverflow.com/questions/5261959/unignore-subdirectories-of-ignored-directories-in-git
 ### This must come AFTER ignoring "results files" (e.g. .pdf)
@@ -48,22 +45,6 @@ data
 !/results/*
 !/results/**/*
 
-
-
-### LDSC tutorial
-src/ldsc/experiments/test.BMI_Yengo2018.*
-src/ldsc-tutorial/BMI1.GTEx*
-src/ldsc-tutorial/tutorial-james/*
-
-
-### DEPICT
-src/depict/*.cfg
-src/depict/results/*
-
-
-### MAGMA
-src/magma-celltyping/data-*
-src/magma-celltyping/export.out.*
 
 
 ################## TMP ##################

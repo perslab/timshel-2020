@@ -1,5 +1,6 @@
 ############### SYNOPSIS ###################
-# Prepare tabula muris figshare/180920-Robj/FACS_all.Robj data object: add annotations and save seurat object
+# Process Tabula Muris FACS (v. 180920, FACS_all.Robj) Seurat data object: add annotations and save seurat object
+# Export Seurat object to CSV
 
 ### OUTPUT: 
 # ....
@@ -17,15 +18,28 @@
 library(tidyverse)
 library(here)
 
+
 # ======================================================================= #
-# ============================  XXXXX  ============================== #
+# ============================  DOWNLOAD  ============================== #
 # ======================================================================= #
 
-### 
+# WEBSTE URL: https://figshare.com/articles/Robject_files_for_tissues_processed_by_Seurat/5821263/2
+# Version 2,  Dataset posted on 21.09.2018, 00:01 by Tabula Muris Consortium
+# DONWNLOAD DATE: Nov 5th 2018
+
+file_download <- here("tmp-data/expression/tabula_muris-FACS_all.RData")
+if (!file.exists(file_download)) {
+  download_url <- "https://ndownloader.figshare.com/files/13092806"
+  download.file(download_url, destfile=file_download)
+}
+
+
+# ======================================================================= #
+# ============================  LOAD  ============================== #
+# ======================================================================= #
 
 ### Load
-file.RData.cell_atlas <- "/data/pub-others/tabula_muris/figshare/180920-Robj/FACS_all.Robj" # 8.1 GB | # tiss_FACS
-load(file.RData.cell_atlas) 
+load(file_download) 
 seurat_obj <- tiss_FACS; 
 rm(tiss_FACS) # rename
 
@@ -102,12 +116,37 @@ seurat_obj <- SubsetData(seurat_obj, cells.use=seurat_obj@meta.data$cell, subset
 all(seurat_obj@cell.names==seurat_obj@raw.data@Dimnames[[2]]) # ok
 all(seurat_obj@cell.names==seurat_obj@meta.data$cell) # ok
 
-# ======================================================================= #
-# ============================ EXPORT  ============================== #
-# ======================================================================= #
-           
-### Normalize data (just to be sure)
-seurat_obj <- NormalizeData(seurat_obj, normalization.method = "LogNormalize", scale.factor = 1e4)
 
-### Save Robj
-save(seurat_obj, file="/data/pub-others/tabula_muris/figshare/180920-Robj/tabula_muris.seurat_obj.facs.figshare_180920.RData")
+# ======================================================================= #
+# ==================  EXPORT CELL-TYPE METADATA FILE  =================== #
+# ======================================================================= #
+
+
+df.metadata <- seurat_obj@meta.data %>% group_by(tissue_celltype) %>% summarise(n_cells = n()) # count
+df.metadata <- df.metadata %>% separate(tissue_celltype, into=c("tissue", "cell_type"), sep="\\.", remove=F, extra="merge") # split
+
+file.out <- here("data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv")
+df.metadata %>% write_csv(path=file.out)
+
+
+# ======================================================================= #
+# ================================ EXPORT TO CSV ============================= #
+# ======================================================================= #
+
+### Get expression data
+df <- as.data.frame(as.matrix(seurat_obj@raw.data)) # need to convert to matrix first. Otherwise you will get the error "cannot coerce class "structure("dgCMatrix", package = "Matrix")" to a data.frame"
+dim(df) # 23341 44949
+colnames(df)[1:10]; rownames(df)[1:10]
+df <- df %>% rownames_to_column(var="gene") %>% select(gene, everything()) %>% as.tibble() # set rownames as column
+### df <- GetAssayData(object = seurat_obj, slot = "raw.data") # returns dgCMatrix
+file.out.data <- here("tmp-data/expression/tabula_muris.umi.csv"
+data.table::fwrite(df, file=file.out.data,  # fwrite cannot write gziped files
+                   nThread=24, verbose=T) # write file ---> write to scratch 
+R.utils::gzip(file.out.data, overwrite=TRUE) # gzip
+
+### Write meta-data
+df.metadata <- seurat_obj@meta.data %>% as.tibble() %>% select(cell_id=cell,nGene,nReads,tissue,subtissue_clean,celltype,tissue_celltype,tissue_subtissue_celltype)
+file.out.meta <- "tmp-data/expression/tabula_muris.metadata.csv"
+data.table::fwrite(df.metadata, file=file.out.meta,  # fwrite cannot write gziped files
+                   nThread=24, verbose=T) # write file ---> write to scratch 
+

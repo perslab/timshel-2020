@@ -1,5 +1,6 @@
 ############### SYNOPSIS ###################
 # Download and prepare Campbell2017 hypothalamus gene epxression data
+# Seurat 2 compatible - not 3
 
 ### OUTPUT: 
 # ....
@@ -24,28 +25,42 @@ library(Seurat)
 # ======================================================================= #
 ### You only need to run this step once
 
-# Download UMI data  
-download_url <- "ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE93nnn/GSE93374/suppl/GSE93374_Merged_all_020816_DGE.txt.gz"
 file_download <- here("tmp-data/expression/campbell2017-GSE93374_Merged_all_020816_DGE.txt.gz")
-download.file(download_url, destfile=file_download)
 
-# Read data
-df.data_raw <- read.table(gzfile(file_download), header=T, sep="\t", stringsAsFactors=F)
-# save(df.data_raw, file=here("tmp-data/expression/GSE93374_Merged_all_020816_DGE.RData"))
+if (!file.exists(file_download)) {
+  # Download UMI data  
+  download_url <- "ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE93nnn/GSE93374/suppl/GSE93374_Merged_all_020816_DGE.txt.gz"
+  download.file(download_url, destfile=file_download)
+} else {
+  # NOTE: readr_*() / vroom() functions will not be able to read file since the file has one less header column than data column
+  df.data_raw <- data.table::fread(file_download, nThread=24, showProgress=T)
+  # ^ Warning messages OK! --> Detected 21086 column names but the data has 21087 columns (i.e. invalid file). Added 1 extra default column name for the first column which is guessed to be row names or an index. Use setnames() afterwards if this guess is not correct, or fix the file write command that created the file to create a valid file.
+  # ^ Rowname 'extra column' named 'V1'
+  # ^ str(df.data_raw)
+  df.data_raw <- df.data_raw %>% as.data.frame() %>% column_to_rownames('V1') # CreateSeuratObject
+  
+  ## ALTERNATIVE #1:
+  # df.data_raw <- read.table(gzfile(file_download), header=T, sep="\t", stringsAsFactors=F) # --> works but slow
+}
+
 
 
 # ======================================================================= #
-# ================================ Campbell ================================ #
+# ========================== Create Seurat object ============================= #
 # ======================================================================= #
+# We create a Seurat object because it is a convinient way of handling expression data and meta-data in the same object
 
 # Initialize a Seurat object
 seurat_obj <- CreateSeuratObject(raw.data = df.data_raw, min.cells = 0, min.genes = 0)
 seurat_obj # 26774 genes across 21086 samples.
 
+
+
 # ======================================================================= #
-# ================================ META DATA ================================ #
+# ================================ ADD META DATA ================================ #
 # ======================================================================= #
 
+### In this file we have mapped cell-types to a taxonomical system
 df.taxon_mapping <- read_csv(here("data/expression/campbell2017/campbell_taxon_mapping.csv"))
 ## Add cell type information to Seurat object
 df.metadata <- read_csv(here("data/expression/campbell2017/campbell2017.cell_metadata-181210.csv")) %>% 

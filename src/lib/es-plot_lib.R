@@ -140,10 +140,10 @@ plot_es.annotation_centric <- function(df.es, genes_highlight) {
   df.es <- df.es %>% mutate(es_metric = case_when(
     es_metric == "es_mu" ~ expression(ES[mu]),
     es_metric == "expr_mean" ~ "Mean norm. expr.",
-    es_metric == "ges" ~ "GES",
-    es_metric == "specificity" ~ "EP",
-    es_metric == "si" ~ "NSI",
-    es_metric == "tstat" ~ "DET",
+    # es_metric == "ges" ~ "GES",
+    # es_metric == "specificity" ~ "EP",
+    # es_metric == "si" ~ "NSI",
+    # es_metric == "tstat" ~ "DET",
     TRUE ~ as.character(es_metric))
   )
   
@@ -436,8 +436,8 @@ plot_es.gene_centric.single_es_metric <- function(df,
 
 
 
-.es_plot_gene_centric_pathwork <- function(df, annotations_highlight, show_only_nonzero_es=F) {
-  # TODO: make this function wrap plots using patchwork. 
+.es_plot_gene_centric_patchwork <- function(df, annotations_highlight, show_only_nonzero_es=F) {
+  # TODO: make this function wrap plots using patchwork instead of facet_wrap
   # 1: make a list of plots. 
   # 2: combine list of plots using patchwork::wrap_plots().
   stop("Not yet implemented")

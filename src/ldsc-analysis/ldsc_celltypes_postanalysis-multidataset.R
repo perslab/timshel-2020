@@ -29,8 +29,8 @@ setwd(here("src/ldsc"))
 ### PARAMS
 # dataset_prefix <- "mousebrain"
 # dataset_prefix <- "tabula_muris"
-dataset_prefix <- "campbell_lvl1"
-# dataset_prefix <- "campbell_lvl2"
+dataset_prefix <- "campbell2017_lvl1"
+# dataset_prefix <- "campbell2017_lvl2"
 
 genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 
@@ -48,8 +48,8 @@ file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc
 # file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__BMI_UPDATE_Yengo2018.cell_type_results.txt", genomic_annotation_prefix)
 # file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.mousebrain.all__BMI_Yengo2018.cell_type_results.txt"
 # file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.tabula_muris.all__BMI_Yengo2018.cell_type_results.txt"
-# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl1.all__BMI_Yengo2018.cell_type_results.txt"
-# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl2.all__BMI_Yengo2018.cell_type_results.txt"
+# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell2017_lvl1.all__BMI_Yengo2018.cell_type_results.txt"
+# file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell2017_lvl2.all__BMI_Yengo2018.cell_type_results.txt"
 df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
 df.ldsc_cts <- df.ldsc_cts %>% filter(es=="es_mean")
 

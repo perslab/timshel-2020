@@ -48,7 +48,7 @@ get_mousebrain_campbell_integrated_dendrogram <- function(save_fig) {
   # ======================================================================= #
   # ================================== CAMPBELL ========================= #
   # ======================================================================= #
-  dataset_prefix <- "campbell_lvl2"
+  dataset_prefix <- "campbell2017_lvl2"
   df.metadata.cb <- get_metadata(dataset_prefix)
   
   ### Annotation ESmu

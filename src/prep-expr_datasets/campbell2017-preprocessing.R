@@ -61,7 +61,7 @@ seurat_obj # 26774 genes across 21086 samples.
 # ======================================================================= #
 
 ### In this file we have mapped cell-types to a taxonomical system
-df.taxon_mapping <- read_csv(here("data/expression/campbell2017/campbell_taxon_mapping.csv"))
+df.taxon_mapping <- read_csv(here("data/expression/campbell2017/campbell2017_taxon_mapping.csv"))
 ## Add cell type information to Seurat object
 df.metadata <- read_csv(here("data/expression/campbell2017/campbell2017.cell_metadata-181210.csv")) %>% 
   select(-cell_type_glia, -cell_type_neurons, -umi_count_per_cell,-n_genes_expressed_per_cell, -cell_barcode)
@@ -217,9 +217,9 @@ seurat_obj@meta.data %>% count(cell_type_all_lvl2)
 # ======================================================================= #
 
 seurat_obj@meta.data %>% count(taxonomy_lvl1, taxonomy_lvl2, cell_type_all_lvl1) %>% 
-  write_csv(here("data/expression/campbell2017/campbell_lvl1.cell_type_metadata.csv"))
+  write_csv(here("data/expression/campbell2017/campbell2017_lvl1.cell_type_metadata.csv"))
 seurat_obj@meta.data %>% count(taxonomy_lvl1, taxonomy_lvl2, cell_type_all_lvl2) %>%
-  write_csv(here("data/expression/campbell2017/campbell_lvl2.cell_type_metadata.csv"))
+  write_csv(here("data/expression/campbell2017/campbell2017_lvl2.cell_type_metadata.csv"))
 
 # ======================================================================= #
 # ================================ EXPORT TO CSV ============================= #

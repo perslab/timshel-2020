@@ -28,7 +28,7 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 
-dataset_prefixes <- c("tabula_muris", "mousebrain", "campbell_lvl2")
+dataset_prefixes <- c("tabula_muris", "mousebrain", "campbell2017_lvl2")
 filter.gwas_bmi <- "BMI_UKBB_Loh2018"
 filter.gwas <- utils.get_gwas_ids_for_meta_analysis()
 

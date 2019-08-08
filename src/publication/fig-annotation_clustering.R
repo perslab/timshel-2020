@@ -39,8 +39,8 @@ setwd(here("src/publication"))
 # filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 ### Campbell
-dataset_prefix <- "campbell_lvl2"
-filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell_lvl2")
+dataset_prefix <- "campbell2017_lvl2"
+filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell2017_lvl2")
 
 
 

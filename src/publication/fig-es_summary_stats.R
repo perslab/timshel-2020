@@ -42,7 +42,7 @@ setwd(here("src/publication"))
 # dataset_prefix <- "mousebrain"
 # var_color_by <- sym("Class")
 
-dataset_prefix <- "campbell_lvl2"
+dataset_prefix <- "campbell2017_lvl2"
 var_color_by <- sym("taxonomy_lvl2")
 
 

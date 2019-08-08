@@ -88,9 +88,9 @@ print(sprintf("RUNNING dataset_prefix=%s, version_stamp=%s", dataset_prefix, ver
 
 ### DEV | MANUAL Args
 # version_stamp <- "999999"
-# dataset_prefix2run <- c("tabula_muris","mousebrain","campbell_lvl1","campbell_lvl2")
-# dataset_prefix <- "campbell_lvl1"
-# dataset_prefix <- "campbell_lvl2"
+# dataset_prefix2run <- c("tabula_muris","mousebrain","campbell2017_lvl1","campbell2017_lvl2")
+# dataset_prefix <- "campbell2017_lvl1"
+# dataset_prefix <- "campbell2017_lvl2"
 # dataset_prefix <- "tabula_muris"
 # dataset_prefix <- "mousebrain"
 
@@ -100,7 +100,7 @@ if (dataset_prefix == "mousebrain") {
   type_mouse_gene_ids <- "ensembl"
 } else if (dataset_prefix == "tabula_muris") {
   type_mouse_gene_ids <- "mgi"
-} else if (dataset_prefix %in% c("campbell_lvl1", "campbell_lvl2")) {
+} else if (dataset_prefix %in% c("campbell2017_lvl1", "campbell2017_lvl2")) {
   type_mouse_gene_ids <- "mgi"
 } else {
   stop(sprintf("Got wrong dataset_prefix %s", dataset_prefix))

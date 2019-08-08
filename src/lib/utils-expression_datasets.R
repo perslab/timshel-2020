@@ -25,12 +25,12 @@ library(here)
 get_metadata <- function(dataset_prefix) {
   ### DESCRIPTION: function to load expression meta-data
   
-  if (dataset_prefix == "campbell_lvl1") {
-    file.metadata <- here("/data/expression/campbell2017/campbell_lvl1.cell_type_metadata.csv")
+  if (dataset_prefix == "campbell2017_lvl1") {
+    file.metadata <- here("/data/expression/campbell2017/campbell2017_lvl1.cell_type_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl1)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
-  } else if (dataset_prefix == "campbell_lvl2") {
-    file.metadata <- here("/data/expression/campbell2017/campbell_lvl2.cell_type_metadata.csv")
+  } else if (dataset_prefix == "campbell2017_lvl2") {
+    file.metadata <- here("/data/expression/campbell2017/campbell2017_lvl2.cell_type_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl2)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
   } else if (dataset_prefix == "mousebrain") {

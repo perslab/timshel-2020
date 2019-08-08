@@ -370,12 +370,12 @@ dict_genomic_annot = {"celltypes.mousebrain.all":
 
 
 ### Cambpell [ES mean]
-# dict_genomic_annot = {"celltypes.campbell_lvl1.all":
+# dict_genomic_annot = {"celltypes.campbell2017_lvl1.all":
 # 						{"dataset":"campbell",
-# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl1.sem_mean.txt"},
-# 					 "celltypes.campbell_lvl2.all":
+# 						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell2017_lvl1.sem_mean.txt"},
+# 					 "celltypes.campbell2017_lvl2.all":
 # 					   	{"dataset":"campbell",
-# 					   	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell_lvl2.sem_mean.txt"}
+# 					   	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.campbell2017_lvl2.sem_mean.txt"}
 # 					  }
 
 

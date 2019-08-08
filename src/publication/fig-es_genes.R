@@ -85,7 +85,7 @@ es_obj.mb <- es_obj
 load(here("out/es/tabula_muris.es_obj.RData"))
 es_obj.tm <- es_obj
 
-load(here("out/es/campbell_lvl2.es_obj.RData"))
+load(here("out/es/campbell2017_lvl2.es_obj.RData"))
 es_obj.arc <- es_obj
 
 

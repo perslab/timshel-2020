@@ -290,7 +290,7 @@ def read_multi_gene_set_file(file_multi_gene_set, out_dir, out_prefix, flag_enco
 		# ^ This is because LDSC .annot files are read as *whitespace delimted* by the ldsc.py program, so annotation_name with whitespace in the name will make the .l2.ldscore.gz header wrong.
 		# df_multi_gene_set["annotation"] = df_multi_gene_set["annotation"].replace(r"/", "-",regex=True) 
 		# ^ We need to avoid forward slash (/) in the filenames when files are split per annotation (/per_annot dir). 
-		# ^ If forward slashes are not replaced, we would get an error when looking for or writing files such as "celltypes.campbell_lvl1.all.campbell_lvl1.a06.NG2/OPC.ges.21.l2.M" when the annotation name is "a06.NG2/OPC.ges"
+		# ^ If forward slashes are not replaced, we would get an error when looking for or writing files such as "celltypes.campbell2017_lvl1.all.campbell2017_lvl1.a06.NG2/OPC.ges.21.l2.M" when the annotation name is "a06.NG2/OPC.ges"
 	### Check for duplicated entries
 	bool_duplicated = df_multi_gene_set.duplicated(subset=["annotation", "gene_input"])
 	if bool_duplicated.any():

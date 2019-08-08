@@ -27,7 +27,7 @@ setwd(here("src/publication"))
 # ================================ LOAD DATA ============================ #
 # ======================================================================= #
 
-dataset_prefix <- "campbell_lvl2"
+dataset_prefix <- "campbell2017_lvl2"
 
 ### Get ES data
 load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))

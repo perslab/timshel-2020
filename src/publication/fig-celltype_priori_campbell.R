@@ -26,13 +26,13 @@ setwd(here("src/publication"))
 # ============================ CAMPBELL LVL2 LDSC ============================ #
 # ======================================================================= #
 
-dataset_prefix <- "campbell_lvl2"
+dataset_prefix <- "campbell2017_lvl2"
 filter.gwas <- "BMI_UKBB_Loh2018"
 
 # ================== LOAD LDSC CTS RESULTS (multi GWAS) ================ #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--campbell_lvl2.multi_gwas.csv.gz")
+file.results <- here("results/prioritization_celltypes--campbell2017_lvl2.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
 # =========================== FILTER GWAS =========================== #

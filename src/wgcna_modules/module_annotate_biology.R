@@ -264,7 +264,7 @@ df.bio_genes <- df.bio_genes %>% left_join(df.magma_gwas, by="ensembl_gene_id")
 df.bio_genes <- df.bio_genes %>% arrange(module_ldsc_pval, kme_rank_within_module)
 ### copy and filter (we copy to make be able to list all modules in df.bio_modules)
 df.bio_genes.all <- df.bio_genes
-df.bio_genes <- df.bio_genes %>% filter(module_ldsc_pval <= 0.05) # only write out module gene-based info for semi-significant modules (otherwise the list gets too long)
+df.bio_genes <- df.bio_genes %>% filter(module_ldsc_pval <= 0.05) # only write out module gene-based info for esi-significant modules (otherwise the list gets too long)
 
 # ======================================================================= #
 # =============================== Module biology summary ================================ #

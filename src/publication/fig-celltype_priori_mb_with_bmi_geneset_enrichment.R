@@ -101,7 +101,7 @@ p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(combined_rar
                                             size=rel(2.5), show.legend=F, 
                                             min.segment.length=0.1)# vjust=-2, hjust=1 #  box.padding=0
 # p.main <- p.main + geom_text(data=df.plot %>% filter(combined_rare_mendelian_obesity<fdr_threshold), aes(x=annotation, y=p.value.mlog10, label=text), size=rel(2), hjust=0, nudge_y=0.08, show.legend=F)
-# ^ no repel: works semi-ok
+# ^ no repel: works esi-ok
 ### axes
 p.main <- p.main + labs(x="", y=expression(-log[10](P[S-LDSC])), size=expression(-log[10](P[enrichment])))
 ### guides

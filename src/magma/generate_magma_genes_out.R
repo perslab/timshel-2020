@@ -150,7 +150,7 @@ if (RUN_MODE) {
 # .log
 
 # ======================================================================= #
-# ============= Add more gene IDs: Ensembl + gene symbol IDs ============ #
+# ============= Add more gene IDs: Enesbl + gene symbol IDs ============ #
 # ======================================================================= #
 
 ### Read file from previous step

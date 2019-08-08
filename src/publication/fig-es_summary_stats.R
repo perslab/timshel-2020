@@ -53,9 +53,9 @@ var_color_by <- sym("taxonomy_lvl2")
 load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
 
 # load(here("out/es/mousebrain_all.es_obj.RData"))
-# sem_obj.mb <- sem_obj
+# es_obj.mb <- es_obj
 # load(here("out/es/tabula_muris.es_obj.RData"))
-# sem_obj.tm <- sem_obj
+# es_obj.tm <- es_obj
 
 
 # ======================================================================= #
@@ -63,7 +63,7 @@ load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
 # ======================================================================= #
 
 ### Summary of number of ES genes for each metric
-df.n_es <- get_empirical_pvalues_summary(sem_obj, threshold=0.05, slot="sem_pvalues")
+df.n_es <- get_empirical_pvalues_summary(es_obj, threshold=0.05, slot="es_pvalues")
 # annotation tstat   ges    si specificity
 # 1 ABC         2701  2477  1265        2351
 # 2 ACBG        1502  1056  2126        2170
@@ -71,7 +71,7 @@ df.n_es <- get_empirical_pvalues_summary(sem_obj, threshold=0.05, slot="sem_pval
 # 4 ACNT1       1721  1343  2414        3364
 
 ### Calculate number of ES mu genes
-df.es_mu_genes <- sem_obj[["sem_meta"]][["mean"]] %>% 
+df.es_mu_genes <- es_obj[["es_meta"]][["mean"]] %>% 
   gather(key="annotation", value="es_weight") %>% 
   group_by(annotation) %>% 
   summarise(es_mu = sum(es_weight>0)) %>%
@@ -258,7 +258,7 @@ ggsave(plot=p.patch, filename=file.out, width=10, height=5)
 # ======================================================================= #
 
 # ### Empirical pval distribution
-# df.plot <- get_empirical_distribution(sem_obj, sem_name="ges", annotation=NULL) # ACBG (median=1)
-# df.plot.gather <- df.plot %>% gather(key="distribution", value="sem_value")
-# df.plot.gather %>% ggplot(aes(x=sem_value, fill=distribution)) + geom_density(alpha=0.2) + xlim(c(-10,10))
-# df.plot.gather %>% ggplot(aes(x=sem_value, fill=distribution)) + geom_density(alpha=0.2) + xlim(c(10,1000))
+# df.plot <- get_empirical_distribution(es_obj, es_name="ges", annotation=NULL) # ACBG (median=1)
+# df.plot.gather <- df.plot %>% gather(key="distribution", value="es_value")
+# df.plot.gather %>% ggplot(aes(x=es_value, fill=distribution)) + geom_density(alpha=0.2) + xlim(c(-10,10))
+# df.plot.gather %>% ggplot(aes(x=es_value, fill=distribution)) + geom_density(alpha=0.2) + xlim(c(10,1000))

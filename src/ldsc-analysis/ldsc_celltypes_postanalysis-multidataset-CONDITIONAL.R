@@ -55,7 +55,7 @@ tmp[is.na(tmp)] <- "baseline"
 names(list.dfs) <- tmp
 names(list.dfs)
 df.ldsc_cts <- list.dfs %>% bind_rows(.id="condition")
-df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
+df.ldsc_cts <- df.ldsc_cts %>% filter(es=="es_mean")
 
 df.ldsc_cts %>% count(condition)
 
@@ -69,7 +69,7 @@ df.ldsc_cts.export <- df.ldsc_cts %>% select(condition, p.value, annotation) %>%
 ### Export (selected columns)
 file.out <- here("results", sprintf("prioritization_celltypes_conditional--%s.BMI_UKBB_Loh2018.csv.gz", dataset_prefix))
 file.out
-# df.ldsc_cts %>% select(-sem, -dataset, -n_obs_sem, -fdr_significant, -p.value.adj) %>% write_csv(file.out)
+# df.ldsc_cts %>% select(-es, -dataset, -n_obs_es, -fdr_significant, -p.value.adj) %>% write_csv(file.out)
 
 
 # ======================================================================= #
@@ -85,7 +85,7 @@ df.ldsc_cts.export <- df.ldsc_cts.export %>% left_join(df.metadata, by="annotati
 # ======================================================================= #
 
 ### Multi CONDITION
-df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190212.%s.sem_mean.CONDITIONAL_BMI_UKBB_Loh2018.csv", dataset_prefix))
+df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190212.%s.es_mean.CONDITIONAL_BMI_UKBB_Loh2018.csv", dataset_prefix))
 
 # ======================================================================= #
 # ================================ PLOT: cell priori [FACET WRAP MULTI-CONDITIONAL] ================================= #
@@ -106,7 +106,7 @@ p <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 p
-file.out <- sprintf("out.tmp.190212.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "CONDITIONAL_BMI_UKBB_Loh2018")
+file.out <- sprintf("out.tmp.190212.plot.cell_prioritization.%s.%s.es_mean.color_by_class.pdf", dataset_prefix, "CONDITIONAL_BMI_UKBB_Loh2018")
 #ggsave(p, filename=file.out, width=15, height=20)
 ggsave(p, filename=file.out, width=15, height=20)
 

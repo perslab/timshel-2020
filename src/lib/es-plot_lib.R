@@ -13,7 +13,7 @@ library(viridis)
 # ================================ ES TABLES ================================ #
 # ==================================================================================== #
 
-get_annotation_es.top_n <- function(sem_obj, annotations, n_top_genes, es_metric) {
+get_annotation_es.top_n <- function(es_obj, annotations, n_top_genes, es_metric) {
   # returns data frame with top n ES genes for a given metric
   # output data frame will have the column "es_genes_top_fmt"
   ### DEV
@@ -28,7 +28,7 @@ get_annotation_es.top_n <- function(sem_obj, annotations, n_top_genes, es_metric
   list.res <- list()
   for (annotation in annotations) {
     print(sprintf("Fetching data for annotation = %s", annotation))
-    df.es <- get_es.annotation_centric(sem_obj, annotation=annotation) %>% # TODO: suppress print messages
+    df.es <- get_es.annotation_centric(es_obj, annotation=annotation) %>% # TODO: suppress print messages
       filter(es_metric == (!!es_metric) ) # !!sym(es_metric) does not work here [Error: object 'es_mu' not found]. REF: https://github.com/tidyverse/dplyr/issues/3139
     # gene            gene_name gene_idx_fixed es_metric es_weight gene_idx_sorted_within_metric
     # <chr>           <chr>              <int> <chr>         <dbl>                         <int>
@@ -51,7 +51,7 @@ get_annotation_es.top_n <- function(sem_obj, annotations, n_top_genes, es_metric
   return(df.res)
 }
 
-get_annotation_es.table <- function(sem_obj, annotations, es_metric) {
+get_annotation_es.table <- function(es_obj, annotations, es_metric) {
   # returns data frame: genes x annotation
   ### DEV
   # annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
@@ -65,7 +65,7 @@ get_annotation_es.table <- function(sem_obj, annotations, es_metric) {
   list.res <- list()
   for (annotation in annotations) {
     print(sprintf("Fetching data for annotation = %s", annotation))
-    df.es <- get_es.annotation_centric(sem_obj, annotation=annotation) %>% # TODO: suppress print messages
+    df.es <- get_es.annotation_centric(es_obj, annotation=annotation) %>% # TODO: suppress print messages
       filter(es_metric == (!!es_metric) ) # !!sym(es_metric) does not work here [Error: object 'es_mu' not found]. REF: https://github.com/tidyverse/dplyr/issues/3139
     # gene            gene_name gene_idx_fixed es_metric es_weight gene_idx_sorted_within_metric
     # <chr>           <chr>              <int> <chr>         <dbl>                         <int>
@@ -97,21 +97,21 @@ get_annotation_es.table <- function(sem_obj, annotations, es_metric) {
 # You can highlight genes in the plot function.
 # This function is used in "fig-es_conceptual.R"
 
-get_es.annotation_centric <- function(sem_obj, annotation) {
+get_es.annotation_centric <- function(es_obj, annotation) {
   ### OBS: this function only supports extracting one annotation.
   
-  if (is.null(sem_obj[["group_by_annotation.sem"]][[annotation]])) {
+  if (is.null(es_obj[["group_by_annotation.es"]][[annotation]])) {
     stop(sprintf("Annotation = '%s' not found in data", annotation))
   }
   ### Get data
-  df.es <- sem_obj[["group_by_annotation.sem"]][[annotation]] %>% 
-    mutate(gene=sem_obj$genes) %>% 
+  df.es <- es_obj[["group_by_annotation.es"]][[annotation]] %>% 
+    mutate(gene=es_obj$genes) %>% 
     hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name") # map gene
   ### Add addition data
   df.es <- df.es %>% 
     mutate(
-      expr_mean = sem_obj$data$mean[[annotation]],
-      es_mu = sem_obj$sem_meta$mean[[annotation]] 
+      expr_mean = es_obj$data$mean[[annotation]],
+      es_mu = es_obj$es_meta$mean[[annotation]] 
     )
   
   ### Wrangle data
@@ -163,13 +163,13 @@ plot_es.annotation_centric <- function(df.es, genes_highlight) {
 # ================================ UTILS ================================ #
 # ============================================================================== #
 
-.get_genes_select_idx <- function(sem_obj, genes_select) {
-  ### Function to get indices of genes in genes_select. Genes not in sem_obj will be dropped.
+.get_genes_select_idx <- function(es_obj, genes_select) {
+  ### Function to get indices of genes in genes_select. Genes not in es_obj will be dropped.
   ### Input: genes_select is a character vector of gene names
   ### Return: a named character vector. values are indecies of matching genes, names are gene names.
   
   ### Get index of genes
-  df.genes <- tibble(gene=sem_obj$genes) %>% hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name")
+  df.genes <- tibble(gene=es_obj$genes) %>% hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name")
   genes_match.idx <- match(genes_select, df.genes$gene_name)
   if (anyNA(genes_match.idx)) {
     print("Warning: one or more genes in genes_select could not be found.")
@@ -196,21 +196,21 @@ plot_es.annotation_centric <- function(df.es, genes_highlight) {
 ### Gene centric: Plot ES of all annotations for **one gene** (genes_select supports multiple genes as subplots). 
 # You can highlight annotations in the plot function.
 
-get_es.gene_centric.all_es_metrics <- function(sem_obj, genes_select) {
+get_es.gene_centric.all_es_metrics <- function(es_obj, genes_select) {
   ### returns all ES metrics (incl. es_mu and mean expr)
   # this function supports multiple genes (genes_select as vector)
   
   ### DEVELOPMENT
-  # sem_obj
+  # es_obj
   # genes_select <- c("AGRP", "NPY")
   
-  genes_match.idx <- .get_genes_select_idx(sem_obj, genes_select)
+  genes_match.idx <- .get_genes_select_idx(es_obj, genes_select)
 
   list.es <- list()
-  for (annotation in sem_obj$annotations) {
-    df.es <- sem_obj[["group_by_annotation.sem"]][[annotation]] %>% slice(genes_match.idx) # df | ges, si, tstat, specificity
-    expr_mean <- sem_obj$data$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | mean expression
-    es_mean <- sem_obj$sem_meta$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | es_mu
+  for (annotation in es_obj$annotations) {
+    df.es <- es_obj[["group_by_annotation.es"]][[annotation]] %>% slice(genes_match.idx) # df | ges, si, tstat, specificity
+    expr_mean <- es_obj$data$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | mean expression
+    es_mean <- es_obj$es_meta$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | es_mu
     list.es[[annotation]] <- df.es %>% mutate(
       expr_mean=expr_mean,
       es_mean=es_mean,
@@ -239,7 +239,7 @@ get_es.gene_centric.all_es_metrics <- function(sem_obj, genes_select) {
 
 
 
-get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metric) {
+get_es.gene_centric.single_es_metric <- function(es_obj, genes_select, es_metric) {
   # this function supports multiple genes (genes_select as vector)
   
   .check_valid_es_metrics(es_metric)
@@ -247,16 +247,16 @@ get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metri
 
   
   ### Get matching genes
-  genes_match.idx <- .get_genes_select_idx(sem_obj, genes_select)
+  genes_match.idx <- .get_genes_select_idx(es_obj, genes_select)
   
   
   ### Get data
   if (es_metric == "es_mu") {
-    df.es <- es_mean <- sem_obj$sem_meta$mean
+    df.es <- es_mean <- es_obj$es_meta$mean
   } else if (es_metric == "expr_mean") {
-    df.es <- sem_obj$data$mean
+    df.es <- es_obj$data$mean
   } else { # 'real' es metric
-    df.es <- sem_obj$sem[[es_metric]]
+    df.es <- es_obj$es[[es_metric]]
   }
   
   df.es_mean.gene_filter <- df.es %>% 
@@ -264,8 +264,8 @@ get_es.gene_centric.single_es_metric <- function(sem_obj, genes_select, es_metri
     mutate(gene_name=names(genes_match.idx)) # add gene names
 
   ### OLD method | WORKS [SIMPLE] [but OK delete]
-  # df.es_mean <- sem_obj$sem_meta$mean %>% 
-  #   mutate(gene=sem_obj$genes) %>% 
+  # df.es_mean <- es_obj$es_meta$mean %>% 
+  #   mutate(gene=es_obj$genes) %>% 
   #   hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name") %>% # map gene
   #   select(gene_name, everything(), -gene)
   # df.es_mean.gene_filter <- df.es_mean %>% filter(gene_name %in% genes_select)

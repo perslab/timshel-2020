@@ -49,9 +49,9 @@ get_df_es_from_multiple_es_obj <- function(list.data) {
 # ======================================================================= #
 
 load(here("out/es/mousebrain_all.es_obj.RData"))
-sem_obj.mb <- sem_obj
+es_obj.mb <- es_obj
 load(here("out/es/tabula_muris.es_obj.RData"))
-sem_obj.tm <- sem_obj
+es_obj.tm <- es_obj
 
 
 # ======================================================================= #
@@ -101,19 +101,19 @@ list.data <- list()
 list.data[[1]] <- list(
   "annotation"="DEINH6",
   "dataset"="mb",
-  "data_obj"=sem_obj.mb)
+  "data_obj"=es_obj.mb)
 list.data[[2]] <- list(
   "annotation"="MSN3",
   "dataset"="mb",
-  "data_obj"=sem_obj.mb)
+  "data_obj"=es_obj.mb)
 list.data[[3]] <- list(
   "annotation"="Pancreas.pancreatic_A_cell",
   "dataset"="tm",
-  "data_obj"=sem_obj.tm)
+  "data_obj"=es_obj.tm)
 list.data[[4]] <- list(
   "annotation"="Liver.hepatocyte",
   "dataset"="tm",
-  "data_obj"=sem_obj.tm)
+  "data_obj"=es_obj.tm)
 
 
 # ======================================================================= #
@@ -135,8 +135,8 @@ df.es <- df.es %>% mutate(annotation_fmt = recode_factor(annotation, !!!rename_v
 # ============================ GET ESw thresholds ========================= #
 # ======================================================================= #
 
-df.es_threshold.mb <- get_es_w_threshold(sem_obj.mb, threshold_pval=0.05)
-df.es_threshold.tm <- get_es_w_threshold(sem_obj.tm, threshold_pval=0.05)
+df.es_threshold.mb <- get_es_w_threshold(es_obj.mb, threshold_pval=0.05)
+df.es_threshold.tm <- get_es_w_threshold(es_obj.tm, threshold_pval=0.05)
 df.es_threshold <- bind_rows(df.es_threshold.mb, df.es_threshold.tm) # ok to bind because annotation are unique
 
 ### process
@@ -227,13 +227,13 @@ annotations_colormap.mb <- c("DEINH6"="black", "MSN3"="black")
 
 ### AGRP
 genes_select <- c("AGRP")
-df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.mb, genes_select=genes_select, es_metric="es_mu")
+df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.mb, genes_select=genes_select, es_metric="es_mu")
 p.mb_agrp <- plot_es.gene_centric.single_es_metric(df.es.gene, annotations_highlight=annotations_highlight.mb, annotations_colormap=annotations_colormap.mb)
 p.mb_agrp
 
 ### MSN
 genes_select <- c("DRD2")
-df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.mb, genes_select=genes_select, es_metric="es_mu")
+df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.mb, genes_select=genes_select, es_metric="es_mu")
 p.mb_msn <- plot_es.gene_centric.single_es_metric(df.es.gene, annotations_highlight=annotations_highlight.mb, annotations_colormap=annotations_colormap.mb)
 p.mb_msn
 
@@ -244,14 +244,14 @@ annotations_colormap.tm <- c("Pancreas.pancreatic_A_cell"="black","Liver.hepatoc
 
 ### Alpha
 genes_select <- c("GCG")
-df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.tm, genes_select=genes_select, es_metric="es_mu")
+df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.tm, genes_select=genes_select, es_metric="es_mu")
 p.tm_alhpa <- plot_es.gene_centric.single_es_metric(df.es.gene, annotations_highlight=annotations_highlight.tm, annotations_colormap=annotations_colormap.tm)
 p.tm_alhpa
 
 
 ### Liver
 genes_select <- c("APOA2")
-df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.tm, genes_select=genes_select, es_metric="es_mu")
+df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.tm, genes_select=genes_select, es_metric="es_mu")
 p.tm_hepato <- plot_es.gene_centric.single_es_metric(df.es.gene, annotations_highlight=annotations_highlight.tm, annotations_colormap=annotations_colormap.tm)
 p.tm_hepato
 
@@ -314,10 +314,10 @@ ggsave(plot=p.patch.comb, filename=file.out, width=12, height=6)
 
 
 # ### Get data for different annotations
-# df.es.mb_agrp <- get_es.annotation_centric(sem_obj.mb, annotation="DEINH6")
-# df.es.mb_msn <- get_es.annotation_centric(sem_obj.mb, annotation="MSN3") # or MSN2, MSN4
-# df.es.tm_alpha <- get_es.annotation_centric(sem_obj.tm, annotation="Pancreas.pancreatic_A_cell")
-# df.es.tm_hepato <- get_es.annotation_centric(sem_obj.tm, annotation="Liver.hepatocyte")
+# df.es.mb_agrp <- get_es.annotation_centric(es_obj.mb, annotation="DEINH6")
+# df.es.mb_msn <- get_es.annotation_centric(es_obj.mb, annotation="MSN3") # or MSN2, MSN4
+# df.es.tm_alpha <- get_es.annotation_centric(es_obj.tm, annotation="Pancreas.pancreatic_A_cell")
+# df.es.tm_hepato <- get_es.annotation_centric(es_obj.tm, annotation="Liver.hepatocyte")
 # 
 # ### Combine
 # list.df <- list(mb_agrp=df.es.mb_agrp,
@@ -340,7 +340,7 @@ ggsave(plot=p.patch.comb, filename=file.out, width=12, height=6)
 # # ================================= MB PLOTS ============================= #
 # 
 # ### AGRP
-# df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.mb, 
+# df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.mb, 
 #                                                    genes_select=c("AGRP"), 
 #                                                    es_metric="es_mu")
 # p.mb_agrp <- plot_es.gene_centric.single_es_metric(df.es.gene, 
@@ -349,7 +349,7 @@ ggsave(plot=p.patch.comb, filename=file.out, width=12, height=6)
 # p.mb_agrp
 # 
 # ### MSN
-# df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.mb, 
+# df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.mb, 
 #                                                    genes_select=c("DRD2"), 
 #                                                    es_metric="es_mu")
 # p.mb_msn <- plot_es.gene_centric.single_es_metric(df.es.gene, 
@@ -361,7 +361,7 @@ ggsave(plot=p.patch.comb, filename=file.out, width=12, height=6)
 # 
 # 
 # ### Alpha
-# df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.tm, 
+# df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.tm, 
 #                                                    genes_select=c("GCG"), 
 #                                                    es_metric="es_mu")
 # p.tm_alhpa <- plot_es.gene_centric.single_es_metric(df.es.gene, 
@@ -371,7 +371,7 @@ ggsave(plot=p.patch.comb, filename=file.out, width=12, height=6)
 # 
 # 
 # ### Liver
-# df.es.gene <- get_es.gene_centric.single_es_metric(sem_obj.tm, 
+# df.es.gene <- get_es.gene_centric.single_es_metric(es_obj.tm, 
 #                                                    genes_select=c("APOA2"), 
 #                                                    es_metric="es_mu")
 # p.tm_hepato <- plot_es.gene_centric.single_es_metric(df.es.gene, 

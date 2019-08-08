@@ -35,17 +35,17 @@ mouse_to_human_ortholog_gene_mapping <- function(gene_ids, type_mouse_gene_ids) 
   df.gene_name_mapping <- suppressMessages(read_delim(file.gene_name_mapping, delim="\t"))
   file.ortholog_mapping <- here("data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz")
   df.ortholog_mapping <- suppressMessages(read_delim(file.ortholog_mapping, delim="\t"))
-  # ==========================  Map: MGI to EnsemblID  ==================== #
+  # ==========================  Map: MGI to EnesblID  ==================== #
   # TODO: consider moving this step to a seperate function
   if (type_mouse_gene_ids=="mgi") {
-    print("Mapping from MGI to EnsemblID...")
+    print("Mapping from MGI to EnesblID...")
     print("Converting MGI symbols to lowercase to avoid issues with case sensitivity")
     df.gene_name_mapping$gene_name_optimal <- tolower(df.gene_name_mapping$gene_name_optimal)
     gene_ids <- tolower(gene_ids)
     ### Genes not found
     bool.not_found <- !(gene_ids %in% df.gene_name_mapping$gene_name_optimal) 
     not_mapped_from_MGI_to_ensembl.n_genes <- sum(bool.not_found) # n genes could not be mapped
-    not_mapped_from_MGI_to_ensembl.genes <- gene_ids[bool.not_found] # e.g Fam150a not found, but this is because it is called ALKAL1. Fam150a is listed as a synonym in Emsembl now.
+    not_mapped_from_MGI_to_ensembl.genes <- gene_ids[bool.not_found] # e.g Fam150a not found, but this is because it is called ALKAL1. Fam150a is listed as a synonym in Emesbl now.
     ### Match
     idx.match <- match(gene_ids, df.gene_name_mapping$gene_name_optimal) # find mapping idx. 'nomatch' is set to NA
     gene_ids.ens <- df.gene_name_mapping$ensembl_gene_id[idx.match] # vector with same length as "gene_ids", but we NA values for genes not found.
@@ -65,13 +65,13 @@ mouse_to_human_ortholog_gene_mapping <- function(gene_ids, type_mouse_gene_ids) 
   not_mapped_to_human_ortholog.genes <- gene_ids.ens[bool.not_found] # genes with no ortholog
   # ===============================  FINISH  ============================== #
   if (type_mouse_gene_ids=="mgi") {
-    print("List of genes not mapped from MGI to Ensembl ID:")
+    print("List of genes not mapped from MGI to Enesbl ID:")
     print(not_mapped_from_MGI_to_ensembl.genes)
   }
   print("List of genes not mapped to human ortholog:")
   print(not_mapped_to_human_ortholog.genes)
   if (type_mouse_gene_ids=="mgi") {
-    str1 <- sprintf("Number of genes NOT mapped from MGI to Ensembl ID: %s out of %s genes (%.2f pct)", 
+    str1 <- sprintf("Number of genes NOT mapped from MGI to Enesbl ID: %s out of %s genes (%.2f pct)", 
                     not_mapped_from_MGI_to_ensembl.n_genes, 
                     sum(!is.na(gene_ids)),
                     not_mapped_from_MGI_to_ensembl.n_genes/sum(!is.na(gene_ids))*100)
@@ -97,11 +97,11 @@ mouse_to_human_ortholog_gene_mapping <- function(gene_ids, type_mouse_gene_ids) 
 # Funtion to do ortholog mapping: map mouse genes to human
 
 ### DESCRIPTION
-# INPUT: avg expression file + mouse MGI-Ensembl mapping + ortholog mapping file.
+# INPUT: avg expression file + mouse MGI-Enesbl mapping + ortholog mapping file.
 # 1. Load avg expression file.
-# 4. Map MOUSE GENE NAME to ENSEMBL: Map expression matrices MGI gene names to mouse Ensembl IDs
+# 4. Map MOUSE GENE NAME to ENSEMBL: Map expression matrices MGI gene names to mouse Enesbl IDs
 #     1. use timshel-lib from gene name to ensembl: "Mus_musculus.GRCm38.90.gene_name_version2ensembl.txt.gz"
-# 5. SUBSET genes on 1-1 orthologs: in the expression file, keep only Ensembl IDs listed in "1-1 ortholog file"
+# 5. SUBSET genes on 1-1 orthologs: in the expression file, keep only Enesbl IDs listed in "1-1 ortholog file"
 # 6. REPLACE mouse ID with human ID.
 
 
@@ -111,12 +111,12 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr, type_mouse_
   # df.expr                 data frame containing expression data.
   #                         columns: cell-types or annotations
   # type_mouse_gene_ids     "mgi" or "ensembl"
-  #                         rows: genes (MGI or mouse Ensembl symbols). The data frame *MUST have rownames* with *mouse genes*.
+  #                         rows: genes (MGI or mouse Enesbl symbols). The data frame *MUST have rownames* with *mouse genes*.
   # file.out.map_stats:     output file path for the mapping stats (by default it just prints to the screen)
   ### OUTPUT
   # df.expr.ens.human:      a data frame where mouse genes have been substituted to human genes.
   #                         columns: cell-types or annotations
-  #                         rows: genes (human Ensembl IDs) as rownames.
+  #                         rows: genes (human Enesbl IDs) as rownames.
   
   ### TODO
   # this function is VERY MEMORY INEFFICIENT because it copies many data frame. It is simple to fix.
@@ -144,10 +144,10 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr, type_mouse_
   file.ortholog_mapping <- here("data/gene_annotations/gene_annotation.hsapiens_mmusculus_unique_orthologs.GRCh37.ens_v91.txt.gz")
   df.ortholog_mapping <- suppressMessages(read_delim(file.ortholog_mapping, delim="\t"))
   # ======================================================================= #
-  # ==========================  Map: MGI to EnsemblID  ==================== #
+  # ==========================  Map: MGI to EnesblID  ==================== #
   # ======================================================================= #
   if (type_mouse_gene_ids=="mgi") {
-    print("Mapping from MGI to EnsemblID...")
+    print("Mapping from MGI to EnesblID...")
     
     ### Converting MGI symbols to lowercase to avoid issues with case sensitivity
     print("Converting MGI symbols to lowercase to avoid issues with case sensitivity")
@@ -157,7 +157,7 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr, type_mouse_
     ### Genes not found
     bool.not_found <- !(rownames(df.expr) %in% df.gene_name_mapping$gene_name_optimal) 
     not_mapped_from_MGI_to_ensembl.n_genes <- sum(bool.not_found) # n genes could not be mapped
-    not_mapped_from_MGI_to_ensembl.genes <- rownames(df.expr)[bool.not_found] # e.g Fam150a not found, but this is because it is called ALKAL1. Fam150a is listed as a synonym in Emsembl now.
+    not_mapped_from_MGI_to_ensembl.genes <- rownames(df.expr)[bool.not_found] # e.g Fam150a not found, but this is because it is called ALKAL1. Fam150a is listed as a synonym in Emesbl now.
     
     ### Match
     idx.match <- match(rownames(df.expr), df.gene_name_mapping$gene_name_optimal) # find mapping idx. 'nomatch' is set to NA
@@ -195,12 +195,12 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr, type_mouse_
   # ===============================  FINISH  ============================== #
   # ======================================================================= #
   if (type_mouse_gene_ids=="mgi") {
-    str1 <- sprintf("Number of genes not mapped from MGI to Ensembl ID: %s out of %s genes (%.2f pct)", 
+    str1 <- sprintf("Number of genes not mapped from MGI to Enesbl ID: %s out of %s genes (%.2f pct)", 
                     not_mapped_from_MGI_to_ensembl.n_genes, 
                     length(rownames(df.expr)),
                     not_mapped_from_MGI_to_ensembl.n_genes/length(rownames(df.expr))*100)
     print(str1)
-    print("List of genes not mapped from MGI to Ensembl ID:")
+    print("List of genes not mapped from MGI to Enesbl ID:")
     print(not_mapped_from_MGI_to_ensembl.genes)
   }
   str2 <- sprintf("Number of genes not mapped to human ortholog: %s out of %s genes (%.2f pct)", 

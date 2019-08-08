@@ -115,5 +115,5 @@ ggsave(p + theme(legend.position="top"), filename=file.out, height=6.5, width=5)
 #   theme(axis.text.x=element_blank(),
 #         axis.ticks.x=element_blank())
 # p
-# file.out <- sprintf("out.tmp.190212.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "CONDITIONAL_BMI_UKBB_Loh2018")
+# file.out <- sprintf("out.tmp.190212.plot.cell_prioritization.%s.%s.es_mean.color_by_class.pdf", dataset_prefix, "CONDITIONAL_BMI_UKBB_Loh2018")
 # ggsave(p, filename=file.out, width=15, height=20)

@@ -27,7 +27,7 @@ get_genomic_annotation_prefix <- function(dataset_prefix) {
 # ======================================================================= #
 
 load_ldsc_cts_results <- function(file.ldsc_cts, dataset_prefix) {
-  # dataset_prefix: character vector given the data set prefix. This is used to seperate the sem_name from the annotation_name.
+  # dataset_prefix: character vector given the data set prefix. This is used to seperate the es_name from the annotation_name.
   
   df.ldsc_cts <- read_tsv(file.ldsc_cts) # The last column gives a P-value from a one-sided test that the coefficient is greater than zero. 
   ### Name column examples in CTS file:
@@ -37,23 +37,23 @@ load_ldsc_cts_results <- function(file.ldsc_cts, dataset_prefix) {
   pattern <- sprintf(".*__%s\\.(.*)\\.(.*?)$",dataset_prefix)
   mat.match <- str_match(df.ldsc_cts$Name, pattern) # returns matrix where the first column is the complete match, followed by one column for each capture group
   mat.match
-  df.ldsc_cts <- df.ldsc_cts %>% mutate(sem=mat.match[,3],
+  df.ldsc_cts <- df.ldsc_cts %>% mutate(es=mat.match[,3],
                                         annotation=mat.match[,2],
                                         dataset=dataset_prefix) %>%
     select(-Name) # drop Name col now
   
   ### split string - ONLY works if there are no dots (.) in the annotation_name. (Works for mousebrain)
   # tmp_split <- stringr::str_split_fixed(df.ldsc_cts$Name,pattern="\\.", n=Inf)
-  # df.ldsc_cts <- df.ldsc_cts %>% mutate(sem=tmp_split[,length(tmp_split[1,])],
+  # df.ldsc_cts <- df.ldsc_cts %>% mutate(es=tmp_split[,length(tmp_split[1,])],
   #                                       annotation=tmp_split[,length(tmp_split[1,])-1],
   #                                       dataset=tmp_split[,length(tmp_split[1,])-2]) %>% 
   #   select(-Name) # drop Name col now
   
   df.ldsc_cts <- df.ldsc_cts %>% rename(estimate=Coefficient, std.error=Coefficient_std_error, p.value=Coefficient_P_value)
-  df.ldsc_cts.tmp.summary <- df.ldsc_cts %>% group_by(sem) %>% summarise(n_obs_sem=n())
-  df.ldsc_cts <- left_join(df.ldsc_cts, df.ldsc_cts.tmp.summary, by="sem")
-  df.ldsc_cts <- df.ldsc_cts %>% mutate(fdr_significant = if_else(p.value <= 0.05/n_obs_sem, true=T, false=F),
-                                        p.value.adj = p.value*n_obs_sem)
+  df.ldsc_cts.tmp.summary <- df.ldsc_cts %>% group_by(es) %>% summarise(n_obs_es=n())
+  df.ldsc_cts <- left_join(df.ldsc_cts, df.ldsc_cts.tmp.summary, by="es")
+  df.ldsc_cts <- df.ldsc_cts %>% mutate(fdr_significant = if_else(p.value <= 0.05/n_obs_es, true=T, false=F),
+                                        p.value.adj = p.value*n_obs_es)
   # df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation") # add meta data
   return(df.ldsc_cts)
 }

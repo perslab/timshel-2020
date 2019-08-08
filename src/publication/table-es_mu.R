@@ -38,10 +38,10 @@ load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
 # ===================== SOM table (csv): all genes ES =================== #
 # ======================================================================= #
 
-# filter.annotations <- sem_obj[["annotations"]]
+# filter.annotations <- es_obj[["annotations"]]
 
 ### ES table for all genes (SOM)
-df.all_table <- get_annotation_es.table(sem_obj, annotations=filter.annotations, es_metric="es_mu")
+df.all_table <- get_annotation_es.table(es_obj, annotations=filter.annotations, es_metric="es_mu")
 file.out <- sprintf("tables/table-es_mu.%s.csv.gz", dataset_prefix)
 df.all_table %>% write_csv(file.out)
 

@@ -41,9 +41,9 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 load(here("out/es/mousebrain_all.es_obj.RData"))
-# sem_obj.mb <- sem_obj
+# es_obj.mb <- es_obj
 # load(here("out/es/tabula_muris.es_obj.RData"))
-# sem_obj.tm <- sem_obj
+# es_obj.tm <- es_obj
 
 # ======================================================================= #
 # ============================= LOAD GENE LISTS ========================= #
@@ -61,7 +61,7 @@ filter.genes <- df.geneset %>% pull(gene_symbol) %>% toupper()
 print(length(filter.genes)) # 50
 
 ### Get ESmu
-df.es <- get_es.gene_centric.single_es_metric(sem_obj, genes_select=filter.genes, es_metric="es_mu")
+df.es <- get_es.gene_centric.single_es_metric(es_obj, genes_select=filter.genes, es_metric="es_mu")
 ### "The following genes could not be found: BBS1;BBS5;ZBTB7B"
 # gene_name annotation es_weight
 # 1 ALMS1     ABC            0    

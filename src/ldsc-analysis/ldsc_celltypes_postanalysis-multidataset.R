@@ -51,7 +51,7 @@ file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc
 # file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl1.all__BMI_Yengo2018.cell_type_results.txt"
 # file.ldsc_cts <- "/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/celltypes.campbell_lvl2.all__BMI_Yengo2018.cell_type_results.txt"
 df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
-df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
+df.ldsc_cts <- df.ldsc_cts %>% filter(es=="es_mean")
 
 
 ### Load - MULTI GWAS
@@ -62,7 +62,7 @@ list.dfs <- lapply(file.path(dir.data, filenames), load_ldsc_cts_results, datase
 names(list.dfs) <- stringr::str_match(filenames, pattern=sprintf("%s__(.*).cell_type_results.txt", genomic_annotation_prefix))[,2] # ALT: filenames
 names(list.dfs)
 df.ldsc_cts <- list.dfs %>% bind_rows(.id="gwas")
-df.ldsc_cts <- df.ldsc_cts %>% filter(sem=="sem_mean")
+df.ldsc_cts <- df.ldsc_cts %>% filter(es=="es_mean")
 
 ### format file [*not* compatible with multi-GWAS plotting]
 df.ldsc_cts.export <- df.ldsc_cts %>% select(gwas, p.value, annotation) %>% spread(key=gwas, value=p.value) # format file
@@ -75,7 +75,7 @@ df.ldsc_cts.export <- df.ldsc_cts %>% select(gwas, p.value, annotation) %>% spre
 ### Export (selected columns)
 file.out <- here("results", sprintf("prioritization_celltypes--%s.multi_gwas.csv.gz", dataset_prefix))
 file.out
-# df.ldsc_cts %>% select(-sem, -dataset, -n_obs_sem, -fdr_significant, -p.value.adj) %>% write_csv(file.out)
+# df.ldsc_cts %>% select(-es, -dataset, -n_obs_es, -fdr_significant, -p.value.adj) %>% write_csv(file.out)
 
 
 # ======================================================================= #
@@ -91,10 +91,10 @@ df.ldsc_cts.export <- df.ldsc_cts.export %>% left_join(df.metadata, by="annotati
 # ======================================================================= #
 
 ### Multi GWAS
-# df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190316.%s.sem_mean.multi_gwas.csv", dataset_prefix))
+# df.ldsc_cts.export %>% write_csv(sprintf("out.tmp.190316.%s.es_mean.multi_gwas.csv", dataset_prefix))
 
 ### Single GWAS
-# df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.sem_mean.%s.csv", dataset_prefix, "BMI_UKBB_Loh2018"))
+# df.ldsc_cts %>% write_csv(sprintf("out.tmp.190111.%s.es_mean.%s.csv", dataset_prefix, "BMI_UKBB_Loh2018"))
 
 # ======================================================================= #
 # ================================ PLOT: cell priori [SINGLE-GWAS] ================================= #
@@ -113,7 +113,7 @@ p <- ggplot(df.plot, aes(x=annotation, y=-log10(p.value))) +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 p
-file.out <- sprintf("out.tmp.190316.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, "BMI_UKBB_Loh2018")
+file.out <- sprintf("out.tmp.190316.plot.cell_prioritization.%s.%s.es_mean.color_by_class.pdf", dataset_prefix, "BMI_UKBB_Loh2018")
 ggsave(p, filename=file.out, width=20, height=8)
 
 
@@ -139,7 +139,7 @@ for (name_elem in names(list.dfs.split)) {
     theme_classic() + 
     theme(axis.text.x=element_blank(),
           axis.ticks.x=element_blank())
-  file.out <- sprintf("out.tmp.190111.plot.cell_prioritization.%s.%s.sem_mean.color_by_class.pdf", dataset_prefix, name_elem)
+  file.out <- sprintf("out.tmp.190111.plot.cell_prioritization.%s.%s.es_mean.color_by_class.pdf", dataset_prefix, name_elem)
   ggsave(p, filename=file.out, width=20, height=8)
 }
 

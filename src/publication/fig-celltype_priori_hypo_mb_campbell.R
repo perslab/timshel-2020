@@ -203,7 +203,7 @@ p.dendro <- p.dendro + coord_flip(clip="off",
                                   )
 # p.dendro <- p.dendro + xlim(c(0,n_leaf_nodes)) # this seems to help the alignment with LDSC if scale_y_continuous(position="bottom) is enabled
 p.dendro <- p.dendro + scale_y_continuous(trans="reverse" # same as scale_y_reverse()
-                                          # position="bottom" # put axis on top | works semi-ok
+                                          # position="bottom" # put axis on top | works esi-ok
                                           )
 p.dendro <- p.dendro + guides(color=F) # no guides for dataset color
 p.dendro <- p.dendro + theme(axis.line.y=element_blank(), # remove all x-axis 

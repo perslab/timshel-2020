@@ -86,7 +86,7 @@ df <- df %>% mutate(Neurotransmitter = str_replace_all(Neurotransmitter, ", ", "
 # ======================================================================= #
 
 ### Top ES genes
-df.top_n <- get_annotation_es.top_n(sem_obj, annotations=filter.annotations, n_top_genes=10, es_metric="es_mu")
+df.top_n <- get_annotation_es.top_n(es_obj, annotations=filter.annotations, n_top_genes=10, es_metric="es_mu")
 df.top_n <- df.top_n %>% select(annotation, es_genes_top_fmt) %>% distinct()
 df.top_n
 
@@ -103,7 +103,7 @@ df %>% write_csv(file.out)
 # ======================================================================= #
 
 ### ES table for all genes (SOM)
-df.all_table <- get_annotation_es.table(sem_obj, annotations=filter.annotations, es_metric="es_mu")
+df.all_table <- get_annotation_es.table(es_obj, annotations=filter.annotations, es_metric="es_mu")
 file.out <- "tables/table-es_mu.mousebrain_bmi_celltypes.csv.gz"
 df.all_table %>% write_csv(file.out)
 

@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-# FIT SEM models
+# FIT ES models
 # Export Mousebrain enrichment scores
 
 
@@ -38,14 +38,14 @@ for (dataset_prefix in c("mousebrain", "tabula_muris")) {
   for (gwas_name in c("BMI_UKBB_Loh2018_no_mhc", "BMI_UPDATE_Yengo2018_no_mhc") ) {
 
   # ======================================================================= #
-  # ================================ LOAD SEM ================================= #
+  # ================================ LOAD ES ================================= #
   # ======================================================================= #
   
   ### load data
   if (dataset_prefix == "mousebrain") {
-    load(file=here("src/GE-mousebrain/mousebrain.sem_obj.RData"))
+    load(file=here("src/GE-mousebrain/mousebrain.es_obj.RData"))
   } else if (dataset_prefix == "tabula_muris") {
-    load(file=here("src/GE-maca/tabula_muris.sem_obj.RData"))
+    load(file=here("src/GE-maca/tabula_muris.es_obj.RData"))
   } else {
     stop("Wrong dataset_prefix")
   }
@@ -64,23 +64,23 @@ for (dataset_prefix in c("mousebrain", "tabula_muris")) {
   
   
   # ======================================================================= #
-  # ============================== Fit SEM ================================ #
+  # ============================== Fit ES ================================ #
   # ======================================================================= #
   
-  df.model_sumstats.all_anno <- fit_sems(object=sem_obj, slot="mean", df.magma, df.metadata=NULL, exclude_bin_zero=F)
+  df.model_sumstats.all_anno <- fit_ess(object=es_obj, slot="mean", df.magma, df.metadata=NULL, exclude_bin_zero=F)
   df.model_sumstats.all_anno
   
-  # df.model_sumstats.all_anno.bin_zero_excl <- fit_sems(object=sem_obj, slot="mean", df.magma, df.metadata, exclude_bin_zero=T)
+  # df.model_sumstats.all_anno.bin_zero_excl <- fit_ess(object=es_obj, slot="mean", df.magma, df.metadata, exclude_bin_zero=T)
   # df.model_sumstats.all_anno.bin_zero_excl
   # 
-  # df.model_sumstats.all_anno.tstat <- fit_sems_tstat(object=sem_obj, slot="mean", df.magma, df.metadata)
+  # df.model_sumstats.all_anno.tstat <- fit_ess_tstat(object=es_obj, slot="mean", df.magma, df.metadata)
   # df.model_sumstats.all_anno.tstat
   
   # ======================================================================= #
   # ================================ EXPORT results ================================= #
   # ======================================================================= #
   
-  file.out <- sprintf("out.cell_prioritization.%s.%s.sem_meta_mean.csv", dataset_prefix, gwas_name)
+  file.out <- sprintf("out.cell_prioritization.%s.%s.es_meta_mean.csv", dataset_prefix, gwas_name)
   df.model_sumstats.all_anno %>% write_csv(file.out)
 
   }
@@ -103,7 +103,7 @@ for (dataset_prefix in c("mousebrain", "tabula_muris")) {
 #     theme(axis.text.x=element_blank(),
 #           axis.ticks.x=element_blank())
 # 
-# file.out <- sprintf("out.plot.cell_prioritization.%s.%s.sem_meta_mean.color_by_class.pdf", dataset_prefix, gwas_name)
+# file.out <- sprintf("out.plot.cell_prioritization.%s.%s.es_meta_mean.color_by_class.pdf", dataset_prefix, gwas_name)
 # ggsave(p, filename=file.out, width=20, height=8)
 
 

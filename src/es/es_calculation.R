@@ -39,38 +39,38 @@ path_out <- here("out/es")
 wrapper_calc_es <- function(path_prefix.es_precalc, path_out, dataset_prefix, version_stamp, type_mouse_gene_ids) {
   
   # ================================== Mouse ============================== #
-  sem_obj_mouse <- create_sem_object(path_prefix.es_precalc)
-  sem_obj_mouse <- exclude_sporadic_expressed_genes(sem_obj_mouse)
-  # sem_obj_mouse <- calc_sem_wrapper(sem_obj_mouse)
-  # sem_obj_mouse <- bin_sems(sem_obj_mouse, n_bins=101, threshold_bin_zero=0)
+  es_obj_mouse <- create_es_object(path_prefix.es_precalc)
+  es_obj_mouse <- exclude_sporadic_expressed_genes(es_obj_mouse)
+  # es_obj_mouse <- calc_es_wrapper(es_obj_mouse)
+  # es_obj_mouse <- bin_ess(es_obj_mouse, n_bins=101, threshold_bin_zero=0)
   
   # print("Saving object...")
   # file.out <- sprintf("%s/%s.es_obj_mouse-%s.RData", path_out, dataset_prefix, version_stamp)
-  # save(sem_obj_mouse, file=file.out)
+  # save(es_obj_mouse, file=file.out)
   
   # ============================== Human =============================== #
   
-  sem_obj <- map_to_human(sem_obj_mouse, type_mouse_gene_ids=type_mouse_gene_ids)
-  sem_obj <- calc_sem_wrapper(sem_obj)
-  sem_obj <- calc_empirical_pvalues_wrapper(sem_obj)
-  sem_obj <- transform_sems(sem_obj, method="rank_normalize")
-  sem_obj <- set_group_by_annotation_slots(sem_obj)
-  sem_obj <- calc_sem_meta(sem_obj)
+  es_obj <- map_to_human(es_obj_mouse, type_mouse_gene_ids=type_mouse_gene_ids)
+  es_obj <- calc_es_wrapper(es_obj)
+  es_obj <- calc_empirical_pvalues_wrapper(es_obj)
+  es_obj <- transform_ess(es_obj, method="rank_normalize")
+  es_obj <- set_group_by_annotation_slots(es_obj)
+  es_obj <- calc_es_meta(es_obj)
   
   print("Saving object...")
   file.out <- sprintf("%s/%s.es_obj-%s.RData", path_out, dataset_prefix, version_stamp)
-  save(sem_obj, file=file.out)
+  save(es_obj, file=file.out)
   print("Done saving")
   
-  # ================================ Write SEMs ================================= #
+  # ================================ Write ESs ================================= #
   
-  ## write_sems(slot='sem_meta'): writes out mean, median, sd
-  write_sems(sem_obj, slot="sem_meta", dataset_prefix=dataset_prefix, dir_out=path_out)
+  ## write_ess(slot='es_meta'): writes out mean, median, sd
+  write_ess(es_obj, slot="es_meta", dataset_prefix=dataset_prefix, dir_out=path_out)
   print("Done with function")
 
   ### Write multi_geneset_file for LDSC
-  df_multi_geneset <- write_multi_geneset_file(sem_obj, dataset_prefix, use_raw_sem_values=F) # no raw values
-  # df_multi_geneset <- write_multi_geneset_file(sem_obj, dataset_prefix=sprintf("%s_raw_sems", dataset_prefix), use_raw_sem_values=T) # *OBS*: only set use_raw_sem_values=T if you want raw (untransformed) SEM values exported.
+  df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix, use_raw_es_values=F) # no raw values
+  # df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix=sprintf("%s_raw_ess", dataset_prefix), use_raw_es_values=T) # *OBS*: only set use_raw_es_values=T if you want raw (untransformed) ES values exported.
 }
 
 

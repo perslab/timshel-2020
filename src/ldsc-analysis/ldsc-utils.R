@@ -11,7 +11,7 @@ get_genomic_annotation_prefix <- function(dataset_prefix) {
     genomic_annotation_prefix <- "celltypes.campbell_lvl1.all"
   } else if (dataset_prefix == "campbell_lvl2") {
     genomic_annotation_prefix <- "celltypes.campbell_lvl2.all"
-  } else if (dataset_prefix == "mousebrain_all") {
+  } else if (dataset_prefix == "mousebrain") {
     genomic_annotation_prefix <- "celltypes.mousebrain.all"
   } else if (dataset_prefix == "tabula_muris") {
     genomic_annotation_prefix <- "celltypes.tabula_muris.all"
@@ -31,7 +31,7 @@ load_ldsc_cts_results <- function(file.ldsc_cts, dataset_prefix) {
   
   df.ldsc_cts <- read_tsv(file.ldsc_cts) # The last column gives a P-value from a one-sided test that the coefficient is greater than zero. 
   ### Name column examples in CTS file:
-  # celltypes.mousebrain.all.binary__mousebrain_all.DEGLU5.tstat
+  # celltypes.mousebrain.all.binary__mousebrain.DEGLU5.tstat
   # celltypes.campbell_lvl1.all__campbell_lvl1.a18.Neurons6.tstat
   # celltypes.tabula_muris.all.binary__tabula_muris.Brain_Non-Myeloid.Bergmann_glial_cell.specificity
   pattern <- sprintf(".*__%s\\.(.*)\\.(.*?)$",dataset_prefix)

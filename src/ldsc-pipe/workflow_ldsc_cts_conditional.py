@@ -18,7 +18,7 @@ import random
 def get_cond_ref_ld_chr_name(cond_annotation, dataset):
 	""" Function to get the ref_ld_chr_name for 'conditional annotation' for ldsc.py --h2/--h2-cts command """
 	# *IMPORTANT*: ref_ld_chr_name MUST be full file path PLUS trailing "."
-	dict_ldscore_path_prefix = {"mousebrain":"/scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain_all.{}.sem_mean.", # placeholder for .format() call works
+	dict_ldscore_path_prefix = {"mousebrain":"/scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain.{}.sem_mean.", # placeholder for .format() call works
 						 		"tabula_muris":"/scratch/sc-ldsc/celltypes.tabula_muris.all/per_annotation/celltypes.tabula_muris.all__tabula_muris.{}.sem_mean.",
 						 		}
 	if not dataset in dict_ldscore_path_prefix:
@@ -32,7 +32,7 @@ def get_cond_ref_ld_chr_name(cond_annotation, dataset):
 # def get_list_cond_ref_ld_chr_name_LIST_VERSION(list_cond_annotations, dataset):
 # 	""" Function to get the ref_ld_chr_name for 'conditional annotation' for ldsc.py --h2/--h2-cts command """
 # 	# *IMPORTANT*: ref_ld_chr_name MUST be full file path PLUS trailing "."
-# 	dict_ldscore_path_prefix = {"mousebrain":"/scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain_all.{}.sem_mean.", # placeholder for .format() call works
+# 	dict_ldscore_path_prefix = {"mousebrain":"/scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain.{}.sem_mean.", # placeholder for .format() call works
 # 						 		"tabula_muris":"/scratch/sc-ldsc/celltypes.tabula_muris.all/per_annotation/celltypes.tabula_muris.all__tabula_muris.{}.sem_mean.",
 # 						 		}
 # 	if not dataset in dict_ldscore_path_prefix:

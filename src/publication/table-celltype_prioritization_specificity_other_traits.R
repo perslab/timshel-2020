@@ -31,7 +31,7 @@ setwd(here("src/publication"))
 ### PARAMS
 filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 filter.gwas <- utils.get_gwas_ids_for_meta_analysis()
-dataset_prefix <- "mousebrain_all"
+dataset_prefix <- "mousebrain"
 
 ### Load LDSC results
 file.data <- here("results", sprintf("prioritization_celltypes--%s.multi_gwas.csv.gz", dataset_prefix))

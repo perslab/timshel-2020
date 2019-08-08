@@ -33,7 +33,7 @@ get_metadata <- function(dataset_prefix) {
     file.metadata <- here("/data/expression/campbell2017/campbell_lvl2.cell_type_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl2)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
-  } else if (dataset_prefix == "mousebrain_all") {
+  } else if (dataset_prefix == "mousebrain") {
     cols_metadata_keep <- c("ClusterName",
                             "Class",
                             "Description",
@@ -151,7 +151,7 @@ utils.rename_annotations.campbell2015 <- function(annotation_ids, style, check_a
 
 get_annotations.mousebrain.hypothalamus <- function() {
   print("Will fetch cell-types annotated with 'Hypothalamus' in Region")
-  df.metadata <- get_metadata("mousebrain_all")
+  df.metadata <- get_metadata("mousebrain")
   
   df.mb_hypo <- df.metadata %>% filter(grepl("Hypothalamus", Region, ignore.case=TRUE))
   ### ALTERNATIVE: Separate rows [also works and gives same result]

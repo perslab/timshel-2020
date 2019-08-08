@@ -48,7 +48,7 @@ get_df_es_from_multiple_es_obj <- function(list.data) {
 # ================================ LOAD DATA ============================ #
 # ======================================================================= #
 
-load(here("out/es/mousebrain_all.es_obj.RData"))
+load(here("out/es/mousebrain.es_obj.RData"))
 es_obj.mb <- es_obj
 load(here("out/es/tabula_muris.es_obj.RData"))
 es_obj.tm <- es_obj

@@ -26,7 +26,7 @@ setwd(here("src/publication"))
 
 ### Tabula muris
 dataset_prefix <- "tabula_muris"
-# dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "mousebrain"
 
 # ======================================================================= #
 # ============================ DEPENDENCIES =============================== #
@@ -35,7 +35,7 @@ dataset_prefix <- "tabula_muris"
 # - p.main.margin: plot obtained from fig-celltype_priori_{mb/tm}.R . This is the main plot without any heatmaps etc.
 
 ### Get p.main.margin
-if (dataset_prefix == "mousebrain_all") {
+if (dataset_prefix == "mousebrain") {
   source("fig-celltype_priori_mb.R")
   transition_state_variable <- sym("TaxonomyRank4_reduced1")
 } else if (dataset_prefix == "tabula_muris") {

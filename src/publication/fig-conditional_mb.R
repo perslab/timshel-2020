@@ -29,7 +29,7 @@ setwd(here("src/publication"))
 # ============================ LOAD DATA =============================== #
 # ======================================================================= #
 
-file.data <- here("results/prioritization_celltypes_conditional--mousebrain_all.BMI_UKBB_Loh2018.csv.gz")
+file.data <- here("results/prioritization_celltypes_conditional--mousebrain.BMI_UKBB_Loh2018.csv.gz")
 df <- read_csv(file.data)
 
 filter.exclude <- "wgcna.mousebrain-190111-dodgerblue"

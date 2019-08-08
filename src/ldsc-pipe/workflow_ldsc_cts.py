@@ -202,7 +202,7 @@ def get_all_genes_ref_ld_chr_name(dataset):
 # 	for file_path in files_per_annot:
 # 		m = re.search(r"^(.*%s.*)\.(\d{1,2})\.l2.ldscore.gz$" % annot_name_all_genes, os.path.basename(file_path)) # REF 'using a variable inside a regex' https://stackoverflow.com/a/6931048/6639640
 # 		if m:
-# 			ldsc_all_genes_ref_ld_chr_name = m.groups()[0] # groups()[0]= celltypes.mousebrain.all.mousebrain_all.all_genes_in_dataset.dummy" if file_path= celltypes.mousebrain.all.mousebrain_all.all_genes_in_dataset.dummy.5.l2.ldscore.gz"
+# 			ldsc_all_genes_ref_ld_chr_name = m.groups()[0] # groups()[0]= celltypes.mousebrain.all.mousebrain.all_genes_in_dataset.dummy" if file_path= celltypes.mousebrain.all.mousebrain.all_genes_in_dataset.dummy.5.l2.ldscore.gz"
 # 			chromosome = m.groups()[1]
 # 			dict_matches[chromosome] = ldsc_all_genes_ref_ld_chr_name
 # 	# some obnoxious validation of the matches
@@ -362,7 +362,7 @@ FLAG_WGCNA = False
 ### Mean MB+TM [ES mean *PUBLICATION*]
 dict_genomic_annot = {"celltypes.mousebrain.all":
 						{"dataset":"mousebrain",
-						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain_all.sem_mean.txt"},
+						"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.mousebrain.sem_mean.txt"},
  					 "celltypes.tabula_muris.all":
  					  	{"dataset":"tabula_muris",
  					  	"file_multi_gene_set":"/projects/timshel/sc-genetics/sc-genetics/src/ldsc/multi_geneset_files/multi_geneset.tabula_muris.sem_mean.txt"}

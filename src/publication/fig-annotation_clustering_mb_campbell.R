@@ -35,7 +35,7 @@ get_mousebrain_campbell_integrated_dendrogram <- function(save_fig) {
   # ======================================================================= #
   # ================================== MOUSEBRAIN ========================= #
   # ======================================================================= #
-  dataset_prefix <- "mousebrain_all"
+  dataset_prefix <- "mousebrain"
   df.metadata.mb <- get_metadata(dataset_prefix)
   ### Annotation ESmu
   file.es <- here(sprintf("out/es/%s.mean.csv.gz", dataset_prefix)) # New ESmu values

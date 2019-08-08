@@ -39,7 +39,7 @@ setwd(here("src/publication"))
 # dataset_prefix <- "tabula_muris"
 # var_color_by <- sym("tissue")
 
-# dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "mousebrain"
 # var_color_by <- sym("Class")
 
 dataset_prefix <- "campbell_lvl2"
@@ -52,7 +52,7 @@ var_color_by <- sym("taxonomy_lvl2")
 
 load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
 
-# load(here("out/es/mousebrain_all.es_obj.RData"))
+# load(here("out/es/mousebrain.es_obj.RData"))
 # es_obj.mb <- es_obj
 # load(here("out/es/tabula_muris.es_obj.RData"))
 # es_obj.tm <- es_obj

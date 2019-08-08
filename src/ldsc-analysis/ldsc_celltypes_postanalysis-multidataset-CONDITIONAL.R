@@ -29,7 +29,7 @@ setwd(here("src/ldsc"))
 
 
 ### PARAMS
-dataset_prefix <- "mousebrain_all"
+dataset_prefix <- "mousebrain"
 # dataset_prefix <- "tabula_muris"
 
 genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)

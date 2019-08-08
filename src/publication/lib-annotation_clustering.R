@@ -111,7 +111,7 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
 plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_prioritized=F, circular) {
   
   # ====================== Get dataset-specific params (color mappings) ==================== #
-  if (dataset_prefix == "mousebrain_all") {
+  if (dataset_prefix == "mousebrain") {
     filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
     colormap.annotations_highlight <- get_color_mapping.prioritized_annotations_bmi(dataset="mousebrain")
     sym_var.node_color <- sym("TaxonomyRank4_reduced1")

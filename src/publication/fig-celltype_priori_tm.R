@@ -54,7 +54,7 @@ df.ldsc_cts <- read_csv(file.results)
 # ======================================================================= #
 
 # gwas <- "BMI_UKBB_Loh2018"
-# dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "mousebrain"
 # genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 # 
 # ### Loading BMI data

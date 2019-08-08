@@ -35,7 +35,7 @@ setwd(here("src/publication"))
 # filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
 
 ### Mousebrain
-# dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "mousebrain"
 # filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 ### Campbell
@@ -109,7 +109,7 @@ p.linear <- plot_es_dendrogram(dend, df.metadata, dataset_prefix, circular=FALSE
 file.out <- sprintf("figs/fig_clustering.%s.dendrogram.linear.pdf", dataset_prefix)
 ggsave(plot=p.linear, filename=file.out, width=9, height=4)
 
-# if (dataset_prefix == "mousebrain_all") {
+# if (dataset_prefix == "mousebrain") {
 #   p <- p + theme(plot.margin = unit(c(1,1,2,1), "cm")) # (t, r, b, l) widen bottom margin
 # } else if (dataset_prefix == "tabula_muris") {
 #   p <- p + theme(plot.margin = unit(c(1,1,4,1), "cm")) # (t, r, b, l) widen bottom margin

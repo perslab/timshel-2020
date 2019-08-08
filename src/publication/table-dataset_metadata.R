@@ -27,7 +27,7 @@ setwd(here("src/publication"))
 # ============================== LOAD METADATA ============================= #
 # ======================================================================= #
 
-dataset_prefixes <- c("tabula_muris", "mousebrain_all", "campbell_lvl2")
+dataset_prefixes <- c("tabula_muris", "mousebrain", "campbell_lvl2")
 
 for (dataset_prefix in dataset_prefixes) {
   df.metadata <- get_metadata(dataset_prefix)

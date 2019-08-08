@@ -183,9 +183,9 @@ dict_annotations = collections.defaultdict(dict)
 df = pd.read_csv("/projects/timshel/sc-genetics/sc-genetics/data/expression/mousebrain/mousebrain-agg_L5.metadata.csv")
 list_annotations = df["annotation"].tolist()
 for annotation in list_annotations:
-	dict_annotations[annotation]["name_context"] = "mousebrain_all.{}.sem_mean".format(annotation)
+	dict_annotations[annotation]["name_context"] = "mousebrain.{}.sem_mean".format(annotation)
 	dict_annotations[annotation]["file_path_prefix"] = "/scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__{}".format(dict_annotations[annotation]["name_context"])
-# ALT using dict comprehension: dict_annotations = {key:{"name_context":"mousebrain_all.{}.sem_mean".format(key)} for key in list_annotations}
+# ALT using dict comprehension: dict_annotations = {key:{"name_context":"mousebrain.{}.sem_mean".format(key)} for key in list_annotations}
 dict_annotations_mb_all = dict_annotations
 
 
@@ -205,9 +205,9 @@ dict_annotations_tm_all = dict_annotations
 dict_annotations = collections.defaultdict(dict)
 list_annotations = ["TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12"]
 for annotation in list_annotations:
-	dict_annotations[annotation]["name_context"] = "mousebrain_all.{}.sem_mean".format(annotation)
+	dict_annotations[annotation]["name_context"] = "mousebrain.{}.sem_mean".format(annotation)
 	dict_annotations[annotation]["file_path_prefix"] = "/scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__{}".format(dict_annotations[annotation]["name_context"])
-# ALT using dict comprehension: dict_annotations = {key:{"name_context":"mousebrain_all.{}.sem_mean".format(key)} for key in list_annotations}
+# ALT using dict comprehension: dict_annotations = {key:{"name_context":"mousebrain.{}.sem_mean".format(key)} for key in list_annotations}
 dict_annotations_mb_select_quantile = dict_annotations
 
 
@@ -401,7 +401,7 @@ if FLAG_RUN_QUANTILE_H2:
 	# Last column = N_SNPs/annotation_size in highest quantile (of the annotation stratified on)
 
 
-	### snippet qfixed | /scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain_all.TEINH12.sem_mean.qfixed.M
+	### snippet qfixed | /scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain.TEINH12.sem_mean.qfixed.M
 	# N       4081518 412332  630022  365058  219945  252284
 	# base    4081518 412332  630022  365058  219945  252284
 	# Coding_UCSC.bed 36656   9055    15431   11046   6187    6720
@@ -411,9 +411,9 @@ if FLAG_RUN_QUANTILE_H2:
 	# WeakEnhancer_Hoffman.bed        69748   11857   18109   11375   6738    7281
 	# WeakEnhancer_Hoffman.extend.500.bed     297928  49986   76299   47203   27705   30150
 	# all_genes_in_dataset.mousebrain 2085845 412332  630022  365058  219945  252284
-	# mousebrain_all.TEINH12.sem_mean 0       40918.9212836192        192911.49975945 178369.311397958        153360.932629917        230021.339404443
+	# mousebrain.TEINH12.sem_mean 0       40918.9212836192        192911.49975945 178369.311397958        153360.932629917        230021.339404443
 
-	### snippet q5_exclude_zero | /scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain_all.TEINH12.sem_mean.q5_exclude_zero.M
+	### snippet q5_exclude_zero | /scratch/sc-ldsc/celltypes.mousebrain.all/per_annotation/celltypes.mousebrain.all__mousebrain.TEINH12.sem_mean.q5_exclude_zero.M
 	# N       376102  376046  376194  377725  373574
 	# base    376102  376046  376194  377725  373574
 	# Coding_UCSC.bed 8153    8873    10093   10983   10337
@@ -423,7 +423,7 @@ if FLAG_RUN_QUANTILE_H2:
 	# WeakEnhancer_Hoffman.bed        10642   10621   11515   11574   11008
 	# WeakEnhancer_Hoffman.extend.500.bed     45196   45151   47584   48031   45381
 	# all_genes_in_dataset.mousebrain 376102  376046  376194  377725  373574
-	# mousebrain_all.TEINH12.sem_mean 34073.4491382769        95629.6952472526        139792.10504084 206291.635054323        319795.119994766
+	# mousebrain.TEINH12.sem_mean 34073.4491382769        95629.6952472526        139792.10504084 206291.635054323        319795.119994766
 
 
 	#########################################################################################

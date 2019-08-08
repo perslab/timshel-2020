@@ -27,16 +27,16 @@ setwd(here("src/ldsc"))
 
 
 ### PARAMS
-# dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "mousebrain"
 # dataset_prefix <- "tabula_muris"
 dataset_prefix <- "campbell_lvl1"
 # dataset_prefix <- "campbell_lvl2"
 
 genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 
-#### mousebrain_all_190306_es_fix
+#### mousebrain_190306_es_fix
 # genomic_annotation_prefix <- "celltypes.mousebrain_190306_es_fix.all"
-# dataset_prefix <- "mousebrain_all_190306_es_fix"
+# dataset_prefix <- "mousebrain_190306_es_fix"
 
 
 # ======================================================================= #
@@ -145,7 +145,7 @@ for (name_elem in names(list.dfs.split)) {
 
 
 # ======================================================================= #
-# ====== TMP compare mousebrain_all_190306_es_fix to existing =========== #
+# ====== TMP compare mousebrain_190306_es_fix to existing =========== #
 # ======================================================================= #
 # df.ldsc_cts.fix.full <- df.ldsc_cts
 # 

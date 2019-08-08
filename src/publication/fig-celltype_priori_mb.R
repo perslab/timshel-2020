@@ -49,7 +49,7 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--mousebrain_all.multi_gwas.csv.gz")
+file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
 # ======================================================================= #
@@ -57,7 +57,7 @@ df.ldsc_cts <- read_csv(file.results)
 # ======================================================================= #
 
 # gwas <- "BMI_UKBB_Loh2018"
-# dataset_prefix <- "mousebrain_all"
+# dataset_prefix <- "mousebrain"
 # genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
 # 
 # ### Loading BMI data
@@ -73,7 +73,7 @@ df.ldsc_cts <- read_csv(file.results)
 
 
 ### Read annotation metadata
-df.metadata <- get_metadata(dataset_prefix="mousebrain_all")
+df.metadata <- get_metadata(dataset_prefix="mousebrain")
 
 ### Add meta data
 df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation") # add meta data

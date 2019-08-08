@@ -33,15 +33,15 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Get ES data
-load(here("out/es/mousebrain_all.es_obj.RData"))
+load(here("out/es/mousebrain.es_obj.RData"))
 
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--mousebrain_all.multi_gwas.csv.gz")
+file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
 ### Read and add meta data
-df.metadata <- get_metadata(dataset_prefix="mousebrain_all")
+df.metadata <- get_metadata(dataset_prefix="mousebrain")
 df.ldsc_cts <- df.ldsc_cts %>% left_join(df.metadata, by="annotation") # add meta data
 df.ldsc_cts
 

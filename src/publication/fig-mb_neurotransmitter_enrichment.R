@@ -28,7 +28,7 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--mousebrain_all.multi_gwas.csv.gz")
+file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
 # filter.gwas <- c("BMI_UKBB_Loh2018", "SCZ_Pardinas2018")

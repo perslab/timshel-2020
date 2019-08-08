@@ -37,13 +37,13 @@ df.enrich <- read_csv(file.enrich)
 # ============================ MOUSEBRAIN LDSC =========================== #
 # ======================================================================= #
 
-dataset_prefix <- "mousebrain_all"
+dataset_prefix <- "mousebrain"
 filter.gwas <- "BMI_UKBB_Loh2018"
 
 # ================== LOAD LDSC CTS RESULTS (multi GWAS) ================ #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--mousebrain_all.multi_gwas.csv.gz")
+file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
 # =========================== FILTER GWAS =========================== #

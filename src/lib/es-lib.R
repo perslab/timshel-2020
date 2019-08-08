@@ -556,7 +556,7 @@ read_file_fast <- function(file_path) {
 }
 
 
-write_ess <- function(object, slot, dataset_prefix, dir_out) {
+write_es <- function(object, slot, dataset_prefix, dir_out) {
   ### Function: write ES: "es" or "es_transformed"
   ### We recommend that dataset_prefix contains information about specie
   stopifnot(slot %in% c("es","es_transformed", "es_meta", "es_pvalues", "null"))

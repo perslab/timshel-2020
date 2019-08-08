@@ -1,5 +1,8 @@
 ############### SYNOPSIS ###################
-# Calculate ES
+# 1) Calculate ES
+# 2) Saves ES object (as .RData file)
+# 3) Writes multi geneset file for es_mu to use as input for S-LDSC/CELLECT
+# Output is written to tmp-data/expression-precalc/
 
 ### OUTPUT: 
 # ....
@@ -64,13 +67,13 @@ wrapper_calc_es <- function(path_prefix.es_precalc, path_out, dataset_prefix, ve
   
   # ================================ Write ESs ================================= #
   
-  ## write_ess(slot='es_meta'): writes out mean, median, sd
-  write_ess(es_obj, slot="es_meta", dataset_prefix=dataset_prefix, dir_out=path_out)
-  print("Done with function")
+  ## write_es(slot='es_meta'): writes out mean, median, sd
+  write_es(es_obj, slot="es_meta", dataset_prefix=dataset_prefix, dir_out=path_out)
 
   ### Write multi_geneset_file for LDSC
   df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix, use_raw_es_values=F) # no raw values
   # df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix=sprintf("%s_raw_ess", dataset_prefix), use_raw_es_values=T) # *OBS*: only set use_raw_es_values=T if you want raw (untransformed) ES values exported.
+  print("Done with function")
 }
 
 

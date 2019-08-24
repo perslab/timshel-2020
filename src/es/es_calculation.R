@@ -75,8 +75,10 @@ wrapper_calc_es <- function(path_prefix.es_precalc, path_out, dataset_prefix, ve
   # write_es(slot='es_meta'): writes out mean, median, sd
   write_es(es_obj, slot="es_meta", dataset_prefix=dataset_prefix, dir_out=path_out)
 
-  ### [LEGACY] Write multi_geneset_file for LDSC
+  ### [LEGACY] Write multi_geneset_file for LDSC --> ES mu only
   df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix, dir_out=path_out, use_es_w=F, es_mean_only=T) # no raw values
+  
+  ### [LEGACY] Write multi_geneset_file for LDSC --> ESw [not needed]
   # df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix=sprintf("%s_raw_ess", dataset_prefix), use_raw_es_values=T) # *OBS*: only set use_raw_es_values=T if you want raw (untransformed) ES values exported.
   print("Done with function")
   
@@ -118,7 +120,7 @@ if (dataset_prefix == "mousebrain") {
 # =============================== RUN ================================ #
 # ======================================================================= #
 
-source(here("src/lib/load_functions.R")) # load sc-genetics library
 wrapper_calc_es(path_prefix.es_precalc, path_out, dataset_prefix, version_stamp, type_mouse_gene_ids)
+
 
 print("Script done!")

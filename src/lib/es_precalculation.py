@@ -50,6 +50,7 @@ def calculate_anova_sporadically_expressed_genes(df, annotations, out_prefix):
 	df_anova.sort_values("pvalue",ascending=False, inplace=True)
 
 	print("Writing out file...")
+	df_anova.index.name = "gene" # data frame must have index name "gene" for downstream R pipeline to work
 	df_anova.to_csv("{}.pre_calc.sporadically_expressed_genes.anova.csv.gz".format(out_prefix), compression="gzip")
 
 	n_genes_sporadically_expressed = np.sum(df_anova['pvalue'] > 0.00001) # 0.00001 is Skene cut-off

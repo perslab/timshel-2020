@@ -41,6 +41,11 @@ path_out <- here("out/es")
 
 wrapper_calc_es <- function(path_prefix.es_precalc, path_out, dataset_prefix, version_stamp, type_mouse_gene_ids) {
   
+  file.out.es_obj <- sprintf("%s/%s.es_obj-%s.RData", path_out, dataset_prefix, version_stamp)
+  if (file.exists(file.out.es_obj)) {
+    print("ES object file already exists. Will overwrite it...")
+  }
+
   # ================================== Mouse ============================== #
   es_obj_mouse <- create_es_object(path_prefix.es_precalc)
   es_obj_mouse <- exclude_sporadic_expressed_genes(es_obj_mouse)
@@ -60,20 +65,22 @@ wrapper_calc_es <- function(path_prefix.es_precalc, path_out, dataset_prefix, ve
   es_obj <- set_group_by_annotation_slots(es_obj)
   es_obj <- calc_es_meta(es_obj)
   
-  print("Saving object...")
-  file.out <- sprintf("%s/%s.es_obj-%s.RData", path_out, dataset_prefix, version_stamp)
-  save(es_obj, file=file.out)
+  print("Saving ES object...")
+  save(es_obj, file=file.out.es_obj)
   print("Done saving")
   
   # ================================ Write ESs ================================= #
   
-  ## write_es(slot='es_meta'): writes out mean, median, sd
+  ### Write ES mu matrix
+  # write_es(slot='es_meta'): writes out mean, median, sd
   write_es(es_obj, slot="es_meta", dataset_prefix=dataset_prefix, dir_out=path_out)
 
-  ### Write multi_geneset_file for LDSC
-  df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix, use_raw_es_values=F) # no raw values
+  ### [LEGACY] Write multi_geneset_file for LDSC
+  df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix, dir_out=path_out, use_es_w=F, es_mean_only=T) # no raw values
   # df_multi_geneset <- write_multi_geneset_file(es_obj, dataset_prefix=sprintf("%s_raw_ess", dataset_prefix), use_raw_es_values=T) # *OBS*: only set use_raw_es_values=T if you want raw (untransformed) ES values exported.
   print("Done with function")
+  
+
 }
 
 
@@ -111,6 +118,7 @@ if (dataset_prefix == "mousebrain") {
 # =============================== RUN ================================ #
 # ======================================================================= #
 
+source(here("src/lib/load_functions.R")) # load sc-genetics library
 wrapper_calc_es(path_prefix.es_precalc, path_out, dataset_prefix, version_stamp, type_mouse_gene_ids)
 
 print("Script done!")

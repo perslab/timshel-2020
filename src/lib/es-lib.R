@@ -379,181 +379,9 @@ calc_ges <- function(object_data, df.ncells) {
 
 
 ######################################################################################################
-############################################# MULTI_GENESET ##############################################
+################################## EXPORT: MATRIX + MULTI_GENESET #####################################
 ######################################################################################################
 
-
-write_multi_geneset_file <- function(object, 
-                                     dataset_prefix, 
-                                     use_raw_es_values=F, 
-                                     make_clean_annotation_names=T, 
-                                     add_all_genes_in_dataset=F,
-                                     es_mean_only=F, # only export object[["es_meta"]][["mean"]]. Saves time
-                                     write_file=T) {
-  ### OUTPUT
-  ### a file with filename multi_geneset.<dataset_prefix>.txt
-  ### the file (no header) with the following columns:
-  # col 1 "geneset name"  : <dataset_prefix>.<annotation=celltype>.<es_name> or <dataset_prefix>.all_genes_in_dataset.dummy
-  # col 2                       : human ensembl gene ID
-  # col 3                       : value/score for the given gene. For .all_genes_in_dataset it will be all 1's.
-  ### we prefix with <dataset_prefix> to allow for multiple multi_geneset files to be concatenatted together (e.g. hierarchical ESs) and still have unique values in col1 (geneset name).
-  ### only genes with es_transformed > 0 will be written to file. This makes the LDSC make_annot.py pipeline more effective.
-  if (is.null(object[["es_transformed"]])) { # ensure that slots exists
-    stop("Object has no es_transformed slot. Calculate before running this function")
-  }
-  
-  print(sprintf("Running with make_clean_annotation_names=%s", make_clean_annotation_names))
-  
-  
-  if (es_mean_only & (use_raw_es_values | add_all_genes_in_dataset)) {
-    stop("es_mean_only argument cannot be used together with use_raw_es_values or add_all_genes_in_dataset")
-  }
-  
-  if (use_raw_es_values) {
-    print("OBS: use_raw_es_values enabled. Will use object[['es']] as es value slot")
-    ES_SLOT <- "es"
-  } else {
-    ES_SLOT <- "es_transformed"
-  }
-  
-  list_res <- list()
-  i <- 1
-  if (!es_mean_only) {
-    ### loop over individual es_transformed
-    for (es_name in names(object[[ES_SLOT]])) { 
-      for (annotation in names(object[[ES_SLOT]][[es_name]])) {
-        print(sprintf("Processing ES = %s | counter = %s", es_name, i))
-        df.tmp <- object[[ES_SLOT]][[es_name]] %>% 
-          select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-          mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-                 .es_name = as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-                 gene=object[["genes"]]) # add geneset annotation and gene names 
-        ### NB: this simpler (no as_string() and .annotation) but less explicit version also works.
-        # df.tmp <- object[[ES_SLOT]][[es_name]] %>% 
-        #   select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-        #   mutate(annotation = annotation, # LHS is the name of the column we create; RHS is a string
-        #          es_name = es_name, # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-        #          gene=object[["genes"]]) # add geneset annotation and gene names 
-        if (!use_raw_es_values) {
-          df.tmp <- df.tmp %>% filter(value > 0) # keep only es_transformed > 0. Do this AFTER adding gene names
-        }
-        list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-        i <- i + 1
-      }
-    }
-    ### add tstat_top10pct_binary [works for both conditions of use_raw_es_values]
-    ### this ES was used in Finucane2018 (LDSC-SEG)
-    es_dependency <- "tstat"
-    es_name <- "tstat_top10pct_binary"
-    if (is.null(object[[ES_SLOT]][[es_dependency]])) {
-      stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given ES is calculated before running this function...", ES_SLOT, es_dependency))
-    }
-    for (annotation in names(object[[ES_SLOT]][[es_dependency]])) {
-      print(sprintf("Processing ES = %s | counter = %s", es_name, i))
-      df.tmp <- object[[ES_SLOT]][[es_dependency]] %>% 
-        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-        mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-               .es_name = as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-               gene=object[["genes"]]) # add geneset annotation and gene names 
-      # SPECIFIC STEP
-      df.tmp <- df.tmp %>% 
-        filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
-        mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
-      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-      i <- i + 1
-    }
-    
-    ### add specificity_top10pct_binary [works for both conditions of use_raw_es_values]
-    ### this ES was used in Skene2018
-    es_dependency <- "specificity"
-    es_name <- "specificity_top10pct_binary"
-    if (is.null(object[[ES_SLOT]][[es_dependency]])) {
-      stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given ES is calculated before running this function...", ES_SLOT, es_dependency))
-    }
-    for (annotation in names(object[[ES_SLOT]][[es_dependency]])) {
-      print(sprintf("Processing ES = %s | counter = %s", es_name, i))
-      df.tmp <- object[[ES_SLOT]][[es_dependency]] %>% 
-        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-        mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-               .es_name = as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-               gene=object[["genes"]]) # add geneset annotation and gene names 
-      # SPECIFIC STEP
-      df.tmp <- df.tmp %>% 
-        filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
-        mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
-      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-      i <- i + 1
-    }
-    ### add all genes
-    if (add_all_genes_in_dataset) {
-      print("Adding all genes...")
-      list_res[[i]] <- tibble(value=1, 
-                              gene=object[["genes"]], 
-                              .annotation="all_genes_in_dataset",
-                              .es_name="dummy")
-      i <- i + 1 # not needed, but good to have if you rearrange the code
-    }
-  } # end if (!es_mean_only)
-  if (!use_raw_es_values) {
-    ### loop over es_meta mean
-    es_name <- "es_mean"
-    for (annotation in names(object[["es_meta"]][["mean"]])) {
-      print(sprintf("Processing ES = %s | counter = %s", es_name, i))
-      df.tmp <- object[["es_meta"]][["mean"]] %>% 
-        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
-        mutate(.annotation = as_string(annotation), # LHS is the name of the column we create; RHS is a string
-               .es_name = as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
-               gene=object[["genes"]]) %>% # add geneset annotation and gene names
-        filter(value > 0) # keep only es_transformed > 0. Do this AFTER adding gene names
-      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
-      i <- i + 1
-    }
-  }
-  print("Doing bind_rows..")
-  # rowbind
-  df.multi_geneset <- bind_rows(list_res) # When row-binding, columns are matched by name
-  # clean annotation name
-  if (make_clean_annotation_names) {
-    print("Cleaning annotation names...")
-    df.multi_geneset <- df.multi_geneset %>% mutate(.annotation = clean_annotation_name(.annotation))
-  }
-  # make geneset_name column
-  df.multi_geneset <- df.multi_geneset %>% mutate(geneset_name=paste(dataset_prefix,
-                                                                     .annotation,
-                                                                     .es_name, 
-                                                                     sep="."))
-  # check for any NA values
-  if(any(is.na(df.multi_geneset))) {
-    print("Error: df.multi_geneset contains NA values. Investigate the returned data.frame for NA values, resolve the issue and rerun this function. No file will be written.")
-    return(df.multi_geneset) 
-  } else {
-    print("Checked df.multi_geneset for NA values and found nothing. All good to go!")
-  }
-  
-  if (write_file) {
-    file.out <- sprintf("multi_geneset.%s.txt.gz", dataset_prefix)
-    print(sprintf("writing file: %s", file.out))
-    df.multi_geneset %>% 
-      select(geneset_name, gene, value) %>% # *IMPORTANT*: re-arrange column order to agree with make_annot.py file format
-      write_tsv(file.out, col_names=F) # no header
-  }
-  return(df.multi_geneset)
-}
-
-
-######################################################################################################
-############################################# ES UTILS ##############################################
-######################################################################################################
-
-
-read_file_fast <- function(file_path) {
-  print(sprintf("Reading file %s", file_path))
-  # fast reading of files
-  df <- data.table::fread(file_path, nThread=24, showProgress=T) %>% as.tibble()
-  # file_path can be a gzip file. It will automatically be infered: https://github.com/hansenlab/bsseq/commit/0656078974325effacdaabeaba68bc5c07bfe704
-  # Compressed files ending .gz and .bz2 are supported if the R.utils package is installed.
-  return(df)
-}
 
 
 write_es <- function(object, slot, dataset_prefix, dir_out) {
@@ -585,6 +413,182 @@ write_es <- function(object, slot, dataset_prefix, dir_out) {
     # or use data.table::fwrite() and afterwards R.utils::gzip('filename.csv',destname='filename.csv.gz')
   }
 }
+
+
+write_multi_geneset_file <- function(object, 
+                                     dataset_prefix,
+                                     dir_out=getwd(),
+                                     use_es_w=F, 
+                                     make_clean_annotation_names=T, 
+                                     add_all_genes_in_dataset=F,
+                                     es_mean_only=F, # only export object[["es_meta"]][["mean"]]. Saves time
+                                     write_file=T) {
+  ### OUTPUT
+  ### a file with filename multi_geneset.<dataset_prefix>.txt
+  ### the file (no header) with the following columns:
+  # col 1 "geneset name"  : <dataset_prefix>.<annotation=celltype>.<es_name> or <dataset_prefix>.all_genes_in_dataset.dummy
+  # col 2                       : human ensembl gene ID
+  # col 3                       : value/score for the given gene. For .all_genes_in_dataset it will be all 1's.
+  ### we prefix with <dataset_prefix> to allow for multiple multi_geneset files to be concatenatted together (e.g. hierarchical ESs) and still have unique values in col1 (geneset name).
+  ### only genes with es_transformed > 0 will be written to file. This makes the LDSC make_annot.py pipeline more effective.
+  if (is.null(object[["es_transformed"]])) { # ensure that slots exists
+    stop("Object has no es_transformed slot. Calculate before running this function")
+  }
+  
+  print(sprintf("Running with make_clean_annotation_names=%s", make_clean_annotation_names))
+  
+  
+  if (es_mean_only & (use_es_w | add_all_genes_in_dataset)) {
+    stop("es_mean_only argument cannot be used together with use_es_w or add_all_genes_in_dataset")
+  }
+  
+  if (use_es_w) {
+    print("OBS: use_es_w enabled. Will use object[['es']] as es value slot")
+    ES_SLOT <- "es"
+  } else {
+    ES_SLOT <- "es_transformed"
+  }
+  
+  list_res <- list()
+  i <- 1
+  if (!es_mean_only) {
+    ### loop over individual es_transformed
+    for (es_name in names(object[[ES_SLOT]])) { 
+      for (annotation in names(object[[ES_SLOT]][[es_name]])) {
+        print(sprintf("Processing ES = %s | counter = %s", es_name, i))
+        df.tmp <- object[[ES_SLOT]][[es_name]] %>% 
+          select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+          mutate(.annotation = rlang::as_string(annotation), # LHS is the name of the column we create; RHS is a string
+                 .es_name = rlang::as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+                 gene=object[["genes"]]) # add geneset annotation and gene names 
+        ### NB: this simpler (no as_string() and .annotation) but less explicit version also works.
+        # df.tmp <- object[[ES_SLOT]][[es_name]] %>% 
+        #   select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+        #   mutate(annotation = annotation, # LHS is the name of the column we create; RHS is a string
+        #          es_name = es_name, # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+        #          gene=object[["genes"]]) # add geneset annotation and gene names 
+        if (!use_es_w) {
+          df.tmp <- df.tmp %>% filter(value > 0) # keep only es_transformed > 0. Do this AFTER adding gene names
+        }
+        list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
+        i <- i + 1
+      }
+    }
+    ### add tstat_top10pct_binary [works for both conditions of use_es_w]
+    ### this ES was used in Finucane2018 (LDSC-SEG)
+    es_dependency <- "tstat"
+    es_name <- "tstat_top10pct_binary"
+    if (is.null(object[[ES_SLOT]][[es_dependency]])) {
+      stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given ES is calculated before running this function...", ES_SLOT, es_dependency))
+    }
+    for (annotation in names(object[[ES_SLOT]][[es_dependency]])) {
+      print(sprintf("Processing ES = %s | counter = %s", es_name, i))
+      df.tmp <- object[[ES_SLOT]][[es_dependency]] %>% 
+        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+        mutate(.annotation = rlang::as_string(annotation), # LHS is the name of the column we create; RHS is a string
+               .es_name = rlang::as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+               gene=object[["genes"]]) # add geneset annotation and gene names 
+      # SPECIFIC STEP
+      df.tmp <- df.tmp %>% 
+        filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
+        mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
+      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
+      i <- i + 1
+    }
+    
+    ### add specificity_top10pct_binary [works for both conditions of use_es_w]
+    ### this ES was used in Skene2018
+    es_dependency <- "specificity"
+    es_name <- "specificity_top10pct_binary"
+    if (is.null(object[[ES_SLOT]][[es_dependency]])) {
+      stop(sprintf("object[[%s]][[%s]] is NULL. Make sure that the given ES is calculated before running this function...", ES_SLOT, es_dependency))
+    }
+    for (annotation in names(object[[ES_SLOT]][[es_dependency]])) {
+      print(sprintf("Processing ES = %s | counter = %s", es_name, i))
+      df.tmp <- object[[ES_SLOT]][[es_dependency]] %>% 
+        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+        mutate(.annotation = rlang::as_string(annotation), # LHS is the name of the column we create; RHS is a string
+               .es_name = rlang::as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+               gene=object[["genes"]]) # add geneset annotation and gene names 
+      # SPECIFIC STEP
+      df.tmp <- df.tmp %>% 
+        filter(value > quantile(value, 0.9)) %>% # keep only genes with the TOP 10 % largest (positive) values REF: https://stackoverflow.com/a/33221186/6639640
+        mutate(value = if_else(value > 0, true=1, false=0)) # binarise - this is how Skene and Finucane ran LDSC
+      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
+      i <- i + 1
+    }
+    ### add all genes
+    if (add_all_genes_in_dataset) {
+      print("Adding all genes...")
+      list_res[[i]] <- tibble(value=1, 
+                              gene=object[["genes"]], 
+                              .annotation="all_genes_in_dataset",
+                              .es_name="dummy")
+      i <- i + 1 # not needed, but good to have if you rearrange the code
+    }
+  } # end if (!es_mean_only)
+  if (!use_es_w) {
+    ### loop over es_meta mean
+    es_name <- "es_mean"
+    for (annotation in names(object[["es_meta"]][["mean"]])) {
+      print(sprintf("Processing ES = %s | counter = %s", es_name, i))
+      df.tmp <- object[["es_meta"]][["mean"]] %>% 
+        select(value := !!rlang::sym(annotation)) %>% # select and rename column to a generic name so we can do bind_rows() later. LHS is the name of the column we create; RHS is the STRING of a column name in the data frame.
+        mutate(.annotation = rlang::as_string(annotation), # LHS is the name of the column we create; RHS is a string
+               .es_name = rlang::as_string(es_name), # LHS is the name of the column we create; RHS is a string. (I KNOW THIS IS SLIGHTLY CONFUSING SYNTAX, but it works)
+               gene=object[["genes"]]) %>% # add geneset annotation and gene names
+        filter(value > 0) # keep only es_transformed > 0. Do this AFTER adding gene names
+      list_res[[i]] <- df.tmp # df.tmp has the columns: value, geneset_name and gene.
+      i <- i + 1
+    }
+  }
+  print("Doing bind_rows..")
+  # rowbind
+  df.multi_geneset <- bind_rows(list_res) # When row-binding, columns are matched by name
+  # clean annotation name
+  if (make_clean_annotation_names) {
+    print("Cleaning annotation names...")
+    df.multi_geneset <- df.multi_geneset %>% mutate(.annotation = clean_annotation_name(.annotation))
+  }
+  # make geneset_name column
+  df.multi_geneset <- df.multi_geneset %>% mutate(geneset_name=paste(dataset_prefix,
+                                                                     .annotation,
+                                                                     .es_name, 
+                                                                     sep="."))
+  # check for any NA values
+  if(any(is.na(df.multi_geneset))) {
+    print("Error: df.multi_geneset contains NA values. Investigate the returned data.frame for NA values, resolve the issue and rerun this function. No file will be written.")
+    return(df.multi_geneset) 
+  } else {
+    print("Checked df.multi_geneset for NA values and found nothing. All good to go!")
+  }
+  
+  
+  if (write_file) {
+    file.out <- sprintf("%s.multi_geneset.%s.txt.gz", dir_out, dataset_prefix)
+    print(sprintf("writing file: %s", file.out))
+    df.multi_geneset %>% 
+      select(geneset_name, gene, value) %>% # *IMPORTANT*: re-arrange column order to agree with make_annot.py file format
+      write_tsv(file.out, col_names=F) # no header
+  }
+  return(df.multi_geneset)
+}
+
+
+######################################################################################################
+############################################# ES UTILS ##############################################
+######################################################################################################
+
+
+read_file_fast <- function(file_path) {
+  print(sprintf("Reading file %s", file_path))
+  # fast reading of files
+  df <- data.table::fread(file_path, nThread=24, showProgress=T) %>% as.tibble()
+  # file_path can be a gzip file. It will automatically be infered: https://github.com/hansenlab/bsseq/commit/0656078974325effacdaabeaba68bc5c07bfe704
+  # Compressed files ending .gz and .bz2 are supported if the R.utils package is installed.
+  return(df)
+}
+
 
 
 identical_value <- function(x,y) {
@@ -627,13 +631,17 @@ check_object_annotation_names <- function(annotations) {
   # annotations: character vector
   bool.white_space <- stringr::str_detect(annotations, pattern="\\s+")
   bool.fwd_slash <- stringr::str_detect(annotations, pattern="/")
+  bool.double_underscore <- stringr::str_detect(annotations, pattern="__")
   if (any(bool.white_space)) {
     print(sprintf("*WARNING*:  annotations contains whitespace (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.white_space)))
   }
   if (any(bool.fwd_slash)) {
     print(sprintf("*WARNING*:  annotations contains forward slash ('/') (in n=%s annotations). Consider renaming annotations to improve compatability with Linux file system", sum(bool.fwd_slash)))
   }
-  if (!any(bool.white_space,bool.fwd_slash)) {
+  if (any(bool.double_underscore)) {
+    print(sprintf("*WARNING*:  annotations contains double underscore ('__') (in n=%s annotations). Consider renaming annotations to improve compatability with CELLECT software", sum(bool.fwd_slash)))
+  }
+  if (!any(bool.white_space,bool.fwd_slash,bool.double_underscore)) {
     print("Annotation names passed check_object_annotation_names() with no remarks")
   } 
 }
@@ -729,11 +737,17 @@ create_es_object <- function(file_prefix) {
   ### Class variables/constants
   object[["parameters"]][["clean_annotation_names"]] <- TRUE
   
+
   ### Data
   object[["data"]][["var"]] <- read_file_fast(sprintf("%s.pre_calc.var.csv.gz", file_prefix))
   object[["data"]][["frac_expr"]] <- read_file_fast(sprintf("%s.pre_calc.frac_expr.csv.gz", file_prefix))
   object[["data"]][["mean"]] <- read_file_fast(sprintf("%s.pre_calc.mean.csv.gz", file_prefix))
   object[["genes_exclude"]] <- read_file_fast(sprintf("%s.pre_calc.sporadically_expressed_genes.anova.csv.gz", file_prefix))
+  if (!identical(colnames(object[["genes_exclude"]]), c("gene","pvalue","statistic"))) { 
+    print("pre_calc.sporadically_expressed_genes.anova.csv.gz file has wrong header. See source code.")
+    print(sprintf("Header is: %s", paste(colnames(object[["genes_exclude"]]), collapse=",") ))
+    stop("Throwing error")
+  }
   object[["ncells"]] <- read_file_fast(sprintf("%s.pre_calc.ncells.csv.gz", file_prefix))
   
   ### making 'ncells' a one row df.

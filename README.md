@@ -12,6 +12,7 @@ Code to reproduce analysis and figures in [Timshel (2019, bioRxiv)](https://www.
    CELLECT-MAGMA using scripts in `src/CELLECT-MAGMA`
 5. Generate figures and tables using scripts in `src/publication`
 
-* Since publication, we have implemented CELLEX-PY available [here](https://github.com/perslab/CELLEX). We recommend using CELLEX-PY as it is easier to use for new users.
 
-Code to reproduce cell-type co-expression network analysis can be found here: https://github.com/perslab/19-BMI-brain-wgcna
+\*Since publication, we have implemented CELLEX-PY available [here](https://github.com/perslab/CELLEX). We recommend using CELLEX-PY as it is easier to use for new users.
+
+Code to reproduce cell-type co-expression networks can be found here: https://github.com/perslab/19-BMI-brain-wgcna

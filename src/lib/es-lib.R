@@ -407,6 +407,9 @@ write_es <- function(object, slot, dataset_prefix, dir_out) {
     } else if (slot == "null") {
       file.suffix <- sprintf("es_w_null.%s", name.es)
     }
+    if (any(name.es %in% c("median", "sd"))) {
+      next # skip writing these files
+    }
     file.out <- sprintf("%s/%s.%s.csv.gz", dir_out, dataset_prefix, file.suffix)
     print(sprintf("Writing file: %s", file.out))
     df.export <- object.data[[name.es]] %>% mutate(gene=object[["genes"]]) %>% select(gene, everything())

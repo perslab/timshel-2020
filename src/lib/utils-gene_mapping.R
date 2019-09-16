@@ -225,7 +225,7 @@ mouse_to_human_ortholog_gene_expression_mapping <- function(df.expr, type_mouse_
 
 
 ######################################################################################################
-############ mouse_to_human_ortholog_gene_expression_mapping [DATA FRAME INPUT] ######################
+############ human_to_mouse_ortholog_gene_expression_mapping [DATA FRAME INPUT] ######################
 ######################################################################################################
 ### THIS FUNCTION IS NOT USED VERY MUCH. [But it is still helpful.]
 

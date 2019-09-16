@@ -32,15 +32,6 @@ setwd(here("src/publication"))
 
 n_max_genes <- 50
 
-dirFiles = "/projects/jonatan/applied/18-mousebrain_7/tables/networkplot_args/"
-prefixOut ="mb_7.2_190408"
-
-celltype <- "MEINH2" 
-#celltype <- "TEGLU23"
-
-module <-  "lavenderblush" 
-#module <- "lightpink3"
-
 # ======================================================================= #
 # ================================ LOAD DATA ================================ #
 # ======================================================================= #
@@ -49,9 +40,12 @@ module <-  "lavenderblush"
 file.module_geneset <- here("results/modules--metadata.txt")
 df.module_geneset <- read_tsv(file.module_geneset)
 
-### Gene expression
-datExpr = read.csv(paste0(dirFiles, prefixOut,"_", module, "_", celltype, "_datExprScaled.csv.gz"), quote="", stringsAsFactors = F, row.names = 1)
+### Gene expression data [MEINH2 cell-type] for genes in module
+# ORIGIN: /projects/jonatan/pub-perslab/18-mousebrain/18-mousebrain_7/tables/networkplot_args/mb_7.2_190408_lavenderblush_MEINH2_datExprScaled.csv.gz
+file.expr <- here("out/wgcna/module_expr.lavenderblush_MEINH2_datExprScaled.csv.gz")
+datExpr = read.csv(file.expr, quote="", stringsAsFactors = F, row.names = 1)
 # ^ cells x genes
+
 
 ### MAGMA
 file.magma_gwas <- here("out/magma/gene_based_scores/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out") # 100 KB window

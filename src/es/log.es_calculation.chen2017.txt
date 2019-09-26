@@ -1,0 +1,1267 @@
+WARNING: ignoring environment value of R_HOME
+── Attaching packages ─────────────────────────────────────── tidyverse 1.2.1 ──
+✔ ggplot2 3.2.0     ✔ purrr   0.3.2
+✔ tibble  2.1.3     ✔ dplyr   0.8.3
+✔ tidyr   0.8.3     ✔ stringr 1.4.0
+✔ readr   1.3.1     ✔ forcats 0.4.0
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+here() starts at /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019
+[1] "Sourced file: es-lib.R"
+Loading required package: viridisLite
+[1] "Sourced file: es-plot_lib.R"
+[1] "Sourced file: utils-expression_datasets.R"
+[1] "Sourced file: utils-gene_mapping.R"
+[1] "Sourced file: utils-gwas.R"
+[1] "RUNNING dataset_prefix=chen2017, version_stamp=190926"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.var.csv.gz"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.frac_expr.csv.gz"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.mean.csv.gz"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.sporadically_expressed_genes.anova.csv.gz"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.ncells.csv.gz"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.var.null.csv.gz"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.frac_expr.null.csv.gz"
+[1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.mean.null.csv.gz"
+[1] "Annotation names passed check_object_annotation_names() with no remarks"
+[1] "Making clean annotations names..."
+[1] "Object passed all checks"
+[1] "Annotation names passed check_object_annotation_names() with no remarks"
+[1] "Making clean annotations names..."
+[1] "Object null passed all checks"
+[1] "Number of genes with NA in anova pvalue: 4853. (This number is not used for anything. We just report it for your information)"
+[1] "Number of sporadic_expressed_genes: 8199"
+[1] "Number of zero-mean genes: 4853"
+[1] "Total number of genes marked for exclusion: 13052"
+[1] "Number of genes in object: 10232"
+[1] "Reading gene mapping files..."
+[1] "Mapping from MGI to EnesblID..."
+[1] "Converting MGI symbols to lowercase to avoid issues with case sensitivity"
+[1] "Subsetting on orthologs..."
+[1] "List of genes not mapped from MGI to Enesbl ID:"
+  [1] "0610007c21rik" "0610007l01rik" "0610007n19rik" "0610007p14rik"
+  [5] "0610009d07rik" "0610010o12rik" "0610011f06rik" "0610031j06rik"
+  [9] "0610037p05rik" "1110001a16rik" "1110001j03rik" "1110002b05rik"
+ [13] "1110003e01rik" "1110007c09rik" "1110012j17rik" "1110018g07rik"
+ [17] "1110020g09rik" "1110034a24rik" "1110049f12rik" "1110054m08rik"
+ [21] "1110057k04rik" "1110058l19rik" "1110067d22rik" "1190002f15rik"
+ [25] "1190002h23rik" "1190003j15rik" "1190007f08rik" "1300001i01rik"
+ [29] "1300014i06rik" "1300018j18rik" "1500003o03rik" "1500011h22rik"
+ [33] "1500012f01rik" "1500016l03rik" "1500031l02rik" "1500032l24rik"
+ [37] "1520402a15rik" "1600021p15rik" "1600029d21rik" "1600029i14rik"
+ [41] "1700003m02rik" "1700008p20rik" "1700009p17rik" "1700011j10rik"
+ [45] "1700012d01rik" "1700013g23rik" "1700019e19rik" "1700019l03rik"
+ [49] "1700022p22rik" "1700023l04rik" "1700025k23rik" "1700026d08rik"
+ [53] "1700026l06rik" "1700027a23rik" "1700029f09rik" "1700029g01rik"
+ [57] "1700040i03rik" "1700040n02rik" "1700045i19rik" "1700054n08rik"
+ [61] "1700084c01rik" "1700094d03rik" "1700101e01rik" "1700102h20rik"
+ [65] "1810006k21rik" "1810012p15rik" "1810014f10rik" "1810020d17rik"
+ [69] "1810027o10rik" "1810029b16rik" "1810031k17rik" "1810035l17rik"
+ [73] "1810043h04rik" "1810046j19rik" "1810048j11rik" "1810049h13rik"
+ [77] "1810063b05rik" "2010001m06rik" "2010002n04rik" "2010003o02rik"
+ [81] "2010011i20rik" "2010012o05rik" "2010015l04rik" "2010106g01rik"
+ [85] "2010107h07rik" "2010110p09rik" "2010317e24rik" "2200002k05rik"
+ [89] "2210018m11rik" "2210020m01rik" "2210403k04rik" "2210411k11rik"
+ [93] "2310001a20rik" "2310003f16rik" "2310003l22rik" "2310004n24rik"
+ [97] "2310007l24rik" "2310008h04rik" "2310015b20rik" "2310016m24rik"
+[101] "2310030n02rik" "2310036o22rik" "2310044g17rik" "2310044h10rik"
+[105] "2310046k01rik" "2310050b05rik" "2310061c15rik" "2310061j03rik"
+[109] "2400001e08rik" "2400009b08rik" "2410018m08rik" "2410022l05rik"
+[113] "2410066e13rik" "2410137f16rik" "2500003m10rik" "2510003e04rik"
+[117] "2510006d16rik" "2510049j12rik" "2610002d18rik" "2610002j02rik"
+[121] "2610015p09rik" "2610017i09rik" "2610018g03rik" "2610019e17rik"
+[125] "2610019f03rik" "2610021k21rik" "2610029g23rik" "2610029i01rik"
+[129] "2610034m16rik" "2610039c10rik" "2610100l16rik" "2610101n10rik"
+[133] "2610528e23rik" "2700029m09rik" "2700054a10rik" "2700070h01rik"
+[137] "2700089e24rik" "2700090o03rik" "2700094k13rik" "2810008d09rik"
+[141] "2810008m24rik" "2810011l19rik" "2810055g20rik" "2810405k02rik"
+[145] "2810408m09rik" "2810417h13rik" "2810432l12rik" "2900006k08rik"
+[149] "2900008c10rik" "2900010m23rik" "2900056m20rik" "2900064a13rik"
+[153] "2900092d14rik" "3010026o09rik" "3110003a17rik" "3110047p20rik"
+[157] "3110056o03rik" "3200001d21rik" "3200002m19rik" "4632411b12rik"
+[161] "4632428n05rik" "4732415m23rik" "4732418c07rik" "4732456n10rik"
+[165] "4833419f23rik" "4833424o15rik" "4833442j19rik" "4921510h08rik"
+[169] "4921517l17rik" "4922501c03rik" "4922501l14rik" "4922505g16rik"
+[173] "4930414l22rik" "4930420k17rik" "4930451c15rik" "4930452g13rik"
+[177] "4930455f23rik" "4930506m07rik" "4930511m11rik" "4930528f23rik"
+[181] "4930534b04rik" "4930555i21rik" "4930563m20rik" "4930565a17"   
+[185] "4930572j05rik" "4930578n16rik" "4930579g22rik" "4930588n13rik"
+[189] "4931417g12rik" "4931429i11rik" "4932425i24rik" "4933404m02rik"
+[193] "4933407c03rik" "4933407h18rik" "4933411k20rik" "4933412e12rik"
+[197] "4933421e11rik" "4933426m11rik" "4933430h15rik" "4933432b09rik"
+[201] "4933433p14rik" "4933436c20rik" "5033411d12rik" "5033414d02rik"
+[205] "5133401n09rik" "5330426p16rik" "5430403n17"    "5430405g05rik"
+[209] "5430407p10rik" "5430416o09rik" "5430435g22rik" "5430437p03rik"
+[213] "5730403b10rik" "5730419i09rik" "5730455o13rik" "5730469m10rik"
+[217] "5730494m16rik" "5830403l16rik" "5930416i19rik" "5930438m14"   
+[221] "6030405a18rik" "6030429g01rik" "6230409e13rik" "6230427j02rik"
+[225] "6330403a02rik" "6330406i15rik" "6330407j23rik" "6330409n04rik"
+[229] "6330439k17rik" "6330503k22rik" "6330527o06rik" "6430527g18rik"
+[233] "6430598a04rik" "6430704m03rik" "6530401n04rik" "6530418l21rik"
+[237] "6720401g13rik" "6720456b07rik" "6720463m24rik" "6720468p15rik"
+[241] "8430410k20rik" "8430419l09rik" "9030418k01rik" "9030425e11rik"
+[245] "9030625a04rik" "9130014g24rik" "9130206i24rik" "9430020k01rik"
+[249] "9530048j24rik" "9630013a20rik" "9830001h06rik" "9930013l23rik"
+[253] "9930021d14rik" "a030009h04rik" "a130022j15rik" "a230070e04rik"
+[257] "a230073k19rik" "a2ld1"         "a330021e22rik" "a330049n07rik"
+[261] "a330050f15rik" "a430084p05rik" "a430107o13rik" "a430107p09rik"
+[265] "a530046m15"    "a530058n18rik" "a630007b06rik" "a630055g03rik"
+[269] "a730090h04rik" "a830010m20rik" "a830082n09rik" "a930001n09rik"
+[273] "a930005i04rik" "a930011o12rik" "a930038c07rik" "aa387883"     
+[277] "ab099516"      "abp1"          "accn1"         "accn2"        
+[281] "accn4"         "acpl2"         "adck4"         "adrbk2"       
+[285] "af251705"      "agpat9"        "agxt2l1"       "ai118078"     
+[289] "ai314976"      "ai316807"      "ai414108"      "ai597468"     
+[293] "ai607873"      "ai836003"      "ai848100"      "ai848285"     
+[297] "ai854517"      "aim1"          "aim1l"         "ak010878"     
+[301] "ak129341"      "aldoa"         "als2cr4"       "amac1"        
+[305] "amica1"        "ankrd32"       "ankrd5"        "apbb3"        
+[309] "athl1"         "atpbd4"        "au021034"      "aw549542"     
+[313] "aw555464"      "azi1"          "b230120h23rik" "b230206f22rik"
+[317] "b230208h17rik" "b230312a22rik" "b3galtl"       "b3gnt1"       
+[321] "b3gnt9-ps"     "b930041f14rik" "bai1"          "bai2"         
+[325] "bai3"          "bc003266"      "bc005764"      "bc006779"     
+[329] "bc013529"      "bc013712"      "bc017612"      "bc018242"     
+[333] "bc020535"      "bc021891"      "bc024582"      "bc024659"     
+[337] "bc029214"      "bc031353"      "bc031781"      "bc048355"     
+[341] "bc048546"      "bc048943"      "bc051070"      "bc053749"     
+[345] "bc055004"      "bc056474"      "bc057022"      "bc060267"     
+[349] "bc068157"      "bc089491"      "bc094916"      "beta-s"       
+[353] "brp44"         "brp44l"        "bzrap1"        "c030019i05rik"
+[357] "c030030a07rik" "c030044b11rik" "c030046i01rik" "c1s"          
+[361] "c330006k01rik" "c530028o21rik" "c630004h02rik" "c630020p19rik"
+[365] "c80913"        "c85492"        "carkd"         "casc5"        
+[369] "ccdc104"       "ccdc108"       "ccdc109a"      "ccdc109b"     
+[373] "ccdc11"        "ccdc123"       "ccdc135"       "ccdc147"      
+[377] "ccdc164"       "ccdc19"        "ccdc23"        "ccdc37"       
+[381] "ccdc41"        "ccdc42b"       "ccdc45"        "ccdc46"       
+[385] "ccdc48"        "ccdc55"        "ccdc56"        "ccdc67"       
+[389] "ccdc72"        "ccdc90a"       "ccdc99"        "ccl27a"       
+[393] "ccrn4l"        "cd97"          "cep110"        "chchd8"       
+[397] "chi3l1"        "chia"          "cirh1a"        "clcn4-2"      
+[401] "cldn25"        "cldn26"        "cml1"          "cml5"         
+[405] "copg"          "crybg3"        "csda"          "cxcr7"        
+[409] "cyb5"          "d0h4s114"      "d10bwg1379e"   "d10wsu52e"    
+[413] "d11wsu99e"     "d14ertd668e"   "d16h22s680e"   "d18ertd653e"  
+[417] "d19wsu162e"    "d230037d09rik" "d2ertd750e"    "d330028d13rik"
+[421] "d3bwg0562e"    "d4bwg0951e"    "d4ertd22e"     "d4wsu53e"     
+[425] "d630037f22rik" "d6wsu116e"     "d730048j04rik" "d830015g02rik"
+[429] "d830046c22rik" "d8ertd82e"     "d930014e17rik" "darc"         
+[433] "dbc1"          "ddx26b"        "deb1"          "diap2"        
+[437] "diap3"         "dio3os"        "dlg2"          "dlx6as1"      
+[441] "dnahc1"        "dnahc10"       "dnahc11"       "dnahc2"       
+[445] "dnahc5"        "dnahc6"        "dnahc7a"       "dnahc7b"      
+[449] "dnahc8"        "dnahc9"        "dnalc1"        "dnalc4"       
+[453] "dohh"          "dos"           "dpcd"          "drd1a"        
+[457] "e030010a14rik" "e030019b06rik" "e030019b13rik" "e130203b14rik"
+[461] "e130303b06rik" "e130306d19rik" "e130309f12rik" "e230008n13rik"
+[465] "e230019m04rik" "e330013p06"    "efcab4a"       "efha2"        
+[469] "eif2c2"        "eif2c3"        "eltd1"         "emr1"         
+[473] "epb4.1"        "epb4.1l1"      "epb4.1l2"      "epb4.1l3"     
+[477] "epb4.1l4a"     "epb4.1l5"      "epb4.9"        "eppk1"        
+[481] "ept1"          "erbb2ip"       "expi"          "f630043a04rik"
+[485] "fam100a"       "fam101b"       "fam108a"       "fam108b"      
+[489] "fam115a"       "fam115c"       "fam116b"       "fam123a"      
+[493] "fam123c"       "fam132a"       "fam134a"       "fam134b"      
+[497] "fam150b"       "fam154b"       "fam158a"       "fam164a"      
+[501] "fam164c"       "fam165b"       "fam175b"       "fam176a"      
+[505] "fam176b"       "fam178a"       "fam179a"       "fam179b"      
+[509] "fam188a"       "fam188b"       "fam18a"        "fam18b"       
+[513] "fam195b"       "fam33a"        "fam36a"        "fam38a"       
+[517] "fam40a"        "fam40b"        "fam48a"        "fam54a"       
+[521] "fam55c"        "fam55d"        "fam59a"        "fam59b"       
+[525] "fam5b"         "fam5c"         "fam63a"        "fam63b"       
+[529] "fam64a"        "fam65a"        "fam65b"        "fam70a"       
+[533] "fam70b"        "fam73a"        "fam75d3"       "fam82a1"      
+[537] "fam86"         "galntl1"       "galntl2"       "galntl4"      
+[541] "gbas"          "gcap14"        "gltpd1"        "gltscr2"      
+[545] "gm101"         "gm10485"       "gm10565"       "gm106"        
+[549] "gm11428"       "gm11435"       "gm11744"       "gm11818"      
+[553] "gm11968"       "gm129"         "gm13308"       "gm1337"       
+[557] "gm13476"       "gm14492"       "gm15070"       "gm1574"       
+[561] "gm15800"       "gm16039"       "gm16119"       "gm16515"      
+[565] "gm16517"       "gm16532"       "gm166"         "gm1715"       
+[569] "gm17384"       "gm19897"       "gm20300"       "gm216"        
+[573] "gm221"         "gm239"         "gm3414"        "gm362"        
+[577] "gm4013"        "gm410"         "gm4902"        "gm5095"       
+[581] "gm5151"        "gm5480"        "gm561"         "gm5918"       
+[585] "gm606"         "gm6251"        "gm6537"        "gm6792"       
+[589] "gm684"         "gm711"         "gm7325"        "gm872"        
+[593] "gm88"          "gm98"          "gm9895"        "gnb2l1"       
+[597] "gp49a"         "gpr111"        "gpr116"        "gpr123"       
+[601] "gpr124"        "gpr126"        "gpr133"        "gpr30"        
+[605] "gpr56"         "gpr64"         "gpr81"         "gpr98"        
+[609] "grlf1"         "gtl3"          "h2-ke2"        "h47"          
+[613] "has2as"        "hdgfrp3"       "heatr2"        "heatr8"       
+[617] "hiat1"         "hiatl1"        "hmga2-ps1"     "hmha1"        
+[621] "hn1"           "hnrpdl"        "hras1"         "hrsp12"       
+[625] "i830012o16rik" "ifi27l1"       "ifltd1"        "inadl"        
+[629] "itfg3"         "itgam"         "itgb1bp3"      "itprip"       
+[633] "jakmip1"       "jhdm1d"        "jub"           "kbtbd10"      
+[637] "klraq1"        "l7rn6"         "lass2"         "lass4"        
+[641] "lass5"         "lats2"         "lcn14"         "lect1"        
+[645] "leprel2"       "leprel4"       "lilrb3"        "lilrb4"       
+[649] "lnp"           "loc100048884"  "loc100504703"  "loc171588"    
+[653] "loc433944"     "loc545261"     "loc622552"     "loh12cr1"     
+[657] "lphn1"         "lphn2"         "lphn3"         "lrrc16a"      
+[661] "lrrc16b"       "lrrc33"        "lrrc48"        "lrrc50"       
+[665] "lsmd1"         "mesdc1"        "mesdc2"        "mettl10"      
+[669] "mfi2"          "mfsd4"         "mia1"          "mir1839"      
+[673] "mir1949"       "mir219-2"      "mira"          "mki67ip"      
+[677] "mlf1ip"        "mll1"          "mll5"          "mllt4"        
+[681] "mosc1"         "mosc2"         "mrp63"         "mtap1a"       
+[685] "mtap1b"        "mtap2"         "mtap4"         "mtap6"        
+[689] "mtap7"         "mtap7d1"       "mtap7d2"       "mtap9"        
+[693] "mycl1"         "myeov2"        "myst3"         "n28178"       
+[697] "n6amt2"        "naprt1"        "nat15"         "ncrna00086"   
+[701] "ndnl2"         "nelf"          "ng23"          "ngfrap1"      
+[705] "nhp2l1"        "niacr1"        "odz1"          "odz2"         
+[709] "odz3"          "odz4"          "orf63"         "pcnxl2"       
+[713] "pdxp"          "peg3as"        "pex11c"        "pgcp"         
+[717] "phf17"         "pion"          "pkm2"          "pldn"         
+[721] "plk1s1"        "ppap2a"        "ppap2b"        "ppap2c"       
+[725] "ppapdc1a"      "ppapdc1b"      "ppapdc2"       "ppapdc3"      
+[729] "pppde2"        "prkcc"         "prkcdbp"       "prkrir"       
+[733] "prosapip1"     "prr24"         "ptchd2"        "ptpla"        
+[737] "ptplad1"       "ptplad2"       "ptplb"         "ptrf"         
+[741] "pvrl1"         "pvrl2"         "pvrl3"         "pvrl4"        
+[745] "pxmp3"         "pyhin1"        "rab1"          "rab7l1"       
+[749] "rabl5"         "rad51l1"       "rai12"         "rdbp"         
+[753] "rgnef"         "rltpr"         "rmst"          "rn45s"        
+[757] "rnmtl1"        "rod1"          "rp2h"          "rps3a"        
+[761] "rps4y2"        "rtcd1"         "rtdr1"         "sc4mol"       
+[765] "scn2a1"        "sdpr"          "selk"          "selm"         
+[769] "sep15"         "sepp1"         "sept2"         "sepw1"        
+[773] "sepx1"         "setd8"         "sfpi1"         "sfrs18"       
+[777] "sgol1"         "sgol2"         "shfm1"         "slc24a6"      
+[781] "slmo1"         "slmo2"         "snhg10"        "snora16a"     
+[785] "spin2"         "spna2"         "spnb1"         "spnb2"        
+[789] "spnb3"         "spnb4"         "sqrdl"         "st6galnac2"   
+[793] "stk30"         "stmn1-rs1"     "stra13"        "stxbp3a"      
+[797] "sumo3"         "supt16h"       "supt4h1"       "tceb2"        
+[801] "tenc1"         "tmco7"         "tmem111"       "tmem179b"     
+[805] "tmem22"        "tmem223"       "tmem35"        "tmem66"       
+[809] "tmem85"        "tmem8c"        "tmem90a"       "tmem90b"      
+[813] "tmem93"        "tsga14"        "ttc18"         "ttc35"        
+[817] "txndc3"        "txndc6"        "ube2d2"        "ufd1l"        
+[821] "uqcc"          "utp11l"        "vps28"         "wbp5"         
+[825] "wbscr27"       "wdr16"         "wdr52"         "wdr65"        
+[829] "wdr67"         "wdr69"         "wdr96"         "whsc1"        
+[833] "whsc1l1"       "whsc2"         "x99384"        "ysk4"         
+[837] "zfp187"        "zfp191"        "zfp238"        "zmynd17"      
+[841] "znhit2-ps"    
+[1] "List of genes not mapped to human ortholog:"
+   [1] NA                   NA                   NA                  
+   [4] NA                   "ENSMUSG00000007777" NA                  
+   [7] "ENSMUSG00000043644" NA                   NA                  
+  [10] "ENSMUSG00000107002" NA                   NA                  
+  [13] "ENSMUSG00000087341" NA                   NA                  
+  [16] NA                   NA                   NA                  
+  [19] "ENSMUSG00000021023" NA                   "ENSMUSG00000098659"
+  [22] NA                   NA                   NA                  
+  [25] "ENSMUSG00000092203" NA                   NA                  
+  [28] NA                   NA                   NA                  
+  [31] NA                   NA                   NA                  
+  [34] "ENSMUSG00000043687" NA                   NA                  
+  [37] NA                   NA                   NA                  
+  [40] "ENSMUSG00000068099" "ENSMUSG00000072694" NA                  
+  [43] "ENSMUSG00000051319" NA                   "ENSMUSG00000094732"
+  [46] NA                   NA                   NA                  
+  [49] NA                   NA                   NA                  
+  [52] NA                   "ENSMUSG00000103746" "ENSMUSG00000101565"
+  [55] NA                   "ENSMUSG00000085389" "ENSMUSG00000097318"
+  [58] NA                   NA                   "ENSMUSG00000092599"
+  [61] "ENSMUSG00000058925" NA                   "ENSMUSG00000031927"
+  [64] NA                   NA                   "ENSMUSG00000031509"
+  [67] NA                   "ENSMUSG00000085416" NA                  
+  [70] "ENSMUSG00000085438" "ENSMUSG00000100253" NA                  
+  [73] "ENSMUSG00000020940" NA                   NA                  
+  [76] NA                   NA                   NA                  
+  [79] NA                   NA                   "ENSMUSG00000055833"
+  [82] NA                   NA                   NA                  
+  [85] "ENSMUSG00000100147" "ENSMUSG00000043773" NA                  
+  [88] "ENSMUSG00000086887" "ENSMUSG00000100837" "ENSMUSG00000101978"
+  [91] "ENSMUSG00000100872" "ENSMUSG00000099605" "ENSMUSG00000099378"
+  [94] NA                   "ENSMUSG00000071265" "ENSMUSG00000090840"
+  [97] NA                   "ENSMUSG00000101856" "ENSMUSG00000099474"
+ [100] NA                   NA                   "ENSMUSG00000100511"
+ [103] "ENSMUSG00000096935" NA                   "ENSMUSG00000078607"
+ [106] NA                   NA                   NA                  
+ [109] "ENSMUSG00000089997" "ENSMUSG00000078784" NA                  
+ [112] NA                   NA                   NA                  
+ [115] NA                   NA                   NA                  
+ [118] NA                   "ENSMUSG00000100277" "ENSMUSG00000073155"
+ [121] "ENSMUSG00000027713" NA                   NA                  
+ [124] NA                   NA                   "ENSMUSG00000095620"
+ [127] NA                   NA                   NA                  
+ [130] NA                   NA                   NA                  
+ [133] "ENSMUSG00000063018" NA                   "ENSMUSG00000100691"
+ [136] "ENSMUSG00000030587" NA                   "ENSMUSG00000086316"
+ [139] NA                   NA                   NA                  
+ [142] "ENSMUSG00000087380" NA                   "ENSMUSG00000086494"
+ [145] NA                   "ENSMUSG00000097354" NA                  
+ [148] NA                   NA                   NA                  
+ [151] NA                   "ENSMUSG00000097162" "ENSMUSG00000097729"
+ [154] NA                   NA                   NA                  
+ [157] "ENSMUSG00000099655" NA                   "ENSMUSG00000101655"
+ [160] NA                   NA                   NA                  
+ [163] NA                   NA                   NA                  
+ [166] "ENSMUSG00000097102" NA                   NA                  
+ [169] "ENSMUSG00000045411" "ENSMUSG00000086841" NA                  
+ [172] NA                   NA                   NA                  
+ [175] NA                   NA                   NA                  
+ [178] NA                   NA                   NA                  
+ [181] NA                   NA                   NA                  
+ [184] NA                   NA                   NA                  
+ [187] "ENSMUSG00000085562" NA                   NA                  
+ [190] NA                   "ENSMUSG00000087259" NA                  
+ [193] NA                   NA                   "ENSMUSG00000074415"
+ [196] "ENSMUSG00000079671" "ENSMUSG00000097040" "ENSMUSG00000085882"
+ [199] "ENSMUSG00000092486" NA                   NA                  
+ [202] "ENSMUSG00000041789" "ENSMUSG00000097787" NA                  
+ [205] "ENSMUSG00000021807" "ENSMUSG00000086224" NA                  
+ [208] "ENSMUSG00000053080" NA                   NA                  
+ [211] NA                   "ENSMUSG00000098090" "ENSMUSG00000087497"
+ [214] NA                   NA                   NA                  
+ [217] "ENSMUSG00000099881" "ENSMUSG00000049881" "ENSMUSG00000096995"
+ [220] "ENSMUSG00000100891" NA                   "ENSMUSG00000086629"
+ [223] "ENSMUSG00000103562" NA                   "ENSMUSG00000018570"
+ [226] NA                   "ENSMUSG00000075389" NA                  
+ [229] NA                   "ENSMUSG00000086283" "ENSMUSG00000091475"
+ [232] NA                   NA                   NA                  
+ [235] "ENSMUSG00000051339" "ENSMUSG00000054418" "ENSMUSG00000099696"
+ [238] NA                   NA                   "ENSMUSG00000097277"
+ [241] "ENSMUSG00000087038" NA                   "ENSMUSG00000102869"
+ [244] NA                   "ENSMUSG00000086254" NA                  
+ [247] "ENSMUSG00000104861" NA                   NA                  
+ [250] "ENSMUSG00000086815" NA                   NA                  
+ [253] "ENSMUSG00000031125" "ENSMUSG00000038917" NA                  
+ [256] NA                   NA                   "ENSMUSG00000107402"
+ [259] NA                   NA                   "ENSMUSG00000053714"
+ [262] NA                   "ENSMUSG00000075217" NA                  
+ [265] NA                   NA                   NA                  
+ [268] NA                   NA                   NA                  
+ [271] "ENSMUSG00000079421" "ENSMUSG00000087354" "ENSMUSG00000085940"
+ [274] "ENSMUSG00000085558" NA                   NA                  
+ [277] "ENSMUSG00000086918" "ENSMUSG00000069712" "ENSMUSG00000067795"
+ [280] NA                   NA                   NA                  
+ [283] "ENSMUSG00000097370" "ENSMUSG00000097693" "ENSMUSG00000050345"
+ [286] "ENSMUSG00000106056" NA                   NA                  
+ [289] "ENSMUSG00000020992" "ENSMUSG00000031325" "ENSMUSG00000101701"
+ [292] NA                   NA                   NA                  
+ [295] "ENSMUSG00000097519" "ENSMUSG00000053574" NA                  
+ [298] NA                   "ENSMUSG00000085084" NA                  
+ [301] "ENSMUSG00000097587" NA                   NA                  
+ [304] "ENSMUSG00000051074" NA                   "ENSMUSG00000086365"
+ [307] NA                   NA                   "ENSMUSG00000074580"
+ [310] NA                   "ENSMUSG00000090336" "ENSMUSG00000079460"
+ [313] NA                   "ENSMUSG00000097908" NA                  
+ [316] NA                   "ENSMUSG00000026224" "ENSMUSG00000053896"
+ [319] NA                   NA                   "ENSMUSG00000071763"
+ [322] "ENSMUSG00000097637" NA                   NA                  
+ [325] NA                   "ENSMUSG00000086968" NA                  
+ [328] NA                   NA                   "ENSMUSG00000072893"
+ [331] "ENSMUSG00000051940" "ENSMUSG00000102185" NA                  
+ [334] NA                   NA                   "ENSMUSG00000087455"
+ [337] "ENSMUSG00000086822" NA                   "ENSMUSG00000085776"
+ [340] NA                   NA                   NA                  
+ [343] NA                   "ENSMUSG00000106002" NA                  
+ [346] NA                   NA                   NA                  
+ [349] NA                   NA                   NA                  
+ [352] NA                   "ENSMUSG00000097471" "ENSMUSG00000072591"
+ [355] NA                   NA                   NA                  
+ [358] NA                   "ENSMUSG00000051361" NA                  
+ [361] NA                   NA                   "ENSMUSG00000018451"
+ [364] NA                   NA                   "ENSMUSG00000009551"
+ [367] NA                   NA                   NA                  
+ [370] NA                   NA                   "ENSMUSG00000073795"
+ [373] NA                   NA                   NA                  
+ [376] NA                   NA                   NA                  
+ [379] NA                   NA                   NA                  
+ [382] NA                   "ENSMUSG00000034587" NA                  
+ [385] NA                   NA                   NA                  
+ [388] "ENSMUSG00000073067" "ENSMUSG00000087022" NA                  
+ [391] "ENSMUSG00000079602" "ENSMUSG00000097145" "ENSMUSG00000073154"
+ [394] "ENSMUSG00000094112" NA                   "ENSMUSG00000054457"
+ [397] "ENSMUSG00000100632" NA                   "ENSMUSG00000078776"
+ [400] "ENSMUSG00000097736" NA                   NA                  
+ [403] NA                   NA                   "ENSMUSG00000069893"
+ [406] NA                   NA                   "ENSMUSG00000105891"
+ [409] "ENSMUSG00000087075" NA                   NA                  
+ [412] NA                   "ENSMUSG00000097915" NA                  
+ [415] "ENSMUSG00000096929" "ENSMUSG00000097326" NA                  
+ [418] NA                   "ENSMUSG00000097868" "ENSMUSG00000109321"
+ [421] "ENSMUSG00000086363" "ENSMUSG00000087305" NA                  
+ [424] NA                   NA                   NA                  
+ [427] NA                   NA                   "ENSMUSG00000054293"
+ [430] NA                   "ENSMUSG00000097924" "ENSMUSG00000085139"
+ [433] NA                   NA                   "ENSMUSG00000087143"
+ [436] NA                   NA                   "ENSMUSG00000075330"
+ [439] "ENSMUSG00000054426" NA                   "ENSMUSG00000092210"
+ [442] NA                   "ENSMUSG00000060530" NA                  
+ [445] NA                   NA                   "ENSMUSG00000051900"
+ [448] "ENSMUSG00000040584" "ENSMUSG00000029802" "ENSMUSG00000029299"
+ [451] NA                   "ENSMUSG00000036138" "ENSMUSG00000042647"
+ [454] "ENSMUSG00000023832" "ENSMUSG00000062480" NA                  
+ [457] NA                   NA                   "ENSMUSG00000020681"
+ [460] "ENSMUSG00000072949" "ENSMUSG00000021226" "ENSMUSG00000042540"
+ [463] "ENSMUSG00000025287" NA                   "ENSMUSG00000023262"
+ [466] "ENSMUSG00000079058" "ENSMUSG00000031554" "ENSMUSG00000036040"
+ [469] NA                   "ENSMUSG00000074207" NA                  
+ [472] "ENSMUSG00000039041" NA                   "ENSMUSG00000088294"
+ [475] NA                   "ENSMUSG00000049115" NA                  
+ [478] "ENSMUSG00000027597" NA                   NA                  
+ [481] NA                   "ENSMUSG00000062753" NA                  
+ [484] "ENSMUSG00000056145" NA                   "ENSMUSG00000093738"
+ [487] NA                   NA                   NA                  
+ [490] NA                   NA                   "ENSMUSG00000053297"
+ [493] NA                   NA                   NA                  
+ [496] NA                   "ENSMUSG00000038729" "ENSMUSG00000061758"
+ [499] "ENSMUSG00000029762" "ENSMUSG00000021211" "ENSMUSG00000033715"
+ [502] "ENSMUSG00000021207" "ENSMUSG00000053279" "ENSMUSG00000029455"
+ [505] "ENSMUSG00000075296" NA                   NA                  
+ [508] "ENSMUSG00000025134" NA                   "ENSMUSG00000031354"
+ [511] NA                   "ENSMUSG00000074264" "ENSMUSG00000072115"
+ [514] NA                   "ENSMUSG00000052331" NA                  
+ [517] "ENSMUSG00000032249" "ENSMUSG00000028333" "ENSMUSG00000021950"
+ [520] "ENSMUSG00000064294" "ENSMUSG00000038242" NA                  
+ [523] "ENSMUSG00000073705" "ENSMUSG00000050014" "ENSMUSG00000051716"
+ [526] "ENSMUSG00000079508" "ENSMUSG00000029378" "ENSMUSG00000025154"
+ [529] "ENSMUSG00000024944" "ENSMUSG00000008475" "ENSMUSG00000048355"
+ [532] "ENSMUSG00000048040" "ENSMUSG00000025533" "ENSMUSG00000076441"
+ [535] "ENSMUSG00000029036" NA                   "ENSMUSG00000046808"
+ [538] "ENSMUSG00000016252" "ENSMUSG00000034566" "ENSMUSG00000022956"
+ [541] NA                   NA                   "ENSMUSG00000109890"
+ [544] "ENSMUSG00000078349" "ENSMUSG00000075010" NA                  
+ [547] "ENSMUSG00000038112" NA                   NA                  
+ [550] NA                   NA                   "ENSMUSG00000086844"
+ [553] NA                   "ENSMUSG00000109006" "ENSMUSG00000089706"
+ [556] "ENSMUSG00000050538" "ENSMUSG00000097785" NA                  
+ [559] "ENSMUSG00000097623" NA                   NA                  
+ [562] NA                   "ENSMUSG00000084960" "ENSMUSG00000052364"
+ [565] "ENSMUSG00000109473" NA                   NA                  
+ [568] NA                   NA                   "ENSMUSG00000006464"
+ [571] "ENSMUSG00000063145" NA                   "ENSMUSG00000079065"
+ [574] NA                   NA                   "ENSMUSG00000041674"
+ [577] NA                   NA                   NA                  
+ [580] NA                   NA                   "ENSMUSG00000085006"
+ [583] NA                   NA                   NA                  
+ [586] NA                   "ENSMUSG00000074649" "ENSMUSG00000049946"
+ [589] NA                   NA                   "ENSMUSG00000036948"
+ [592] "ENSMUSG00000086272" NA                   NA                  
+ [595] "ENSMUSG00000074052" NA                   NA                  
+ [598] "ENSMUSG00000057246" NA                   NA                  
+ [601] "ENSMUSG00000101429" NA                   NA                  
+ [604] NA                   "ENSMUSG00000087150" NA                  
+ [607] NA                   NA                   "ENSMUSG00000102037"
+ [610] "ENSMUSG00000089929" NA                   "ENSMUSG00000050071"
+ [613] "ENSMUSG00000042750" "ENSMUSG00000047844" "ENSMUSG00000074483"
+ [616] "ENSMUSG00000090247" "ENSMUSG00000044502" "ENSMUSG00000047721"
+ [619] "ENSMUSG00000027484" NA                   NA                  
+ [622] "ENSMUSG00000036478" NA                   NA                  
+ [625] NA                   "ENSMUSG00000087574" NA                  
+ [628] NA                   "ENSMUSG00000052848" "ENSMUSG00000029917"
+ [631] "ENSMUSG00000092397" "ENSMUSG00000058914" "ENSMUSG00000071347"
+ [634] "ENSMUSG00000055172" "ENSMUSG00000098470" NA                  
+ [637] "ENSMUSG00000071753" "ENSMUSG00000085024" "ENSMUSG00000091956"
+ [640] NA                   "ENSMUSG00000087365" "ENSMUSG00000073418"
+ [643] NA                   NA                   NA                  
+ [646] "ENSMUSG00000084910" NA                   NA                  
+ [649] "ENSMUSG00000070686" "ENSMUSG00000008393" NA                  
+ [652] NA                   "ENSMUSG00000033538" "ENSMUSG00000025150"
+ [655] NA                   NA                   NA                  
+ [658] NA                   NA                   "ENSMUSG00000050625"
+ [661] NA                   NA                   NA                  
+ [664] "ENSMUSG00000075225" NA                   NA                  
+ [667] NA                   NA                   NA                  
+ [670] NA                   NA                   NA                  
+ [673] NA                   NA                   NA                  
+ [676] NA                   NA                   "ENSMUSG00000041617"
+ [679] NA                   NA                   "ENSMUSG00000035352"
+ [682] NA                   "ENSMUSG00000000982" "ENSMUSG00000018930"
+ [685] "ENSMUSG00000018927" "ENSMUSG00000009185" "ENSMUSG00000019122"
+ [688] "ENSMUSG00000025804" NA                   "ENSMUSG00000028076"
+ [691] "ENSMUSG00000022667" "ENSMUSG00000031494" "ENSMUSG00000065987"
+ [694] "ENSMUSG00000031495" "ENSMUSG00000051906" "ENSMUSG00000079168"
+ [697] "ENSMUSG00000047139" "ENSMUSG00000034652" "ENSMUSG00000034641"
+ [700] "ENSMUSG00000004609" "ENSMUSG00000000682" "ENSMUSG00000026399"
+ [703] "ENSMUSG00000032679" "ENSMUSG00000068686" NA                  
+ [706] "ENSMUSG00000012819" "ENSMUSG00000029062" "ENSMUSG00000029394"
+ [709] "ENSMUSG00000044303" "ENSMUSG00000071637" "ENSMUSG00000032297"
+ [712] NA                   "ENSMUSG00000056973" "ENSMUSG00000045031"
+ [715] "ENSMUSG00000026365" "ENSMUSG00000026031" "ENSMUSG00000034203"
+ [718] NA                   NA                   NA                  
+ [721] "ENSMUSG00000109901" "ENSMUSG00000053119" "ENSMUSG00000031952"
+ [724] NA                   "ENSMUSG00000000308" NA                  
+ [727] NA                   NA                   "ENSMUSG00000000318"
+ [730] "ENSMUSG00000033633" "ENSMUSG00000030157" "ENSMUSG00000049037"
+ [733] "ENSMUSG00000030148" "ENSMUSG00000043832" "ENSMUSG00000030720"
+ [736] "ENSMUSG00000014232" "ENSMUSG00000016756" NA                  
+ [739] NA                   "ENSMUSG00000015202" "ENSMUSG00000025381"
+ [742] "ENSMUSG00000070695" "ENSMUSG00000038048" "ENSMUSG00000032572"
+ [745] NA                   "ENSMUSG00000039637" "ENSMUSG00000046516"
+ [748] "ENSMUSG00000061518" "ENSMUSG00000041697" "ENSMUSG00000024248"
+ [751] "ENSMUSG00000017778" "ENSMUSG00000035885" "ENSMUSG00000025488"
+ [754] "ENSMUSG00000025586" "ENSMUSG00000016481" "ENSMUSG00000006360"
+ [757] NA                   "ENSMUSG00000070870" "ENSMUSG00000025945"
+ [760] "ENSMUSG00000005683" NA                   "ENSMUSG00000071714"
+ [763] "ENSMUSG00000070702" "ENSMUSG00000061937" "ENSMUSG00000061388"
+ [766] "ENSMUSG00000024576" "ENSMUSG00000074698" "ENSMUSG00000044258"
+ [769] "ENSMUSG00000074874" "ENSMUSG00000029380" "ENSMUSG00000058427"
+ [772] NA                   "ENSMUSG00000067925" "ENSMUSG00000067924"
+ [775] "ENSMUSG00000051851" NA                   "ENSMUSG00000063694"
+ [778] "ENSMUSG00000005547" "ENSMUSG00000061740" "ENSMUSG00000081225"
+ [781] "ENSMUSG00000052914" "ENSMUSG00000015224" "ENSMUSG00000048440"
+ [784] "ENSMUSG00000078700" NA                   NA                  
+ [787] NA                   NA                   "ENSMUSG00000097121"
+ [790] NA                   NA                   NA                  
+ [793] NA                   NA                   NA                  
+ [796] "ENSMUSG00000087269" NA                   NA                  
+ [799] "ENSMUSG00000094910" "ENSMUSG00000097466" NA                  
+ [802] NA                   NA                   "ENSMUSG00000095385"
+ [805] NA                   NA                   NA                  
+ [808] NA                   NA                   NA                  
+ [811] "ENSMUSG00000097003" NA                   "ENSMUSG00000074274"
+ [814] NA                   NA                   "ENSMUSG00000029878"
+ [817] "ENSMUSG00000045284" "ENSMUSG00000001666" NA                  
+ [820] "ENSMUSG00000000787" NA                   "ENSMUSG00000058568"
+ [823] "ENSMUSG00000038633" "ENSMUSG00000003531" "ENSMUSG00000062393"
+ [826] "ENSMUSG00000021707" "ENSMUSG00000022210" NA                  
+ [829] NA                   NA                   "ENSMUSG00000097589"
+ [832] NA                   "ENSMUSG00000084946" NA                  
+ [835] "ENSMUSG00000031323" NA                   NA                  
+ [838] NA                   NA                   NA                  
+ [841] NA                   NA                   NA                  
+ [844] NA                   NA                   NA                  
+ [847] NA                   NA                   NA                  
+ [850] NA                   "ENSMUSG00000064010" NA                  
+ [853] "ENSMUSG00000092074" "ENSMUSG00000092192" NA                  
+ [856] NA                   NA                   "ENSMUSG00000078605"
+ [859] "ENSMUSG00000085271" "ENSMUSG00000048747" NA                  
+ [862] "ENSMUSG00000087406" NA                   NA                  
+ [865] NA                   NA                   "ENSMUSG00000087231"
+ [868] NA                   "ENSMUSG00000097585" NA                  
+ [871] "ENSMUSG00000073538" "ENSMUSG00000038925" "ENSMUSG00000021417"
+ [874] "ENSMUSG00000001707" NA                   NA                  
+ [877] "ENSMUSG00000063600" "ENSMUSG00000057561" NA                  
+ [880] NA                   "ENSMUSG00000030738" "ENSMUSG00000025580"
+ [883] "ENSMUSG00000078812" NA                   NA                  
+ [886] "ENSMUSG00000063524" NA                   NA                  
+ [889] NA                   NA                   NA                  
+ [892] NA                   NA                   "ENSMUSG00000028876"
+ [895] NA                   NA                   NA                  
+ [898] "ENSMUSG00000026048" "ENSMUSG00000078771" NA                  
+ [901] "ENSMUSG00000078122" NA                   "ENSMUSG00000086686"
+ [904] "ENSMUSG00000052125" "ENSMUSG00000078317" "ENSMUSG00000028773"
+ [907] "ENSMUSG00000027371" NA                   NA                  
+ [910] "ENSMUSG00000038646" NA                   NA                  
+ [913] NA                   NA                   NA                  
+ [916] NA                   NA                   NA                  
+ [919] NA                   NA                   "ENSMUSG00000057497"
+ [922] NA                   NA                   NA                  
+ [925] "ENSMUSG00000009216" NA                   NA                  
+ [928] NA                   NA                   NA                  
+ [931] NA                   NA                   NA                  
+ [934] NA                   "ENSMUSG00000051515" "ENSMUSG00000049154"
+ [937] NA                   NA                   NA                  
+ [940] NA                   NA                   "ENSMUSG00000043681"
+ [943] NA                   NA                   NA                  
+ [946] NA                   NA                   "ENSMUSG00000057068"
+ [949] NA                   NA                   NA                  
+ [952] NA                   NA                   NA                  
+ [955] NA                   NA                   NA                  
+ [958] NA                   NA                   NA                  
+ [961] NA                   NA                   NA                  
+ [964] "ENSMUSG00000055184" NA                   NA                  
+ [967] NA                   NA                   "ENSMUSG00000038274"
+ [970] "ENSMUSG00000049314" "ENSMUSG00000015947" "ENSMUSG00000026656"
+ [973] "ENSMUSG00000059498" "ENSMUSG00000032966" "ENSMUSG00000032633"
+ [976] "ENSMUSG00000110206" "ENSMUSG00000026560" "ENSMUSG00000033737"
+ [979] "ENSMUSG00000015994" "ENSMUSG00000097072" "ENSMUSG00000071275"
+ [982] "ENSMUSG00000067199" "ENSMUSG00000050708" "ENSMUSG00000055978"
+ [985] "ENSMUSG00000066705" "ENSMUSG00000072844" "ENSMUSG00000031400"
+ [988] "ENSMUSG00000089704" NA                   NA                  
+ [991] NA                   "ENSMUSG00000057666" "ENSMUSG00000053332"
+ [994] "ENSMUSG00000015944" NA                   "ENSMUSG00000028270"
+ [997] "ENSMUSG00000028268" "ENSMUSG00000079363" "ENSMUSG00000105504"
+[1000] "ENSMUSG00000104713" "ENSMUSG00000040253" "ENSMUSG00000034438"
+[1003] "ENSMUSG00000029298" NA                   "ENSMUSG00000006345"
+[1006] "ENSMUSG00000035778" "ENSMUSG00000043505" "ENSMUSG00000051124"
+[1009] "ENSMUSG00000030048" NA                   NA                  
+[1012] "ENSMUSG00000021794" "ENSMUSG00000109143" NA                  
+[1015] "ENSMUSG00000068680" "ENSMUSG00000107623" "ENSMUSG00000099907"
+[1018] NA                   NA                   NA                  
+[1021] "ENSMUSG00000074555" "ENSMUSG00000102887" "ENSMUSG00000078444"
+[1024] "ENSMUSG00000079644" "ENSMUSG00000044860" NA                  
+[1027] NA                   "ENSMUSG00000081249" "ENSMUSG00000078640"
+[1030] NA                   NA                   "ENSMUSG00000086587"
+[1033] NA                   "ENSMUSG00000069939" "ENSMUSG00000083061"
+[1036] "ENSMUSG00000087342" "ENSMUSG00000082292" "ENSMUSG00000085181"
+[1039] NA                   "ENSMUSG00000086006" NA                  
+[1042] NA                   "ENSMUSG00000075514" "ENSMUSG00000086555"
+[1045] NA                   "ENSMUSG00000083270" "ENSMUSG00000087301"
+[1048] "ENSMUSG00000087006" "ENSMUSG00000074813" "ENSMUSG00000086496"
+[1051] NA                   NA                   "ENSMUSG00000084780"
+[1054] "ENSMUSG00000074466" "ENSMUSG00000084235" NA                  
+[1057] NA                   NA                   NA                  
+[1060] NA                   NA                   NA                  
+[1063] NA                   "ENSMUSG00000097511" NA                  
+[1066] NA                   "ENSMUSG00000091034" "ENSMUSG00000110647"
+[1069] "ENSMUSG00000044285" NA                   "ENSMUSG00000100684"
+[1072] NA                   NA                   NA                  
+[1075] NA                   "ENSMUSG00000010529" "ENSMUSG00000097248"
+[1078] "ENSMUSG00000096793" NA                   NA                  
+[1081] "ENSMUSG00000105402" "ENSMUSG00000111709" "ENSMUSG00000090682"
+[1084] NA                   NA                   "ENSMUSG00000094893"
+[1087] "ENSMUSG00000051081" "ENSMUSG00000097174" NA                  
+[1090] "ENSMUSG00000086909" "ENSMUSG00000106738" "ENSMUSG00000089815"
+[1093] "ENSMUSG00000064052" NA                   "ENSMUSG00000051537"
+[1096] "ENSMUSG00000073010" NA                   NA                  
+[1099] "ENSMUSG00000097711" "ENSMUSG00000104835" "ENSMUSG00000047935"
+[1102] NA                   "ENSMUSG00000096775" NA                  
+[1105] "ENSMUSG00000079531" "ENSMUSG00000073407" NA                  
+[1108] "ENSMUSG00000053182" "ENSMUSG00000110101" NA                  
+[1111] "ENSMUSG00000048621" NA                   "ENSMUSG00000082002"
+[1114] NA                   NA                   "ENSMUSG00000075549"
+[1117] NA                   NA                   "ENSMUSG00000079034"
+[1120] NA                   "ENSMUSG00000073234" NA                  
+[1123] "ENSMUSG00000039098" NA                   "ENSMUSG00000049230"
+[1126] "ENSMUSG00000094002" NA                   "ENSMUSG00000055048"
+[1129] NA                   NA                   "ENSMUSG00000036427"
+[1132] NA                   NA                   NA                  
+[1135] NA                   NA                   NA                  
+[1138] "ENSMUSG00000097715" "ENSMUSG00000031210" NA                  
+[1141] NA                   NA                   NA                  
+[1144] NA                   NA                   "ENSMUSG00000017211"
+[1147] "ENSMUSG00000057177" "ENSMUSG00000032348" "ENSMUSG00000058135"
+[1150] "ENSMUSG00000040562" "ENSMUSG00000068762" "ENSMUSG00000004035"
+[1153] "ENSMUSG00000060803" "ENSMUSG00000033318" "ENSMUSG00000001665"
+[1156] "ENSMUSG00000009093" "ENSMUSG00000015942" NA                  
+[1159] "ENSMUSG00000070708" "ENSMUSG00000055523" "ENSMUSG00000073421"
+[1162] "ENSMUSG00000073411" "ENSMUSG00000079547" "ENSMUSG00000061232"
+[1165] "ENSMUSG00000067203" NA                   "ENSMUSG00000016206"
+[1168] "ENSMUSG00000035929" "ENSMUSG00000067212" "ENSMUSG00000053835"
+[1171] NA                   "ENSMUSG00000075297" "ENSMUSG00000056978"
+[1174] NA                   "ENSMUSG00000022177" "ENSMUSG00000052217"
+[1177] "ENSMUSG00000028800" NA                   NA                  
+[1180] NA                   NA                   NA                  
+[1183] "ENSMUSG00000038412" "ENSMUSG00000025868" "ENSMUSG00000038994"
+[1186] "ENSMUSG00000069270" NA                   "ENSMUSG00000015217"
+[1189] "ENSMUSG00000003038" NA                   NA                  
+[1192] "ENSMUSG00000042079" "ENSMUSG00000021546" "ENSMUSG00000071659"
+[1195] NA                   "ENSMUSG00000031722" NA                  
+[1198] "ENSMUSG00000071001" NA                   "ENSMUSG00000047759"
+[1201] "ENSMUSG00000045802" "ENSMUSG00000109865" "ENSMUSG00000091971"
+[1204] "ENSMUSG00000090877" "ENSMUSG00000038086" "ENSMUSG00000059854"
+[1207] NA                   "ENSMUSG00000035847" "ENSMUSG00000026535"
+[1210] "ENSMUSG00000039997" "ENSMUSG00000073489" NA                  
+[1213] "ENSMUSG00000079017" "ENSMUSG00000078920" "ENSMUSG00000034459"
+[1216] "ENSMUSG00000074896" "ENSMUSG00000025491" "ENSMUSG00000060591"
+[1219] "ENSMUSG00000025492" "ENSMUSG00000059108" NA                  
+[1222] "ENSMUSG00000078853" "ENSMUSG00000054072" "ENSMUSG00000022969"
+[1225] "ENSMUSG00000073889" "ENSMUSG00000074695" "ENSMUSG00000031304"
+[1228] NA                   "ENSMUSG00000003477" "ENSMUSG00000064065"
+[1231] "ENSMUSG00000046879" "ENSMUSG00000069874" "ENSMUSG00000044792"
+[1234] "ENSMUSG00000030056" NA                   NA                  
+[1237] NA                   "ENSMUSG00000000290" NA                  
+[1240] NA                   NA                   "ENSMUSG00000005078"
+[1243] NA                   NA                   "ENSMUSG00000101609"
+[1246] "ENSMUSG00000059022" "ENSMUSG00000041633" "ENSMUSG00000034311"
+[1249] "ENSMUSG00000079553" "ENSMUSG00000024301" "ENSMUSG00000102367"
+[1252] "ENSMUSG00000021288" "ENSMUSG00000109764" NA                  
+[1255] "ENSMUSG00000053012" "ENSMUSG00000035849" "ENSMUSG00000053654"
+[1258] "ENSMUSG00000058354" "ENSMUSG00000078252" NA                  
+[1261] "ENSMUSG00000055541" "ENSMUSG00000091512" "ENSMUSG00000027968"
+[1264] NA                   NA                   NA                  
+[1267] NA                   "ENSMUSG00000095870" NA                  
+[1270] "ENSMUSG00000094035" NA                   NA                  
+[1273] NA                   "ENSMUSG00000001123" "ENSMUSG00000100916"
+[1276] "ENSMUSG00000106379" "ENSMUSG00000070873" NA                  
+[1279] NA                   "ENSMUSG00000019920" NA                  
+[1282] NA                   NA                   NA                  
+[1285] NA                   NA                   NA                  
+[1288] NA                   "ENSMUSG00000043165" NA                  
+[1291] NA                   NA                   NA                  
+[1294] NA                   NA                   NA                  
+[1297] NA                   "ENSMUSG00000064307" "ENSMUSG00000007476"
+[1300] "ENSMUSG00000035215" NA                   "ENSMUSG00000018819"
+[1303] "ENSMUSG00000075602" "ENSMUSG00000079018" "ENSMUSG00000022584"
+[1306] "ENSMUSG00000022583" "ENSMUSG00000073413" "ENSMUSG00000034923"
+[1309] "ENSMUSG00000022594" "ENSMUSG00000069516" "ENSMUSG00000092341"
+[1312] "ENSMUSG00000005142" "ENSMUSG00000034912" "ENSMUSG00000002329"
+[1315] "ENSMUSG00000021268" NA                   NA                  
+[1318] NA                   "ENSMUSG00000054619" NA                  
+[1321] "ENSMUSG00000034739" NA                   "ENSMUSG00000040950"
+[1324] NA                   "ENSMUSG00000097767" "ENSMUSG00000065511"
+[1327] "ENSMUSG00000065446" "ENSMUSG00000105196" "ENSMUSG00000065601"
+[1330] "ENSMUSG00000065495" "ENSMUSG00000089726" "ENSMUSG00000065458"
+[1333] NA                   "ENSMUSG00000105497" NA                  
+[1336] NA                   "ENSMUSG00000093003" "ENSMUSG00000065579"
+[1339] "ENSMUSG00000077925" "ENSMUSG00000092638" "ENSMUSG00000076372"
+[1342] "ENSMUSG00000076236" "ENSMUSG00000076064" "ENSMUSG00000076218"
+[1345] "ENSMUSG00000105814" NA                   "ENSMUSG00000097391"
+[1348] "ENSMUSG00000065557" NA                   NA                  
+[1351] NA                   NA                   NA                  
+[1354] "ENSMUSG00000074064" "ENSMUSG00000061273" "ENSMUSG00000048497"
+[1357] "ENSMUSG00000090272" NA                   NA                  
+[1360] "ENSMUSG00000046805" "ENSMUSG00000107283" "ENSMUSG00000022679"
+[1363] "ENSMUSG00000026712" "ENSMUSG00000055302" NA                  
+[1366] "ENSMUSG00000026087" "ENSMUSG00000015672" "ENSMUSG00000106918"
+[1369] "ENSMUSG00000036850" "ENSMUSG00000034211" "ENSMUSG00000024677"
+[1372] "ENSMUSG00000079419" "ENSMUSG00000024679" "ENSMUSG00000031765"
+[1375] "ENSMUSG00000062937" NA                   NA                  
+[1378] NA                   NA                   NA                  
+[1381] NA                   NA                   NA                  
+[1384] NA                   "ENSMUSG00000042485" "ENSMUSG00000023341"
+[1387] "ENSMUSG00000022346" NA                   "ENSMUSG00000044597"
+[1390] "ENSMUSG00000027201" NA                   "ENSMUSG00000020542"
+[1393] NA                   "ENSMUSG00000022671" NA                  
+[1396] NA                   "ENSMUSG00000061315" "ENSMUSG00000078945"
+[1399] "ENSMUSG00000020572" NA                   NA                  
+[1402] "ENSMUSG00000030004" "ENSMUSG00000041120" NA                  
+[1405] NA                   "ENSMUSG00000002379" "ENSMUSG00000041881"
+[1408] "ENSMUSG00000000399" "ENSMUSG00000031059" "ENSMUSG00000025204"
+[1411] "ENSMUSG00000030647" "ENSMUSG00000092274" "ENSMUSG00000022055"
+[1414] NA                   "ENSMUSG00000047180" NA                  
+[1417] NA                   NA                   NA                  
+[1420] "ENSMUSG00000069670" "ENSMUSG00000020857" "ENSMUSG00000001441"
+[1423] "ENSMUSG00000057113" "ENSMUSG00000038071" "ENSMUSG00000032491"
+[1426] "ENSMUSG00000073293" "ENSMUSG00000073295" "ENSMUSG00000032565"
+[1429] "ENSMUSG00000109511" "ENSMUSG00000052776" "ENSMUSG00000001166"
+[1432] "ENSMUSG00000032623" "ENSMUSG00000066861" "ENSMUSG00000029561"
+[1435] "ENSMUSG00000083610" "ENSMUSG00000054310" NA                  
+[1438] NA                   NA                   NA                  
+[1441] "ENSMUSG00000075206" "ENSMUSG00000109449" "ENSMUSG00000049456"
+[1444] "ENSMUSG00000052508" "ENSMUSG00000093901" "ENSMUSG00000031394"
+[1447] NA                   "ENSMUSG00000076436" "ENSMUSG00000025364"
+[1450] "ENSMUSG00000022283" "ENSMUSG00000090053" "ENSMUSG00000014301"
+[1453] "ENSMUSG00000023495" "ENSMUSG00000034755" "ENSMUSG00000102697"
+[1456] "ENSMUSG00000045657" "ENSMUSG00000051242" "ENSMUSG00000102918"
+[1459] "ENSMUSG00000027342" NA                   "ENSMUSG00000110195"
+[1462] NA                   "ENSMUSG00000032959" "ENSMUSG00000020717"
+[1465] "ENSMUSG00000106847" NA                   NA                  
+[1468] "ENSMUSG00000029373" "ENSMUSG00000011752" NA                  
+[1471] "ENSMUSG00000062070" "ENSMUSG00000031212" "ENSMUSG00000054728"
+[1474] NA                   "ENSMUSG00000046804" "ENSMUSG00000031802"
+[1477] "ENSMUSG00000031834" "ENSMUSG00000032171" NA                  
+[1480] "ENSMUSG00000023452" "ENSMUSG00000023795" NA                  
+[1483] NA                   NA                   "ENSMUSG00000031146"
+[1486] "ENSMUSG00000032369" "ENSMUSG00000032372" "ENSMUSG00000028066"
+[1489] "ENSMUSG00000021871" "ENSMUSG00000028394" "ENSMUSG00000053293"
+[1492] "ENSMUSG00000009739" NA                   NA                  
+[1495] NA                   NA                   NA                  
+[1498] NA                   NA                   "ENSMUSG00000071866"
+[1501] "ENSMUSG00000056612" "ENSMUSG00000033953" NA                  
+[1504] "ENSMUSG00000005161" "ENSMUSG00000026701" "ENSMUSG00000050114"
+[1507] NA                   NA                   NA                  
+[1510] "ENSMUSG00000005268" "ENSMUSG00000109324" "ENSMUSG00000032673"
+[1513] NA                   "ENSMUSG00000031432" "ENSMUSG00000023048"
+[1516] NA                   "ENSMUSG00000057163" "ENSMUSG00000058398"
+[1519] "ENSMUSG00000030751" "ENSMUSG00000068749" "ENSMUSG00000069744"
+[1522] "ENSMUSG00000026229" "ENSMUSG00000006998" "ENSMUSG00000029440"
+[1525] "ENSMUSG00000079197" NA                   "ENSMUSG00000026238"
+[1528] "ENSMUSG00000030122" NA                   NA                  
+[1531] NA                   NA                   NA                  
+[1534] "ENSMUSG00000020415" NA                   NA                  
+[1537] NA                   NA                   NA                  
+[1540] "ENSMUSG00000026520" NA                   "ENSMUSG00000058400"
+[1543] NA                   "ENSMUSG00000021062" "ENSMUSG00000064181"
+[1546] "ENSMUSG00000025170" "ENSMUSG00000053291" "ENSMUSG00000030704"
+[1549] NA                   "ENSMUSG00000022621" NA                  
+[1552] NA                   NA                   "ENSMUSG00000029430"
+[1555] "ENSMUSG00000037533" "ENSMUSG00000004952" "ENSMUSG00000089809"
+[1558] "ENSMUSG00000098132" "ENSMUSG00000042396" "ENSMUSG00000038374"
+[1561] NA                   NA                   "ENSMUSG00000028825"
+[1564] "ENSMUSG00000097451" "ENSMUSG00000039097" NA                  
+[1567] NA                   NA                   "ENSMUSG00000093989"
+[1570] "ENSMUSG00000095687" "ENSMUSG00000051234" "ENSMUSG00000090083"
+[1573] NA                   NA                   NA                  
+[1576] "ENSMUSG00000008682" "ENSMUSG00000037805" "ENSMUSG00000059291"
+[1579] "ENSMUSG00000000740" "ENSMUSG00000074129" "ENSMUSG00000062328"
+[1582] "ENSMUSG00000041453" "ENSMUSG00000058546" "ENSMUSG00000063316"
+[1585] "ENSMUSG00000046364" "ENSMUSG00000030432" "ENSMUSG00000048758"
+[1588] "ENSMUSG00000057841" "ENSMUSG00000068396" "ENSMUSG00000062997"
+[1591] "ENSMUSG00000057863" "ENSMUSG00000093674" "ENSMUSG00000029614"
+[1594] "ENSMUSG00000062647" "ENSMUSG00000067274" "ENSMUSG00000007892"
+[1597] "ENSMUSG00000092837" "ENSMUSG00000063457" "ENSMUSG00000008668"
+[1600] "ENSMUSG00000044533" "ENSMUSG00000025362" "ENSMUSG00000090733"
+[1603] "ENSMUSG00000034892" NA                   NA                  
+[1606] "ENSMUSG00000061477" NA                   NA                  
+[1609] "ENSMUSG00000030079" "ENSMUSG00000074115" "ENSMUSG00000040026"
+[1612] "ENSMUSG00000109336" "ENSMUSG00000021963" "ENSMUSG00000078427"
+[1615] NA                   "ENSMUSG00000113949" "ENSMUSG00000037071"
+[1618] "ENSMUSG00000025203" "ENSMUSG00000025202" NA                  
+[1621] "ENSMUSG00000034161" "ENSMUSG00000000171" NA                  
+[1624] "ENSMUSG00000001103" "ENSMUSG00000068874" NA                  
+[1627] NA                   "ENSMUSG00000057969" NA                  
+[1630] NA                   "ENSMUSG00000000486" NA                  
+[1633] NA                   NA                   "ENSMUSG00000071178"
+[1636] "ENSMUSG00000071177" "ENSMUSG00000072849" "ENSMUSG00000066361"
+[1639] "ENSMUSG00000041449" "ENSMUSG00000079014" "ENSMUSG00000021091"
+[1642] "ENSMUSG00000044734" "ENSMUSG00000051029" "ENSMUSG00000079049"
+[1645] "ENSMUSG00000060147" "ENSMUSG00000042842" "ENSMUSG00000045827"
+[1648] "ENSMUSG00000021403" NA                   NA                  
+[1651] NA                   "ENSMUSG00000073468" "ENSMUSG00000025915"
+[1654] NA                   NA                   NA                  
+[1657] "ENSMUSG00000051504" "ENSMUSG00000037902" "ENSMUSG00000093460"
+[1660] "ENSMUSG00000036309" "ENSMUSG00000029219" "ENSMUSG00000100241"
+[1663] NA                   "ENSMUSG00000025792" "ENSMUSG00000003153"
+[1666] "ENSMUSG00000033272" "ENSMUSG00000010064" "ENSMUSG00000089774"
+[1669] "ENSMUSG00000030237" "ENSMUSG00000072620" "ENSMUSG00000018986"
+[1672] "ENSMUSG00000035208" NA                   NA                  
+[1675] "ENSMUSG00000042045" "ENSMUSG00000108414" NA                  
+[1678] "ENSMUSG00000044349" "ENSMUSG00000086290" "ENSMUSG00000085241"
+[1681] "ENSMUSG00000097769" "ENSMUSG00000097195" "ENSMUSG00000098234"
+[1684] "ENSMUSG00000097052" "ENSMUSG00000104960" "ENSMUSG00000090101"
+[1687] NA                   "ENSMUSG00000080610" "ENSMUSG00000065087"
+[1690] "ENSMUSG00000105167" "ENSMUSG00000093289" "ENSMUSG00000040824"
+[1693] "ENSMUSG00000020027" "ENSMUSG00000105265" "ENSMUSG00000063060"
+[1696] "ENSMUSG00000026222" "ENSMUSG00000070034" "ENSMUSG00000070031"
+[1699] "ENSMUSG00000037167" "ENSMUSG00000021990" "ENSMUSG00000033444"
+[1702] "ENSMUSG00000070933" "ENSMUSG00000091255" NA                  
+[1705] NA                   NA                   NA                  
+[1708] NA                   NA                   "ENSMUSG00000038156"
+[1711] "ENSMUSG00000057522" "ENSMUSG00000033735" NA                  
+[1714] "ENSMUSG00000014504" "ENSMUSG00000034120" "ENSMUSG00000071172"
+[1717] NA                   "ENSMUSG00000015652" NA                  
+[1720] NA                   "ENSMUSG00000033855" NA                  
+[1723] NA                   "ENSMUSG00000030711" NA                  
+[1726] NA                   NA                   "ENSMUSG00000016998"
+[1729] "ENSMUSG00000009394" "ENSMUSG00000096054" "ENSMUSG00000058159"
+[1732] "ENSMUSG00000033450" "ENSMUSG00000052031" "ENSMUSG00000024339"
+[1735] "ENSMUSG00000034412" "ENSMUSG00000036473" "ENSMUSG00000044550"
+[1738] "ENSMUSG00000054034" "ENSMUSG00000031409" NA                  
+[1741] "ENSMUSG00000041852" "ENSMUSG00000014075" "ENSMUSG00000024175"
+[1744] NA                   "ENSMUSG00000029552" "ENSMUSG00000071138"
+[1747] "ENSMUSG00000014748" "ENSMUSG00000062175" "ENSMUSG00000062545"
+[1750] "ENSMUSG00000033777" "ENSMUSG00000045322" "ENSMUSG00000002320"
+[1753] "ENSMUSG00000020225" NA                   "ENSMUSG00000031919"
+[1756] "ENSMUSG00000028347" "ENSMUSG00000006526" NA                  
+[1759] "ENSMUSG00000024845" "ENSMUSG00000021361" NA                  
+[1762] "ENSMUSG00000096780" "ENSMUSG00000090213" "ENSMUSG00000055692"
+[1765] "ENSMUSG00000047090" NA                   NA                  
+[1768] "ENSMUSG00000031951" "ENSMUSG00000041353" NA                  
+[1771] "ENSMUSG00000022754" NA                   NA                  
+[1774] NA                   NA                   NA                  
+[1777] NA                   "ENSMUSG00000079451" "ENSMUSG00000079523"
+[1780] "ENSMUSG00000050043" "ENSMUSG00000022074" "ENSMUSG00000097328"
+[1783] "ENSMUSG00000041754" "ENSMUSG00000032554" "ENSMUSG00000043496"
+[1786] "ENSMUSG00000066258" "ENSMUSG00000057143" "ENSMUSG00000047821"
+[1789] "ENSMUSG00000030921" "ENSMUSG00000052749" "ENSMUSG00000038812"
+[1792] NA                   "ENSMUSG00000085715" "ENSMUSG00000058254"
+[1795] "ENSMUSG00000103711" NA                   "ENSMUSG00000006784"
+[1798] "ENSMUSG00000075271" "ENSMUSG00000075273" NA                  
+[1801] "ENSMUSG00000045467" "ENSMUSG00000030276" "ENSMUSG00000062380"
+[1804] "ENSMUSG00000036752" NA                   NA                  
+[1807] NA                   "ENSMUSG00000022111" NA                  
+[1810] "ENSMUSG00000090124" "ENSMUSG00000001228" "ENSMUSG00000036908"
+[1813] "ENSMUSG00000028186" NA                   "ENSMUSG00000020163"
+[1816] "ENSMUSG00000030107" NA                   "ENSMUSG00000079470"
+[1819] "ENSMUSG00000020894" "ENSMUSG00000008892" "ENSMUSG00000033933"
+[1822] "ENSMUSG00000096145" "ENSMUSG00000091805" "ENSMUSG00000072049"
+[1825] "ENSMUSG00000072780" "ENSMUSG00000070448" NA                  
+[1828] "ENSMUSG00000031913" "ENSMUSG00000023186" NA                  
+[1831] NA                   NA                   NA                  
+[1834] NA                   NA                   NA                  
+[1837] "ENSMUSG00000029658" NA                   NA                  
+[1840] NA                   NA                   NA                  
+[1843] "ENSMUSG00000086503" "ENSMUSG00000054626" "ENSMUSG00000073125"
+[1846] "ENSMUSG00000067768" NA                   "ENSMUSG00000028042"
+[1849] "ENSMUSG00000018239" "ENSMUSG00000036699" "ENSMUSG00000031428"
+[1852] "ENSMUSG00000054117" NA                   NA                  
+[1855] NA                   "ENSMUSG00000074731" "ENSMUSG00000037640"
+[1858] "ENSMUSG00000072653" "ENSMUSG00000055202" "ENSMUSG00000024695"
+[1861] "ENSMUSG00000066613" "ENSMUSG00000062931" "ENSMUSG00000050855"
+[1864] "ENSMUSG00000067931" "ENSMUSG00000002266" NA                  
+[1867] NA                   "ENSMUSG00000036214" "ENSMUSG00000004948"
+[1870] "ENSMUSG00000044068" "ENSMUSG00000031370"
+[1] "Number of genes NOT mapped from MGI to Enesbl ID: 841 out of 10232 genes (8.22 pct)"
+[1] "Number of genes NOT mapped to human ortholog: 1871 out of 9391 genes (19.92 pct)"
+[1] "Number of mapped genes in output: 8361 out of 10232 input genes (total mapping rate = 81.71 pct)"
+[1] "Total number of genes marked for exclusion: 1871"
+[1] "Number of genes in object: 8361"
+[1] "Clearning es data slots: es, es_transformed, etc..."
+[1] "Calculating t-stat"
+[1] "#1/#45 | Calculating tstat for annotation=Astro"
+[1] "#2/#45 | Calculating tstat for annotation=Ependy"
+[1] "#3/#45 | Calculating tstat for annotation=Epith1"
+[1] "#4/#45 | Calculating tstat for annotation=Epith2"
+[1] "#5/#45 | Calculating tstat for annotation=GABA1"
+[1] "#6/#45 | Calculating tstat for annotation=GABA10"
+[1] "#7/#45 | Calculating tstat for annotation=GABA11"
+[1] "#8/#45 | Calculating tstat for annotation=GABA12"
+[1] "#9/#45 | Calculating tstat for annotation=GABA13"
+[1] "#10/#45 | Calculating tstat for annotation=GABA14"
+[1] "#11/#45 | Calculating tstat for annotation=GABA15"
+[1] "#12/#45 | Calculating tstat for annotation=GABA16"
+[1] "#13/#45 | Calculating tstat for annotation=GABA17"
+[1] "#14/#45 | Calculating tstat for annotation=GABA18"
+[1] "#15/#45 | Calculating tstat for annotation=GABA2"
+[1] "#16/#45 | Calculating tstat for annotation=GABA3"
+[1] "#17/#45 | Calculating tstat for annotation=GABA4"
+[1] "#18/#45 | Calculating tstat for annotation=GABA5"
+[1] "#19/#45 | Calculating tstat for annotation=GABA6"
+[1] "#20/#45 | Calculating tstat for annotation=GABA7"
+[1] "#21/#45 | Calculating tstat for annotation=GABA8"
+[1] "#22/#45 | Calculating tstat for annotation=GABA9"
+[1] "#23/#45 | Calculating tstat for annotation=Glu1"
+[1] "#24/#45 | Calculating tstat for annotation=Glu10"
+[1] "#25/#45 | Calculating tstat for annotation=Glu11"
+[1] "#26/#45 | Calculating tstat for annotation=Glu12"
+[1] "#27/#45 | Calculating tstat for annotation=Glu13"
+[1] "#28/#45 | Calculating tstat for annotation=Glu14"
+[1] "#29/#45 | Calculating tstat for annotation=Glu15"
+[1] "#30/#45 | Calculating tstat for annotation=Glu2"
+[1] "#31/#45 | Calculating tstat for annotation=Glu3"
+[1] "#32/#45 | Calculating tstat for annotation=Glu4"
+[1] "#33/#45 | Calculating tstat for annotation=Glu5"
+[1] "#34/#45 | Calculating tstat for annotation=Glu6"
+[1] "#35/#45 | Calculating tstat for annotation=Glu7"
+[1] "#36/#45 | Calculating tstat for annotation=Glu8"
+[1] "#37/#45 | Calculating tstat for annotation=Glu9"
+[1] "#38/#45 | Calculating tstat for annotation=Hista"
+[1] "#39/#45 | Calculating tstat for annotation=IMO"
+[1] "#40/#45 | Calculating tstat for annotation=MO"
+[1] "#41/#45 | Calculating tstat for annotation=Macro"
+[1] "#42/#45 | Calculating tstat for annotation=Micro"
+[1] "#43/#45 | Calculating tstat for annotation=OPC"
+[1] "#44/#45 | Calculating tstat for annotation=POPC"
+[1] "#45/#45 | Calculating tstat for annotation=Tany"
+[1] "Calculating null ES"
+[1] "Calculating t-stat"
+[1] "#1/#45 | Calculating tstat for annotation=Astro"
+[1] "#2/#45 | Calculating tstat for annotation=Ependy"
+[1] "#3/#45 | Calculating tstat for annotation=Epith1"
+[1] "#4/#45 | Calculating tstat for annotation=Epith2"
+[1] "#5/#45 | Calculating tstat for annotation=GABA1"
+[1] "#6/#45 | Calculating tstat for annotation=GABA10"
+[1] "#7/#45 | Calculating tstat for annotation=GABA11"
+[1] "#8/#45 | Calculating tstat for annotation=GABA12"
+[1] "#9/#45 | Calculating tstat for annotation=GABA13"
+[1] "#10/#45 | Calculating tstat for annotation=GABA14"
+[1] "#11/#45 | Calculating tstat for annotation=GABA15"
+[1] "#12/#45 | Calculating tstat for annotation=GABA16"
+[1] "#13/#45 | Calculating tstat for annotation=GABA17"
+[1] "#14/#45 | Calculating tstat for annotation=GABA18"
+[1] "#15/#45 | Calculating tstat for annotation=GABA2"
+[1] "#16/#45 | Calculating tstat for annotation=GABA3"
+[1] "#17/#45 | Calculating tstat for annotation=GABA4"
+[1] "#18/#45 | Calculating tstat for annotation=GABA5"
+[1] "#19/#45 | Calculating tstat for annotation=GABA6"
+[1] "#20/#45 | Calculating tstat for annotation=GABA7"
+[1] "#21/#45 | Calculating tstat for annotation=GABA8"
+[1] "#22/#45 | Calculating tstat for annotation=GABA9"
+[1] "#23/#45 | Calculating tstat for annotation=Glu1"
+[1] "#24/#45 | Calculating tstat for annotation=Glu10"
+[1] "#25/#45 | Calculating tstat for annotation=Glu11"
+[1] "#26/#45 | Calculating tstat for annotation=Glu12"
+[1] "#27/#45 | Calculating tstat for annotation=Glu13"
+[1] "#28/#45 | Calculating tstat for annotation=Glu14"
+[1] "#29/#45 | Calculating tstat for annotation=Glu15"
+[1] "#30/#45 | Calculating tstat for annotation=Glu2"
+[1] "#31/#45 | Calculating tstat for annotation=Glu3"
+[1] "#32/#45 | Calculating tstat for annotation=Glu4"
+[1] "#33/#45 | Calculating tstat for annotation=Glu5"
+[1] "#34/#45 | Calculating tstat for annotation=Glu6"
+[1] "#35/#45 | Calculating tstat for annotation=Glu7"
+[1] "#36/#45 | Calculating tstat for annotation=Glu8"
+[1] "#37/#45 | Calculating tstat for annotation=Glu9"
+[1] "#38/#45 | Calculating tstat for annotation=Hista"
+[1] "#39/#45 | Calculating tstat for annotation=IMO"
+[1] "#40/#45 | Calculating tstat for annotation=MO"
+[1] "#41/#45 | Calculating tstat for annotation=Macro"
+[1] "#42/#45 | Calculating tstat for annotation=Micro"
+[1] "#43/#45 | Calculating tstat for annotation=OPC"
+[1] "#44/#45 | Calculating tstat for annotation=POPC"
+[1] "#45/#45 | Calculating tstat for annotation=Tany"
+[1] "Calculating GES"
+[1] "#1/#45 | Calculating GES for annotation=Astro"
+[1] "#2/#45 | Calculating GES for annotation=Ependy"
+[1] "#3/#45 | Calculating GES for annotation=Epith1"
+[1] "#4/#45 | Calculating GES for annotation=Epith2"
+[1] "#5/#45 | Calculating GES for annotation=GABA1"
+[1] "#6/#45 | Calculating GES for annotation=GABA10"
+[1] "#7/#45 | Calculating GES for annotation=GABA11"
+[1] "#8/#45 | Calculating GES for annotation=GABA12"
+[1] "#9/#45 | Calculating GES for annotation=GABA13"
+[1] "#10/#45 | Calculating GES for annotation=GABA14"
+[1] "#11/#45 | Calculating GES for annotation=GABA15"
+[1] "#12/#45 | Calculating GES for annotation=GABA16"
+[1] "#13/#45 | Calculating GES for annotation=GABA17"
+[1] "#14/#45 | Calculating GES for annotation=GABA18"
+[1] "#15/#45 | Calculating GES for annotation=GABA2"
+[1] "#16/#45 | Calculating GES for annotation=GABA3"
+[1] "#17/#45 | Calculating GES for annotation=GABA4"
+[1] "#18/#45 | Calculating GES for annotation=GABA5"
+[1] "#19/#45 | Calculating GES for annotation=GABA6"
+[1] "#20/#45 | Calculating GES for annotation=GABA7"
+[1] "#21/#45 | Calculating GES for annotation=GABA8"
+[1] "#22/#45 | Calculating GES for annotation=GABA9"
+[1] "#23/#45 | Calculating GES for annotation=Glu1"
+[1] "#24/#45 | Calculating GES for annotation=Glu10"
+[1] "#25/#45 | Calculating GES for annotation=Glu11"
+[1] "#26/#45 | Calculating GES for annotation=Glu12"
+[1] "#27/#45 | Calculating GES for annotation=Glu13"
+[1] "#28/#45 | Calculating GES for annotation=Glu14"
+[1] "#29/#45 | Calculating GES for annotation=Glu15"
+[1] "#30/#45 | Calculating GES for annotation=Glu2"
+[1] "#31/#45 | Calculating GES for annotation=Glu3"
+[1] "#32/#45 | Calculating GES for annotation=Glu4"
+[1] "#33/#45 | Calculating GES for annotation=Glu5"
+[1] "#34/#45 | Calculating GES for annotation=Glu6"
+[1] "#35/#45 | Calculating GES for annotation=Glu7"
+[1] "#36/#45 | Calculating GES for annotation=Glu8"
+[1] "#37/#45 | Calculating GES for annotation=Glu9"
+[1] "#38/#45 | Calculating GES for annotation=Hista"
+[1] "#39/#45 | Calculating GES for annotation=IMO"
+[1] "#40/#45 | Calculating GES for annotation=MO"
+[1] "#41/#45 | Calculating GES for annotation=Macro"
+[1] "#42/#45 | Calculating GES for annotation=Micro"
+[1] "#43/#45 | Calculating GES for annotation=OPC"
+[1] "#44/#45 | Calculating GES for annotation=POPC"
+[1] "#45/#45 | Calculating GES for annotation=Tany"
+[1] "Calculating null ES"
+[1] "Calculating GES"
+[1] "#1/#45 | Calculating GES for annotation=Astro"
+[1] "#2/#45 | Calculating GES for annotation=Ependy"
+[1] "#3/#45 | Calculating GES for annotation=Epith1"
+[1] "#4/#45 | Calculating GES for annotation=Epith2"
+[1] "#5/#45 | Calculating GES for annotation=GABA1"
+[1] "#6/#45 | Calculating GES for annotation=GABA10"
+[1] "#7/#45 | Calculating GES for annotation=GABA11"
+[1] "#8/#45 | Calculating GES for annotation=GABA12"
+[1] "#9/#45 | Calculating GES for annotation=GABA13"
+[1] "#10/#45 | Calculating GES for annotation=GABA14"
+[1] "#11/#45 | Calculating GES for annotation=GABA15"
+[1] "#12/#45 | Calculating GES for annotation=GABA16"
+[1] "#13/#45 | Calculating GES for annotation=GABA17"
+[1] "#14/#45 | Calculating GES for annotation=GABA18"
+[1] "#15/#45 | Calculating GES for annotation=GABA2"
+[1] "#16/#45 | Calculating GES for annotation=GABA3"
+[1] "#17/#45 | Calculating GES for annotation=GABA4"
+[1] "#18/#45 | Calculating GES for annotation=GABA5"
+[1] "#19/#45 | Calculating GES for annotation=GABA6"
+[1] "#20/#45 | Calculating GES for annotation=GABA7"
+[1] "#21/#45 | Calculating GES for annotation=GABA8"
+[1] "#22/#45 | Calculating GES for annotation=GABA9"
+[1] "#23/#45 | Calculating GES for annotation=Glu1"
+[1] "#24/#45 | Calculating GES for annotation=Glu10"
+[1] "#25/#45 | Calculating GES for annotation=Glu11"
+[1] "#26/#45 | Calculating GES for annotation=Glu12"
+[1] "#27/#45 | Calculating GES for annotation=Glu13"
+[1] "#28/#45 | Calculating GES for annotation=Glu14"
+[1] "#29/#45 | Calculating GES for annotation=Glu15"
+[1] "#30/#45 | Calculating GES for annotation=Glu2"
+[1] "#31/#45 | Calculating GES for annotation=Glu3"
+[1] "#32/#45 | Calculating GES for annotation=Glu4"
+[1] "#33/#45 | Calculating GES for annotation=Glu5"
+[1] "#34/#45 | Calculating GES for annotation=Glu6"
+[1] "#35/#45 | Calculating GES for annotation=Glu7"
+[1] "#36/#45 | Calculating GES for annotation=Glu8"
+[1] "#37/#45 | Calculating GES for annotation=Glu9"
+[1] "#38/#45 | Calculating GES for annotation=Hista"
+[1] "#39/#45 | Calculating GES for annotation=IMO"
+[1] "#40/#45 | Calculating GES for annotation=MO"
+[1] "#41/#45 | Calculating GES for annotation=Macro"
+[1] "#42/#45 | Calculating GES for annotation=Micro"
+[1] "#43/#45 | Calculating GES for annotation=OPC"
+[1] "#44/#45 | Calculating GES for annotation=POPC"
+[1] "#45/#45 | Calculating GES for annotation=Tany"
+[1] "Calculating NSI"
+[1] "Calculating NSI: #1/#45"
+[1] "Calculating NSI: #2/#45"
+[1] "Calculating NSI: #3/#45"
+[1] "Calculating NSI: #4/#45"
+[1] "Calculating NSI: #5/#45"
+[1] "Calculating NSI: #6/#45"
+[1] "Calculating NSI: #7/#45"
+[1] "Calculating NSI: #8/#45"
+[1] "Calculating NSI: #9/#45"
+[1] "Calculating NSI: #10/#45"
+[1] "Calculating NSI: #11/#45"
+[1] "Calculating NSI: #12/#45"
+[1] "Calculating NSI: #13/#45"
+[1] "Calculating NSI: #14/#45"
+[1] "Calculating NSI: #15/#45"
+[1] "Calculating NSI: #16/#45"
+[1] "Calculating NSI: #17/#45"
+[1] "Calculating NSI: #18/#45"
+[1] "Calculating NSI: #19/#45"
+[1] "Calculating NSI: #20/#45"
+[1] "Calculating NSI: #21/#45"
+[1] "Calculating NSI: #22/#45"
+[1] "Calculating NSI: #23/#45"
+[1] "Calculating NSI: #24/#45"
+[1] "Calculating NSI: #25/#45"
+[1] "Calculating NSI: #26/#45"
+[1] "Calculating NSI: #27/#45"
+[1] "Calculating NSI: #28/#45"
+[1] "Calculating NSI: #29/#45"
+[1] "Calculating NSI: #30/#45"
+[1] "Calculating NSI: #31/#45"
+[1] "Calculating NSI: #32/#45"
+[1] "Calculating NSI: #33/#45"
+[1] "Calculating NSI: #34/#45"
+[1] "Calculating NSI: #35/#45"
+[1] "Calculating NSI: #36/#45"
+[1] "Calculating NSI: #37/#45"
+[1] "Calculating NSI: #38/#45"
+[1] "Calculating NSI: #39/#45"
+[1] "Calculating NSI: #40/#45"
+[1] "Calculating NSI: #41/#45"
+[1] "Calculating NSI: #42/#45"
+[1] "Calculating NSI: #43/#45"
+[1] "Calculating NSI: #44/#45"
+[1] "Calculating NSI: #45/#45"
+[1] "Calculating null ES"
+[1] "Calculating NSI"
+[1] "Calculating NSI: #1/#45"
+[1] "Calculating NSI: #2/#45"
+[1] "Calculating NSI: #3/#45"
+[1] "Calculating NSI: #4/#45"
+[1] "Calculating NSI: #5/#45"
+[1] "Calculating NSI: #6/#45"
+[1] "Calculating NSI: #7/#45"
+[1] "Calculating NSI: #8/#45"
+[1] "Calculating NSI: #9/#45"
+[1] "Calculating NSI: #10/#45"
+[1] "Calculating NSI: #11/#45"
+[1] "Calculating NSI: #12/#45"
+[1] "Calculating NSI: #13/#45"
+[1] "Calculating NSI: #14/#45"
+[1] "Calculating NSI: #15/#45"
+[1] "Calculating NSI: #16/#45"
+[1] "Calculating NSI: #17/#45"
+[1] "Calculating NSI: #18/#45"
+[1] "Calculating NSI: #19/#45"
+[1] "Calculating NSI: #20/#45"
+[1] "Calculating NSI: #21/#45"
+[1] "Calculating NSI: #22/#45"
+[1] "Calculating NSI: #23/#45"
+[1] "Calculating NSI: #24/#45"
+[1] "Calculating NSI: #25/#45"
+[1] "Calculating NSI: #26/#45"
+[1] "Calculating NSI: #27/#45"
+[1] "Calculating NSI: #28/#45"
+[1] "Calculating NSI: #29/#45"
+[1] "Calculating NSI: #30/#45"
+[1] "Calculating NSI: #31/#45"
+[1] "Calculating NSI: #32/#45"
+[1] "Calculating NSI: #33/#45"
+[1] "Calculating NSI: #34/#45"
+[1] "Calculating NSI: #35/#45"
+[1] "Calculating NSI: #36/#45"
+[1] "Calculating NSI: #37/#45"
+[1] "Calculating NSI: #38/#45"
+[1] "Calculating NSI: #39/#45"
+[1] "Calculating NSI: #40/#45"
+[1] "Calculating NSI: #41/#45"
+[1] "Calculating NSI: #42/#45"
+[1] "Calculating NSI: #43/#45"
+[1] "Calculating NSI: #44/#45"
+[1] "Calculating NSI: #45/#45"
+[1] "Calculating specificity (Skene)"
+[1] "Calculating null ES"
+[1] "Calculating specificity (Skene)"
+[1] "Calculating emperical p-values and q-values for ES = DET"
+[1] "Calculating emperical p-values and q-values for ES = GES"
+[1] "Calculating emperical p-values and q-values for ES = NSI"
+[1] "Calculating emperical p-values and q-values for ES = EP"
+[1] "Astro"
+[1] "Ependy"
+[1] "Epith1"
+[1] "Epith2"
+[1] "GABA1"
+[1] "GABA10"
+[1] "GABA11"
+[1] "GABA12"
+[1] "GABA13"
+[1] "GABA14"
+[1] "GABA15"
+[1] "GABA16"
+[1] "GABA17"
+[1] "GABA18"
+[1] "GABA2"
+[1] "GABA3"
+[1] "GABA4"
+[1] "GABA5"
+[1] "GABA6"
+[1] "GABA7"
+[1] "GABA8"
+[1] "GABA9"
+[1] "Glu1"
+[1] "Glu10"
+[1] "Glu11"
+[1] "Glu12"
+[1] "Glu13"
+[1] "Glu14"
+[1] "Glu15"
+[1] "Glu2"
+[1] "Glu3"
+[1] "Glu4"
+[1] "Glu5"
+[1] "Glu6"
+[1] "Glu7"
+[1] "Glu8"
+[1] "Glu9"
+[1] "Hista"
+[1] "IMO"
+[1] "MO"
+[1] "Macro"
+[1] "Micro"
+[1] "OPC"
+[1] "POPC"
+[1] "Tany"
+[1] "Calculating es_meta based on group_by_annotation.es_transformed"
+[1] "Calculating es_meta for annotation = Astro"
+[1] "Calculating es_meta for annotation = Ependy"
+[1] "Calculating es_meta for annotation = Epith1"
+[1] "Calculating es_meta for annotation = Epith2"
+[1] "Calculating es_meta for annotation = GABA1"
+[1] "Calculating es_meta for annotation = GABA10"
+[1] "Calculating es_meta for annotation = GABA11"
+[1] "Calculating es_meta for annotation = GABA12"
+[1] "Calculating es_meta for annotation = GABA13"
+[1] "Calculating es_meta for annotation = GABA14"
+[1] "Calculating es_meta for annotation = GABA15"
+[1] "Calculating es_meta for annotation = GABA16"
+[1] "Calculating es_meta for annotation = GABA17"
+[1] "Calculating es_meta for annotation = GABA18"
+[1] "Calculating es_meta for annotation = GABA2"
+[1] "Calculating es_meta for annotation = GABA3"
+[1] "Calculating es_meta for annotation = GABA4"
+[1] "Calculating es_meta for annotation = GABA5"
+[1] "Calculating es_meta for annotation = GABA6"
+[1] "Calculating es_meta for annotation = GABA7"
+[1] "Calculating es_meta for annotation = GABA8"
+[1] "Calculating es_meta for annotation = GABA9"
+[1] "Calculating es_meta for annotation = Glu1"
+[1] "Calculating es_meta for annotation = Glu10"
+[1] "Calculating es_meta for annotation = Glu11"
+[1] "Calculating es_meta for annotation = Glu12"
+[1] "Calculating es_meta for annotation = Glu13"
+[1] "Calculating es_meta for annotation = Glu14"
+[1] "Calculating es_meta for annotation = Glu15"
+[1] "Calculating es_meta for annotation = Glu2"
+[1] "Calculating es_meta for annotation = Glu3"
+[1] "Calculating es_meta for annotation = Glu4"
+[1] "Calculating es_meta for annotation = Glu5"
+[1] "Calculating es_meta for annotation = Glu6"
+[1] "Calculating es_meta for annotation = Glu7"
+[1] "Calculating es_meta for annotation = Glu8"
+[1] "Calculating es_meta for annotation = Glu9"
+[1] "Calculating es_meta for annotation = Hista"
+[1] "Calculating es_meta for annotation = IMO"
+[1] "Calculating es_meta for annotation = MO"
+[1] "Calculating es_meta for annotation = Macro"
+[1] "Calculating es_meta for annotation = Micro"
+[1] "Calculating es_meta for annotation = OPC"
+[1] "Calculating es_meta for annotation = POPC"
+[1] "Calculating es_meta for annotation = Tany"
+[1] "Saving ES object..."
+[1] "Done saving"
+[1] "Writing slot=es_meta files for dataset_prefix=chen2017"
+[1] "Writing file: /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/out/es/chen2017.mu.csv.gz"
+[1] "Checked export df for NA values and found nothing. All good to go!"
+[1] "Done with function"
+[1] "Script done!"

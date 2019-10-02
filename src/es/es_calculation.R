@@ -111,6 +111,12 @@ if (dataset_prefix == "mousebrain") {
   type_mouse_gene_ids <- "mgi"
 } else if (dataset_prefix %in% c("campbell2017_lvl1", "campbell2017_lvl2")) {
   type_mouse_gene_ids <- "mgi"
+} else if (dataset_prefix == "chen2017") {
+    type_mouse_gene_ids <- "mgi"
+} else if (dataset_prefix == "romanov2017") {
+    type_mouse_gene_ids <- "mgi"
+} else if (dataset_prefix == "moffitt2018") {
+    type_mouse_gene_ids <- "ensembl"
 } else {
   stop(sprintf("Got wrong dataset_prefix %s", dataset_prefix))
 }

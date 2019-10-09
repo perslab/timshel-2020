@@ -40,6 +40,9 @@ if (!file.exists(rawDataDownload)) {
 
 df.data_raw <- read.table(gzfile(rawDataDownload), header=T, sep="\t", stringsAsFactors=F, row.names = 1)
 
+dim(df.data_raw)
+# 23284 14437
+
 # metadata - cluster assignments
 metadataDownload <- here("data", "expression", "chen2017", "GSE87544_1443737Cells.SVM.cluster.identity.renamed.csv.gz")
 
@@ -50,7 +53,7 @@ if (!file.exists(metadataDownload)) {
 }
 
 df.metadata <- read.csv(gzfile(metadataDownload), header=T, stringsAsFactors=F, row.names=1)
-
+  
 # get supp tab 2 to select cell clusters to use
 
 suppTab1Download <- here("data", "expression", "chen2017", "mmc2.xlsx")
@@ -71,16 +74,39 @@ df.suppTab1 <- openxlsx::read.xlsx(xlsxFile = suppTab1Download)
 # Workflow of cell type classification. The entire dataset was analyzed to identify
 # 3,319 cells with > 2000 different transcripts in each cell
 
-seurat_obj <- CreateSeuratObject(counts = df.data_raw, min.features = 2001, project = "chen-cellreports-2017", meta.data = df.metadata)
+seurat_obj <- CreateSeuratObject(counts = df.data_raw, 
+                                 min.features = 0, 
+                                 project = "chen-cellreports-2017", 
+                                 meta.data = df.metadata)
+
+seurat_obj
+# An object of class Seurat 
+# 23284 features across 14437 samples within 1 assay 
+# Active assay: RNA (23284 features)
+
+# ======================================================================= #
+# =========================== Filter cells ============================== #
+# ======================================================================= #
+
+# https://www.cell.com/cell-reports/fulltext/S2211-1247(17)30321-2#secsectitle0150
+# Based on the above clustering results, we re-assigned each of the 14,437 single cells (≥800 transcripts detected) to the 45 cell clusters. 
 
 # All cell clusters were then pooled together and clusters with less than 10 cells, or
 # representing double-droplets or without a marker identified or out of hypothalamus
 # were filtered out. At the end, 45 cell clusters with distinct transcriptional features
 # were identified.
 
-seurat_obj_sub <- subset(x = seurat_obj, subset=SVM_clusterID %in% df.suppTab1$final_ClusterID)
+seurat_obj_sub <- subset(x = seurat_obj, subset=SVM_clusterID %in% df.suppTab1$final_ClusterID & nCount_RNA>=800)
+
 dim(seurat_obj_sub)
-# [1] 23284  2269
+# [1] 23284 12055
+
+
+df.suppTab1$final_ClusterID %>% unique %>% length
+# [1] 45
+
+sum((seurat_obj$SVM_clusterID %>% unique) %in% df.suppTab1$final_ClusterID)
+# [1] 45
 
 # ======================================================================= #
 # =============== EXPORT CELL-TYPE/ANNOTATION METADATA TO CSV =========== #

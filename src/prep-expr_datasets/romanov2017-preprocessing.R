@@ -76,8 +76,6 @@ df.metadata$level2_class_neurons_only  <- gsub("-", "neg",df.metadata$level2_cla
 df.metadata$level2_class_neurons_only  <- gsub("/", "_",df.metadata$level2_class_neurons_only )
 df.metadata$level2_class_neurons_only  <- gsub("__", "_",df.metadata$level2_class_neurons_only )
 
-
-
 # ======================================================================= #
 # ====================== CREATE CELL_TYPE LABEL ========================== #
 # ======================================================================= #
@@ -98,14 +96,14 @@ sum(is.na(df.metadata$cell_type))
 ## https://www.nature.com/articles/nn.4462#methods
 
 seurat_obj <- CreateSeuratObject(counts = mat.data_raw, 
-                              min.cells = 50, 
+                              min.cells = 0, 
                               min.features = 0, 
                               meta.data=df.metadata)
 # Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
 
 
 dim(seurat_obj)
-#[1] 12884  2878
+#[1] 24341  2881
 # ======================================================================= #
 # =============================== FILTER GENES AND CELLS ========================== #
 # ======================================================================= #
@@ -115,19 +113,21 @@ dim(seurat_obj)
 # Genes [...] expressed in >70% of the cells were excluded. 
 GetAssayData(seurat_obj, slot= "counts") %>% as.matrix %>% '>'(0) %>% rowSums %>% '/'(ncol(seurat_obj)) -> vec_featsPctExpr
 
-# Cells with more than 1,500 molecules/cell (excluding rRNA, mitochondrial RNA and repeats) were analyzed, resulting in a total of 3,131 cells. 
+# Genes with <50 molecules in the whole data set [..] were excluded
+GetAssayData(seurat_obj, slot= "counts") %>% as.matrix %>% rowSums %>% '>='(50) -> vec_logicalOver50Counts
 
+# Cells with more than 1,500 molecules/cell (excluding rRNA, mitochondrial RNA and repeats) were analyzed, resulting in a total of 3,131 cells. 
 # We (Pers lab) also remove the "uc" class which appears to tag left overs (not included in  figures)
 # We (Pers lab) also cell clusters with <= 3 cells
 vec_smallClusters <- names(table(seurat_obj@meta.data$cell_type))[table(seurat_obj@meta.data$cell_type)<=3]
 
 seurat_obj_sub <- subset(x = seurat_obj, 
-                         features = rownames(seurat_obj)[vec_featsPctExpr<=0.7],
+                         features = rownames(seurat_obj)[vec_featsPctExpr<=0.7 & vec_logicalOver50Counts],
                          cells = colnames(seurat_obj)[!seurat_obj@meta.data$cell_type %in%  c("uc",vec_smallClusters)],
                          subset=nCount_RNA > 1500)
 
 dim(seurat_obj_sub)
-#[1] 12884  2730
+#[1] 13364  2733
 # ======================================================================= #
 # =============== EXPORT CELL-TYPE/ANNOTATION METADATA TO CSV =========== #
 # ======================================================================= #

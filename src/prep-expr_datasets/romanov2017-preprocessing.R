@@ -34,19 +34,18 @@ if (!dir.exists(here("data","expression", "romanov2017"))) dir.create(here("data
 # combined raw and metadatafile
 combinedDataDownload <- here("data", "expression", "romanov2017", "romanov2017-GSE74672_expressed_mols_with_classes.xlsx.gz")
 
-if (!file.exists(combinedDataDownload)) {
+if (!file.exists(combinedDataDownload) & !file.exists(gsub("\\.gz","", combinedDataDownload))) {
   # Download UMI data
   downloadURLcombined <-  "ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE74nnn/GSE74672/suppl/GSE74672_expressed_mols_with_classes.xlsx.gz"
   download.file(downloadURLcombined, destfile=combinedDataDownload)
   system2(command = "gunzip", args = combinedDataDownload)
-  combinedDataDownload <- gsub("\\.gz","", combinedDataDownload)
 }
 
 
 #df.data_raw <- data.table::fread(rawDataDownload, nThread=24, showProgress=T)
-mat.data_raw <- openxlsx::read.xlsx(combinedDataDownload, startRow=13,colNames=F,rowNames=T)
+mat.data_raw <- openxlsx::read.xlsx(gsub("\\.gz","", combinedDataDownload), startRow=13,colNames=F,rowNames=T)
 
-openxlsx::read.xlsx(combinedDataDownload, rows=1:12,colNames=T,rowNames=T) %>% 
+openxlsx::read.xlsx(gsub("\\.gz","", combinedDataDownload), rows=1:12,colNames=T,rowNames=T) %>% 
   t %>% 
   as.data.frame -> df.metadata
 
@@ -55,9 +54,17 @@ vec_numericVars <- c("age (days postnatal)",
                      "cell diameter",
                      "total molecules")
 
+vec_charVars <- c("level1 class", 
+                  "level2 class (neurons only)",
+                  "level2 cluster number (neurons only)")
+
 df.metadata[,vec_numericVars] <- apply(df.metadata[,vec_numericVars], 
                                        MARGIN=2, 
                                        FUN=as.numeric)
+
+df.metadata[,vec_charVars] <- apply(df.metadata[,vec_charVars], 
+                                       MARGIN=2, 
+                                       FUN=as.character)
 
 colnames(mat.data_raw) <- rownames(df.metadata)
 
@@ -81,19 +88,90 @@ df.metadata$level2_class_neurons_only  <- gsub("__", "_",df.metadata$level2_clas
 # ======================================================================= #
 # include both neurons and glia
 
-df.metadata$cell_type <- ifelse(!is.na(df.metadata$level2_class_neurons_only), df.metadata$level2_class_neurons_only, df.metadata$level1_class)
+df.metadata$cell_type <- ifelse(!is.na(df.metadata$level2_class_neurons_only), 
+                                df.metadata$level2_class_neurons_only, 
+                                as.character(df.metadata$level1_class))
 
 sum(is.na(df.metadata$cell_type))
 #[1] 0
 
+df.metadata$cell_type %>% table
+# Adcyap1_1_Tac1                      Adcyap1_2
+# 14                             20
+# astrocytes                     Avp_1_high
+# 267                              9
+# Avp_2_high                   Avp_3_medium
+# 8                              8
+# circadian_1_Vip_Grppos_neg     circadian_2_Nms_VIPpos_neg
+# 6                             12
+# circadian_3_Per2                     Dopamine_1
+# 13                             17
+# Dopamine_2_low_VMAT2                     Dopamine_3
+# 7                             12
+# Dopamine_4                    endothelial
+# 5                            240
+# ependymal                        GABA_10
+# 356                             20
+# GABA_11_Nts_1                  GABA_12_Nts_2
+# 25                             26
+# GABA_13_Galanin               GABA_14_Npy_Agrp
+# 23                             13
+# GABA_15_Npynegmedium                 GABA_2_Gucy1a3
+# 7                             19
+# GABA_3_Crhpos_neg_Lhx6       GABA_4_Crhpos_neg_Pgr15l
+# 20                             24
+# GABA_5_Calcr_Lhx1               GABA_6_Otof_Lhx1
+# 32                             24
+# GABA_7_Pomcpos_neg                         GABA_8
+# 27                             15
+# GABA_9                          GABA1
+# 22                             14
+# Gadneglow_Gnrhneg_pos                           Ghrh
+# 9                              3
+# Hcrt                    Hmitpos_neg
+# 14                             24
+# microglia                           Npvf
+# 48                              6
+# oligos                     Oxytocin_1
+# 1001                              9
+# Oxytocin_2                     Oxytocin_3
+# 7                             11
+# Oxytocin_4                           Pmch
+# 10                              4
+# Qrfp                      Sst_1_low
+# 3                             17
+# Sst_2_high                   Sst_3_medium
+# 9                             12
+# Trh_1_low                   Trh_2_medium
+# 26                             20
+# Trh_3_high                             uc
+# 9                            126
+# Vglut2_1_Penk         Vglut2_10_Morn4_Prrc2a
+# 2                              3
+# Vglut2_11               Vglut2_12_Mgat4b
+# 12                              4
+# Vglut2_13Ninl_Rfx5_Zfp346               Vglut2_14_Col9a2
+# 5                              5
+# Vglut2_15_Hcn1_6430411K18Rik           Vglut2_16_Gm5595_Tnr
+# 4                              3
+# Vglut2_17_A930013F10Rik_Pou2f2      Vglut2_18_Zfp458_Ppp1r12b
+# 3                              2
+# Vglut2_2_Crhpos_neg     Vglut2_3_Crhnegpos_neg_low
+# 15                             40
+# Vglut2_4             Vglut2_5_Myt1_Lhx9
+# 4                              3
+# Vglut2_6_Prmt8_Ugdh            Vglut2_7_Pgam_Snx12
+# 11                              6
+# Vglut2_8                Vglut2_9_Gpr149
+# 9                              6
+# vsm
+# 71
+
+
 # ======================================================================= #
 # ========================== Create Seurat object ============================= #
 # ======================================================================= #
-
-
 # Initialize a Seurat object and filter data
-# Genes with <50 molecules in the whole data set [...] were excluded. 
-## https://www.nature.com/articles/nn.4462#methods
 
 seurat_obj <- CreateSeuratObject(counts = mat.data_raw, 
                               min.cells = 0, 
@@ -113,8 +191,16 @@ dim(seurat_obj)
 # Genes [...] expressed in >70% of the cells were excluded. 
 GetAssayData(seurat_obj, slot= "counts") %>% as.matrix %>% '>'(0) %>% rowSums %>% '/'(ncol(seurat_obj)) -> vec_featsPctExpr
 
+summary(vec_featsPctExpr)
+# Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+# 0.000000 0.001041 0.029851 0.122278 0.183270 1.000000
+
 # Genes with <50 molecules in the whole data set [..] were excluded
 GetAssayData(seurat_obj, slot= "counts") %>% as.matrix %>% rowSums %>% '>='(50) -> vec_logicalOver50Counts
+
+table(vec_logicalOver50Counts)
+# FALSE  TRUE
+# 10568 13773
 
 # Cells with more than 1,500 molecules/cell (excluding rRNA, mitochondrial RNA and repeats) were analyzed, resulting in a total of 3,131 cells. 
 # We (Pers lab) also remove the "uc" class which appears to tag left overs (not included in  figures)

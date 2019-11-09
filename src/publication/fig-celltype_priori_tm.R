@@ -46,22 +46,12 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--tabula_muris.multi_gwas.csv.gz")
+file.results <- here("results/cellect_ldsc-prioritization.csv")
 df.ldsc_cts <- read_csv(file.results)
 
-# ======================================================================= #
-# ================== LOAD LDSC CTS RESULTS (single GWAS) ================ #
-# ======================================================================= #
+df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
+df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "tabula_muris")
 
-# gwas <- "BMI_UKBB_Loh2018"
-# dataset_prefix <- "mousebrain"
-# genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
-# 
-# ### Loading BMI data
-# file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
-# df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
-# df.ldsc_cts <- df.ldsc_cts %>% filter(es=="es_mean")
-# 
 
 # ======================================================================= #
 # ========================= LOAD CELL-TYPE METADATA ===================== #
@@ -170,7 +160,7 @@ p.main <- ggplot() +
   geom_rect(data=df.tax_text_position %>% filter(flag_draw_rect), aes(xmin=pos_start, xmax=pos_end, ymin=-5, ymax=Inf, fill=tissue), color="gray", alpha=0.1) +
   ### cell-types
   geom_point(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=tissue)) +
-  ggrepel::geom_text_repel(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation_label_fmt, color=tissue, group=tissue), hjust = 0, nudge_x = 1.5, show.legend=F) + # group is to try to improve gganimate
+  ggrepel::geom_text_repel(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation_label_fmt, group=tissue), color="black", hjust = 0, nudge_x = 1.5, show.legend=F) + # group is to try to improve gganimate
   ### extra
   geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
   ### axes

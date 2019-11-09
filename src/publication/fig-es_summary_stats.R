@@ -39,11 +39,11 @@ setwd(here("src/publication"))
 # dataset_prefix <- "tabula_muris"
 # var_color_by <- sym("tissue")
 
-# dataset_prefix <- "mousebrain"
-# var_color_by <- sym("Class")
+dataset_prefix <- "mousebrain"
+var_color_by <- sym("Class")
 
-dataset_prefix <- "campbell2017_lvl2"
-var_color_by <- sym("taxonomy_lvl2")
+# dataset_prefix <- "campbell2017_lvl2"
+# var_color_by <- sym("taxonomy_lvl2")
 
 
 # ======================================================================= #
@@ -71,7 +71,7 @@ df.n_es <- get_empirical_pvalues_summary(es_obj, threshold=0.05, slot="es_pvalue
 # 4 ACNT1       1721  1343  2414        3364
 
 ### Calculate number of ES mu genes
-df.es_mu_genes <- es_obj[["es_meta"]][["mean"]] %>% 
+df.es_mu_genes <- es_obj[["es_meta"]][["mu"]] %>% 
   gather(key="annotation", value="es_weight") %>% 
   group_by(annotation) %>% 
   summarise(es_mu = sum(es_weight>0)) %>%
@@ -82,8 +82,8 @@ df.n_es <- df.n_es %>% left_join(df.es_mu_genes, by="annotation")
 df.n_es
 
 ### Rename
-vec.rename <- c(DET="tstat", GES="ges", EP="specificity", NSI="si", ESmu="es_mu")
-df.n_es <- df.n_es %>% rename(!!vec.rename)
+# vec.rename <- c(DET="tstat", GES="ges", EP="specificity", NSI="si", ESmu="es_mu")
+# df.n_es <- df.n_es %>% rename(!!vec.rename)
 
 # ======================================================================= #
 # ============================ SUMMARIZE ============================= #

@@ -38,34 +38,18 @@ source(here("src/publication/lib-load_pub_lib_functions.R"))
 
 setwd(here("src/publication"))
 
-# ======================================================================= #
-# ============================ PARAMETERS =============================== #
-# ======================================================================= #
-
-
 
 # ======================================================================= #
 # ================== LOAD LDSC CTS RESULTS (multi GWAS) ================ #
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
+file.results <- here("results/cellect_ldsc-prioritization.csv")
+# file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
 
-# ======================================================================= #
-# ================== LOAD LDSC CTS RESULTS (single GWAS) ================ #
-# ======================================================================= #
-
-# gwas <- "BMI_UKBB_Loh2018"
-# dataset_prefix <- "mousebrain"
-# genomic_annotation_prefix <- get_genomic_annotation_prefix(dataset_prefix)
-# 
-# ### Loading BMI data
-# file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
-# df.ldsc_cts <- load_ldsc_cts_results(file.ldsc_cts, dataset_prefix)
-# df.ldsc_cts <- df.ldsc_cts %>% filter(es=="es_mean")
-# 
-
+df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
+df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "mousebrain")
 
 # ======================================================================= #
 # ========================= LOAD CELL-TYPE METADATA ===================== #
@@ -114,6 +98,8 @@ df.plot <- df.plot %>% mutate(Region = case_when(
   TRUE ~ as.character(Region))
 )
 
+
+colormap.region <- get_color_mapping.mb.region()
 
 ### Get tax text
 df.tax_text_position <- get_celltype_taxonomy_text_position.mb(df.metadata, df.plot)

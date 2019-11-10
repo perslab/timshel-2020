@@ -32,7 +32,7 @@ library(here)
 
 reorder_factor_levels_to_first_last_pairs <- function(factor_levels) {
   ### reorder vector. works for input vectors of both equal and unequal lengths
-  ### this function is usefull for adding bigger contrast between neighboring colored categories.
+  ### this function is useful for adding bigger contrast between neighboring colored categories.
   ### input
   # factor_levels: ordered factor levels (unique). The factor levels should be ordered in the same order as your x/y annotations are ordered
   ### output
@@ -86,6 +86,23 @@ reorder_factor_levels_to_first_last_pairs <- function(factor_levels) {
 }
 
 # ======================================================================= #
+# ============================= LOADER FUNCTIONS ======================== #
+# ======================================================================= #
+
+format_cellect_ldsc_results <- function(df.ldsc_cts) {
+  ### Rename 
+  df.ldsc_cts <- df.ldsc_cts %>% rename(annotation=annotation,
+                            specificity_id=specificity_id,
+                            estimate=beta,
+                            std.error=se,
+                            p.value=pvalue)
+  # df.ldsc_cts <- df.ldsc_cts %>% mutate(fdr_significant = if_else(p.value <= 0.05/n_obs_es, true=T, false=F),
+  #                                       p.value.adj = p.value*n_obs_es)
+  return(df.ldsc_cts)
+}
+
+
+# ======================================================================= #
 # ========================= PRIORITIZED CELL-TYPES ====================== #
 # ======================================================================= #
 
@@ -96,7 +113,8 @@ get_prioritized_annotations_bmi <- function(dataset) {
     stop("Got wrong dataset argument. Allowed values are: [%s]", paste(allowed.dataset, collapse=", "))
   }
   if (dataset == "mousebrain") {
-    annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+    # annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","TEGLU4","DEGLU4","TEINH12")
+    annotations <- c("TEGLU23","DEINH3","MEGLU1","MEINH2","DEGLU5","MEGLU10","TEGLU17","MEGLU11","DEGLU4","TEINH12") # No TEGLU4
   } else if (dataset == "tabula_muris") {
     annotations <- c("Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
   } else if (dataset == "campbell2017_lvl2") {
@@ -131,7 +149,7 @@ get_color_mapping.prioritized_annotations_bmi <- function(dataset) {
     # "Hypothalamus"="#33A02C"
     ### ORDERED BY HIERARCHICAL CLUSTERING OF ESmu
     annotations <- c("TEGLU23"="#E31A1C", # HC
-                     "TEGLU4"="#FF7F00", # CORTEX
+                     # "TEGLU4"="#FF7F00", # CORTEX
                      "TEGLU17"="#FF7F00", # CORTEX
                      "TEINH12"="#B15928", # HC/CORTEX
                      "DEGLU5"="#1F78B4", # MIDBRAIN

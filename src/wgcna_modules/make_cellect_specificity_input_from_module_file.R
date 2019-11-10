@@ -58,7 +58,7 @@ df.long <- read_csv(file.table)
 
 ## long --> matrix
 df <- df.long %>% select(module, ensembl, pkME) %>% spread(key='module', value='pkME')
-df[is.na(df)] <- 0# ALT:  df %>% mutate_all(~replace(., is.na(.), 0)) 
+df[is.na(df)] <- 0 # ALT:  df %>% mutate_all(~replace(., is.na(.), 0)) 
 
 ### map mouse to human orthologs
 df <- df %>% as.data.frame() %>% column_to_rownames("ensembl")

@@ -94,7 +94,7 @@ format_cellect_ldsc_results <- function(df.ldsc_cts) {
   df.ldsc_cts <- df.ldsc_cts %>% rename(annotation=annotation,
                             specificity_id=specificity_id,
                             estimate=beta,
-                            std.error=se,
+                            std.error=beta_se,
                             p.value=pvalue)
   # df.ldsc_cts <- df.ldsc_cts %>% mutate(fdr_significant = if_else(p.value <= 0.05/n_obs_es, true=T, false=F),
   #                                       p.value.adj = p.value*n_obs_es)

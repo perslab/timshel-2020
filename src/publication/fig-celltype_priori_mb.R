@@ -44,9 +44,10 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/cellect_ldsc-prioritization.csv")
+file.results <- here("results/cellect_ldsc/prioritization.csv")
 # file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
+
 
 df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
 df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "mousebrain")
@@ -110,7 +111,7 @@ p.main <- get_celltype_priori_base_tax_plot.mb(df.plot, df.tax_text_position)
 p.main <- p.main + geom_point(data=df.plot, aes(x=annotation, y=-log10(p.value)), color="gray")
 p.main <- p.main + geom_point(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region))
 p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5, show.legend=F)
-p.main <- p.main + scale_color_manual(values=colormap.region)
+# p.main <- p.main + scale_color_manual(values=colormap.region)
 p.main <- p.main + theme(legend.position="bottom")
 p.main
 

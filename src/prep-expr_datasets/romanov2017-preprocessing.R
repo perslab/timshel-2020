@@ -95,78 +95,42 @@ df.metadata$cell_type <- ifelse(!is.na(df.metadata$level2_class_neurons_only),
 sum(is.na(df.metadata$cell_type))
 #[1] 0
 
-df.metadata$cell_type %>% table
-# Adcyap1_1_Tac1                      Adcyap1_2
-# 14                             20
-# astrocytes                     Avp_1_high
-# 267                              9
-# Avp_2_high                   Avp_3_medium
-# 8                              8
-# circadian_1_Vip_Grppos_neg     circadian_2_Nms_VIPpos_neg
-# 6                             12
-# circadian_3_Per2                     Dopamine_1
-# 13                             17
-# Dopamine_2_low_VMAT2                     Dopamine_3
-# 7                             12
-# Dopamine_4                    endothelial
-# 5                            240
-# ependymal                        GABA_10
-# 356                             20
-# GABA_11_Nts_1                  GABA_12_Nts_2
-# 25                             26
-# GABA_13_Galanin               GABA_14_Npy_Agrp
-# 23                             13
-# GABA_15_Npynegmedium                 GABA_2_Gucy1a3
-# 7                             19
-# GABA_3_Crhpos_neg_Lhx6       GABA_4_Crhpos_neg_Pgr15l
-# 20                             24
-# GABA_5_Calcr_Lhx1               GABA_6_Otof_Lhx1
-# 32                             24
-# GABA_7_Pomcpos_neg                         GABA_8
-# 27                             15
-# GABA_9                          GABA1
-# 22                             14
-# Gadneglow_Gnrhneg_pos                           Ghrh
-# 9                              3
-# Hcrt                    Hmitpos_neg
-# 14                             24
-# microglia                           Npvf
-# 48                              6
-# oligos                     Oxytocin_1
-# 1001                              9
-# Oxytocin_2                     Oxytocin_3
-# 7                             11
-# Oxytocin_4                           Pmch
-# 10                              4
-# Qrfp                      Sst_1_low
-# 3                             17
-# Sst_2_high                   Sst_3_medium
-# 9                             12
-# Trh_1_low                   Trh_2_medium
-# 26                             20
-# Trh_3_high                             uc
-# 9                            126
-# Vglut2_1_Penk         Vglut2_10_Morn4_Prrc2a
-# 2                              3
-# Vglut2_11               Vglut2_12_Mgat4b
-# 12                              4
-# Vglut2_13Ninl_Rfx5_Zfp346               Vglut2_14_Col9a2
-# 5                              5
-# Vglut2_15_Hcn1_6430411K18Rik           Vglut2_16_Gm5595_Tnr
-# 4                              3
-# Vglut2_17_A930013F10Rik_Pou2f2      Vglut2_18_Zfp458_Ppp1r12b
-# 3                              2
-# Vglut2_2_Crhpos_neg     Vglut2_3_Crhnegpos_neg_low
-# 15                             40
-# Vglut2_4             Vglut2_5_Myt1_Lhx9
-# 4                              3
-# Vglut2_6_Prmt8_Ugdh            Vglut2_7_Pgam_Snx12
-# 11                              6
-# Vglut2_8                Vglut2_9_Gpr149
-# 9                              6
-# vsm
-# 71
-
+df.metadata$cell_type  %>% unique
+# [1] "oligos"                         "astrocytes"
+# [3] "ependymal"                      "microglia"
+# [5] "vsm"                            "endothelial"
+# [7] "Adcyap1_1_Tac1"                 "Adcyap1_2"
+# [9] "Avp_1_high"                     "Avp_2_high"
+# [11] "Avp_3_medium"                   "Dopamine_1"
+# [13] "Dopamine_2_low_VMAT2"           "Dopamine_3"
+# [15] "Dopamine_4"                     "GABA_10"
+# [17] "GABA_11_Nts_1"                  "GABA_12_Nts_2"
+# [19] "GABA_13_Galanin"                "GABA_14_Npy_Agrp"
+# [21] "GABA_15_Npynegmedium"           "GABA_2_Gucy1a3"
+# [23] "GABA_3_Crhpos_neg_Lhx6"         "GABA_4_Crhpos_neg_Pgr15l"
+# [25] "GABA_5_Calcr_Lhx1"              "GABA_6_Otof_Lhx1"
+# [27] "GABA_7_Pomcpos_neg"             "GABA_8"
+# [29] "GABA_9"                         "GABA1"
+# [31] "Gadneglow_Gnrhneg_pos"          "Ghrh"
+# [33] "Hcrt"                           "Hmitpos_neg"
+# [35] "Npvf"                           "Oxytocin_1"
+# [37] "Oxytocin_2"                     "Oxytocin_3"
+# [39] "Oxytocin_4"                     "Pmch"
+# [41] "Qrfp"                           "Sst_1_low"
+# [43] "Sst_2_high"                     "Sst_3_medium"
+# [45] "Trh_1_low"                      "Trh_2_medium"
+# [47] "Trh_3_high"                     "Vglut2_1_Penk"
+# [49] "Vglut2_10_Morn4_Prrc2a"         "Vglut2_11"
+# [51] "Vglut2_12_Mgat4b"               "Vglut2_13Ninl_Rfx5_Zfp346"
+# [53] "Vglut2_14_Col9a2"               "Vglut2_15_Hcn1_6430411K18Rik"
+# [55] "Vglut2_16_Gm5595_Tnr"           "Vglut2_17_A930013F10Rik_Pou2f2"
+# [57] "Vglut2_18_Zfp458_Ppp1r12b"      "Vglut2_2_Crhpos_neg"
+# [59] "Vglut2_3_Crhnegpos_neg_low"     "Vglut2_4"
+# [61] "Vglut2_5_Myt1_Lhx9"             "Vglut2_6_Prmt8_Ugdh"
+# [63] "Vglut2_7_Pgam_Snx12"            "Vglut2_8"
+# [65] "Vglut2_9_Gpr149"                "circadian_1_Vip_Grppos_neg"
+# [67] "circadian_2_Nms_VIPpos_neg"     "circadian_3_Per2"
+# [69] "uc"
 
 # ======================================================================= #
 # ========================== Create Seurat object ============================= #

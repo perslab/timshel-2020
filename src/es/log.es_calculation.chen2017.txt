@@ -14,7 +14,7 @@ Loading required package: viridisLite
 [1] "Sourced file: utils-expression_datasets.R"
 [1] "Sourced file: utils-gene_mapping.R"
 [1] "Sourced file: utils-gwas.R"
-[1] "RUNNING dataset_prefix=chen2017, version_stamp=190926"
+[1] "RUNNING dataset_prefix=chen2017, version_stamp=191009"
 [1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.var.csv.gz"
 [1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.frac_expr.csv.gz"
 [1] "Reading file /nfsdata/projects/jonatan/pub-perslab/timshel-bmicelltypes2019/tmp-data/expression-precalc//chen2017.pre_calc.mean.csv.gz"

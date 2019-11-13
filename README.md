@@ -20,4 +20,8 @@ This repository contains code to reproduce analysis and figures in presented in:
 
 \*Since publication, we have implemented CELLEX-PY available [here](https://github.com/perslab/CELLEX). We recommend using CELLEX-PY as it is easier to use for new users.
 
+### Additional repositories to reproduce analysis
+
 Code to reproduce cell-type co-expression networks can be found here: https://github.com/perslab/19-BMI-brain-wgcna
+
+Code to reproduce 'obesity geneset' enrichment tests can be found here: https://github.com/perslab/19-BMI-brain-genesettests

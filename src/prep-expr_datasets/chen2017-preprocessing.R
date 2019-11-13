@@ -1,6 +1,5 @@
 ############### SYNOPSIS ###################
 # Download and pre=process chen-cellreports-2017 hypothalamus gene expression data
-# https://www.cell.com/cell-reports/fulltext/S2211-1247(17)30321-2#secsectitle0150
 
 ### OUTPUT:
 # ....
@@ -9,6 +8,8 @@
 # ....
 
 ### REFERENCE:
+
+# https://www.cell.com/cell-reports/fulltext/S2211-1247(17)30321-2#secsectitle0150
 
 # ======================================================================= #
 # ================================ SETUP ================================ #
@@ -71,8 +72,6 @@ df.suppTab1 <- openxlsx::read.xlsx(xlsxFile = suppTab1Download)
 
 # Document S1 supp exp procedures
 # https://www.cell.com/cell-reports/fulltext/S2211-1247(17)30321-2#secsectitle0150
-# Workflow of cell type classification. The entire dataset was analyzed to identify
-# 3,319 cells with > 2000 different transcripts in each cell
 
 seurat_obj <- CreateSeuratObject(counts = df.data_raw, 
                                  min.features = 0, 
@@ -98,16 +97,23 @@ seurat_obj
 
 seurat_obj_sub <- subset(x = seurat_obj, subset=SVM_clusterID %in% df.suppTab1$final_ClusterID & nCount_RNA>=800)
 
+# this subset excludes two clusters 
+# > table(seurat_obj$SVM_clusterID[!seurat_obj$SVM_clusterID %in% df.suppTab1$final_ClusterID])
+# 
+# SCO zothers
+# 32    2348
+
 dim(seurat_obj_sub)
 # [1] 23284 12055
-
 
 df.suppTab1$final_ClusterID %>% unique %>% length
 # [1] 45
 
-sum((seurat_obj$SVM_clusterID %>% unique) %in% df.suppTab1$final_ClusterID)
+sum((seurat_obj_sub$SVM_clusterID %>% unique) %in% df.suppTab1$final_ClusterID)
 # [1] 45
 
+dim(seurat_obj_sub)
+# [1] 23284 12055
 # ======================================================================= #
 # =============== EXPORT CELL-TYPE/ANNOTATION METADATA TO CSV =========== #
 # ======================================================================= #

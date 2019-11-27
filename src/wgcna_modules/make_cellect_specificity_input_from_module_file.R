@@ -39,9 +39,10 @@ df.geneset <- df.long
 df.geneset <- df.geneset %>% mutate(ensembl_gene_id_mouse=ensembl)
 df.geneset <- df.geneset %>% mutate(ensembl_gene_id=mouse_to_human_ortholog_gene_mapping(gene_ids=ensembl, type_mouse_gene_ids="ensembl")) %>%
   filter(!is.na(ensembl_gene_id)) # keep only mapping genes
-df.geneset <- hs_add_gene_symbol_from_ensembl_ids(df.geneset, colname_geneids_from="ensembl_gene_id", colname_geneids_to="gene_symbol")
+# df.geneset <- hs_add_gene_symbol_from_ensembl_ids(df.geneset, colname_geneids_from="ensembl_gene_id", colname_geneids_to="gene_symbol")
+# ^ ---->  hs_add_gene_symbol_from_ensembl_ids() implementation currention does not allow for duplicated ensembl ids in the output
 # df.geneset %>% filter(!toupper(df.geneset$hgnc) == df.geneset$gene_symbol) # PNT mapping is slightly different from JT.
-df.geneset <- df.geneset %>% select(-hgnc)
+df.geneset <- df.geneset %>% rename(gene_symbol=hgnc)
 file.out <- here("out/wgcna/modules.mousebrain_bmicelltypes.rwgcna_table.human_only_geneset.csv.gz")
 df.geneset %>% write_csv(file.out)
 

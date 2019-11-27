@@ -20,15 +20,16 @@ library(gProfileR)
 # library(GOplot)
 
 setwd(here("src/wgcna_modules"))
-
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 # ======================================================================= #
 # =============================== PARAMS ================================ #
 # ======================================================================= #
 
-gwas <- "BMI_UKBB_Loh2018"
+GWAS_SELECT <- "BMI_UKBB_Loh2018"
 name.dataset <- "mousebrain"
-specificity_id <- "modules.mousebrain_bmicelltypes" # name given in CELLECT run
+SPECIFICITY_ID_SELECT <- "modules.mousebrain_bmicelltypes" # name given in CELLECT run
 
+FLAG_RUN_GO_ANALYSIS <- FALSE
 
 # ======================================================================= #
 # =============================== FUNCTIONS ================================ #
@@ -87,7 +88,7 @@ do_gprofiler <- function(df, ordered_query){
 # ======================================================================= #
 
 file.magma_gwas <- here("out/magma/gene_based_scores/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out") # 100 KB window
-file.gwas_loci <- here("out/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.depict_tissues_loci.txt")
+# file.gwas_loci <- here("out/depict/results/BMI_UKBB_Loh2018_no_mhc.5e-8.depict_tissues_loci.txt")
 
 file.genes_mendelian <- here("data/genes_obesity/turcot2018_s21.mendelian_obesity_genes.mapped.txt") # human_genes = ensembl_gene_id
 file.genes_rare_variant <- here("data/genes_obesity/turcot2018_table1.rare_variants.mapped.txt") # human_genes = ensembl_gene_id
@@ -104,8 +105,9 @@ file.ldsc_cts <- here("results/cellect_ldsc/prioritization.csv") # sprintf("/pro
 
 if (name.dataset == "mousebrain") {
   ### Mousebrain
-  file.module_geneset <- here("out/wgcna/modules.mousebrain_bmicelltypes.rwgcna_table.human_only_geneset.csv.gz") # sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", prefix_genomic_annot, prefix_genomic_annot)
-  file.module_origin_metadata <- here("data/expression/mousebrain/mousebrain-agg_L5.metadata.csv")
+  file.module_geneset <- here("out/wgcna/modules.mousebrain_bmicelltypes.rwgcna_table.human_only_geneset.csv.gz") # contains only human mapped genes
+  # file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", prefix_genomic_annot, prefix_genomic_annot)
+  file.module_origin_metadata <- here("data/expression/mousebrain/mousebrain.metadata.csv")
   df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=annotation,
                                                                                 module_origin_ncells=NCells, 
                                                                                 module_origin_desc=Description)
@@ -133,11 +135,11 @@ df.magma_gwas <- df.magma_gwas.raw %>% transmute(ensembl_gene_id=ensembl_gene_id
   mutate(magma_zstat_rank_orthologs = rank(magma_zstat)) 
 # df.magma_gwas %>% arrange(P)
 
-### GWAS LOCI
-df.gwas_loci <- read_tsv(file.gwas_loci)
-genes_in_loci.rows <- df.gwas_loci %>% pull(genes_in_locus)
-genes_in_loci.ext <- stringr::str_split(paste(genes_in_loci.rows,collapse=";"), pattern=";")[[1]]
-df.genes_in_gwas_loci <- tibble(ensembl_gene_id=unique(genes_in_loci.ext)) # 5e-8=1695 genes, 1e-5=3396 genes
+# ### GWAS LOCI
+# df.gwas_loci <- read_tsv(file.gwas_loci)
+# genes_in_loci.rows <- df.gwas_loci %>% pull(genes_in_locus)
+# genes_in_loci.ext <- stringr::str_split(paste(genes_in_loci.rows,collapse=";"), pattern=";")[[1]]
+# df.genes_in_gwas_loci <- tibble(ensembl_gene_id=unique(genes_in_loci.ext)) # 5e-8=1695 genes, 1e-5=3396 genes
 
 ### OBESITY GENES: MENDELIAN / RARE / MOUSE
 df.genes_mendelian <- read_tsv(file.genes_mendelian)
@@ -145,9 +147,9 @@ df.genes_rare_variant <- read_tsv(file.genes_rare_variant)
 df.genes_mouse_obesity <- read_tsv(file.genes_mouse_obesity)
 
 ### GENESET
-df.module_geneset <- read_tsv(file.module_geneset)
-df.module_geneset <- df.module_geneset %>% rename(module_id=annotation, module_origin=cell_cluster)
-df.module_geneset <- df.module_geneset %>% mutate(module_origin = stringr::str_replace_all(module_origin, pattern="\\s+", replacement="_"))  # *HACK FOR TABULA MURIS*
+df.module_geneset <- read_csv(file.module_geneset)
+df.module_geneset <- df.module_geneset %>% rename(module_id=module, module_origin=cell_cluster)
+# df.module_geneset <- df.module_geneset %>% mutate(module_origin = stringr::str_replace_all(module_origin, pattern="\\s+", replacement="_"))  # *HACK FOR TABULA MURIS*
 # df.module_geneset <- df.module_geneset %>% rename(pkME=annotation_value)
 
 ### GETSET METADATA
@@ -156,8 +158,11 @@ df.module_metadata <- df.module_geneset %>% select(module_origin, module_id) %>%
 ### LDSC module results
 df.ldsc_cts <- read_csv(file.ldsc_cts)
 df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
-df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == specificity_id)
-
+df.ldsc_cts <- df.ldsc_cts %>% 
+  filter(specificity_id == SPECIFICITY_ID_SELECT) %>%
+  filter(gwas == GWAS_SELECT)
+df.ldsc_cts <- df.ldsc_cts %>% rename(module_id=annotation, BETA=estimate, SE=std.error, P=p.value)
+df.ldsc_cts
 # mat_tmp_split_str <- stringr::str_split_fixed(df.ldsc_cts$Name,pattern="\\__",n=Inf)
 # df.ldsc_cts <- df.ldsc_cts %>% mutate(module_id=mat_tmp_split_str[,ncol(mat_tmp_split_str)]) # add module ID from 'Name' string, e.g. maca_tissue_cell_type.slateblue4
 # df.ldsc_cts <- df.ldsc_cts %>% rename(BETA=Coefficient, SE=Coefficient_std_error, P=Coefficient_P_value)
@@ -172,55 +177,56 @@ df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == specificity_id)
 # =============================== GO analysis ================================ #
 # ======================================================================= #
 
-### Filter top10 LDSC modules
-n.top_modules <- 15
-top_modules <- df.ldsc_cts %>% top_n(n.top_modules, -P) %>% pull(module_id)
-
-
-### split data frame
-list_of_dfs_per_module <- df.module_geneset %>% 
-  filter(module_id %in% top_modules) %>% # filter top modules
-  base::split(.$module_id) # ALT1: plyr::dlply(df, "V1", identity)
-names(list_of_dfs_per_module) # --> names of modules
-
-### Run GO analysis
-# TODO: consider making this a %dopar% loop. http://www.vikparuchuri.com/blog/monitoring-progress-inside-foreach-loop/
-library(parallel)
-cl <- makeCluster(n.top_modules, type = "FORK") # outfile="" (no redirection) prints to console [only works for socket clusters?]
-clusterEvalQ(cl, library(tidyverse))
-clusterEvalQ(cl, library(gProfileR))
-list_of_dfs_per_module.gprofiler.ordered <- parLapply(cl, list_of_dfs_per_module, do_gprofiler, ordered_query=T) # PARALLEL VERSION. returns a list of data frames (not named - only 'indexes')
-df.gprofiler.ordered <- bind_rows(list_of_dfs_per_module.gprofiler.ordered, .id="module_id")
-list_of_dfs_per_module.gprofiler.unordered <- parLapply(cl, list_of_dfs_per_module, do_gprofiler, ordered_query=F) # PARALLEL VERSION. returns a list of data frames (not named - only 'indexes')
-df.gprofiler.unordered <- bind_rows(list_of_dfs_per_module.gprofiler.unordered, .id="module_id")
-stopCluster(cl)
-# names(list_of_dfs_per_module.gprofiler) <- names(list_of_dfs_per_module) #: not needed because do_gprofiler() never returns NULL
-
-### gprofiler WIKI
-# term.size: the number of genes in a term, 
-# query.size: number of recognized genes in the input query 
-# ^----> I cannot make sense of the query.size numbers. I observe that for the same the module, the "query.size" changes for different GO terms analyzed. 
-# ^----> The query.size should be the same for every GO term analyzed for a module, since it is the same set of query genes. (Custom background option does not change this)
-# ^----> SOLUTION/EXPLANATION: the query.size changes within a module when running with "ordered_query=T".
-# overlap.size: the overlap of the query and term. 
-# If a custom statistical background has been passed, these sets have been intersected with the background, resulting in a value smaller or equal than without a background.
-# precision: or predictive rate, i.e. the proportion of genes in the input list that have the function.
-# recall: i.e. the proportion of functionally annotated genes that the query recovers.
-
-
-### Filter TF domain
-# df.gprofiler <- df.gprofiler %>% filter(!domain=="tf")
-
-df.gprofiler.ordered.meta <- df.gprofiler.ordered %>% 
-  filter(!domain=="tf") %>%
-  left_join(df.module_metadata, by=c("module_id")) %>% 
-  select(module_origin, -query.number, everything())
-
-df.gprofiler.unordered.meta <- df.gprofiler.unordered %>% 
-  filter(!domain=="tf") %>%
-  left_join(df.module_metadata, by=c("module_id")) %>% 
-  select(module_origin, -query.number, everything())
-
+if (FLAG_RUN_GO_ANALYSIS) {
+  ### Filter top10 LDSC modules
+  n.top_modules <- 15
+  top_modules <- df.ldsc_cts %>% top_n(n.top_modules, -P) %>% pull(module_id)
+  
+  
+  ### split data frame
+  list_of_dfs_per_module <- df.module_geneset %>% 
+    filter(module_id %in% top_modules) %>% # filter top modules
+    base::split(.$module_id) # ALT1: plyr::dlply(df, "V1", identity)
+  names(list_of_dfs_per_module) # --> names of modules
+  
+  ### Run GO analysis
+  # TODO: consider making this a %dopar% loop. http://www.vikparuchuri.com/blog/monitoring-progress-inside-foreach-loop/
+  library(parallel)
+  cl <- makeCluster(n.top_modules, type = "FORK") # outfile="" (no redirection) prints to console [only works for socket clusters?]
+  clusterEvalQ(cl, library(tidyverse))
+  clusterEvalQ(cl, library(gProfileR))
+  list_of_dfs_per_module.gprofiler.ordered <- parLapply(cl, list_of_dfs_per_module, do_gprofiler, ordered_query=T) # PARALLEL VERSION. returns a list of data frames (not named - only 'indexes')
+  df.gprofiler.ordered <- bind_rows(list_of_dfs_per_module.gprofiler.ordered, .id="module_id")
+  list_of_dfs_per_module.gprofiler.unordered <- parLapply(cl, list_of_dfs_per_module, do_gprofiler, ordered_query=F) # PARALLEL VERSION. returns a list of data frames (not named - only 'indexes')
+  df.gprofiler.unordered <- bind_rows(list_of_dfs_per_module.gprofiler.unordered, .id="module_id")
+  stopCluster(cl)
+  # names(list_of_dfs_per_module.gprofiler) <- names(list_of_dfs_per_module) #: not needed because do_gprofiler() never returns NULL
+  
+  ### gprofiler WIKI
+  # term.size: the number of genes in a term, 
+  # query.size: number of recognized genes in the input query 
+  # ^----> I cannot make sense of the query.size numbers. I observe that for the same the module, the "query.size" changes for different GO terms analyzed. 
+  # ^----> The query.size should be the same for every GO term analyzed for a module, since it is the same set of query genes. (Custom background option does not change this)
+  # ^----> SOLUTION/EXPLANATION: the query.size changes within a module when running with "ordered_query=T".
+  # overlap.size: the overlap of the query and term. 
+  # If a custom statistical background has been passed, these sets have been intersected with the background, resulting in a value smaller or equal than without a background.
+  # precision: or predictive rate, i.e. the proportion of genes in the input list that have the function.
+  # recall: i.e. the proportion of functionally annotated genes that the query recovers.
+  
+  
+  ### Filter TF domain
+  # df.gprofiler <- df.gprofiler %>% filter(!domain=="tf")
+  
+  df.gprofiler.ordered.meta <- df.gprofiler.ordered %>% 
+    filter(!domain=="tf") %>%
+    left_join(df.module_metadata, by=c("module_id")) %>% 
+    select(module_origin, -query.number, everything())
+  
+  df.gprofiler.unordered.meta <- df.gprofiler.unordered %>% 
+    filter(!domain=="tf") %>%
+    left_join(df.module_metadata, by=c("module_id")) %>% 
+    select(module_origin, -query.number, everything())
+}
 
 # ======================================================================= #
 # =============================== Gene based biology  ================================ #
@@ -238,7 +244,7 @@ df.bio_genes <- df.bio_genes %>%
 
 ### add gene flags
 df.bio_genes <- df.bio_genes %>% mutate( 
-  flag_gene_gwas_loci = ensembl_gene_id %in% df.genes_in_gwas_loci$ensembl_gene_id,
+  # flag_gene_gwas_loci = ensembl_gene_id %in% df.genes_in_gwas_loci$ensembl_gene_id,
   flag_gene_mendelian = ensembl_gene_id %in% df.genes_mendelian$ensembl_gene_id,
   flag_gene_rare_variant = ensembl_gene_id %in% df.genes_rare_variant$ensembl_gene_id,
   flag_gene_mouse_obesity = ensembl_gene_id %in% df.genes_mouse_obesity$ensembl_gene_id
@@ -263,7 +269,7 @@ df.bio_modules <- df.bio_genes.all %>%
     module_origin=unique(module_origin),
     #module_ldsc_pval=unique(module_ldsc_pval), # we join ldsc results later, so no need for this
     n_genes_module=n(),
-    n_genes_gwas_loci=sum(flag_gene_gwas_loci),
+    #n_genes_gwas_loci=sum(flag_gene_gwas_loci),
     n_genes_mendelian=sum(flag_gene_mendelian),
     n_genes_rare_variant=sum(flag_gene_rare_variant),
     n_genes_mouse_obesity=sum(flag_gene_mouse_obesity),
@@ -272,10 +278,18 @@ df.bio_modules <- df.bio_genes.all %>%
 
 ### add ALL modules from ldsc (full join) [this makes us independent on the module_ldsc_pval filtering we did for the df.bio_genes]
 df.bio_modules <- df.bio_modules %>% full_join(df.ldsc_cts %>% select(module_id, module_ldsc_pval=P), by="module_id")
-### add meta data (e.g. n_cells) | full join
-df.bio_modules <- df.bio_modules %>% full_join(df.module_origin_metadata, by="module_origin")
+### add meta data (e.g. n_cells)
+df.bio_modules <- df.bio_modules %>% left_join(df.module_origin_metadata, by="module_origin")
+### Module size filter
+df.bio_modules <- df.bio_modules %>% filter(n_genes_module >= 15 & n_genes_module <= 500) # *OBS*
+### Add FDR-flag
+df.bio_modules <- df.bio_modules %>% mutate(
+  module_ldsc_pval_adj = p.adjust(module_ldsc_pval, method="bonferroni"),
+  fdr_significant = if_else(module_ldsc_pval_adj <= 0.05, true=T, false=F)
+  )
 ### Order
 df.bio_modules <- df.bio_modules %>% arrange(module_ldsc_pval)
+
 
 # ======================================================================= #
 # =============================== Export Excel ================================ #
@@ -295,11 +309,13 @@ do.excel_export <- function(df, sheet_name, xlsx.workbook) {
 
 ### Write to excel file
 xlsx.workbook <- createWorkbook(creator="PTimshel") # start excel
-do.excel_export(df.gprofiler.ordered.meta, sheet_name="GO analysis - GSEA", xlsx.workbook)
-do.excel_export(df.gprofiler.unordered.meta, sheet_name="GO analysis", xlsx.workbook)
+if (FLAG_RUN_GO_ANALYSIS) {
+  do.excel_export(df.gprofiler.ordered.meta, sheet_name="GO analysis - GSEA", xlsx.workbook)
+  do.excel_export(df.gprofiler.unordered.meta, sheet_name="GO analysis", xlsx.workbook)
+}
 do.excel_export(df.bio_genes, sheet_name="Module bio. gene-based", xlsx.workbook)
 do.excel_export(df.bio_modules, sheet_name="Module bio. summary", xlsx.workbook)
-file.out <- here("results/", sprintf("modules--biology.%s-%s.xlsx", gwas, specificity_id))
+file.out <- here("results/", sprintf("modules--biology.%s-%s.xlsx", GWAS_SELECT, SPECIFICITY_ID_SELECT))
 saveWorkbook(xlsx.workbook, file=file.out, overwrite=TRUE) # write file
 
 

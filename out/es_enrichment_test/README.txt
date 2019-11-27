@@ -1,2 +1,2 @@
-Obesity geneset (rare + mendelian variant genes) *two-sided* wilcoxon test. P-values uncorrected.
+Obesity geneset (rare + mendelian variant genes) wilcoxon test. P-values uncorrected.
 

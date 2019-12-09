@@ -1,14 +1,20 @@
 
 # ======================================================================= #
-# ==================== FILE ORIGIN INFO 19.11.27 ======================= #
+# ================== FILE ORIGIN INFO RUN 19.11.27 ======================= #
 # ======================================================================= #
 
-Date: 19.11.27
-WGCNA on n=22 MB BMI cell-types
+WGCNA run on n=22 MB BMI cell-types
+
+
+Module table
 cp /projects/jonatan/pub-perslab/18-mousebrain/18-mousebrain_7/tables/ClusterName_prior_191127a_cell_cluster_module_genes.csv.gz modules.mousebrain_bmicelltypes.rwgcna_table.csv.gz
 M1 is back as floralwhite_427
 
+KME table
+cp /projects/jonatan/pub-perslab/18-mousebrain/18-mousebrain_7/tables/ClusterName_prior_191127a_kMs_full_join.csv.gz modules.mousebrain_bmicelltypes.kme_table.csv.gz
 
+Gene set enrichment test (tested for n=22 BMI cell-types)
+cp /nfsdata/projects/jonatan/pub-perslab/19-BMI-brain-genesettests/output/mousebrain_subCELLECTprior_wgcna_modules_run1_wilcoxon_genetestOuts_191129.csv.gz modules.mousebrain_bmicelltypes.es_mu_geneset_enrichment.csv.gz
 
 
 # ======================================================================= #

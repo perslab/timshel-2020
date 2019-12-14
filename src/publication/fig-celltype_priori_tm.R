@@ -46,9 +46,8 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/cellect_ldsc-prioritization.csv")
+file.results <- here("results/cellect_ldsc/prioritization.csv")
 df.ldsc_cts <- read_csv(file.results)
-
 df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
 df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "tabula_muris")
 
@@ -79,6 +78,7 @@ df.ldsc_cts.tmp.summary <- df.ldsc_cts %>% group_by(gwas) %>% summarise(n_obs_gw
 df.ldsc_cts <- left_join(df.ldsc_cts, df.ldsc_cts.tmp.summary, by="gwas")
 df.ldsc_cts <- df.ldsc_cts %>% mutate(fdr_significant = if_else(p.value <= 0.05/n_obs_gwas, true=T, false=F))
 df.ldsc_cts
+
 
 
 # ======================================================================= #

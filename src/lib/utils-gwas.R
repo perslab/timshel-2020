@@ -45,9 +45,8 @@ utils.get_gwas_ids_for_meta_analysis <- function() {
   # GWAS represent represent the lastest GWAS for each trait.
   # Traits are selected to be as independent/non-redundant as possible.
   # LAST MODIFIED: 04.05.2019
-  
-  
-  gwas_ids.meta_analysis <- read_csv(file.gwas_ids_meta_analysis, col_names=F) %>% pull(X1)
+  file.gwas_ids_meta_analysis <- here("data/gwas/gwas_traits.csv")
+  gwas_ids.meta_analysis <- suppressMessages(read_csv(file.gwas_ids_meta_analysis, col_names=F)) %>% pull(X1)
   print(sprintf("Returning n=%s gwas_ids", length(gwas_ids.meta_analysis)))
   return(gwas_ids.meta_analysis)
 }
@@ -91,7 +90,7 @@ utils.rename_gwas <- function(gwas_ids, style, check_all_matches=F, return_as_df
     print("Warning: trait name abreviations are not unique.")
   }
   ### Read data
-  df.gwas_database <- read_csv(file.gwas_rename)
+  df.gwas_database <- suppressMessages(read_csv(file.gwas_rename))
   if (any(duplicated(df.gwas_database$gwas_id))) {
     stop("internal renaming data frame contains duplicates. Fix the .csv file")
   }

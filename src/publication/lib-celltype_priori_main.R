@@ -178,6 +178,7 @@ set_multi_gwas_heatmap_plot <- function(df.ldsc_cts) {
     theme_minimal() + # set this first
     theme(panel.grid.major=element_blank(), 
           panel.grid.minor=element_blank()) + # remove grid
+    # theme(panel.background = element_blank()) + # Remove panel background
     theme(axis.text.x=element_text(angle=45, hjust=1)) + 
     theme(legend.position="bottom") +
     theme(axis.text.y=element_blank(), 
@@ -228,11 +229,12 @@ set_h2_barplot <- function() {
   p.h2 <- ggplot(df.plot.h2, aes(x=gwas, y=h2)) + 
     geom_col(fill="gray") +
     labs(y=expression(h[S-LDSC]^{2})) +
+    theme_classic() +
     theme(axis.text.x=element_text(angle=45, hjust=1), 
           axis.ticks.x = element_blank(),
           axis.title.x = element_blank(),
           axis.line = element_blank())
-  p.h2
+  
   
   ### Add spacing using facet_wrap
   p.h2 <- p.h2 + 

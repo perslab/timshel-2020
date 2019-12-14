@@ -1,0 +1,348 @@
+specificity_id,annotation,annotation_fmt,annotation_prefix,taxonomy_lvl1,taxonomy_lvl2,n,color_by_variable,annotation_fmt_prefix
+campbell2017_lvl2,n01.Hdc,n01 Hdc,ARCME,Neuron,Neuron,50,Neuron,ARCME-n01 Hdc
+campbell2017_lvl2,n02.Gm8773-Tac1,n02 Gm8773/Tac1,ARCME,Neuron,Neuron,83,Neuron,ARCME-n02 Gm8773/Tac1
+campbell2017_lvl2,n03,n03 Th/Sst,ARCME,Neuron,Neuron,30,Neuron,ARCME-n03 Th/Sst
+campbell2017_lvl2,n04.Sst-Nts,n04 Sst/Nts,ARCME,Neuron,Neuron,70,Neuron,ARCME-n04 Sst/Nts
+campbell2017_lvl2,n05.Nfix-Htr2c,n05 Nfix/Htr2c,ARCME,Neuron,Neuron,35,Neuron,ARCME-n05 Nfix/Htr2c
+campbell2017_lvl2,n06.Oxt,n06 Oxt,ARCME,Neuron,Neuron,36,Neuron,ARCME-n06 Oxt
+campbell2017_lvl2,n07,n07 Arx/Nr5a2,ARCME,Neuron,Neuron,279,Neuron,ARCME-n07 Arx/Nr5a2
+campbell2017_lvl2,n08,n08 Th/Slc6a3,ARCME,Neuron,Neuron,287,Neuron,ARCME-n08 Th/Slc6a3
+campbell2017_lvl2,n09.Th-Slc6a3,n09 Th/Slc6a3,ARCME,Neuron,Neuron,202,Neuron,ARCME-n09 Th/Slc6a3
+campbell2017_lvl2,n10.Ghrh,n10 Ghrh,ARCME,Neuron,Neuron,504,Neuron,ARCME-n10 Ghrh
+campbell2017_lvl2,n11.Th-Cxcl12,n11 Th/Cxcl12,ARCME,Neuron,Neuron,327,Neuron,ARCME-n11 Th/Cxcl12
+campbell2017_lvl2,n12.Agrp-Sst,n12 Agrp/Sst,ARCME,Neuron,Neuron,539,Neuron,ARCME-n12 Agrp/Sst
+campbell2017_lvl2,n13.Agrp-Gm8773,n13 Agrp/Gm8773,ARCME,Neuron,Neuron,1747,Neuron,ARCME-n13 Agrp/Gm8773
+campbell2017_lvl2,n14.Pomc-Ttr,n14 Pomc/Ttr,ARCME,Neuron,Neuron,512,Neuron,ARCME-n14 Pomc/Ttr
+campbell2017_lvl2,n15.Pomc-Anxa2,n15 Pomc/Anxa2,ARCME,Neuron,Neuron,369,Neuron,ARCME-n15 Pomc/Anxa2
+campbell2017_lvl2,n16.Rgs16-Vip,n16 Rgs16/Vip,ARCME,Neuron,Neuron,474,Neuron,ARCME-n16 Rgs16/Vip
+campbell2017_lvl2,n17.Rgs16-Dlx1,n17 Rgs16/Dlx1,ARCME,Neuron,Neuron,106,Neuron,ARCME-n17 Rgs16/Dlx1
+campbell2017_lvl2,n18.Rgs16-Slc17a6,n18 Rgs16/Slc17a6,ARCME,Neuron,Neuron,258,Neuron,ARCME-n18 Rgs16/Slc17a6
+campbell2017_lvl2,n19.Gpr50,n19 Gpr50,ARCME,Neuron,Neuron,67,Neuron,ARCME-n19 Gpr50
+campbell2017_lvl2,n20.Kiss1-Tac2,n20 Kiss1/Tac2,ARCME,Neuron,Neuron,657,Neuron,ARCME-n20 Kiss1/Tac2
+campbell2017_lvl2,n21.Pomc-Glipr1,n21 Pomc/Glipr1,ARCME,Neuron,Neuron,310,Neuron,ARCME-n21 Pomc/Glipr1
+campbell2017_lvl2,n22.Tmem215,n22 Tmem215,ARCME,Neuron,Neuron,752,Neuron,ARCME-n22 Tmem215
+campbell2017_lvl2,n23.Sst-Unc13c,n23 Sst/Unc13c,ARCME,Neuron,Neuron,552,Neuron,ARCME-n23 Sst/Unc13c
+campbell2017_lvl2,n24.Sst-Pthlh,n24 Sst/Pthlh,ARCME,Neuron,Neuron,246,Neuron,ARCME-n24 Sst/Pthlh
+campbell2017_lvl2,n25.Th-Lef1,n25 Th/Lef1,ARCME,Neuron,Neuron,229,Neuron,ARCME-n25 Th/Lef1
+campbell2017_lvl2,n26.Htr3b,n26 Htr3b,ARCME,Neuron,Neuron,486,Neuron,ARCME-n26 Htr3b
+campbell2017_lvl2,n27,n27 Tbx19,ARCME,Neuron,Neuron,431,Neuron,ARCME-n27 Tbx19
+campbell2017_lvl2,n28.Qrfp,n28 Qrfp,ARCME,Neuron,Neuron,66,Neuron,ARCME-n28 Qrfp
+campbell2017_lvl2,n29.Nr5a1-Adcyap1,n29 Nr5a1/Bdnf,ARCME,Neuron,Neuron,745,Neuron,ARCME-n29 Nr5a1/Bdnf
+campbell2017_lvl2,n30.Nr5a1-Nfib,n30 Nr5a1/Nfib,ARCME,Neuron,Neuron,316,Neuron,ARCME-n30 Nr5a1/Nfib
+campbell2017_lvl2,n31.Fam19a2,n31 Fam19a2,ARCME,Neuron,Neuron,171,Neuron,ARCME-n31 Fam19a2
+campbell2017_lvl2,n32.Slc17a6-Trhr,n32 Slc17a6/Trhr,ARCME,Neuron,Neuron,342,Neuron,ARCME-n32 Slc17a6/Trhr
+campbell2017_lvl2,n33.unassigned(1),n33 unassigned(1),ARCME,Neuron,Neuron,420,Neuron,ARCME-n33 unassigned(1)
+campbell2017_lvl2,n34.unassigned(2),n34 unassigned(2),ARCME,Neuron,Neuron,1381,Neuron,ARCME-n34 unassigned(2)
+campbell2017_lvl2,s01.Ependymocy1,s01 Ependymocy1,ARCME,Glia,Ependymal_cell,37,Glia,ARCME-s01 Ependymocy1
+campbell2017_lvl2,s02.Ependymocy2,s02 Ependymocy2,ARCME,Glia,Ependymal_cell,430,Glia,ARCME-s02 Ependymocy2
+campbell2017_lvl2,s03.Oligodendro1,s03 Oligodendro1,ARCME,Glia,Oligodendrocyte,23,Glia,ARCME-s03 Oligodendro1
+campbell2017_lvl2,s04.Oligodendro2,s04 Oligodendro2,ARCME,Glia,Oligodendrocyte,12,Glia,ARCME-s04 Oligodendro2
+campbell2017_lvl2,s05.Oligodendro3,s05 Oligodendro3,ARCME,Glia,Oligodendrocyte,96,Glia,ARCME-s05 Oligodendro3
+campbell2017_lvl2,s06.Oligodendro4,s06 Oligodendro4,ARCME,Glia,Oligodendrocyte,392,Glia,ARCME-s06 Oligodendro4
+campbell2017_lvl2,s07.Oligodendro5,s07 Oligodendro5,ARCME,Glia,Oligodendrocyte,39,Glia,ARCME-s07 Oligodendro5
+campbell2017_lvl2,s08.Pars_Tuber1A,s08 Pars Tuber1A,ARCME,Endocrine,Pars_tuberalis,42,Endocrine,ARCME-s08 Pars Tuber1A
+campbell2017_lvl2,s09.Pars_Tuber1B,s09 Pars Tuber1B,ARCME,Endocrine,Pars_tuberalis,15,Endocrine,ARCME-s09 Pars Tuber1B
+campbell2017_lvl2,s10.Pars_Tuber1C,s10 Pars Tuber1C,ARCME,Endocrine,Pars_tuberalis,93,Endocrine,ARCME-s10 Pars Tuber1C
+campbell2017_lvl2,s11.Endothelial,s11 Endothelial,ARCME,Vascular,Endothelial_cell,240,Vascular,ARCME-s11 Endothelial
+campbell2017_lvl2,s12.Mural_Cells1,s12 Mural Cells1,ARCME,Vascular,Mural_cell,29,Vascular,ARCME-s12 Mural Cells1
+campbell2017_lvl2,s13.Mural_Cells2,s13 Mural Cells2,ARCME,Vascular,Mural_cell,55,Vascular,ARCME-s13 Mural Cells2
+campbell2017_lvl2,s14.PVMs,s14 PVMs,ARCME,Immune,Perivascular_macrophages_and_microglia,26,Immune,ARCME-s14 PVMs
+campbell2017_lvl2,s15.Microglia,s15 Microglia,ARCME,Immune,Perivascular_macrophages_and_microglia,304,Immune,ARCME-s15 Microglia
+campbell2017_lvl2,s16.Fibroblasts1,s16 Fibroblasts1,ARCME,Other,Fibroblast,14,Other,ARCME-s16 Fibroblasts1
+campbell2017_lvl2,s17.Fibroblasts2,s17 Fibroblasts2,ARCME,Other,Fibroblast,38,Other,ARCME-s17 Fibroblasts2
+campbell2017_lvl2,s18.Fibroblasts3,s18 Fibroblasts3,ARCME,Other,Fibroblast,120,Other,ARCME-s18 Fibroblasts3
+campbell2017_lvl2,s19.Parstuber2A,s19 Parstuber2A,ARCME,Endocrine,Pars_tuberalis,230,Endocrine,ARCME-s19 Parstuber2A
+campbell2017_lvl2,s20.Parstuber2B,s20 Parstuber2B,ARCME,Endocrine,Pars_tuberalis,8,Endocrine,ARCME-s20 Parstuber2B
+campbell2017_lvl2,s27.Oligodendro6,s27 Oligodendro6,ARCME,Glia,Oligodendrocyte,185,Glia,ARCME-s27 Oligodendro6
+campbell2017_lvl2,s28.NG2_OPC1,s28 NG2 OPC1,ARCME,Glia,Oligodendrocyte,23,Glia,ARCME-s28 NG2 OPC1
+campbell2017_lvl2,s29.NG2_OPC2,s29 NG2 OPC2,ARCME,Glia,Oligodendrocyte,604,Glia,ARCME-s29 NG2 OPC2
+campbell2017_lvl2,s30.b2_tanycytes1,s30 b2 tanycytes1,ARCME,Glia,Tanycyte,592,Glia,ARCME-s30 b2 tanycytes1
+campbell2017_lvl2,s31.b2_tanycytes2,s31 b2 tanycytes2,ARCME,Glia,Tanycyte,592,Glia,ARCME-s31 b2 tanycytes2
+campbell2017_lvl2,s32.Astrocytes,s32 Astrocytes,ARCME,Glia,Astrocyte,99,Glia,ARCME-s32 Astrocytes
+campbell2017_lvl2,s33.a1_tanycytes2,s33 a1 tanycytes2,ARCME,Glia,Tanycyte,68,Glia,ARCME-s33 a1 tanycytes2
+campbell2017_lvl2,s34.a1_tanycytes1,s34 a1 tanycytes1,ARCME,Glia,Tanycyte,334,Glia,ARCME-s34 a1 tanycytes1
+campbell2017_lvl2,s35.b1_tanycytes,s35 b1 tanycytes,ARCME,Glia,Tanycyte,1933,Glia,ARCME-s35 b1 tanycytes
+campbell2017_lvl2,s36.a2_tanycytes,s36 a2 tanycytes,ARCME,Glia,Tanycyte,1169,Glia,ARCME-s36 a2 tanycytes
+chen2017,Astro,Astro,HYPC,NA,NA,NA,NA,HYPC-Astro
+chen2017,Ependy,Ependy,HYPC,NA,NA,NA,NA,HYPC-Ependy
+chen2017,Epith1,Epith1,HYPC,NA,NA,NA,NA,HYPC-Epith1
+chen2017,Epith2,Epith2,HYPC,NA,NA,NA,NA,HYPC-Epith2
+chen2017,GABA1,GABA1,HYPC,NA,NA,NA,NA,HYPC-GABA1
+chen2017,GABA10,GABA10,HYPC,NA,NA,NA,NA,HYPC-GABA10
+chen2017,GABA11,GABA11,HYPC,NA,NA,NA,NA,HYPC-GABA11
+chen2017,GABA12,GABA12,HYPC,NA,NA,NA,NA,HYPC-GABA12
+chen2017,GABA13,GABA13,HYPC,NA,NA,NA,NA,HYPC-GABA13
+chen2017,GABA14,GABA14,HYPC,NA,NA,NA,NA,HYPC-GABA14
+chen2017,GABA15,GABA15,HYPC,NA,NA,NA,NA,HYPC-GABA15
+chen2017,GABA16,GABA16,HYPC,NA,NA,NA,NA,HYPC-GABA16
+chen2017,GABA17,GABA17,HYPC,NA,NA,NA,NA,HYPC-GABA17
+chen2017,GABA18,GABA18,HYPC,NA,NA,NA,NA,HYPC-GABA18
+chen2017,GABA2,GABA2,HYPC,NA,NA,NA,NA,HYPC-GABA2
+chen2017,GABA3,GABA3,HYPC,NA,NA,NA,NA,HYPC-GABA3
+chen2017,GABA4,GABA4,HYPC,NA,NA,NA,NA,HYPC-GABA4
+chen2017,GABA5,GABA5,HYPC,NA,NA,NA,NA,HYPC-GABA5
+chen2017,GABA6,GABA6,HYPC,NA,NA,NA,NA,HYPC-GABA6
+chen2017,GABA7,GABA7,HYPC,NA,NA,NA,NA,HYPC-GABA7
+chen2017,GABA8,GABA8,HYPC,NA,NA,NA,NA,HYPC-GABA8
+chen2017,GABA9,GABA9,HYPC,NA,NA,NA,NA,HYPC-GABA9
+chen2017,Glu1,Glu1,HYPC,NA,NA,NA,NA,HYPC-Glu1
+chen2017,Glu10,Glu10,HYPC,NA,NA,NA,NA,HYPC-Glu10
+chen2017,Glu11,Glu11,HYPC,NA,NA,NA,NA,HYPC-Glu11
+chen2017,Glu12,Glu12,HYPC,NA,NA,NA,NA,HYPC-Glu12
+chen2017,Glu13,Glu13,HYPC,NA,NA,NA,NA,HYPC-Glu13
+chen2017,Glu14,Glu14,HYPC,NA,NA,NA,NA,HYPC-Glu14
+chen2017,Glu15,Glu15,HYPC,NA,NA,NA,NA,HYPC-Glu15
+chen2017,Glu2,Glu2,HYPC,NA,NA,NA,NA,HYPC-Glu2
+chen2017,Glu3,Glu3,HYPC,NA,NA,NA,NA,HYPC-Glu3
+chen2017,Glu4,Glu4,HYPC,NA,NA,NA,NA,HYPC-Glu4
+chen2017,Glu5,Glu5,HYPC,NA,NA,NA,NA,HYPC-Glu5
+chen2017,Glu6,Glu6,HYPC,NA,NA,NA,NA,HYPC-Glu6
+chen2017,Glu7,Glu7,HYPC,NA,NA,NA,NA,HYPC-Glu7
+chen2017,Glu8,Glu8,HYPC,NA,NA,NA,NA,HYPC-Glu8
+chen2017,Glu9,Glu9,HYPC,NA,NA,NA,NA,HYPC-Glu9
+chen2017,Hista,Hista,HYPC,NA,NA,NA,NA,HYPC-Hista
+chen2017,IMO,IMO,HYPC,NA,NA,NA,NA,HYPC-IMO
+chen2017,Macro,Macro,HYPC,NA,NA,NA,NA,HYPC-Macro
+chen2017,Micro,Micro,HYPC,NA,NA,NA,NA,HYPC-Micro
+chen2017,MO,MO,HYPC,NA,NA,NA,NA,HYPC-MO
+chen2017,OPC,OPC,HYPC,NA,NA,NA,NA,HYPC-OPC
+chen2017,POPC,POPC,HYPC,NA,NA,NA,NA,HYPC-POPC
+chen2017,Tany,Tany,HYPC,NA,NA,NA,NA,HYPC-Tany
+kimVMH2019_smartseq,Astro_Aqp4,Astro Aqp4,VMH,NA,NA,NA,NA,VMH-Astro Aqp4
+kimVMH2019_smartseq,Clic4,Clic4,VMH,NA,NA,NA,NA,VMH-Clic4
+kimVMH2019_smartseq,Dlk1_1_Il1rapl2,Dlk1 1 Il1rapl2,VMH,NA,NA,NA,NA,VMH-Dlk1 1 Il1rapl2
+kimVMH2019_smartseq,Dlk1_2_Nts,Dlk1 2 Nts,VMH,NA,NA,NA,NA,VMH-Dlk1 2 Nts
+kimVMH2019_smartseq,Dlk1_3_Maob,Dlk1 3 Maob,VMH,NA,NA,NA,NA,VMH-Dlk1 3 Maob
+kimVMH2019_smartseq,Dlk1_4_Maob,Dlk1 4 Maob,VMH,NA,NA,NA,NA,VMH-Dlk1 4 Maob
+kimVMH2019_smartseq,Dlk1_5_Egflam,Dlk1 5 Egflam,VMH,NA,NA,NA,NA,VMH-Dlk1 5 Egflam
+kimVMH2019_smartseq,Dlk1_6_F2rl2,Dlk1 6 F2rl2,VMH,NA,NA,NA,NA,VMH-Dlk1 6 F2rl2
+kimVMH2019_smartseq,Endo_Gja5,Endo Gja5,VMH,NA,NA,NA,NA,VMH-Endo Gja5
+kimVMH2019_smartseq,Esr1_1_Insm2,Esr1 1 Insm2,VMH,NA,NA,NA,NA,VMH-Esr1 1 Insm2
+kimVMH2019_smartseq,Esr1_2_Samd9l_Rorb,Esr1 2 Samd9l Rorb,VMH,NA,NA,NA,NA,VMH-Esr1 2 Samd9l Rorb
+kimVMH2019_smartseq,Esr1_3_Samd9l_Nmur2,Esr1 3 Samd9l Nmur2,VMH,NA,NA,NA,NA,VMH-Esr1 3 Samd9l Nmur2
+kimVMH2019_smartseq,Esr1_4_Smoc2,Esr1 4 Smoc2,VMH,NA,NA,NA,NA,VMH-Esr1 4 Smoc2
+kimVMH2019_smartseq,Esr1_5_Ngf,Esr1 5 Ngf,VMH,NA,NA,NA,NA,VMH-Esr1 5 Ngf
+kimVMH2019_smartseq,Esr1_6_Ctxn3,Esr1 6 Ctxn3,VMH,NA,NA,NA,NA,VMH-Esr1 6 Ctxn3
+kimVMH2019_smartseq,Irx5,Irx5,VMH,NA,NA,NA,NA,VMH-Irx5
+kimVMH2019_smartseq,Lhx1_1,Lhx1 1,VMH,NA,NA,NA,NA,VMH-Lhx1 1
+kimVMH2019_smartseq,Lhx1_2,Lhx1 2,VMH,NA,NA,NA,NA,VMH-Lhx1 2
+kimVMH2019_smartseq,Lhx9,Lhx9,VMH,NA,NA,NA,NA,VMH-Lhx9
+kimVMH2019_smartseq,Micro_Siglech,Micro Siglech,VMH,NA,NA,NA,NA,VMH-Micro Siglech
+kimVMH2019_smartseq,Nfib_1_Prdm13,Nfib 1 Prdm13,VMH,NA,NA,NA,NA,VMH-Nfib 1 Prdm13
+kimVMH2019_smartseq,Nfib_2_Car4,Nfib 2 Car4,VMH,NA,NA,NA,NA,VMH-Nfib 2 Car4
+kimVMH2019_smartseq,Nr5a1_1_Npffr2,Nr5a1 1 Npffr2,VMH,NA,NA,NA,NA,VMH-Nr5a1 1 Npffr2
+kimVMH2019_smartseq,Nr5a1_2_Ctxn3,Nr5a1 2 Ctxn3,VMH,NA,NA,NA,NA,VMH-Nr5a1 2 Ctxn3
+kimVMH2019_smartseq,Nr5a1_3_Car8,Nr5a1 3 Car8,VMH,NA,NA,NA,NA,VMH-Nr5a1 3 Car8
+kimVMH2019_smartseq,Nr5a1_4_7_Glipr1,Nr5a1 4 7 Glipr1,VMH,NA,NA,NA,NA,VMH-Nr5a1 4 7 Glipr1
+kimVMH2019_smartseq,Nr5a1_8_Tcf7l2,Nr5a1 8 Tcf7l2,VMH,NA,NA,NA,NA,VMH-Nr5a1 8 Tcf7l2
+kimVMH2019_smartseq,Nr5a1_9_11_Rorb,Nr5a1 9 11 Rorb,VMH,NA,NA,NA,NA,VMH-Nr5a1 9 11 Rorb
+kimVMH2019_smartseq,Nr5a1_Foxp2_1_Prdm13,Nr5a1 Foxp2 1 Prdm13,VMH,NA,NA,NA,NA,VMH-Nr5a1 Foxp2 1 Prdm13
+kimVMH2019_smartseq,Nr5a1_Foxp2_2_C1ql2,Nr5a1 Foxp2 2 C1ql2,VMH,NA,NA,NA,NA,VMH-Nr5a1 Foxp2 2 C1ql2
+kimVMH2019_smartseq,Nr5a1_Foxp2_3,Nr5a1 Foxp2 3,VMH,NA,NA,NA,NA,VMH-Nr5a1 Foxp2 3
+kimVMH2019_smartseq,Nr5a1_Smoc2_low,Nr5a1 Smoc2 low,VMH,NA,NA,NA,NA,VMH-Nr5a1 Smoc2 low
+kimVMH2019_smartseq,Nup62cl,Nup62cl,VMH,NA,NA,NA,NA,VMH-Nup62cl
+kimVMH2019_smartseq,Oligo_Opalin_1,Oligo Opalin 1,VMH,NA,NA,NA,NA,VMH-Oligo Opalin 1
+kimVMH2019_smartseq,Oligo_Opalin_2,Oligo Opalin 2,VMH,NA,NA,NA,NA,VMH-Oligo Opalin 2
+kimVMH2019_smartseq,PVM_Mrc1,PVM Mrc1,VMH,NA,NA,NA,NA,VMH-PVM Mrc1
+kimVMH2019_smartseq,Satb2_Calcrl,Satb2 Calcrl,VMH,NA,NA,NA,NA,VMH-Satb2 Calcrl
+kimVMH2019_smartseq,Satb2_Six3,Satb2 Six3,VMH,NA,NA,NA,NA,VMH-Satb2 Six3
+kimVMH2019_smartseq,Scgn,Scgn,VMH,NA,NA,NA,NA,VMH-Scgn
+kimVMH2019_smartseq,Slc18a3,Slc18a3,VMH,NA,NA,NA,NA,VMH-Slc18a3
+kimVMH2019_smartseq,Slc32a1_1_Nup62cl,Slc32a1 1 Nup62cl,VMH,NA,NA,NA,NA,VMH-Slc32a1 1 Nup62cl
+kimVMH2019_smartseq,Slc32a1_2,Slc32a1 2,VMH,NA,NA,NA,NA,VMH-Slc32a1 2
+kimVMH2019_smartseq,SMC,SMC,VMH,NA,NA,NA,NA,VMH-SMC
+kimVMH2019_smartseq,Tbx3_1_Tac2,Tbx3 1 Tac2,VMH,NA,NA,NA,NA,VMH-Tbx3 1 Tac2
+kimVMH2019_smartseq,Tbx3_2_Anxa2,Tbx3 2 Anxa2,VMH,NA,NA,NA,NA,VMH-Tbx3 2 Anxa2
+kimVMH2019_smartseq,Tbx3_3_Slc14a1,Tbx3 3 Slc14a1,VMH,NA,NA,NA,NA,VMH-Tbx3 3 Slc14a1
+kimVMH2019_smartseq,Tsix_Esr1_1_Gabrg3,Tsix Esr1 1 Gabrg3,VMH,NA,NA,NA,NA,VMH-Tsix Esr1 1 Gabrg3
+kimVMH2019_smartseq,Tsix_Esr1_2_Twist2,Tsix Esr1 2 Twist2,VMH,NA,NA,NA,NA,VMH-Tsix Esr1 2 Twist2
+mikkelsen2019,GABA_1,GABA 1,LHA,NA,NA,NA,NA,LHA-GABA 1
+mikkelsen2019,GABA_10,GABA 10,LHA,NA,NA,NA,NA,LHA-GABA 10
+mikkelsen2019,GABA_11,GABA 11,LHA,NA,NA,NA,NA,LHA-GABA 11
+mikkelsen2019,GABA_12,GABA 12,LHA,NA,NA,NA,NA,LHA-GABA 12
+mikkelsen2019,GABA_13,GABA 13,LHA,NA,NA,NA,NA,LHA-GABA 13
+mikkelsen2019,GABA_14,GABA 14,LHA,NA,NA,NA,NA,LHA-GABA 14
+mikkelsen2019,GABA_15,GABA 15,LHA,NA,NA,NA,NA,LHA-GABA 15
+mikkelsen2019,GABA_2,GABA 2,LHA,NA,NA,NA,NA,LHA-GABA 2
+mikkelsen2019,GABA_3,GABA 3,LHA,NA,NA,NA,NA,LHA-GABA 3
+mikkelsen2019,GABA_4,GABA 4,LHA,NA,NA,NA,NA,LHA-GABA 4
+mikkelsen2019,GABA_5,GABA 5,LHA,NA,NA,NA,NA,LHA-GABA 5
+mikkelsen2019,GABA_6,GABA 6,LHA,NA,NA,NA,NA,LHA-GABA 6
+mikkelsen2019,GABA_7,GABA 7,LHA,NA,NA,NA,NA,LHA-GABA 7
+mikkelsen2019,GABA_8,GABA 8,LHA,NA,NA,NA,NA,LHA-GABA 8
+mikkelsen2019,GABA_9,GABA 9,LHA,NA,NA,NA,NA,LHA-GABA 9
+mikkelsen2019,Glut_1,Glut 1,LHA,NA,NA,NA,NA,LHA-Glut 1
+mikkelsen2019,Glut_10,Glut 10,LHA,NA,NA,NA,NA,LHA-Glut 10
+mikkelsen2019,Glut_11,Glut 11,LHA,NA,NA,NA,NA,LHA-Glut 11
+mikkelsen2019,Glut_12,Glut 12,LHA,NA,NA,NA,NA,LHA-Glut 12
+mikkelsen2019,Glut_13,Glut 13,LHA,NA,NA,NA,NA,LHA-Glut 13
+mikkelsen2019,Glut_14,Glut 14,LHA,NA,NA,NA,NA,LHA-Glut 14
+mikkelsen2019,Glut_15,Glut 15,LHA,NA,NA,NA,NA,LHA-Glut 15
+mikkelsen2019,Glut_2,Glut 2,LHA,NA,NA,NA,NA,LHA-Glut 2
+mikkelsen2019,Glut_3,Glut 3,LHA,NA,NA,NA,NA,LHA-Glut 3
+mikkelsen2019,Glut_4,Glut 4,LHA,NA,NA,NA,NA,LHA-Glut 4
+mikkelsen2019,Glut_5,Glut 5,LHA,NA,NA,NA,NA,LHA-Glut 5
+mikkelsen2019,Glut_6,Glut 6,LHA,NA,NA,NA,NA,LHA-Glut 6
+mikkelsen2019,Glut_7,Glut 7,LHA,NA,NA,NA,NA,LHA-Glut 7
+mikkelsen2019,Glut_8,Glut 8,LHA,NA,NA,NA,NA,LHA-Glut 8
+mikkelsen2019,Glut_9,Glut 9,LHA,NA,NA,NA,NA,LHA-Glut 9
+mikkelsen2019,Nonneuronal_1,Nonneuronal 1,LHA,NA,NA,NA,NA,LHA-Nonneuronal 1
+mikkelsen2019,Nonneuronal_10,Nonneuronal 10,LHA,NA,NA,NA,NA,LHA-Nonneuronal 10
+mikkelsen2019,Nonneuronal_11,Nonneuronal 11,LHA,NA,NA,NA,NA,LHA-Nonneuronal 11
+mikkelsen2019,Nonneuronal_12,Nonneuronal 12,LHA,NA,NA,NA,NA,LHA-Nonneuronal 12
+mikkelsen2019,Nonneuronal_13,Nonneuronal 13,LHA,NA,NA,NA,NA,LHA-Nonneuronal 13
+mikkelsen2019,Nonneuronal_2,Nonneuronal 2,LHA,NA,NA,NA,NA,LHA-Nonneuronal 2
+mikkelsen2019,Nonneuronal_3,Nonneuronal 3,LHA,NA,NA,NA,NA,LHA-Nonneuronal 3
+mikkelsen2019,Nonneuronal_4,Nonneuronal 4,LHA,NA,NA,NA,NA,LHA-Nonneuronal 4
+mikkelsen2019,Nonneuronal_5,Nonneuronal 5,LHA,NA,NA,NA,NA,LHA-Nonneuronal 5
+mikkelsen2019,Nonneuronal_6,Nonneuronal 6,LHA,NA,NA,NA,NA,LHA-Nonneuronal 6
+mikkelsen2019,Nonneuronal_7,Nonneuronal 7,LHA,NA,NA,NA,NA,LHA-Nonneuronal 7
+mikkelsen2019,Nonneuronal_8,Nonneuronal 8,LHA,NA,NA,NA,NA,LHA-Nonneuronal 8
+mikkelsen2019,Nonneuronal_9,Nonneuronal 9,LHA,NA,NA,NA,NA,LHA-Nonneuronal 9
+moffitt2018,Astrocytes_1,Astrocytes 1,POA,NA,NA,NA,NA,POA-Astrocytes 1
+moffitt2018,Astrocytes_2,Astrocytes 2,POA,NA,NA,NA,NA,POA-Astrocytes 2
+moffitt2018,e1_Glut,e1 Glut,POA,NA,NA,NA,NA,POA-e1 Glut
+moffitt2018,e10_Glut_Meis2,e10 Glut Meis2,POA,NA,NA,NA,NA,POA-e10 Glut Meis2
+moffitt2018,e11_Glut_Shox2,e11 Glut Shox2,POA,NA,NA,NA,NA,POA-e11 Glut Shox2
+moffitt2018,e12_Nos1_Foxp2,e12 Nos1 Foxp2,POA,NA,NA,NA,NA,POA-e12 Nos1 Foxp2
+moffitt2018,e13_Ghrh_C1ql1,e13 Ghrh C1ql1,POA,NA,NA,NA,NA,POA-e13 Ghrh C1ql1
+moffitt2018,e15_Ucn3_Brs3,e15 Ucn3 Brs3,POA,NA,NA,NA,NA,POA-e15 Ucn3 Brs3
+moffitt2018,e16_Sst_Cartpt,e16 Sst Cartpt,POA,NA,NA,NA,NA,POA-e16 Sst Cartpt
+moffitt2018,e17_Th_Adcyap1,e17 Th Adcyap1,POA,NA,NA,NA,NA,POA-e17 Th Adcyap1
+moffitt2018,e19_Ghrh_Trh,e19 Ghrh Trh,POA,NA,NA,NA,NA,POA-e19 Ghrh Trh
+moffitt2018,e2_Tac1_Fezf1,e2 Tac1 Fezf1,POA,NA,NA,NA,NA,POA-e2 Tac1 Fezf1
+moffitt2018,e20_Crh,e20 Crh,POA,NA,NA,NA,NA,POA-e20 Crh
+moffitt2018,e21_Glut_Rxpf3,e21 Glut Rxpf3,POA,NA,NA,NA,NA,POA-e21 Glut Rxpf3
+moffitt2018,e22_Gal_Ucn3,e22 Gal Ucn3,POA,NA,NA,NA,NA,POA-e22 Gal Ucn3
+moffitt2018,e23_Reln_Etv1,e23 Reln Etv1,POA,NA,NA,NA,NA,POA-e23 Reln Etv1
+moffitt2018,e24_Gal_Rxfp1_,e24 Gal Rxfp1 ,POA,NA,NA,NA,NA,POA-e24 Gal Rxfp1 
+moffitt2018,e3_Cartpt_Isl1,e3 Cartpt Isl1,POA,NA,NA,NA,NA,POA-e3 Cartpt Isl1
+moffitt2018,e4_Trh_Angpt1,e4 Trh Angpt1,POA,NA,NA,NA,NA,POA-e4 Trh Angpt1
+moffitt2018,e5_Adcyap1_Nkx2.1,e5 Adcyap1 Nkx2 1,POA,NA,NA,NA,NA,POA-e5 Adcyap1 Nkx2 1
+moffitt2018,e6_Nos1_Trp73,e6 Nos1 Trp73,POA,NA,NA,NA,NA,POA-e6 Nos1 Trp73
+moffitt2018,e7_Reln_C1ql1,e7 Reln C1ql1,POA,NA,NA,NA,NA,POA-e7 Reln C1ql1
+moffitt2018,e8_Cck_Ebf3,e8 Cck Ebf3,POA,NA,NA,NA,NA,POA-e8 Cck Ebf3
+moffitt2018,e9_Glut_Tcf7l2,e9 Glut Tcf7l2,POA,NA,NA,NA,NA,POA-e9 Glut Tcf7l2
+moffitt2018,Endothelial_1,Endothelial 1,POA,NA,NA,NA,NA,POA-Endothelial 1
+moffitt2018,Endothelial_2,Endothelial 2,POA,NA,NA,NA,NA,POA-Endothelial 2
+moffitt2018,Endothelial_3,Endothelial 3,POA,NA,NA,NA,NA,POA-Endothelial 3
+moffitt2018,Ependymal_1,Ependymal 1,POA,NA,NA,NA,NA,POA-Ependymal 1
+moffitt2018,Fibroblast_1,Fibroblast 1,POA,NA,NA,NA,NA,POA-Fibroblast 1
+moffitt2018,h1_Gaba_Slc17a6,h1 Gaba Slc17a6,POA,NA,NA,NA,NA,POA-h1 Gaba Slc17a6
+moffitt2018,h2_Nts_Slc17a8,h2 Nts Slc17a8,POA,NA,NA,NA,NA,POA-h2 Nts Slc17a8
+moffitt2018,h3_Slc32a1_Gsc,h3 Slc32a1 Gsc,POA,NA,NA,NA,NA,POA-h3 Slc32a1 Gsc
+moffitt2018,i1_Gaba,i1 Gaba,POA,NA,NA,NA,NA,POA-i1 Gaba
+moffitt2018,i10_Tac1_Nts,i10 Tac1 Nts,POA,NA,NA,NA,NA,POA-i10 Tac1 Nts
+moffitt2018,i11_Gaba,i11 Gaba,POA,NA,NA,NA,NA,POA-i11 Gaba
+moffitt2018,i12_Gaba,i12 Gaba,POA,NA,NA,NA,NA,POA-i12 Gaba
+moffitt2018,i13_Gaba,i13 Gaba,POA,NA,NA,NA,NA,POA-i13 Gaba
+moffitt2018,i14_Avp_Cck,i14 Avp Cck,POA,NA,NA,NA,NA,POA-i14 Avp Cck
+moffitt2018,i15_Gaba,i15 Gaba,POA,NA,NA,NA,NA,POA-i15 Gaba
+moffitt2018,i16_Gal_Th,i16 Gal Th,POA,NA,NA,NA,NA,POA-i16 Gal Th
+moffitt2018,i17_Th_Nos1,i17 Th Nos1,POA,NA,NA,NA,NA,POA-i17 Th Nos1
+moffitt2018,i18_Gal_Tac2,i18 Gal Tac2,POA,NA,NA,NA,NA,POA-i18 Gal Tac2
+moffitt2018,i2_Tac1_Pdyn,i2 Tac1 Pdyn,POA,NA,NA,NA,NA,POA-i2 Tac1 Pdyn
+moffitt2018,i20_Gal_Moxd1,i20 Gal Moxd1,POA,NA,NA,NA,NA,POA-i20 Gal Moxd1
+moffitt2018,i21_Sst_Pou3f3,i21 Sst Pou3f3,POA,NA,NA,NA,NA,POA-i21 Sst Pou3f3
+moffitt2018,i22_Gal_Pmaip1,i22 Gal Pmaip1,POA,NA,NA,NA,NA,POA-i22 Gal Pmaip1
+moffitt2018,i23_Crh_Nts,i23 Crh Nts,POA,NA,NA,NA,NA,POA-i23 Crh Nts
+moffitt2018,i24_Nmu,i24 Nmu,POA,NA,NA,NA,NA,POA-i24 Nmu
+moffitt2018,i25_Npy_Etv1,i25 Npy Etv1,POA,NA,NA,NA,NA,POA-i25 Npy Etv1
+moffitt2018,i26_Tac1_Prok2,i26 Tac1 Prok2,POA,NA,NA,NA,NA,POA-i26 Tac1 Prok2
+moffitt2018,i27_Th_Trh,i27 Th Trh,POA,NA,NA,NA,NA,POA-i27 Th Trh
+moffitt2018,i28_Gaba_Six6,i28 Gaba Six6,POA,NA,NA,NA,NA,POA-i28 Gaba Six6
+moffitt2018,i29_Gaba_Igsf1,i29 Gaba Igsf1,POA,NA,NA,NA,NA,POA-i29 Gaba Igsf1
+moffitt2018,i3_Penk_Nts,i3 Penk Nts,POA,NA,NA,NA,NA,POA-i3 Penk Nts
+moffitt2018,i30_Vip,i30 Vip,POA,NA,NA,NA,NA,POA-i30 Vip
+moffitt2018,i31_Calca,i31 Calca,POA,NA,NA,NA,NA,POA-i31 Calca
+moffitt2018,i32_Sst_Npy,i32 Sst Npy,POA,NA,NA,NA,NA,POA-i32 Sst Npy
+moffitt2018,i35_Crh_Tac2,i35 Crh Tac2,POA,NA,NA,NA,NA,POA-i35 Crh Tac2
+moffitt2018,i37_Bdnf_Chrm2,i37 Bdnf Chrm2,POA,NA,NA,NA,NA,POA-i37 Bdnf Chrm2
+moffitt2018,i38_Kiss1_Th,i38 Kiss1 Th,POA,NA,NA,NA,NA,POA-i38 Kiss1 Th
+moffitt2018,i39_Gaba,i39 Gaba,POA,NA,NA,NA,NA,POA-i39 Gaba
+moffitt2018,i4_Gaba_Mylk,i4 Gaba Mylk,POA,NA,NA,NA,NA,POA-i4 Gaba Mylk
+moffitt2018,i40_Sst_Reln,i40 Sst Reln,POA,NA,NA,NA,NA,POA-i40 Sst Reln
+moffitt2018,i41_Npy_Penk,i41 Npy Penk,POA,NA,NA,NA,NA,POA-i41 Npy Penk
+moffitt2018,i42_Pthlh,i42 Pthlh,POA,NA,NA,NA,NA,POA-i42 Pthlh
+moffitt2018,i43_Chat,i43 Chat,POA,NA,NA,NA,NA,POA-i43 Chat
+moffitt2018,i44_Th_Cxcl14,i44 Th Cxcl14,POA,NA,NA,NA,NA,POA-i44 Th Cxcl14
+moffitt2018,i45_Bdnf_Pmaip1,i45 Bdnf Pmaip1,POA,NA,NA,NA,NA,POA-i45 Bdnf Pmaip1
+moffitt2018,i5_Gaba_Pou3f3,i5 Gaba Pou3f3,POA,NA,NA,NA,NA,POA-i5 Gaba Pou3f3
+moffitt2018,i6_Avp_Nms,i6 Avp Nms,POA,NA,NA,NA,NA,POA-i6 Avp Nms
+moffitt2018,i7_Gaba,i7 Gaba,POA,NA,NA,NA,NA,POA-i7 Gaba
+moffitt2018,i8_Gal_Amigo2,i8 Gal Amigo2,POA,NA,NA,NA,NA,POA-i8 Gal Amigo2
+moffitt2018,i9_Gaba,i9 Gaba,POA,NA,NA,NA,NA,POA-i9 Gaba
+moffitt2018,Immature_oligodendrocyte_1,Immature oligodendrocyte 1,POA,NA,NA,NA,NA,POA-Immature oligodendrocyte 1
+moffitt2018,Immature_oligodendrocyte_2,Immature oligodendrocyte 2,POA,NA,NA,NA,NA,POA-Immature oligodendrocyte 2
+moffitt2018,Macrophage_1,Macrophage 1,POA,NA,NA,NA,NA,POA-Macrophage 1
+moffitt2018,Mature_oligodendrocyte_1,Mature oligodendrocyte 1,POA,NA,NA,NA,NA,POA-Mature oligodendrocyte 1
+moffitt2018,Mature_oligodendrocyte_2,Mature oligodendrocyte 2,POA,NA,NA,NA,NA,POA-Mature oligodendrocyte 2
+moffitt2018,Mature_oligodendrocyte_3,Mature oligodendrocyte 3,POA,NA,NA,NA,NA,POA-Mature oligodendrocyte 3
+moffitt2018,Mature_oligodendrocyte_4,Mature oligodendrocyte 4,POA,NA,NA,NA,NA,POA-Mature oligodendrocyte 4
+moffitt2018,Mature_oligodendrocyte_5,Mature oligodendrocyte 5,POA,NA,NA,NA,NA,POA-Mature oligodendrocyte 5
+moffitt2018,Mature_oligodendrocyte_6,Mature oligodendrocyte 6,POA,NA,NA,NA,NA,POA-Mature oligodendrocyte 6
+moffitt2018,Microglia_1,Microglia 1,POA,NA,NA,NA,NA,POA-Microglia 1
+moffitt2018,Microglia_2,Microglia 2,POA,NA,NA,NA,NA,POA-Microglia 2
+moffitt2018,Mural_1,Mural 1,POA,NA,NA,NA,NA,POA-Mural 1
+moffitt2018,Mural_2,Mural 2,POA,NA,NA,NA,NA,POA-Mural 2
+moffitt2018,Newly_formed_oligodendrocyte_1,Newly formed oligodendrocyte 1,POA,NA,NA,NA,NA,POA-Newly formed oligodendrocyte 1
+romanov2017,Adcyap1_1_Tac1,Adcyap1 1 Tac1,HYPR,NA,NA,NA,NA,HYPR-Adcyap1 1 Tac1
+romanov2017,Adcyap1_2,Adcyap1 2,HYPR,NA,NA,NA,NA,HYPR-Adcyap1 2
+romanov2017,astrocytes,astrocytes,HYPR,NA,NA,NA,NA,HYPR-astrocytes
+romanov2017,Avp_1_high,Avp 1 high,HYPR,NA,NA,NA,NA,HYPR-Avp 1 high
+romanov2017,Avp_2_high,Avp 2 high,HYPR,NA,NA,NA,NA,HYPR-Avp 2 high
+romanov2017,Avp_3_medium,Avp 3 medium,HYPR,NA,NA,NA,NA,HYPR-Avp 3 medium
+romanov2017,circadian_1_Vip_Grppos_neg,circadian 1 Vip Grppos neg,HYPR,NA,NA,NA,NA,HYPR-circadian 1 Vip Grppos neg
+romanov2017,circadian_2_Nms_VIPpos_neg,circadian 2 Nms VIPpos neg,HYPR,NA,NA,NA,NA,HYPR-circadian 2 Nms VIPpos neg
+romanov2017,circadian_3_Per2,circadian 3 Per2,HYPR,NA,NA,NA,NA,HYPR-circadian 3 Per2
+romanov2017,Dopamine_1,Dopamine 1,HYPR,NA,NA,NA,NA,HYPR-Dopamine 1
+romanov2017,Dopamine_2_low_VMAT2,Dopamine 2 low VMAT2,HYPR,NA,NA,NA,NA,HYPR-Dopamine 2 low VMAT2
+romanov2017,Dopamine_3,Dopamine 3,HYPR,NA,NA,NA,NA,HYPR-Dopamine 3
+romanov2017,Dopamine_4,Dopamine 4,HYPR,NA,NA,NA,NA,HYPR-Dopamine 4
+romanov2017,endothelial,endothelial,HYPR,NA,NA,NA,NA,HYPR-endothelial
+romanov2017,ependymal,ependymal,HYPR,NA,NA,NA,NA,HYPR-ependymal
+romanov2017,GABA_10,GABA 10,HYPR,NA,NA,NA,NA,HYPR-GABA 10
+romanov2017,GABA_11_Nts_1,GABA 11 Nts 1,HYPR,NA,NA,NA,NA,HYPR-GABA 11 Nts 1
+romanov2017,GABA_12_Nts_2,GABA 12 Nts 2,HYPR,NA,NA,NA,NA,HYPR-GABA 12 Nts 2
+romanov2017,GABA_13_Galanin,GABA 13 Galanin,HYPR,NA,NA,NA,NA,HYPR-GABA 13 Galanin
+romanov2017,GABA_14_Npy_Agrp,GABA 14 Npy Agrp,HYPR,NA,NA,NA,NA,HYPR-GABA 14 Npy Agrp
+romanov2017,GABA_15_Npynegmedium,GABA 15 Npynegmedium,HYPR,NA,NA,NA,NA,HYPR-GABA 15 Npynegmedium
+romanov2017,GABA_2_Gucy1a3,GABA 2 Gucy1a3,HYPR,NA,NA,NA,NA,HYPR-GABA 2 Gucy1a3
+romanov2017,GABA_3_Crhpos_neg_Lhx6,GABA 3 Crhpos neg Lhx6,HYPR,NA,NA,NA,NA,HYPR-GABA 3 Crhpos neg Lhx6
+romanov2017,GABA_4_Crhpos_neg_Pgr15l,GABA 4 Crhpos neg Pgr15l,HYPR,NA,NA,NA,NA,HYPR-GABA 4 Crhpos neg Pgr15l
+romanov2017,GABA_5_Calcr_Lhx1,GABA 5 Calcr Lhx1,HYPR,NA,NA,NA,NA,HYPR-GABA 5 Calcr Lhx1
+romanov2017,GABA_6_Otof_Lhx1,GABA 6 Otof Lhx1,HYPR,NA,NA,NA,NA,HYPR-GABA 6 Otof Lhx1
+romanov2017,GABA_7_Pomcpos_neg,GABA 7 Pomcpos neg,HYPR,NA,NA,NA,NA,HYPR-GABA 7 Pomcpos neg
+romanov2017,GABA_8,GABA 8,HYPR,NA,NA,NA,NA,HYPR-GABA 8
+romanov2017,GABA_9,GABA 9,HYPR,NA,NA,NA,NA,HYPR-GABA 9
+romanov2017,GABA1,GABA1,HYPR,NA,NA,NA,NA,HYPR-GABA1
+romanov2017,Gadneglow_Gnrhneg_pos,Gadneglow Gnrhneg pos,HYPR,NA,NA,NA,NA,HYPR-Gadneglow Gnrhneg pos
+romanov2017,Hcrt,Hcrt,HYPR,NA,NA,NA,NA,HYPR-Hcrt
+romanov2017,Hmitpos_neg,Hmitpos neg,HYPR,NA,NA,NA,NA,HYPR-Hmitpos neg
+romanov2017,microglia,microglia,HYPR,NA,NA,NA,NA,HYPR-microglia
+romanov2017,Npvf,Npvf,HYPR,NA,NA,NA,NA,HYPR-Npvf
+romanov2017,oligos,oligos,HYPR,NA,NA,NA,NA,HYPR-oligos
+romanov2017,Oxytocin_1,Oxytocin 1,HYPR,NA,NA,NA,NA,HYPR-Oxytocin 1
+romanov2017,Oxytocin_2,Oxytocin 2,HYPR,NA,NA,NA,NA,HYPR-Oxytocin 2
+romanov2017,Oxytocin_3,Oxytocin 3,HYPR,NA,NA,NA,NA,HYPR-Oxytocin 3
+romanov2017,Oxytocin_4,Oxytocin 4,HYPR,NA,NA,NA,NA,HYPR-Oxytocin 4
+romanov2017,Pmch,Pmch,HYPR,NA,NA,NA,NA,HYPR-Pmch
+romanov2017,Sst_1_low,Sst 1 low,HYPR,NA,NA,NA,NA,HYPR-Sst 1 low
+romanov2017,Sst_2_high,Sst 2 high,HYPR,NA,NA,NA,NA,HYPR-Sst 2 high
+romanov2017,Sst_3_medium,Sst 3 medium,HYPR,NA,NA,NA,NA,HYPR-Sst 3 medium
+romanov2017,Trh_1_low,Trh 1 low,HYPR,NA,NA,NA,NA,HYPR-Trh 1 low
+romanov2017,Trh_2_medium,Trh 2 medium,HYPR,NA,NA,NA,NA,HYPR-Trh 2 medium
+romanov2017,Trh_3_high,Trh 3 high,HYPR,NA,NA,NA,NA,HYPR-Trh 3 high
+romanov2017,Vglut2_11,Vglut2 11,HYPR,NA,NA,NA,NA,HYPR-Vglut2 11
+romanov2017,Vglut2_12_Mgat4b,Vglut2 12 Mgat4b,HYPR,NA,NA,NA,NA,HYPR-Vglut2 12 Mgat4b
+romanov2017,Vglut2_13Ninl_Rfx5_Zfp346,Vglut2 13Ninl Rfx5 Zfp346,HYPR,NA,NA,NA,NA,HYPR-Vglut2 13Ninl Rfx5 Zfp346
+romanov2017,Vglut2_14_Col9a2,Vglut2 14 Col9a2,HYPR,NA,NA,NA,NA,HYPR-Vglut2 14 Col9a2
+romanov2017,Vglut2_15_Hcn1_6430411K18Rik,Vglut2 15 Hcn1 6430411K18Rik,HYPR,NA,NA,NA,NA,HYPR-Vglut2 15 Hcn1 6430411K18Rik
+romanov2017,Vglut2_2_Crhpos_neg,Vglut2 2 Crhpos neg,HYPR,NA,NA,NA,NA,HYPR-Vglut2 2 Crhpos neg
+romanov2017,Vglut2_3_Crhnegpos_neg_low,Vglut2 3 Crhnegpos neg low,HYPR,NA,NA,NA,NA,HYPR-Vglut2 3 Crhnegpos neg low
+romanov2017,Vglut2_4,Vglut2 4,HYPR,NA,NA,NA,NA,HYPR-Vglut2 4
+romanov2017,Vglut2_6_Prmt8_Ugdh,Vglut2 6 Prmt8 Ugdh,HYPR,NA,NA,NA,NA,HYPR-Vglut2 6 Prmt8 Ugdh
+romanov2017,Vglut2_7_Pgam_Snx12,Vglut2 7 Pgam Snx12,HYPR,NA,NA,NA,NA,HYPR-Vglut2 7 Pgam Snx12
+romanov2017,Vglut2_8,Vglut2 8,HYPR,NA,NA,NA,NA,HYPR-Vglut2 8
+romanov2017,Vglut2_9_Gpr149,Vglut2 9 Gpr149,HYPR,NA,NA,NA,NA,HYPR-Vglut2 9 Gpr149
+romanov2017,vsm,vsm,HYPR,NA,NA,NA,NA,HYPR-vsm

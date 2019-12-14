@@ -106,7 +106,7 @@ plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
 
 
 
-# ====================== MOUSEBRAIN PLOT ==================== #
+# ====================== ES dendrogram ==================== #
 
 plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_prioritized=F, circular) {
   
@@ -173,7 +173,8 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_pri
                     show.legend=F)
     }
     p <- p + geom_node_text(aes(filter=(flag_prioritized==TRUE), # leaf node labels, prioritized cell-types
-                       color=!!sym_var.node_color, label=label,
+                       color=label, # *ONLY FOR CIRCULAR*: color by 'annotations_highlight' [THESIS VERSION: color=!!sym_var.node_color]
+                       label=label,
                        x=x*1.05, y=y*1.05,
                        angle = -((-node_angle(x, y)+90)%%180)+90),
                     hjust='outward',
@@ -185,7 +186,7 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_pri
     )
     p <- p + theme_graph(base_family="Helvetica")
     p <- p + theme(plot.margin = unit(c(3,3,3,3), "cm")) # (t, r, b, l) extra margins
-  } else {
+  } else { # LINEAR
     # p <- p + geom_edge_elbow2(aes(y=node.height, color=!!sym_var.node_color_edge_elbow2)) # gives correct height if 'height' is not set in ggraph
     if (!label_only_prioritized) {
       p <- p + geom_node_text(aes(filter=((leaf==TRUE) & (flag_prioritized!=TRUE)), # leaf node labels
@@ -224,7 +225,12 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_pri
     p  <- p  + theme(plot.margin = unit(c(1,1,4,1), "cm")) # (t, r, b, l) widen bottom margin
   }
   ### Add points (after drawing edges)
-  p <- p + geom_node_point(aes(filter=((flag_prioritized==TRUE) & (leaf==TRUE)), color=label), size=1) # color prioritized annotation leaf nodes points
+  if (circular) { # use 'annotations_highlight' color
+    p <- p + geom_node_point(aes(filter=((flag_prioritized==TRUE) & (leaf==TRUE)), color=label), size=1) # color prioritized annotation leaf nodes points
+  } else { # use red color
+    p <- p + geom_node_point(aes(filter=((flag_prioritized==TRUE) & (leaf==TRUE))), color="red", size=1) # color prioritized annotation leaf nodes points
+  }
+  
   ### Guides
   p <- p + 
     ### Color nodes points by main figure colors

@@ -35,12 +35,12 @@ setwd(here("src/publication"))
 # filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
 
 ### Mousebrain
-# dataset_prefix <- "mousebrain"
-# filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+dataset_prefix <- "mousebrain"
+filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 ### Campbell
-dataset_prefix <- "campbell2017_lvl2"
-filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell2017_lvl2")
+# dataset_prefix <- "campbell2017_lvl2"
+# filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell2017_lvl2")
 
 
 
@@ -53,7 +53,7 @@ df.metadata <- get_metadata(dataset_prefix)
 
 ### Annotation ESmu
 # file.es <- here(sprintf("data/genes_cell_type_specific/%s.mean.csv.gz", dataset_prefix))
-file.es <- here(sprintf("out/es/%s.mean.csv.gz", dataset_prefix)) # New ESmu values
+file.es <- here(sprintf("out/es/%s.mu.csv.gz", dataset_prefix)) # New ESmu values
 df.es <- read_csv(file.es) # genes x cell-types
 
 # ============================ Format annotation names =============================== #
@@ -75,7 +75,8 @@ cormat.es <- cor(df.es %>% select(-gene), method="pearson")
 
 ### Compute distances and hierarchical clustering
 # dd.eucledian <- dist(t(df.es %>% select(-gene)), method = "euclidean") # computes distances between the rows of a data matrix
-dd.corr <- as.dist(1-cormat.es)
+dd.corr <- as.dist(1-cormat.es) # the distance lies between 0 and 2. This is the easiest to interpret since anything *anti-correlated* will have dist>1.
+# dd.corr <- as.dist((1-cormat.es)/2) # the distance lies between 0 and 1
 hc <- hclust(dd.corr, method = "average") # Hierarchical clustering 
 # single linkage = nearest neighbour. 
 # complete linkage = farthest neighbour
@@ -107,7 +108,8 @@ ggsave(plot=p.circular, filename=file.out, width=6, height=6)
 ### 'Linear'
 p.linear <- plot_es_dendrogram(dend, df.metadata, dataset_prefix, circular=FALSE)
 file.out <- sprintf("figs/fig_clustering.%s.dendrogram.linear.pdf", dataset_prefix)
-ggsave(plot=p.linear, filename=file.out, width=9, height=4)
+# ggsave(plot=p.linear, filename=file.out, width=9, height=4)
+ggsave(plot=p.linear, filename=file.out, width=12, height=5)
 
 # if (dataset_prefix == "mousebrain") {
 #   p <- p + theme(plot.margin = unit(c(1,1,2,1), "cm")) # (t, r, b, l) widen bottom margin

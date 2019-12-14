@@ -45,12 +45,13 @@ setwd(here("src/publication"))
 
 ### Read LDSC results
 file.results <- here("results/cellect_ldsc/prioritization.csv")
-# file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
 df.ldsc_cts <- read_csv(file.results)
-
-
 df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
 df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "mousebrain")
+
+# pvals.bh <- p.adjust(df.ldsc_cts %>% filter(gwas =="BMI_UKBB_Loh2018") %>% pull(p.value), method="BH")
+# sum(pvals.bh < 0.05)
+
 
 # ======================================================================= #
 # ========================= LOAD CELL-TYPE METADATA ===================== #
@@ -91,16 +92,15 @@ df.plot <- df.ldsc_cts %>% filter(gwas == "BMI_UKBB_Loh2018")  # filter BMI resu
 ### Add pvalue
 df.plot <- df.plot %>% mutate(p.value.mlog10 = -log10(p.value))
 
-### Rename
+### Rename region
 df.plot <- df.plot %>% mutate(Region = case_when(
+  annotation == "DEINH3" ~ "Subthalamus", # Subthalamic nucleus
+  Region %in% c("Pons", "Medulla") ~ "Hindbrain",
   Region == "Midbrain dorsal" ~ "Midbrain",
   Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
   Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
   TRUE ~ as.character(Region))
 )
-
-
-colormap.region <- get_color_mapping.mb.region()
 
 ### Get tax text
 df.tax_text_position <- get_celltype_taxonomy_text_position.mb(df.metadata, df.plot)
@@ -111,7 +111,7 @@ p.main <- get_celltype_priori_base_tax_plot.mb(df.plot, df.tax_text_position)
 p.main <- p.main + geom_point(data=df.plot, aes(x=annotation, y=-log10(p.value)), color="gray")
 p.main <- p.main + geom_point(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region))
 p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5, show.legend=F)
-# p.main <- p.main + scale_color_manual(values=colormap.region)
+p.main <- p.main + scale_color_manual(values=get_color_mapping.mb.region())
 p.main <- p.main + theme(legend.position="bottom")
 p.main
 
@@ -126,7 +126,7 @@ ggsave(p.main, filename=file.out, width=9, height=8)
 set_multi_gwas_heatmap_plot(df.ldsc_cts)
 p.multi_gwas
 set_h2_barplot()
-
+# p.h2
 
 # ======================================================================= #
 # =================== COMBINE PLOTS: MAIN + HEATMAP =================== #

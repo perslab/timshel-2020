@@ -34,16 +34,19 @@ filter.gwas <- utils.get_gwas_ids_for_meta_analysis()
 dataset_prefix <- "mousebrain"
 
 ### Load LDSC results
-file.data <- here("results", sprintf("prioritization_celltypes--%s.multi_gwas.csv.gz", dataset_prefix))
+file.data <- here("results/cellect_ldsc/prioritization.csv")
+# file.data <- here("results", sprintf("prioritization_celltypes--%s.multi_gwas.csv.gz", dataset_prefix))
 df <- suppressMessages(read_csv(file.data))
 df
+
+
 
 # ================================= FILTER ================================= #
 ### ALL GWAS - P-values filtered
 df.fdr <- df %>% 
   filter(annotation %in% filter.annotations) %>% 
   filter(gwas %in% filter.gwas) %>%
-  filter(p.value<0.05/265) # *OBS*: hardcoded number of cell-types
+  filter(pvalue<0.05/265) # *OBS*: hardcoded number of cell-types
 df.fdr  
 
 

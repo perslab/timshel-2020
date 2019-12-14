@@ -301,7 +301,7 @@ hs_add_gene_symbol_from_ensembl_ids <- function(df, colname_geneids_from="ensemb
   
   df <- as.data.frame(df) # convert to df to ensure the the below operations work.
   
-  file.mapping <- here("data/gene_annotations/GRCh38.ens_v90.gene_name_version2ensembl.txt.gz")
+  file.mapping <- here("data/gene_annotations/GRCh38.ens_v90.ensembl2gene_name_version.txt.gz")
   df.mapping <- suppressMessages(read_tsv(file.mapping))
   
   genes_mapped <- df.mapping$gene_name_optimal[match(df[,colname_geneids_from], df.mapping$ensembl_gene_id)]

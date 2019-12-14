@@ -26,13 +26,23 @@ get_metadata <- function(dataset_prefix) {
   ### DESCRIPTION: function to load expression meta-data
   
   if (dataset_prefix == "campbell2017_lvl1") {
+    # stop(sprintf("dataset_prefix '%s' is no longer supported (December 2019).", dataset_prefix))
     file.metadata <- here("/data/expression/campbell2017/campbell2017_lvl1.cell_type_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl1)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
   } else if (dataset_prefix == "campbell2017_lvl2") {
+    # stop(sprintf("dataset_prefix '%s' is no longer supported (December 2019).", dataset_prefix))
     file.metadata <- here("/data/expression/campbell2017/campbell2017_lvl2.cell_type_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata)) %>% rename(annotation = cell_type_all_lvl2)
     df.metadata <- df.metadata %>% mutate(color_by_variable = taxonomy_lvl1)
+  } else if (dataset_prefix == "hypothalamus") {
+    file.metadata <- here("data/expression/hypothalamus/hypothalamus_metadata.csv")
+    df.metadata <- suppressMessages(read_csv(file.metadata))
+    file.tax <- here("data/expression/hypothalamus/hypothalamus_taxonomy.csv")
+    df.tax <- suppressMessages(read_csv(file.tax))
+    df.metadata <- df.metadata %>% left_join(df.tax, by="taxonomy_lvl2")
+    # df.metadata <- df.metadata %>% select(annotation, specificity_id, annotation_prefix, annotation_fmt, annotation_fmt_prefix)
+    df.metadata <- df.metadata %>% mutate(color_by_variable = annotation_prefix)
   } else if (dataset_prefix == "mousebrain") {
     cols_metadata_keep <- c("ClusterName",
                             "Class",

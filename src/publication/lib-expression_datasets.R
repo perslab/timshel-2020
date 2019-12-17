@@ -18,6 +18,35 @@ library(tidyverse)
 library(here)
 
 
+
+# ======================================================================= #
+# ================================= MISC ================================ #
+# ======================================================================= #
+
+get_scrna_seq_dataset_prefixes <- function(selection=c("all", "brain", "hypo")) {
+  selection <- match.arg(selection)
+  ### These names should match the prefixes in /out/es/*es_obj.RData for the "final publication" datasets
+  data_prefixes <- c("campbell2017_lvl2",
+                     "chen2017",
+                     "kimVMH2019_smartseq",
+                     "mikkelsen2019",
+                     "moffitt2018",
+                     "mousebrain",
+                     "romanov2017",
+                     "tabula_muris")
+  if (selection == "all") {
+    # do nothing
+  } else if (selection =="brain") {
+    data_prefixes <- data_prefixes[data_prefixes!="tabula_muris"]
+  } else if (selection =="hypo") {
+    data_prefixes <- data_prefixes[!data_prefixes %in% c("tabula_muris","mousebrain")]
+  }
+  message(sprintf("selection = %s; returning n=%s data prefixes", selection, length(data_prefixes)))
+  message(paste(data_prefixes, collapse=" | "))
+  return(data_prefixes)
+}
+
+
 # ======================================================================= #
 # ============================== READ METADATA =============================== #
 # ======================================================================= #
@@ -146,16 +175,61 @@ utils.rename_annotations.tabula_muris <- function(annotations, style, check_all_
 
 
 # ======================================================================= #
-# ========================= CAMPBELL RENAME FUNCTION ===================== #
+# ========================= HYPOTHALAMUS RENAME FUNCTION ===================== #
 # ======================================================================= #
 
+utils.rename_annotations.hypothalamus <- function(annotations, specificity_ids, check_all_matches=F) {
+  #' Function to rename hypothalamus dataset
+  #' 
+  #' This function is complicated by duplicated annotation names (`GABA1`, `GABA_10`, `GABA_8`, `GABA_9`)
+  #' That is why both a vector of annotations and specificity_ids must be given.
+  #' SEE utils.rename_annotations.tabula_muris() for other details
 
-utils.rename_annotations.campbell2015 <- function(annotation_ids, style, check_all_matches=F) {
-  stop("NOT IMPLEMENTED YET")
+  ### TMP debug
+  # specificity_ids <- df$specificity_id
+  # annotations <- df$annotation
+  # check_all_matches <- TRUE
+  
+  ### Load hypothalamus metadata
+  df.metadata <- get_metadata("hypothalamus")
+  df.metadata <- df.metadata %>% mutate(annotation_uniq = paste0(specificity_id, "__", annotation)) # needed because some hyp annotations are duplicated across datasets
+  
+  ### Make unique names
+  annotation_uniq = paste0(specificity_ids, "__", annotations)
+
+  ### Check that all are present in database
+  bool.matches <- annotation_uniq %in% df.metadata$annotation_uniq
+  if (check_all_matches && !all(bool.matches)) {
+    annotations_not_found <- annotation_uniq[!bool.matches]
+    stop(sprintf("Some annotation_uniq not found: [%s]", paste(annotations_not_found, collapse=",")))
+  }
+  
+  ### Format output [legacy from TM function]
+  df.out_fmt <- df.metadata %>% filter(annotation_uniq %in% annotation_uniq) %>% mutate(fmt=annotation_fmt) # annotation_fmt is the unique and formatted name in hyp meta-data
+  
+  ### Join renamed with input
+  df.all <- tibble(annotation_uniq=annotation_uniq, annotation=annotations) # this ensures that the return value has the same length as the input
+  df.all <- df.all %>% left_join(df.out_fmt %>% select(-annotation), by="annotation_uniq") # select(-annotation) to avoid annotation.x and annotation.y
+  ### Add fmt column for non-matches
+  df.all <- df.all %>% mutate(fmt=if_else(is.na(fmt), annotation, fmt)) # *OBS*: notice we use annotation and not annotation_uniq to ensure non-mapped annotations does not get changed in the output
+  # ^ non-matches have NA values in the 'fmt' column. we replace na with the input annotation name
+  annotations_fmt <- df.all %>% pull(fmt) # returns vector
+  return(annotations_fmt)
 }
 
+### OLD MANUAL METHOD - WORKS [OK DELETE]
+# ### Load hypothalamus metadata with 'clean names'
+# df.metadata.hyp <- get_metadata("hypothalamus")
+# df.metadata.hyp <- df.metadata.hyp %>% mutate(annotation_uniq = paste0(specificity_id, "__", annotation)) # needed because some hyp annotations are duplicated across datasets
+# 
+# ### Map hypothalamus annotations to 'clean names'
+# df <- df %>% mutate(annotation_uniq = paste0(specificity_id, "__", annotation))
+# df <- df %>% mutate(annotation_fmt = df.metadata.hyp$annotation_fmt[match(annotation_uniq, df.metadata.hyp$annotation_uniq)]) # mousebrain annotation will get NA values
+# df <- df %>% mutate(annotation_fmt = if_else(is.na(annotation_fmt), annotation, annotation_fmt)) # replace NA with original value (cell_type)
+
+
 # ======================================================================= #
-# ========================= MOUSEBRAIN FUNCTION ===================== #
+# ========================= MOUSEBRAIN HYP FUNCTION ===================== #
 # ======================================================================= #
 
 

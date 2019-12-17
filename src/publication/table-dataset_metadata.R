@@ -43,10 +43,14 @@ for (dataset_prefix in dataset_prefixes) {
     df.metadata <- df.metadata %>% mutate(cell_type = stringr::str_replace_all(cell_type, pattern="_", replacement=" "))
   }
   if (dataset_prefix == "hypothalamus") {
-    file.n_es <- here("src/publication/tables", paste0("table-annotation_summary.", get_scrna_seq_dataset_prefixes("hypo"), ".csv"))
-    df.n_es <- file.n_es %>% map_df(read_csv) %>% bind_rows()
-    df.metadata <- df.metadata %>% left_join(df.n_es, by="annotation")
-    df.metadata <- df.metadata %>% arrange(annotation_prefix, annotation) # sort | *WITH annotation_prefix*
+    specificity_ids_tmp <- get_scrna_seq_dataset_prefixes("hypo")
+    file.n_es <- here("src/publication/tables", paste0("table-annotation_summary.", specificity_ids_tmp, ".csv"))
+    list.df.n_es <- file.n_es %>% map(read_csv)
+    names(list.df.n_es) <- specificity_ids_tmp
+    df.n_es <- bind_rows(list.df.n_es, .id="specificity_id")
+    df.n_es <- df.n_es %>% mutate(annotation_fmt = utils.rename_annotations.hypothalamus(annotation, specificity_id, check_all_matches=F)) # check_all_matches False because MB anno included
+    df.metadata <- df.metadata %>% left_join(df.n_es %>% select(-annotation, -specificity_id), by="annotation_fmt")
+    df.metadata <- df.metadata %>% arrange(annotation_prefix, annotation_fmt) # sort | *WITH annotation_prefix*
   } else {
     file.n_es <- here("src/publication/tables", sprintf("table-annotation_summary.%s.csv", dataset_prefix))
     df.n_es <- read_csv(file.n_es)

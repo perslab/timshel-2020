@@ -52,12 +52,7 @@ df <- df %>% mutate(dataset = case_when(
   specificity_id=="mousebrain"~"MSN",
   specificity_id %in% get_scrna_seq_dataset_prefixes("hypo") ~"Hypothalamus"))
 
-### Load hypothalamus metadata with 'clean names'
-df.metadata.hyp <- get_metadata("hypothalamus")
-
-### Map hypothalamus annotations to 'clean names'
-df <- df %>% mutate(annotation_fmt = df.metadata.hyp$annotation_fmt[match(annotation, df.metadata.hyp$annotation)]) # mousebrain annotation will get NA values
-df <- df %>% mutate(annotation_fmt = if_else(is.na(annotation_fmt), annotation, annotation_fmt)) # replace NA with original value (cell_type)
+df <- df %>% mutate(annotation_fmt = utils.rename_annotations.hypothalamus(annotation, specificity_id, check_all_matches=F)) # check_all_matches False because MB anno included
 
 # ======================================================================= #
 # ================================= EXPORT ============================== #

@@ -28,9 +28,7 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 
-dataset_prefixes <- c("tabula_muris", "mousebrain", "campbell2017_lvl2",
-                      "moffitt2018", "romanov2017", "chen2017", "mikkelsen2019")
-# dataset_prefixes <- c("mousebrain")
+dataset_prefixes <- c("tabula_muris", "mousebrain", "hypothalamus")
 filter.gwas_bmi <- "BMI_UKBB_Loh2018"
 filter.gwas <- utils.get_gwas_ids_for_meta_analysis()
 
@@ -43,7 +41,11 @@ for (dataset_prefix in dataset_prefixes) {
   # gwas               estimate     std.error p.value annotation       
   # 1 AD_Jansen2019 0.00000000395 0.00000000218  0.0348 n03              
   # 2 AD_Jansen2019 0.00000000625 0.00000000354  0.0389 s15.Microglia 
-  df <- df %>% filter(specificity_id == dataset_prefix)
+  if (dataset_prefix == "hypothalamus") {
+    df <- df %>% filter(specificity_id %in% get_scrna_seq_dataset_prefixes("hypo"))
+  } else {
+    df <- df %>% filter(specificity_id == dataset_prefix)
+  }
   # =================== BMI GWAS LDSC CTS ================== #
   df.bmi <- df %>% filter(gwas %in% filter.gwas_bmi) %>% select(-gwas)
   ### Add fdr_significant flag for BMI
@@ -63,7 +65,7 @@ for (dataset_prefix in dataset_prefixes) {
   df.other_gwas <- df.other_gwas %>% mutate(gwas = recode_factor(gwas, !!!rename_vector))
   ### spread
   df.other_gwas.spread <- df.other_gwas %>% 
-    select(gwas, p.value, annotation) %>%
+    select(gwas, p.value, annotation, specificity_id) %>%
     spread(key="gwas", value="p.value")
   
   if (dataset_prefix=="mousebrain") { # only do h2 estimates for mousebrain
@@ -90,13 +92,21 @@ for (dataset_prefix in dataset_prefixes) {
     df.h2 <- df.h2 %>% select(!!!rename_select_vector)
     df.h2 <- df.h2 %>% filter(gwas %in% filter.gwas_bmi) %>% select(-gwas)
     df.join <- df.bmi %>% left_join(df.h2, by="annotation") # *TMP disabled 2019-11*
+    df.join <- df.join %>% mutate(annotation_fmt = annotation) # needed to match TM/Hypo format
+  } else if (dataset_prefix == "hypothalamus") {
+    df.join <- df.bmi %>% mutate(annotation_fmt = utils.rename_annotations.hypothalamus(annotation, specificity_id, check_all_matches=T))
+    df.other_gwas.spread <- df.other_gwas.spread %>% mutate(annotation = utils.rename_annotations.hypothalamus(annotation, specificity_id, check_all_matches=T))
+  } else if (dataset_prefix == "tabula_muris") {
+    df.join <- df.bmi %>% mutate(annotation_fmt = utils.rename_annotations.tabula_muris(annotation, style="tissue - celltype", check_all_matches=T))
   } else {
-    df.join <- df.bmi
+    stop("Internal error")
   }
+  
+    
   # =================== COMBINE ================== #
-  df.join <- df.join %>% left_join(df.other_gwas.spread, by="annotation")
+  df.join <- df.join %>% left_join(df.other_gwas.spread %>% select(-specificity_id), by=c("annotation_fmt"="annotation"))
   df.join <- df.join %>% arrange(p.value) # sort by BMI p-value
-  df.join <- df.join %>% select("Annotation"=annotation, 
+  df.join <- df.join %>% select("Annotation"=annotation_fmt, 
                                 "Coefficient p-value"=p.value, 
                                 "Coefficient"=estimate, 
                                 "Coefficient std error"=std.error, 

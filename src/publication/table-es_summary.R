@@ -71,7 +71,7 @@ wrapper_n_es_genes_summary_stats <- function(dataset_prefix) {
   ### Rename
   # vec.rename <- c(DET="tstat", GES="ges", EP="specificity", NSI="si", ESmu="es_mu")
   vec.rename <- c(ESmu="es_mu")
-  df.n_es <- df.n_es %>% rename(!!vec.rename)
+  df.n_es <- df.n_es %>% rename(!!!vec.rename)
   
   ### Get number of cells
   df.n_cells <- es_obj[["ncells"]] # 1 x n_annotations

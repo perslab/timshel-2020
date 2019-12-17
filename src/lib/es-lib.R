@@ -21,7 +21,6 @@ library(tidyverse)
 ######################################################################################################
 
 ### general
-# - consistent naming: find/replace all ES/es with es.
 # - make into a package with roxygen documentation.
 
 ### es_obj

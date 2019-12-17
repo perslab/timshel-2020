@@ -40,6 +40,8 @@ list.dfs <- lapply(file.path(dir.data, files_keep), read_csv)
 names(list.dfs) <- names(files_keep)
 df <- bind_rows(list.dfs, .id="specificity_id")
 
+### Rename 'cell-type' to annotation
+df <- df %>% rename(annotation = cell_type)
 
 # ======================================================================= #
 # ================================= PROCESS ============================= #
@@ -54,15 +56,16 @@ df <- df %>% mutate(dataset = case_when(
 df.metadata.hyp <- get_metadata("hypothalamus")
 
 ### Map hypothalamus annotations to 'clean names'
-df <- df %>% mutate(annotation_fmt = df.metadata.hyp$annotation_fmt[match(cell_type, df.metadata.hyp$annotation)]) # mousebrain annotation will get NA values
-df <- df %>% mutate(annotation_fmt = if_else(is.na(annotation_fmt), cell_type, annotation_fmt)) # replace NA with original value (cell_type)
+df <- df %>% mutate(annotation_fmt = df.metadata.hyp$annotation_fmt[match(annotation, df.metadata.hyp$annotation)]) # mousebrain annotation will get NA values
+df <- df %>% mutate(annotation_fmt = if_else(is.na(annotation_fmt), annotation, annotation_fmt)) # replace NA with original value (cell_type)
 
 # ======================================================================= #
 # ================================= EXPORT ============================== #
 # ======================================================================= #
   
 
-df.export <- df %>% select(Dataset=dataset, Annotation=annotation_fmt, `Enrichment P-value`=p.value)
+# df.export <- df %>% select(Dataset=dataset, Annotation=annotation_fmt, `Enrichment P-value`=p.value)
+df.export <- df %>% select(dataset, annotation, annotation_fmt, p.value)
 
 file.out <- here("src/publication/tables/table-es_enrichment.combined.csv")
 df.export %>% write_csv(file.out)

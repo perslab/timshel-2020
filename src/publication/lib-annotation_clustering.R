@@ -20,13 +20,14 @@ library(RColorBrewer)
 # ====================== [gggraph] plot dendrogram ==================== #
 # ======================================================================= #
 
-# ============= MB+CAMPBELL PLOT ==================== #
+# ============= MULTI-DATASET PLOT ==================== #
 # SIMILAR TO plot_es_dendrogram() but with the approximate following changes
+# ---> color by "dataset" variable
 # - no "flag_priorized"  and highligthig
 # - increased text size
 # - added color label
 # base_family = 'Helvetica' to avoid ggsave problem
-plot_es_dendrogram.mb_campbell <- function(dend, df.metadata, circular) {
+plot_es_dendrogram.multi_dataset <- function(dend, df.metadata, circular) {
   
   # ====================== Get dataset-specific params (color mappings) ==================== #
   sym_var.node_color <- sym("dataset")

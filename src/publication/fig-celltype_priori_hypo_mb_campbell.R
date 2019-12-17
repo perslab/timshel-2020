@@ -227,7 +227,7 @@ order.annotations <- str_split(order.annotations, pattern="\\.") %>% purrr::map_
 df.join <- df.join %>% mutate(annotation_clean = factor(annotation_clean, levels=order.annotations))
 
 
-### Colormap (*SHOULD BE THE SAME AS IN lib-annotation_clustering plot_es_dendrogram.mb_campbell()*)
+### Colormap (*MUST BE THE SAME AS IN lib-annotation_clustering plot_es_dendrogram.mb_campbell()*)
 dataset_names <- sort(unique(df.join$dataset))
 colormap.dataset <- brewer.pal(name="Set1", n=9) # n=9 max for Set1 | "Set2"/"Dark2" ok for colorblind
 colormap.dataset <- colormap.dataset[1:length(dataset_names)] # select the colors we need

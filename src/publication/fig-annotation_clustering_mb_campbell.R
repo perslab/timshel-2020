@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-# AIM: Expression specificity dendrogram for mousebrain hypothalamus
+# AIM: Expression specificity dendrogram for mousebrain and campbell
 
 ### OUTPUT: 
 # ....
@@ -102,14 +102,14 @@ get_mousebrain_campbell_integrated_dendrogram <- function(save_fig) {
   # ======================================================================= #
   
   ### 'Linear'
-  p.linear <- plot_es_dendrogram.mb_campbell(dend, df.metadata.join, circular=FALSE)
+  p.linear <- plot_es_dendrogram.multi_dataset(dend, df.metadata.join, circular=FALSE)
   if (save_fig) {
     file.out <- sprintf("figs/fig_clustering.%s.dendrogram.linear.pdf", dataset_prefix="integrated_campbell_mousebrain")
     ggsave(plot=p.linear, filename=file.out, width=9, height=4)
   }
   
   # ### Circular
-  # p.circular <- plot_es_dendrogram.mb_campbell(dend, df.metadata.join, circular=TRUE)
+  # p.circular <- plot_es_dendrogram.multi_dataset(dend, df.metadata.join, circular=TRUE)
   # file.out <- sprintf("figs/fig_%s.dendrogram.circular.pdf", dataset_prefix="integrated_campbell_mousebrain")
   # ggsave(plot=p.circular, filename=file.out, width=6, height=6)
   

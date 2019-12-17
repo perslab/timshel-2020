@@ -43,12 +43,12 @@ for (dataset_prefix in dataset_prefixes) {
     df.metadata <- df.metadata %>% mutate(cell_type = stringr::str_replace_all(cell_type, pattern="_", replacement=" "))
   }
   if (dataset_prefix == "hypothalamus") {
-    file.n_es <- here("src/publication/tables", paste0("table-n_es_genes.", get_scrna_seq_dataset_prefixes("hypo"), ".csv"))
+    file.n_es <- here("src/publication/tables", paste0("table-annotation_summary.", get_scrna_seq_dataset_prefixes("hypo"), ".csv"))
     df.n_es <- file.n_es %>% map_df(read_csv) %>% bind_rows()
     df.metadata <- df.metadata %>% left_join(df.n_es, by="annotation")
     df.metadata <- df.metadata %>% arrange(annotation_prefix, annotation) # sort | *WITH annotation_prefix*
   } else {
-    file.n_es <- here("src/publication/tables", sprintf("table-n_es_genes.%s.csv", dataset_prefix))
+    file.n_es <- here("src/publication/tables", sprintf("table-annotation_summary.%s.csv", dataset_prefix))
     df.n_es <- read_csv(file.n_es)
     df.metadata <- df.metadata %>% left_join(df.n_es, by="annotation")
     df.metadata <- df.metadata %>% arrange(annotation) # sort

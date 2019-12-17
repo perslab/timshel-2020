@@ -281,7 +281,7 @@ df.bio_modules <- df.bio_modules %>% full_join(df.ldsc_cts %>% select(module_id,
 ### add meta data (e.g. n_cells)
 df.bio_modules <- df.bio_modules %>% left_join(df.module_origin_metadata, by="module_origin")
 ### Module size filter
-df.bio_modules <- df.bio_modules %>% filter(n_genes_module >= 15 & n_genes_module <= 500) # *OBS*
+df.bio_modules <- df.bio_modules %>% filter(n_genes_module >= 10 & n_genes_module <= 500) # *OBS* ***** SIZE FILTER ********
 ### Add FDR-flag
 df.bio_modules <- df.bio_modules %>% mutate(
   module_ldsc_pval_adj = p.adjust(module_ldsc_pval, method="bonferroni"),

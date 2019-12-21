@@ -111,7 +111,7 @@ get_es.annotation_centric <- function(es_obj, annotation) {
   df.es <- df.es %>% 
     mutate(
       expr_mean = es_obj$data$mean[[annotation]],
-      es_mu = es_obj$es_meta$mean[[annotation]] 
+      es_mu = es_obj$es_meta$mu[[annotation]] 
     )
   
   ### Wrangle data
@@ -184,7 +184,8 @@ plot_es.annotation_centric <- function(df.es, genes_highlight) {
 }
 
 .check_valid_es_metrics <- function(es_metric) {
-  es_metrics_allowed <- c("expr_mean", "es_mu", "tstat", "ges", "si", "specificity")
+  # es_metrics_allowed <- c("expr_mean", "es_mu", "tstat", "ges", "si", "specificity")
+  es_metrics_allowed <- c("expr_mean", "es_mu", "DET", "GES", "NSI", "EP")
   if (!any(es_metric %in% es_metrics_allowed)) {
     stop(sprintf("Argument for es_metric=%s did not match es_metrics_allowed: [%s]", es_metric, paste(es_metrics_allowed, collapse=", ")))
   }
@@ -210,7 +211,7 @@ get_es.gene_centric.all_es_metrics <- function(es_obj, genes_select) {
   for (annotation in es_obj$annotations) {
     df.es <- es_obj[["group_by_annotation.es"]][[annotation]] %>% slice(genes_match.idx) # df | ges, si, tstat, specificity
     expr_mean <- es_obj$data$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | mean expression
-    es_mean <- es_obj$es_meta$mean %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | es_mu
+    es_mean <- es_obj$es_meta$mu %>% slice(genes_match.idx) %>% pull(!!sym(annotation)) # vector | es_mu
     list.es[[annotation]] <- df.es %>% mutate(
       expr_mean=expr_mean,
       es_mean=es_mean,
@@ -252,7 +253,7 @@ get_es.gene_centric.single_es_metric <- function(es_obj, genes_select, es_metric
   
   ### Get data
   if (es_metric == "es_mu") {
-    df.es <- es_mean <- es_obj$es_meta$mean
+    df.es <- es_mean <- es_obj$es_meta$mu
   } else if (es_metric == "expr_mean") {
     df.es <- es_obj$data$mean
   } else { # 'real' es metric
@@ -264,7 +265,7 @@ get_es.gene_centric.single_es_metric <- function(es_obj, genes_select, es_metric
     mutate(gene_name=names(genes_match.idx)) # add gene names
 
   ### OLD method | WORKS [SIMPLE] [but OK delete]
-  # df.es_mean <- es_obj$es_meta$mean %>% 
+  # df.es_mean <- es_obj$es_meta$mu %>% 
   #   mutate(gene=es_obj$genes) %>% 
   #   hs_add_gene_symbol_from_ensembl_ids(colname_geneids_from="gene", colname_geneids_to="gene_name") %>% # map gene
   #   select(gene_name, everything(), -gene)

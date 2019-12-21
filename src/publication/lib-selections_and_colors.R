@@ -37,8 +37,7 @@ get_prioritized_annotations_bmi <- function(dataset) {
   } else if (dataset == "tabula_muris") {
     annotations <- c("Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
   } else if (dataset == "hypothalamus") {
-    stop("Not yet implemented for hypothalamus")
-    annotations <- c("")
+    annotations <- c("POA-NEURO66","ARCME-NEURO29","LHA-NEURO20","POA-NEURO21")
     # } else if (dataset == "campbell2017_lvl2") {
     #   stop("Campbell not supported any more")
     #   annotations <- c("n29.Nr5a1-Adcyap1") # Cleaned name is n29.Nr5a1/Bdnf
@@ -131,11 +130,13 @@ get_color_mapping.prioritized_annotations_bmi <- function(dataset) {
     annotations <- c("Brain_Non-Myeloid.neuron"="#FF0000", 
                      "Brain_Non-Myeloid.oligodendrocyte_precursor_cell"="#FF0000")
   } else if (dataset == "hypothalamus") {
-    annotations <- c("n29.Nr5a1-Adcyap1"="#FF0000")
-    # i9_Gaba
-    # n29.Nr5a1-Adcyap1
-    # Glut_5
-    # e8_Cck_Ebf3
+    annotations.raw <- c("POA-NEURO66","ARCME-NEURO29","LHA-NEURO20","POA-NEURO21")
+    annotations <- rep("#FF0000", times=length(annotations.raw))
+    names(annotations) <- annotations.raw
+    # "i9_Gaba"
+    # "n29.Nr5a1-Adcyap1"
+    # "Glut_5"
+    # "e8_Cck_Ebf3"
   } else if (dataset == "campbell2017_lvl2") {
     stop("Campbell option no longer supported")
     annotations <- c("n29.Nr5a1-Adcyap1"="#FF0000") # Cleaned name is n29.Nr5a1/Bdnf

@@ -1,5 +1,6 @@
 ############### SYNOPSIS ###################
 # AIM: Expression specificity dendrogram for mousebrain and campbell
+# THIS SCRIPT IS NOW DEPRECATED.
 
 ### OUTPUT: 
 # ....

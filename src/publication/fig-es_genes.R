@@ -85,31 +85,33 @@ es_obj.mb <- es_obj
 load(here("out/es/tabula_muris.es_obj.RData"))
 es_obj.tm <- es_obj
 
-load(here("out/es/campbell2017_lvl2.es_obj.RData"))
-es_obj.arc <- es_obj
 
 
 # ======================================================================= #
-# ============================= CAMPBELL ================================ #
+# ======================= CAMPBELL n29.Nr5a1-Adcyap INSET =============== #
 # ======================================================================= #
-es_obj <- es_obj.arc
 
-annotations_highlight <- c("n29.Nr5a1-Adcyap1")
-names(annotations_highlight) <- "n29.Nr5a1/Bdnf"
-annotations_colormap <- c("n29.Nr5a1-Adcyap1"="black")
-length(annotations_colormap)
-
-genes_select <- c("CCKBR")
-df.es.gene <- get_es.gene_centric.single_es_metric(es_obj, genes_select=genes_select, es_metric="es_mu")
-p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
-                                           annotations_highlight=annotations_highlight,
-                                           annotations_colormap=annotations_colormap,
-                                           size.highlight.text=rel(3.5),
-                                           size.highlight.points=rel(2))
-p <- p + labs(y=expression(ES[mu]))
-p
-file.out <- "figs/fig_es.cambell.n29.pdf"
-ggsave(plot=p, filename=file.out, width=3, height=2)
+# load(here("out/es/campbell2017_lvl2.es_obj.RData"))
+# es_obj.arc <- es_obj
+# 
+# es_obj <- es_obj.arc
+# 
+# annotations_highlight <- c("n29.Nr5a1-Adcyap1")
+# names(annotations_highlight) <- "n29.Nr5a1/Bdnf"
+# annotations_colormap <- c("n29.Nr5a1-Adcyap1"="black")
+# length(annotations_colormap)
+# 
+# genes_select <- c("CCKBR")
+# df.es.gene <- get_es.gene_centric.single_es_metric(es_obj, genes_select=genes_select, es_metric="es_mu")
+# p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+#                                            annotations_highlight=annotations_highlight,
+#                                            annotations_colormap=annotations_colormap,
+#                                            size.highlight.text=rel(3.5),
+#                                            size.highlight.points=rel(2))
+# p <- p + labs(y=expression(ES[mu]))
+# p
+# file.out <- "figs/fig_es.cambell.n29.pdf"
+# ggsave(plot=p, filename=file.out, width=3, height=2)
 
 
 # ======================================================================= #
@@ -123,7 +125,20 @@ colormap.annotation <- get_color_mapping.prioritized_annotations_bmi(dataset="mo
 es_obj <- es_obj.mb
 
 
-### MAIN PLOT: ESmu
+### MAIN PLOT: ESmu [2019 rev]
+genes_select <- c("HTR2C", "LEPR")
+df.es.gene <- get_es.gene_centric.single_es_metric(es_obj, genes_select=genes_select, es_metric="es_mu")
+p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
+                                           annotations_highlight=annotations_highlight,
+                                           annotations_colormap=colormap.annotation,
+                                           size.highlight.text=rel(2.5),
+                                           size.highlight.points=rel(2))
+p <- p + labs(y=expression(ES[mu]))
+p
+file.out <- "figs/fig_es.main.mb.lepr_HTR2C.pdf"
+ggsave(plot=p, filename=file.out, width=8.5, height=5)
+
+### MAIN PLOT: ESmu [THESIS]
 genes_select <- c("POMC", "AGRP", "LEPR", "MC4R")
 # genes_select <- c("POMC", "AGRP", "LEPR", "MC4R", "CCK", "NTRK2")
 df.es.gene <- get_es.gene_centric.single_es_metric(es_obj, genes_select=genes_select, es_metric="es_mu")
@@ -309,11 +324,11 @@ ggsave(filename="figs/fig_es.mb.all_genes.pdf", plot=p, width=8.3*2, height=11.7
 
 
 list.es_metrics <- list(
-  "DET"="tstat", 
-  "GES"="ges", 
-  "NSI"="si", 
-  "EP"="specificity",
-  "ESmu"="es_mu", 
+  "DET"="DET", 
+  "GES"="GES", 
+  "NSI"="NSI", 
+  "EP"="EP",
+  "es_mu"="es_mu", 
   "log avg UMI\n(counts per 10,000)"="expr_mean")
 
 ### MOUSEBRAIN

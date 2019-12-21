@@ -27,21 +27,26 @@ library(RColorBrewer)
 # - increased text size
 # - added color label
 # base_family = 'Helvetica' to avoid ggsave problem
-plot_es_dendrogram.multi_dataset <- function(dend, df.metadata, circular) {
+plot_es_dendrogram.multi_dataset <- function(dend, df.metadata, circular, var_aes="dataset") {
+  
+  ### TMP debug
+  # df.metadata <- df.metadata.join
+  # circular=FALSE; var_aes="dataset"
   
   # ====================== Get dataset-specific params (color mappings) ==================== #
-  sym_var.node_color <- sym("dataset")
-  sym_var.node_color_edge_elbow2 <- sym("node.dataset")
+  sym_var.node_color <- sym(var_aes)
+  sym_var.node_color_edge_elbow2 <- sym(sprintf("node.%s", var_aes))
   n_color_categories <- n_distinct(df.metadata %>% pull(!!sym_var.node_color))
   
   ### Create color mapping for 'all nodes'
   # [only needed because we manually want to set colors of annotations, and geom_node_text() and geom_node_point() use the same 'color scale']
   # colormap.nodes <- scales::hue_pal()(n_distinct(df.metadata %>% pull(!!sym_var.node_color))) # these are default ggplot colors
-  colormap.nodes <- brewer.pal(name="Set1", n=9) # n=9 max for Set1 | "Set2"/"Dark2" ok for colorblind
-  if (n_color_categories < length(n_color_categories)) {
-    stop(sprintf("Too few colors in current colormap for n=%s categories", n_color_categories))
-  }
-  colormap.nodes <- colormap.nodes[1:n_color_categories] # select the colors we need
+  # colormap.nodes <- brewer.pal(name="Set1", n=9) # n=9 max for Set1 | "Set2"/"Dark2" ok for colorblind
+  colormap.nodes <- colorspace::qualitative_hcl(n=n_color_categories, palette = "Dark 3")
+  # if (n_color_categories < length(colormap.nodes)) { # only needed if using brewer.pal. colorspace::qualitative_hcl does not have a max
+  #   stop(sprintf("Too few colors in current colormap for n=%s categories", n_color_categories))
+  # }
+  # colormap.nodes <- colormap.nodes[1:n_color_categories] # select the colors we need |  only needed if using brewer.pal
   names(colormap.nodes) <- sort(unique(df.metadata %>% pull(!!sym_var.node_color))) # we sort to ensure consistency of results
 
   # ====================== make tidygraph ==================== #
@@ -97,6 +102,7 @@ plot_es_dendrogram.multi_dataset <- function(dend, df.metadata, circular) {
     ### Color nodes points by main figure colors
     ### Apparently, geom_node_text() and geom_node_point() use the same scale_color_*, so the argument to values=X need to contain color mapping for both coloring
     scale_color_manual(values=colormap.nodes) + 
+    scale_edge_color_manual(values=colormap.nodes, na.value = "grey50") + # *NEW 191217 FOR UPDATED GGRAPH VERSION!!!?*
     guides(edge_color="none", node.color="none") # node_color="none", node_color=guide_legend()
   ### Legend
   p <- p + 
@@ -109,7 +115,7 @@ plot_es_dendrogram.multi_dataset <- function(dend, df.metadata, circular) {
 
 # ====================== ES dendrogram ==================== #
 
-plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_prioritized=F, circular) {
+plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_prioritized=F, circular, show_legend=F) {
   
   # ====================== Get dataset-specific params (color mappings) ==================== #
   if (dataset_prefix == "mousebrain") {
@@ -122,11 +128,16 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_pri
     colormap.annotations_highlight <- get_color_mapping.prioritized_annotations_bmi(dataset="tabula_muris")
     sym_var.node_color <- sym("tissue")
     sym_var.node_color_edge_elbow2 <- sym("node.tissue")
-  } else if (dataset_prefix == "campbell2017_lvl2") {
-    filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell2017_lvl2")
-    colormap.annotations_highlight <- get_color_mapping.prioritized_annotations_bmi(dataset="campbell2017_lvl2")
-    sym_var.node_color <- sym("taxonomy_lvl2")
-    sym_var.node_color_edge_elbow2 <- sym("node.taxonomy_lvl2")
+  } else if (dataset_prefix == "hypothalamus") {
+    filter.annotations <- get_prioritized_annotations_bmi(dataset="hypothalamus")
+    colormap.annotations_highlight <- get_color_mapping.prioritized_annotations_bmi(dataset="hypothalamus")
+    sym_var.node_color <- sym("taxonomy_lvl1")
+    sym_var.node_color_edge_elbow2 <- sym("node.taxonomy_lvl1")
+  # } else if (dataset_prefix == "campbell2017_lvl2") {
+  #   filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell2017_lvl2")
+  #   colormap.annotations_highlight <- get_color_mapping.prioritized_annotations_bmi(dataset="campbell2017_lvl2")
+  #   sym_var.node_color <- sym("taxonomy_lvl2")
+  #   sym_var.node_color_edge_elbow2 <- sym("node.taxonomy_lvl2")
   } else {
     stop(sprintf("Wrong dataset_prefix: %s", dataset_prefix))
   }
@@ -239,6 +250,11 @@ plot_es_dendrogram <- function(dend, df.metadata, dataset_prefix, label_only_pri
     scale_color_manual(values=colormap.nodes, guide=FALSE) + 
     guides(node_color="none",
            edge_color="none")
+  if (show_legend) {
+    p <- p + guides(edge_color=guide_legend())
+    # p <- p + guides(edge_color=guide_legend(override.aes=list(shape=1))) # show dots instead of lines in legend | DID NOT WORK
+    p <- p + theme(legend.position = "top")
+  }
   ### Potential errors:
   ### ^ without base_family = 'Helvetica' REF: FIX ggsave() problem: https://github.com/thomasp85/ggraph/issues/152
   # Error in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y,  : 

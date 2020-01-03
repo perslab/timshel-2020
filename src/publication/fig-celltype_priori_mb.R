@@ -92,15 +92,16 @@ df.plot <- df.ldsc_cts %>% filter(gwas == "BMI_UKBB_Loh2018")  # filter BMI resu
 ### Add pvalue
 df.plot <- df.plot %>% mutate(p.value.mlog10 = -log10(p.value))
 
-### Rename region
-df.plot <- df.plot %>% mutate(Region = case_when(
-  annotation == "DEINH3" ~ "Subthalamus", # Subthalamic nucleus
-  Region %in% c("Pons", "Medulla") ~ "Hindbrain",
-  Region == "Midbrain dorsal" ~ "Midbrain",
-  Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
-  Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
-  TRUE ~ as.character(Region))
-)
+# ### Rename region ---> Region_fmt contains this information now
+# df.plot <- df.plot %>% mutate(Region = case_when(
+#   annotation == "DEINH3" ~ "Subthalamus", # Subthalamic nucleus
+#   Region %in% c("Pons", "Medulla") ~ "Hindbrain",
+#   Region == "Midbrain dorsal" ~ "Midbrain",
+#   Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
+#   Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
+#   TRUE ~ as.character(Region))
+# )
+
 
 ### Get tax text
 df.tax_text_position <- get_celltype_taxonomy_text_position.mb(df.metadata, df.plot)
@@ -109,8 +110,8 @@ df.tax_text_position <- get_celltype_taxonomy_text_position.mb(df.metadata, df.p
 p.main <- get_celltype_priori_base_tax_plot.mb(df.plot, df.tax_text_position)
 ### add more data
 p.main <- p.main + geom_point(data=df.plot, aes(x=annotation, y=-log10(p.value)), color="gray")
-p.main <- p.main + geom_point(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region))
-p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region), hjust = 0, nudge_x = 1.5, show.legend=F)
+p.main <- p.main + geom_point(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=Region_fmt))
+p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation, color=Region_fmt), hjust = 0, nudge_x = 1.5, show.legend=F)
 p.main <- p.main + scale_color_manual(values=get_color_mapping.mb.region())
 p.main <- p.main + theme(legend.position="bottom")
 p.main

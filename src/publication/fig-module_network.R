@@ -28,22 +28,13 @@ library(igraph)
 library(RColorBrewer)
 
 source(here("src/lib/load_functions.R")) # load sc-genetics library
+source(here("src/publication/lib-load_pub_lib_functions.R"))
 
-setwd(here("src/wgcna_modules"))
+setwd(here("src/publication"))
 
 # ======================================================================= #
 # ================================ PARAMETERS ================================ #
 # ======================================================================= #
-
-gwas <- "BMI_UKBB_Loh2018"
-genomic_annotation_prefix <- "wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
-
-
-### Set LDSC specific files
-# file.ldsc_cts <- sprintf("/projects/timshel/sc-genetics/sc-genetics/out/out.ldsc/%s__%s.cell_type_results.txt", genomic_annotation_prefix, gwas)
-file.ldsc_cts <- here("results/prioritization_modules--mousebrain.BMI_UKBB_Loh2018.csv.gz")
-# file.module_geneset <- sprintf("/scratch/sc-ldsc/%s/log.%s.multi_geneset.txt", genomic_annotation_prefix, genomic_annotation_prefix)
-file.module_geneset <- here("results/modules--metadata.txt")
 
 # ======================================================================= #
 # ================================ READ DATA ================================ #
@@ -53,25 +44,26 @@ file.module_geneset <- here("results/modules--metadata.txt")
 ### this file correspons to RUN_ID="wgcna.mousebrain-190213.fdr_sign_celltypes.continuous"
 # file.kme <- "/projects/jonatan/mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" 
 # file.kme <- "/projects/jonatan/applied/18-mousebrain_7/tables/Neurons_sub_ClusterName_7.2_run1_kMs_full_join.csv.gz" # NEW APRIL 2019
-file.kme <- here("results/modules-kme_table.csv.gz")
+# file.kme <- here("results/modules-kme_table.csv.gz")
+file.kme <- here("out/wgcna/modules.mousebrain_bmicelltypes.kme_table.csv.gz")
 df.kme <- read_csv(file.kme)
 
 ### LOAD LDSC CTS RESULTS
-df.ldsc_cts <- read_tsv(file.ldsc_cts)
-df.ldsc_cts <- df.ldsc_cts %>% 
-  mutate(module_id = str_split_fixed(Name, "__", n=Inf)[,2]) %>%
-  select(module_id, p.value=Coefficient_P_value)
-df.ldsc_cts
+file.results <- here("results/cellect_ldsc/prioritization.csv")
+df.ldsc_cts <- read_csv(file.results)
+df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
+df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "modules.mousebrain_bmicelltypes", gwas=="BMI_UKBB_Loh2018")
+df.ldsc_cts <- df.ldsc_cts %>% mutate(module_id=annotation)
 
 
 ### Module origin metadata
-file.module_origin_metadata <- here("data/expression/mousebrain/mousebrain-agg_L5.metadata.csv")
-df.module_origin_metadata <- read_csv(file.module_origin_metadata) %>% select(module_origin=annotation, Region)
+df.module_origin_metadata <- get_metadata("mousebrain") %>% select(module_origin=annotation, Region_fmt)
 ### Module origin mapping file (log.%.multi_geneset.txt)
-df.module_geneset <- read_tsv(file.module_geneset)
-df.module_geneset <- df.module_geneset %>% rename(ensembl_gene_id=gene, module_id=annotation, module_origin=cell_cluster)
+file.module_geneset <- here("out/wgcna/modules.mousebrain_bmicelltypes.rwgcna_table.human_only_geneset.csv.gz")
+df.module_geneset <- read_csv(file.module_geneset)
+df.module_geneset <- df.module_geneset %>% rename(module_id=module, module_origin=cell_cluster)
 df.module_geneset <- df.module_geneset %>% mutate(module_origin = stringr::str_replace_all(module_origin, pattern="\\s+", replacement="_"))  # *HACK FOR TABULA MURIS*
-df.module_geneset <- df.module_geneset %>% rename(pkME=annotation_value) # *NEW*
+# df.module_geneset <- df.module_geneset %>% rename(pkME=annotation_value)
 
 # ======================================================================= #
 # ========================== CREATE MODULE METADATA ===================== #
@@ -83,16 +75,20 @@ df.module_metadata <- df.module_metadata %>% left_join(df.ldsc_cts, by="module_i
 df.module_metadata <- df.module_metadata %>% left_join(df.module_origin_metadata, by="module_origin") # add module origin metadata
 head(df.module_metadata)
 
-### Rename Region
-df.module_metadata <- df.module_metadata %>% mutate(Region = case_when(
-  Region == "Midbrain dorsal" ~ "Midbrain",
-  Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
-  Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
-  TRUE ~ as.character(Region))
-)
+### Rename Region --> Region_fmt
+# df.module_metadata <- df.module_metadata %>% mutate(Region = case_when(
+#   Region == "Midbrain dorsal" ~ "Midbrain",
+#   Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
+#   Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
+#   TRUE ~ as.character(Region))
+# )
 
 ### Make sure module_id is first column in matrix (need when used as 'node' data)
 df.module_metadata <- df.module_metadata %>% select(module_id, everything())
+
+### *IMPORTANT* Apply N genes filter [the same filter is used in module_biology_v2.R]
+df.module_metadata <- df.module_metadata %>% filter(n_genes >= 10 & n_genes <= 500)
+# ---> 563 rows
 
 # ======================================================================= #
 # ================================ Correlation ================================ #
@@ -104,7 +100,8 @@ df.corrr <- df.kme %>% select(-genes) %>% correlate(use = "pairwise.complete.obs
 ### Convert to long format
 df.corrr.long <- df.corrr %>%
   shave() %>% # # Convert the upper or lower triangle of a correlation data frame (cor_df) to missing values.
-  stretch(na.rm = TRUE) # convert to long format. na.rm = TRUE: matrix diagonal (self-correlation) have NA values and will be dropped.
+  stretch(na.rm = TRUE) %>% # convert to long format. na.rm = TRUE: matrix diagonal (self-correlation) have NA values and will be dropped.
+  filter(x %in% df.module_metadata$module_id, y %in% df.module_metadata$module_id) # NEW 2020: needed because of module n_genes filter
 # x             y                      r
 # <chr>         <chr>              <dbl>
 #   1 antiquewhite3 antiquewhite3    NA     
@@ -142,23 +139,24 @@ p <- ggraph(layout) +
   scale_edge_width_continuous(range = c(0, 1)) +
   scale_edge_colour_gradientn(limits = c(0.3, 1), colors = c("white", "dodgerblue2")) +
   # scale_edge_colour_gradientn(limits = c(-1, 1), colors = c("firebrick2", "dodgerblue2")) + # positive and negative correlation
-  geom_node_point(aes(size=mlog10p, fill=Region), shape=21) +  # size=pval. Try also mlog10p^3
+  geom_node_point(aes(size=mlog10p, fill=Region_fmt), shape=21) +  # size=pval. Try also mlog10p^3
   # & shapes 21-24 have both stroke colour and a fill. The size of the filled part is controlled by size, the size of the stroke is controlled by stroke. Each
-  geom_node_point(aes(filter=mlog10p>-log10(fdr_threshold), size=mlog10p, fill=Region), stroke=2, color="red", shape=21, show.legend=F) + 
-  # geom_node_point(aes(size=n_genes, color=Region)) +  # size=n_genes
+  geom_node_point(aes(filter=mlog10p>-log10(fdr_threshold), size=mlog10p, fill=Region_fmt), stroke=2, color="red", shape=21, show.legend=F) + 
+  # geom_node_point(aes(size=n_genes, color=Region_fmt)) +  # size=n_genes
   geom_node_text(aes(filter=mlog10p>-log10(fdr_threshold), label = module_id), repel = TRUE) + # REF: https://stackoverflow.com/a/50365886/6639640: tidygraph has filter property which can be used in various geoms for filtering nodes, edges, etc.
+  geom_node_text(aes(filter=module_id == "floralwhite_427", label = module_id), repel = TRUE) + # M1==floralwhite_427
   # labs(color="Cell-type origin", size=) +
   scale_fill_manual(values=colormap.region) + 
   guides(
     edge_width="none", 
     edge_alpha="none",
     edge_color=guide_legend(title=expression(rho)),
-    color=guide_legend(title="Module cell-type origin"),
+    fill=guide_legend(title="Module cell-type origin"),
     size = guide_legend(title=expression(-log[10](P[S-LDSC])))) +
   theme_graph(base_family="Helvetica") # theme_graph() --> font family 'Arial Narrow' not found in PostScript font database
 # sans,serif,Helvetica,
 # missing: Arial
-p 
+p
 file.out <- "figs/fig_module_network_plot.pdf"
 ggsave(plot=p, filename=file.out, width=10, height=8)
 
@@ -188,8 +186,8 @@ if (FALSE) { # Don't run this
   
   ### Map color | REF: https://www.r-graph-gallery.com/249-igraph-network-map-a-color/
   vertex_attr(gr)
-  node_color_map <- brewer.pal(length(unique(V(gr)$Region)), "Set1") # Make a palette of 3 colors
-  node_color <- node_color_map[as.numeric(as.factor(V(gr)$Region))] # Create a vector of color
+  node_color_map <- brewer.pal(length(unique(V(gr)$Region_fmt)), "Set1") # Make a palette of 3 colors
+  node_color <- node_color_map[as.numeric(as.factor(V(gr)$Region_fmt))] # Create a vector of color
   
   ### Plot
   l <- layout_with_fr(gr, weights = E(gr)$r) #  The weight edge attribute is used by default, if present.

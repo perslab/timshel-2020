@@ -29,10 +29,14 @@ setwd(here("src/publication"))
 # =============================== LOAD DATA ============================== #
 # ======================================================================= #
 
-file.data <- here("results/es_enrichment--wgcna_modules.pvals.txt")
-df <- read.table(file.data, sep="\t", header=T) %>% rownames_to_column("module_id") %>% as_tibble
-df
+### OLD
+# file.data <- here("results/es_enrichment--wgcna_modules.pvals.txt")
+# df <- read.table(file.data, sep="\t", header=T) %>% rownames_to_column("module_id") %>% as_tibble
+# df
 
+### 2020
+file.data <- here("out/wgcna/modules.mousebrain_bmicelltypes.es_mu_geneset_enrichment.csv.gz")
+df <- read_csv(file.data)
 
 # ======================================================================= #
 # ============================= SELECT DATA ============================= #
@@ -42,13 +46,13 @@ df
 filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 ### SELECTED modules
-filter.modules <- "lavenderblush" # "lightpink3"
+filter.modules <- "floralwhite_427" # "lightpink3"
 
 ### Select module + cell-types
-df.gather <- df %>% 
-  select(module_id, filter.annotations) %>%
-  filter(module_id == filter.modules) %>%
-  gather(key="annotation", value="p.value", -module_id)
+df.gather <- df %>% select(module_id = geneset_name, 
+                           annotation = cell_type,
+                           p.value) %>%
+  filter(module_id==filter.modules, annotation %in% filter.annotations)
 
 ### Add columns
 df.gather <- df.gather %>% mutate(p.value.mlog10=-log10(p.value))
@@ -71,7 +75,8 @@ p <- ggplot(df.gather, aes(x=annotation, y=p.value.mlog10)) +
   guides(color=FALSE) +
   # theme(axis.text.x=element_text(angle=45, hjust=1)) + 
   theme(plot.title = element_text(size = rel(0.6))) +
-  coord_flip()
+  coord_flip() + 
+  theme_classic()
 p
 
 

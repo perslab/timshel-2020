@@ -37,8 +37,8 @@ n_max_genes <- 50
 # ======================================================================= #
 
 ### Module information
-file.module_geneset <- here("results/modules--metadata.txt")
-df.module_geneset <- read_tsv(file.module_geneset)
+file.module_geneset <- here("out/wgcna/modules.mousebrain_bmicelltypes.rwgcna_table.human_only_geneset.csv.gz")
+df.module_geneset <- read_csv(file.module_geneset)
 
 ### Gene expression data [MEINH2 cell-type] for genes in module
 # ORIGIN: /projects/jonatan/pub-perslab/18-mousebrain/18-mousebrain_7/tables/networkplot_args/mb_7.2_190408_lavenderblush_MEINH2_datExprScaled.csv.gz
@@ -57,8 +57,8 @@ df.magma <- read_tsv(file.magma_gwas)
 
 ### Filter and rename
 df.module <- df.module_geneset %>% 
-  filter(annotation == module) %>%
-  select(annotation, kme=annotation_value, gene_symbol=hgnc) # hgnc contain Jon's mouse gene symbols
+  select(annotation=module, kme=pkME, gene_symbol) %>% # hgnc contain Jon's mouse gene symbols
+  filter(annotation == "floralwhite_427")
 
 # ======================================================================= #
 # ======================= EXTRACT DATA - OLD using JT kMEs =============== #

@@ -87,7 +87,17 @@ get_metadata <- function(dataset_prefix) {
     file.metadata <- here("/data/expression/mousebrain/mousebrain.metadata.csv") # PT formatted/cleaned meta-data
     # df.metadata <- read_csv(file.metadata) %>% select(cols_metadata_keep) %>% rename(annotation = ClusterName)
     df.metadata <-  suppressMessages(read_csv(file.metadata))
-    df.metadata <- df.metadata %>% mutate(color_by_variable = Class)
+    df.metadata <- df.metadata %>% mutate(color_by_variable = Class) # not needed anymore?
+    ### Add Region_fmt [specifically made for prioritized cell-types]
+    df.metadata <- df.metadata %>% mutate(Region_fmt = case_when(
+      annotation == "DEINH3" ~ "Subthalamus", # Subthalamic nucleus
+      Region %in% c("Pons", "Medulla") ~ "Hindbrain",
+      Region == "Midbrain dorsal" ~ "Midbrain",
+      Region == "Midbrain dorsal,Midbrain ventral" ~ "Midbrain",
+      Region == "Hippocampus,Cortex" ~ "Hippocampus/Cortex",
+      TRUE ~ as.character(Region))
+    )
+    
   } else if (dataset_prefix == "tabula_muris") {
     file.metadata <- here("/data/expression/tabula_muris/tabula_muris_facs.tissue_celltype.celltype_metadata.csv")
     df.metadata <- suppressMessages(read_csv(file.metadata))

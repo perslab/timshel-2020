@@ -28,28 +28,19 @@ source(here("src/publication/lib-load_pub_lib_functions.R"))
 setwd(here("src/publication"))
 
 # ======================================================================= #
-# ================================ CONSTANTS ================================ #
-# ======================================================================= #
-
-# ONLY MAKE FIGURE FOR BMI_UKBB_Loh2018_no_mhc
-
-gwas_name <- "BMI_UKBB_Loh2018_no_mhc"
-dataset_prefix <- "mousebrain"
-
-
-# ======================================================================= #
 # ================================ LDSC ================================ #
 # ======================================================================= #
-file.ldsc <- here("out/ldsc/cts/celltypes.mousebrain.all__BMI_UKBB_Loh2018.cell_type_results.txt")
-df.ldsc <- load_ldsc_cts_results(file.ldsc, dataset_prefix="mousebrain.all")
-df.ldsc <- df.ldsc %>% filter(es=="es_mean") # just make sure we only have es_mean results
-df.ldsc <- df.ldsc %>% select(annotation, pval=p.value)
-df.ldsc
+
+file.results <- here("results/cellect_ldsc/prioritization.csv")
+df.ldsc_cts <- read_csv(file.results)
+df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
+df.ldsc_cts <- df.ldsc_cts %>% filter(gwas=="BMI_UKBB_Loh2018", specificity_id == "mousebrain")
+df.ldsc_cts <- df.ldsc_cts %>% select(annotation, pval=p.value)
+
 # ======================================================================= #
 # ================================ MAGMA ================================ #
 # ======================================================================= #
-# file.magma <- here("src/model-fit_gene_based_scores/out.cell_prioritization.mousebrain.BMI_UKBB_Loh2018_no_mhc.es_meta_mean.csv")
-file.magma <- here("out/magma/celltype_models/out.cell_prioritization.mousebrain.BMI_UKBB_Loh2018_no_mhc.es_meta_mean.csv")
+file.magma <- here("results/cellect_magma/out.CELLECT_MAGMA.mousebrain.BMI_UKBB_Loh2018_no_mhc.es_mu.csv")
 df.magma <- read_csv(file.magma)
 df.magma <- df.magma %>% select(annotation, pval=p.value)
 df.magma
@@ -59,7 +50,7 @@ df.magma
 # ============================= COMBINE DATA ============================ #
 # ======================================================================= #
 list.comb <- list("magma"=df.magma,
-                  "ldsc"=df.ldsc)
+                  "ldsc"=df.ldsc_cts)
 df <- bind_rows(list.comb, .id="method")
 
 # ======================================================================= #
@@ -94,14 +85,15 @@ p <- ggplot(df.plot, aes(x=ldsc, y=magma)) +
   geom_vline(xintercept=fdr_threshold.mlog10, linetype="dashed", color="gray") +
   ### MAGMA FDR
   geom_point(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), color="black", size=3) +
-  geom_text_repel(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), aes(label=annotation), color="black") + 
+  geom_text_repel(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), aes(label=annotation), color="black", size=2) + 
   # LDSC FDR
   geom_point(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(color=annotation), size=3) +
-  geom_text_repel(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(label=annotation, color=annotation)) + 
+  geom_text_repel(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(label=annotation, color=annotation), size=2) + 
   labs(x=expression(-log[10](P[S-LDSC])), y=expression(-log[10](P[MAGMA]))) + 
   scale_color_manual(values=colormap.annotations) + 
   guides(color=F) + 
-  ggpubr::stat_cor(method="pearson")
+  ggpubr::stat_cor(method="pearson") + 
+  theme_classic()
 p
 
 file.out <- "figs/fig_celltypepriori_method_comparison.mb_fdr_scatter.pdf"
@@ -130,7 +122,8 @@ p <- ggplot(df %>% filter(annotation %in%  filter.annotations), aes(x=annotation
   geom_hline(yintercept=-log10(0.05/265), linetype="dashed", color="gray") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip() +
-  labs(y=expression(-log[10](P)))
+  labs(y=expression(-log[10](P))) + 
+  theme_classic()
 p
 file.out <- "figs/fig_celltypepriori_method_comparison.mb_fdr.pdf"
 ggsave(plot=p, filename=file.out, width=10, height=6)

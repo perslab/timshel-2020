@@ -1209,7 +1209,7 @@ get_genetic_and_es_data <- function(object, slot, df.magma) {
     df <- object[["es"]][[slot]]
   } else {
     names_accepted_slots <- c(names(object[["es_meta"]]), names(object[["es"]]))
-    stop(sprintf("Got wrong slot name: %s. Accepted slots are: %s", slot, paste(names_accepted_slots, sep=", ")))
+    stop(sprintf("Got wrong slot name: %s. Accepted slots are: %s", slot, paste(names_accepted_slots, collapse=", ")))
   }
   ### Add genetic data to df
   df <- df %>% 
@@ -1219,7 +1219,7 @@ get_genetic_and_es_data <- function(object, slot, df.magma) {
   return(df)
 }
 
-fit_ess <- function(object, slot, df.magma, df.metadata=NULL, exclude_bin_zero=F) {
+fit_es <- function(object, slot, df.magma, df.metadata=NULL, exclude_bin_zero=F) {
   ### Description: fit linear model between es and MAGMA ZSTAT
   
   df.regression <- get_genetic_and_es_data(object, slot, df.magma)
@@ -1273,7 +1273,7 @@ fit_ess <- function(object, slot, df.magma, df.metadata=NULL, exclude_bin_zero=F
 }
 
 
-fit_ess_tstat <- function(object, slot, df.magma, df.metadata=NULL) {
+fit_es_tstat <- function(object, slot, df.magma, df.metadata=NULL) {
   ### Description: compute t-test for MAGMA ZSTAT between genes grouped by es zero-values and non-zero-values 
   
   ### Add genetic data to es_meta

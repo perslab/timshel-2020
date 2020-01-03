@@ -7,7 +7,15 @@
 
 
 ### OUTPUT: 
-# ....
+# The *primary output* of this script is the following file:
+# out/magma/gene_based_scores/BMI_UKBB_Loh2018_no_mhc.resid_correct_all.gsa.genes.mapped.out
+# EXAMPLE:
+# GENE    CHR     START   STOP    NSNPS   NPARAM  N       ZSTAT   ZFITTED_BASE    ZRESID_BASE     ensembl_gene_id gene_symbol     mmusculus_homolog_ensembl_gene
+# 148398  1       759993  979961  46      15      457824  -0.50954        -0.001049       -0.50849        ENSG00000187634 SAMD11  ENSMUSG00000096351
+# 26155   1       779583  994679  47      15      457824  -0.72325        -0.001049       -0.7222 ENSG00000188976 NOC2L   ENSMUSG00000095567
+# 339451  1       795967  1001099 47      14      457824  -0.68736        -0.001049       -0.68631        ENSG00000187961 KLHL17  ENSMUSG00000078484
+# 84069   1       801872  1010488 49      15      457824  -0.66244        -0.001049       -0.66139        ENSG00000187583 PLEKHN1 ENSMUSG00000078485
+
 
 ### REMARKS:
 # ....
@@ -26,7 +34,7 @@ library(here)
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
-dir.wd <- "src/magma-gene_scores"
+dir.wd <- "src/CELLECT-MAGMA"
 setwd(here(dir.wd))
 
 # ======================================================================= #
@@ -36,7 +44,7 @@ setwd(here(dir.wd))
 RUN_MODE <- TRUE # if True, then MAGMA system calls will be made
 
 magma_exec <- "/tools/magma/1.07a/magma"
-dir.out_magma <- here(dir.wd, "/out_magma_BMI")
+dir.out_magma <- here(dir.wd, "/out/magma/gene_based_scores")
 dir.create(dir.out_magma, showWarnings = FALSE)
 
 # ======================================================================= #
@@ -150,7 +158,7 @@ if (RUN_MODE) {
 # .log
 
 # ======================================================================= #
-# ============= Add more gene IDs: Enesbl + gene symbol IDs ============ #
+# ============= Add more gene IDs: Ensembl + gene symbol IDs ============ #
 # ======================================================================= #
 
 ### Read file from previous step

@@ -22,7 +22,7 @@ library(here)
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 
 
-setwd(here("src/magma/"))
+setwd(here("src/CELLECT-MAGMA"))
 
 # ======================================================================= #
 # ================================ PARAMETERS ================================ #
@@ -34,8 +34,11 @@ setwd(here("src/magma/"))
 # dataset_prefix <- "mousebrain"
 # dataset_prefix <- "tabula_muris"
 
+DIR.MAGMA_OUT <- here("out/magma/gene_based_scores")
+DIR.OUT <- here("results/cellect_magma")
+
 for (dataset_prefix in c("mousebrain", "tabula_muris")) {
-  for (gwas_name in c("BMI_UKBB_Loh2018_no_mhc", "BMI_UPDATE_Yengo2018_no_mhc") ) {
+  for (gwas_name in c("BMI_UKBB_Loh2018_no_mhc")) {
 
   # ======================================================================= #
   # ================================ LOAD ES ================================= #
@@ -43,9 +46,9 @@ for (dataset_prefix in c("mousebrain", "tabula_muris")) {
   
   ### load data
   if (dataset_prefix == "mousebrain") {
-    load(file=here("src/GE-mousebrain/mousebrain.es_obj.RData"))
+    load(file=here("out/es/mousebrain.es_obj.RData"))
   } else if (dataset_prefix == "tabula_muris") {
-    load(file=here("src/GE-maca/tabula_muris.es_obj.RData"))
+    load(file=here("out/es/tabula_muris.es_obj.RData"))
   } else {
     stop("Wrong dataset_prefix")
   }
@@ -54,8 +57,8 @@ for (dataset_prefix in c("mousebrain", "tabula_muris")) {
   # ============== LOAD MAGMA GWAS gene-based p-values (corrected) ======== #
   # ======================================================================= #
   
-  file.magma <- file.path(here("src/magma/out_magma_BMI"), sprintf("%s.resid_correct_all.gsa.genes.out", gwas_name))
-  df.magma <- read_table(file.magma, comment = "#")
+  file.magma <- file.path(DIR.MAGMA_OUT, sprintf("%s.resid_correct_all.gsa.genes.mapped.out", gwas_name))
+  df.magma <- read_tsv(file.magma)
   
   ### add ensembl ids
   df.magma <- add_ensembl_ids_from_entrez(df.magma, colname_geneids_from="GENE", colname_geneids_to="gene") %>% 
@@ -67,20 +70,20 @@ for (dataset_prefix in c("mousebrain", "tabula_muris")) {
   # ============================== Fit ES ================================ #
   # ======================================================================= #
   
-  df.model_sumstats.all_anno <- fit_ess(object=es_obj, slot="mean", df.magma, df.metadata=NULL, exclude_bin_zero=F)
+  df.model_sumstats.all_anno <- fit_es(object=es_obj, slot="mu", df.magma, df.metadata=NULL, exclude_bin_zero=F)
   df.model_sumstats.all_anno
   
-  # df.model_sumstats.all_anno.bin_zero_excl <- fit_ess(object=es_obj, slot="mean", df.magma, df.metadata, exclude_bin_zero=T)
+  # df.model_sumstats.all_anno.bin_zero_excl <- fit_es(object=es_obj, slot="mean", df.magma, df.metadata, exclude_bin_zero=T)
   # df.model_sumstats.all_anno.bin_zero_excl
   # 
-  # df.model_sumstats.all_anno.tstat <- fit_ess_tstat(object=es_obj, slot="mean", df.magma, df.metadata)
+  # df.model_sumstats.all_anno.tstat <- fit_es_tstat(object=es_obj, slot="mean", df.magma, df.metadata)
   # df.model_sumstats.all_anno.tstat
   
   # ======================================================================= #
   # ================================ EXPORT results ================================= #
   # ======================================================================= #
   
-  file.out <- sprintf("out.cell_prioritization.%s.%s.es_meta_mean.csv", dataset_prefix, gwas_name)
+  file.out <- sprintf("%s/out.CELLECT_MAGMA.%s.%s.es_mu.csv", DIR.OUT, dataset_prefix, gwas_name)
   df.model_sumstats.all_anno %>% write_csv(file.out)
 
   }

@@ -1,4 +1,30 @@
 
+###################################### SETUP ######################################
+
+### Activate
+conda activate ldsc_munge
+
+### Check
+python -V
+---> Python 2.7.16 :: Anaconda, Inc.
+
+### Notes
+The environment was created from this file:
+CELLECT/ldsc/environment_munge.yml
+
+
+###################################### NEW 2020 [with ldsc_munge env] ######################################
+
+GWAS=HIPPOVOL_Hilbar2017
+python /projects/timshel/sc-genetics/CELLECT/ldsc/munge_sumstats.py \
+--sumstats /nfsdata/projects/timshel/data/gwas_sumstats_raw/HIPPOVOL_Hilbar2017/CHARGE-ENIGMA-HV-METAANALYSIS-201311141.TBL.FINAL.gz \
+--merge-alleles /projects/timshel/sc-genetics/CELLECT/data/ldsc/w_hm3.snplist \
+--ignore Weight,MarkerName \
+--snp RSNUMBERS \
+--N-col N \
+--out /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
 ###################################### CMDS ######################################
 
 GWAS=BMI_Yengo2018
@@ -450,6 +476,8 @@ python2 /projects/timshel/sc-genetics/ldsc/ldsc/munge_sumstats.py \
 --merge-alleles /projects/timshel/sc-genetics/ldsc/data/w_hm3.snplist \
 --N-col Weight \
 --out /projects/timshel/sc-genetics/sc-genetics/data/gwas_sumstats_ldsc/timshel-collection/${GWAS}
+
+
 
 
 ###################################### alkesgroup_UKBB/UKBB_460k ######################################

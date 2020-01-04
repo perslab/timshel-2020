@@ -18,7 +18,7 @@ This repository contains code to reproduce analysis and figures in presented in:
 5. Generate figures and tables using scripts in `src/publication`
 
 
-\*Since publication, we have implemented CELLEX-PY available [here](https://github.com/perslab/CELLEX). We recommend using CELLEX-PY as it is easier to use for new users.
+\*Since finishing the manuscript, we have implemented CELLEX-PY available [here](https://github.com/perslab/CELLEX). We recommend using CELLEX-PY as it is easier to use for new users.
 
 ### Additional repositories to reproduce analysis
 

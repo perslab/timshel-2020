@@ -37,7 +37,7 @@ setwd(here("src/publication"))
 
 plot_h2_annotation_intervals <- function(df.plot_h2q) {
   pd <- position_dodge(0.9)
-  p <- ggplot(df.plot_h2q, aes(x=annotation, y=enr, fill=q)) + 
+  p <- ggplot(df.plot_h2q, aes(x=annotation, y=enr, fill=as.factor(q))) + 
     geom_col(position=pd) + 
     geom_errorbar(aes(ymin=enr-enr_se, ymax=enr+enr_se), position=pd, width = 0.01, colour="black") +
     geom_hline(yintercept = 1, linetype="dashed", color="gray") +
@@ -71,16 +71,17 @@ plot_h2_annotation_intervals.lollipop <- function(df.plot_h2q) {
   p <- ggplot(df.plot_h2q, aes(x=annotation, y=enr, group=q)) + 
     geom_hline(yintercept = 1, linetype="dashed", color="gray") +
     geom_linerange(aes(x=annotation, ymin=0, ymax=enr), position=pd, color="grey",  alpha=0.5) + # REF: https://stackoverflow.com/a/21922792/6639640
-    geom_point(aes(color=q), size=3, position=pd) + 
+    geom_point(aes(color=as.factor(q)), size=3, position=pd) + 
     geom_errorbar(aes(ymin=enr-enr_se, ymax=enr+enr_se), position=pd, width = 0.01, colour="black") +
     scale_color_brewer(palette = "YlOrRd",
-                      breaks = levels(as.factor(df.plot_h2q$q)), # IMPORTANT: q is q0,...q5
+                      breaks = levels(as.factor(df.plot_h2q$q)), # IMPORTANT: q is 0,...5
                       labels = c("0",
                       "(0-0.2]",
                       "(0.2-0.4]",
                       "(0.4-0.6]",
                       "(0.6-0.8]",
                       "(0.8-1]")) +
+    theme_classic() +
     theme(legend.text.align = 0) + # needed for aligning legend text to the left
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
     labs(x="", y="Heritability enrichment", color=expression(ES[mu]~interval)) # title=expression("h"[2]*" enrichment") 
@@ -95,8 +96,9 @@ plot_h2_annotation_intervals.lollipop <- function(df.plot_h2q) {
 # ======================================================================= #
 
 ### Export (selected columns)
-file.data <- here("results/h2_annotation_intervals.multi_gwas.csv.gz")
+file.data <- here("results/cellect_ldsc/heritability_intervals.csv")
 df.ldsc <- read_csv(file.data)
+
 
 ### Rename GWAS
 tmp_gwas_vector <- df.ldsc$gwas # convenience selector. If you want a specific order of the result, this vector should contain (unique) ordered values
@@ -108,11 +110,11 @@ df.ldsc <- df.ldsc %>% mutate(gwas_fmt = recode_factor(gwas, !!!rename_vector)) 
 # rename_vector <- newnames; names(rename_vector) <- df.ldsc$gwas
 # df.ldsc <- df.ldsc %>% mutate(gwas_fmt = recode_factor(gwas, !!!rename_vector)) 
 
-### Rename run_name
-df.ldsc <- df.ldsc %>% mutate(run_name = case_when(
-  run_name == "celltypes.mousebrain" ~ "Mousebrain",
-  run_name == "celltypes.tabula_muris" ~ "Tabula Muris",
-  TRUE ~ as.character(run_name))
+### Rename specificity_id
+df.ldsc <- df.ldsc %>% mutate(specificity_id = case_when(
+  specificity_id == "mousebrain" ~ "Mousebrain",
+  specificity_id == "tabula_muris" ~ "Tabula Muris",
+  TRUE ~ as.character(specificity_id))
 )
 
 # ======================================================================= #
@@ -120,15 +122,24 @@ df.ldsc <- df.ldsc %>% mutate(run_name = case_when(
 # ======================================================================= #
 
 ### SELECTED ANNOTATIONS
-# filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
+filter.annotations.prioritized <- get_prioritized_annotations_bmi(dataset="mousebrain")
 # Prioritized cell-types ORDERED BY Prop-h2 from fig_h2_annotations
-filter.annotations <- c("DEGLU4","MEGLU10","DEGLU5","MEGLU11","TEINH12","MEGLU1","DEINH3","MEINH2","TEGLU23","TEGLU17","TEGLU4") 
+# filter.annotations <- c("DEGLU4","MEGLU10","DEGLU5","MEGLU11","TEINH12","MEGLU1","DEINH3","MEINH2","TEGLU23","TEGLU17","TEGLU4") 
+filter.annotations <- read_csv(here("results/cellect_ldsc/heritability.csv")) %>% 
+  filter(gwas %in% "BMI_UKBB_Loh2018") %>% 
+  filter(annotation %in% filter.annotations.prioritized) %>% 
+  arrange(Prop._h2) %>%
+  pull(annotation)
+# [1] "HBINH8"  "MEGLU3"  "DEGLU4"  "MEGLU7"  "TEGLU19" "HBSER5"  "MEGLU10" "TEINH1"  "DEGLU5"  "MEINH3"  "HBGLU5"  "MEGLU2" 
+# [13] "MEGLU11" "TEGLU21" "DEINH3"  "MEGLU1"  "TEINH12" "MEINH2"  "HBGLU2"  "TEGLU23" "TEGLU17" "TEGLU4"
+
 ### SELECTED GWAS
 filter.gwas <- "BMI_UKBB_Loh2018"
 ### Extract data
 df.plot_h2q <- df.ldsc %>% 
   filter(gwas %in% filter.gwas, annotation %in% filter.annotations) %>%
   mutate(annotation = factor(annotation, levels=filter.annotations)) # set order
+
 
 ### PLOT
 p <- plot_h2_annotation_intervals.lollipop(df.plot_h2q)
@@ -152,7 +163,7 @@ df.ldsc.meta_analysis <- df.ldsc %>%
   summarise(
     enr_se = sd(enr, na.rm=T), # OBS: we take the sd of enr. Calculate this before you 'update' enr
     enr = mean(enr, na.rm=T),
-    run_name = unique(run_name),
+    specificity_id = unique(specificity_id),
     gwas = "META_ANALYSIS",
     gwas_fmt = sprintf("Meta-analysis (n=%s)", length(gwas_ids.meta_analysis))
   ) %>% 
@@ -180,7 +191,7 @@ df.plot_h2q
 
 ### PLOT
 p <- plot_h2_annotation_intervals.lollipop(df.plot_h2q)
-p <- p + facet_grid(gwas_fmt~run_name, 
+p <- p + facet_grid(gwas_fmt~specificity_id, 
                     space="free_x", scales="free_x", drop=T)
                     # switch="x") # If "x", the top labels will be displayed to the bottom. If "y", the right-hand side labels will be displayed to the left. Can also be set to "both".
 p <- p + theme(panel.grid.major = element_blank(), # REF: https://stackoverflow.com/questions/14185754/remove-strip-background-keep-panel-border

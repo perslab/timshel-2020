@@ -31,8 +31,10 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
+file.results <- here("results/cellect_ldsc/prioritization.csv")
 df.ldsc_cts <- read_csv(file.results)
+df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
+df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "mousebrain")
 
 
 # ======================================================================= #
@@ -72,7 +74,7 @@ df.plot <- df.plot %>% mutate(gwas_fmt = paste0("GIANT consortium ", gwas_fmt))
 p <- ggplot(df.plot, aes(x=BMI_UKBB_Loh2018, y=p.value)) + 
   geom_point(color="grey") + 
   geom_point(data=df.plot %>% filter(flag_priori), aes(color=annotation)) +
-  geom_text_repel(data=df.plot %>% filter(flag_priori), aes(label=annotation)) +
+  geom_text_repel(data=df.plot %>% filter(flag_priori), aes(label=annotation), size=2) +
   geom_abline() + 
   scale_color_manual(values=colormap.annotations) +
   labs(
@@ -82,6 +84,7 @@ p <- ggplot(df.plot, aes(x=BMI_UKBB_Loh2018, y=p.value)) +
   guides(color=F) +
   coord_fixed()
 p <- p + ggpubr::stat_cor(method = "pearson")
+p <- p + theme_classic()
 p <- p + facet_grid(~gwas_fmt) + theme(strip.background=element_blank(), strip.text=element_text(face="bold"))
 p 
 
@@ -115,7 +118,7 @@ df.plot
 p <- ggplot(df.plot, aes(x=BMI_UKBB_Loh2018, y=BMI_UPDATE_Yengo2018)) + 
   geom_point(color="grey") + 
   geom_point(data=df.plot %>% filter(flag_priori), aes(color=annotation)) +
-  geom_text_repel(data=df.plot %>% filter(flag_priori), aes(label=annotation)) +
+  geom_text_repel(data=df.plot %>% filter(flag_priori), aes(label=annotation), size=2) +
   geom_abline() + 
   scale_color_manual(values=colormap.annotations) +
   labs(
@@ -124,6 +127,7 @@ p <- ggplot(df.plot, aes(x=BMI_UKBB_Loh2018, y=BMI_UPDATE_Yengo2018)) +
   ) + 
   guides(color=F) +
   coord_fixed()
+p <- p + theme_classic()
 p <- p + ggpubr::stat_cor(method = "pearson")
 p
 

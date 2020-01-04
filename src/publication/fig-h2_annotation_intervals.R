@@ -49,6 +49,7 @@ plot_h2_annotation_intervals <- function(df.plot_h2q) {
                                  "(0.4-0.6]",
                                  "(0.6-0.8]",
                                  "(0.8-1]")) +
+    theme_classic() +
     theme(legend.text.align = 0) + # needed for aligning legend text to the left
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
     labs(x="", y="Heritability enrichment", fill=expression(ES[mu]~interval)) # title=expression("h"[2]*" enrichment") 
@@ -86,7 +87,6 @@ plot_h2_annotation_intervals.lollipop <- function(df.plot_h2q) {
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
     labs(x="", y="Heritability enrichment", color=expression(ES[mu]~interval)) # title=expression("h"[2]*" enrichment") 
     # WORKS --> labs(x="", y=expression(atop(h^{2}~enrichment, (proportion~h^{2}/annotation~size))), color="ES interval") # title=expression("h"[2]*" enrichment") 
-  p
   return(p)
 }
 
@@ -183,10 +183,12 @@ filter.gwas <- c("BMI_UKBB_Loh2018", "HEIGHT_UKBB_Loh2018", "WHRadjBMI_UKBB_Loh2
 ### SELECTED ANNOTATIONS
 filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 filter.annotations <- c(filter.annotations, "Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell")
+# *2020 NOTE* ---> the Tabula Muris cell-types were not calculated and hence not found in "heritability_intervals.csv". That's ok. We just don't plot them.
 
 ### Extract data [OBS: df.ldsc.meta_analysis]
 df.plot_h2q <- df.ldsc.meta_analysis %>% filter(gwas %in% filter.gwas, annotation %in% filter.annotations)
 df.plot_h2q <- df.plot_h2q %>% mutate(annotation = utils.rename_annotations.tabula_muris(annotation, style="tissue - celltype"))
+df.plot_h2q
 df.plot_h2q
 
 ### PLOT
@@ -194,10 +196,11 @@ p <- plot_h2_annotation_intervals.lollipop(df.plot_h2q)
 p <- p + facet_grid(gwas_fmt~specificity_id, 
                     space="free_x", scales="free_x", drop=T)
                     # switch="x") # If "x", the top labels will be displayed to the bottom. If "y", the right-hand side labels will be displayed to the left. Can also be set to "both".
+p
 p <- p + theme(panel.grid.major = element_blank(), # REF: https://stackoverflow.com/questions/14185754/remove-strip-background-keep-panel-border
                panel.grid.minor = element_blank(),
                strip.background = element_blank(),
-               panel.border = element_rect(colour = "black"),
+               # panel.border = element_rect(colour = "black"),
                strip.text.y = element_text(size=rel(0.5)) # gwas text size smaller for easier post edditing
                )
 p

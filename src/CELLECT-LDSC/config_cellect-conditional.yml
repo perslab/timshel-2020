@@ -1,0 +1,73 @@
+---
+
+############################################################################################################################
+################################################ INFORMATION ################################################################
+############################################################################################################################
+
+# All file paths accept absolute and relative paths
+# Environment variables (including ~) are not processed, so don't use them in this config.
+
+
+############################################################################################################################
+############################################ RUN SPECIFIC VARIABLES ########################################################
+############################################################################################################################
+
+BASE_OUTPUT_DIR: /scratch/timshel/BMIcelltypes/CELLECT-LDSC 
+
+SPECIFICITY_INPUT:
+  - id: mousebrain
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/mousebrain.mu.csv.gz
+  #- id: tabula_muris
+  #  path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/tabula_muris.mu.csv.gz
+
+GWAS_SUMSTATS:
+  - id: BMI_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/BMI_UKBB_Loh2018.sumstats.gz
+
+
+ANALYSIS_TYPE:
+  prioritization: False
+  conditional: True
+  heritability: False
+  heritability_intervals: False
+
+
+WINDOW_DEFINITION: 
+  WINDOW_SIZE_KB:
+    100
+  WINDOW_LD_BASED:
+    False
+
+
+############################################################################################################################
+############################################## conditional analysis ########################################################
+############################################################################################################################
+
+CONDITIONAL_INPUT:
+  - id: mousebrain
+    annotations: ["DEINH3","MEGLU11","MEINH2","MEGLU10","DEGLU5","MEGLU1","MEGLU3","TEGLU23","DEGLU4","TEGLU19","HBSER5","HBGLU2","MEGLU2","TEGLU17","MEGLU7","MEINH3","HBGLU5","TEINH12","TEINH1","TEGLU4","TEGLU21","HBINH8"]
+  #- id: tabula_muris
+  #  annotations: ['Brain_Non-Myeloid.neuron','Brain_Non-Myeloid.oligodendrocyte_precursor_cell']
+
+
+############################################################################################################################
+############################################## heritability analysis ########################################################
+############################################################################################################################
+
+HERITABILITY_INPUT:
+  - id: dummy
+    annotations: dummy
+
+
+############################################################################################################################
+################################################## CONSTANTS ###############################################################
+############################################################################################################################
+
+
+LDSC_CONST:
+  DATA_DIR:
+    data/ldsc
+  LDSC_DIR:
+    ldsc
+  NUMPY_CORES:
+    1

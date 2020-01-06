@@ -1,0 +1,156 @@
+---
+
+
+
+BASE_OUTPUT_DIR: /scratch/timshel/BMIcelltypes/CELLECT-LDSC 
+
+
+SPECIFICITY_INPUT:
+  - id: mousebrain
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/mousebrain.mu.csv.gz
+  - id: tabula_muris
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/tabula_muris.mu.csv.gz
+  - id: campbell2017_lvl2
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/campbell2017_lvl2.mu.csv.gz
+  - id: modules.mousebrain_bmicelltypes
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/wgcna/modules.mousebrain_bmicelltypes.specificity_human.csv.gz
+  - id: chen2017
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/chen2017.mu.csv.gz
+  - id: romanov2017
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/romanov2017.mu.csv.gz
+  - id: moffitt2018
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/moffitt2018.mu.csv.gz
+  - id: kimVMH2019_smartseq
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/kimVMH2019_smartseq.mu.csv.gz
+  - id: mikkelsen2019
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/mikkelsen2019.mu.csv.gz
+
+
+GWAS_SUMSTATS:
+  - id: AD_Jansen2019
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/AD_Jansen2019.sumstats.gz
+  - id: ADHD_PGC_Demontis2017
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/ADHD_PGC_Demontis2017.sumstats.gz
+  - id: AN_PGC_Duncan2017
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/AN_PGC_Duncan2017.sumstats.gz
+  - id: ASD_iPSYCH_PGC_Grove2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/ASD_iPSYCH_PGC_Grove2018.sumstats.gz
+  - id: BIP_PGC2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/BIP_PGC2018.sumstats.gz
+  - id: BMI_Locke2015
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/BMI_Locke2015.sumstats.gz
+  - id: BMI_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/BMI_UKBB_Loh2018.sumstats.gz
+  - id: BMI_UPDATE_Yengo2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/BMI_UPDATE_Yengo2018.sumstats.gz
+  - id: CAD_Schunkert2011
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/CAD_Schunkert2011.sumstats.gz
+  - id: CARDIOVASCULAR_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/CARDIOVASCULAR_UKBB_Loh2018.sumstats.gz
+  - id: CELIAC_Dubois2010
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/CELIAC_Dubois2010.sumstats.gz
+  - id: CROHNS_Jostins2012
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/CROHNS_Jostins2012.sumstats.gz
+  - id: DEPRESSED_AFFECT_Nagel2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/DEPRESSED_AFFECT_Nagel2018.sumstats.gz
+  - id: DEPRESSION_Nagel2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/DEPRESSION_Nagel2018.sumstats.gz
+  - id: DIASTOLICadjMED_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/DIASTOLICadjMED_UKBB_Loh2018.sumstats.gz
+  - id: DS_Okbay2016
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/DS_Okbay2016.sumstats.gz
+  - id: EA2_Okbay2016
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/EA2_Okbay2016.sumstats.gz
+  - id: EA3_Lee2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/EA3_Lee2018.sumstats.gz
+  - id: FG_Female_Lagou2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/FG_Female_Lagou2018.sumstats.gz
+  - id: FI_Female_Lagou2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/FI_Female_Lagou2018.sumstats.gz
+  - id: HBA1C_MAGIC_Wheeler2017
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/HBA1C_MAGIC_Wheeler2017.sumstats.gz
+  - id: HEIGHT_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/HEIGHT_UKBB_Loh2018.sumstats.gz
+  - id: HEIGHT_Yengo2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/HEIGHT_Yengo2018.sumstats.gz
+  - id: IBD_Jostins2012
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/IBD_Jostins2012.sumstats.gz
+  - id: INSOMNIA_Jansen2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/INSOMNIA_Jansen2018.sumstats.gz
+  - id: INTELLIGENCE_Savage2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/INTELLIGENCE_Savage2018.sumstats.gz
+  - id: INTELLIGENCE_Sniekers2017
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/INTELLIGENCE_Sniekers2017.sumstats.gz
+  - id: LIPIDS_HDL_Teslovich2010
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/LIPIDS_HDL_Teslovich2010.sumstats.gz
+  - id: LIPIDS_LDL_Teslovich2010
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/LIPIDS_LDL_Teslovich2010.sumstats.gz
+  - id: LIPIDS_TG_Teslovich2010
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/LIPIDS_TG_Teslovich2010.sumstats.gz
+  - id: LUPUS_Bentham2015
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/LUPUS_Bentham2015.sumstats.gz
+  - id: MDD_Howard2019
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/MDD_Howard2019.sumstats.gz
+  - id: MDD_PGC_Wray2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/MDD_PGC_Wray2018.sumstats.gz
+  - id: MS_Patsopoulos2011
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/MS_Patsopoulos2011.sumstats.gz
+  - id: NEUROTICISM_Nagel2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/NEUROTICISM_Nagel2018.sumstats.gz
+  - id: NEUROTICISM_Okbay2016
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/NEUROTICISM_Okbay2016.sumstats.gz
+  - id: PBC_Cordell2015
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/PBC_Cordell2015.sumstats.gz
+  - id: RA_Okada2014
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/RA_Okada2014.sumstats.gz
+  - id: RB_Linner_2019
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/RB_Linner_2019.sumstats.gz
+  - id: SCZ_EUR_Ripke2014
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/SCZ_EUR_Ripke2014.sumstats.gz
+  - id: SCZ_Pardinas2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/SCZ_Pardinas2018.sumstats.gz
+  - id: SWB_Okbay2016
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/SWB_Okbay2016.sumstats.gz
+  - id: SYSTOLICadjMED_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/SYSTOLICadjMED_UKBB_Loh2018.sumstats.gz
+  - id: T1D_Bradfield2011
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/T1D_Bradfield2011.sumstats.gz
+  - id: T2D_DIAMANTE_Mahajan2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/T2D_DIAMANTE_Mahajan2018.sumstats.gz
+  - id: T2D_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/T2D_UKBB_Loh2018.sumstats.gz
+  - id: UC_Jostins2012
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/UC_Jostins2012.sumstats.gz
+  - id: WHR_Pulit2019
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/WHR_Pulit2019.sumstats.gz
+  - id: WHRadjBMI_Pulit2019
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/WHRadjBMI_Pulit2019.sumstats.gz
+  - id: WHRadjBMI_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/WHRadjBMI_UKBB_Loh2018.sumstats.gz
+  - id: WORRY_Nagel2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/WORRY_Nagel2018.sumstats.gz
+
+
+
+ANALYSIS_TYPE: 
+  prioritization: True
+  conditional: False
+  heritability: False
+  heritability_intervals: False
+
+
+WINDOW_DEFINITION: 
+  WINDOW_SIZE_KB:
+    100
+  WINDOW_LD_BASED: 
+    False
+
+
+
+LDSC_CONST:
+  DATA_DIR: 
+    data/ldsc
+  LDSC_DIR: 
+    ldsc
+  NUMPY_CORES: 
+    1

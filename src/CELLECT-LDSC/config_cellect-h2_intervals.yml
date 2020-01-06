@@ -1,0 +1,75 @@
+---
+
+############################################################################################################################
+################################################ INFORMATION ################################################################
+############################################################################################################################
+
+# All file paths accept absolute and relative paths
+# Environment variables (including ~) are not processed, so don't use them in this config.
+
+
+############################################################################################################################
+############################################ RUN SPECIFIC VARIABLES ########################################################
+############################################################################################################################
+
+BASE_OUTPUT_DIR: /scratch/timshel/BMIcelltypes/CELLECT-LDSC 
+
+SPECIFICITY_INPUT:
+  - id: mousebrain
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/mousebrain.mu.csv.gz
+  #- id: tabula_muris
+  #  path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/tabula_muris.mu.csv.gz
+
+GWAS_SUMSTATS:
+  - id: BMI_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/BMI_UKBB_Loh2018.sumstats.gz
+  - id: HEIGHT_UKBB_Loh2018 # needed for h2 + h2_intervals cmp
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/HEIGHT_UKBB_Loh2018.sumstats.gz
+  - id: T2D_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/T2D_UKBB_Loh2018.sumstats.gz
+  - id: LIPIDS_LDL_Teslovich2010
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/LIPIDS_LDL_Teslovich2010.sumstats.gz
+  - id: RA_Okada2014
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/RA_Okada2014.sumstats.gz
+  - id: WHRadjBMI_UKBB_Loh2018 # only needed for h2_intervals cmp
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/WHRadjBMI_UKBB_Loh2018.sumstats.gz
+
+
+ANALYSIS_TYPE:
+  prioritization: False
+  conditional: False
+  heritability: True
+  heritability_intervals: True
+
+
+WINDOW_DEFINITION: 
+  WINDOW_SIZE_KB:
+    100
+  WINDOW_LD_BASED:
+    False
+
+
+############################################################################################################################
+############################################## heritability analysis ########################################################
+############################################################################################################################
+
+
+HERITABILITY_INPUT:
+  - id: mousebrain
+    annotations: ["DEINH3","MEGLU11","MEINH2","MEGLU10","DEGLU5","MEGLU1","MEGLU3","TEGLU23","DEGLU4","TEGLU19","HBSER5","HBGLU2","MEGLU2","TEGLU17","MEGLU7","MEINH3","HBGLU5","TEINH12","TEINH1","TEGLU4","TEGLU21","HBINH8"]
+ # - id: tabula_muris
+ #   annotations: ["Limb_Muscle.mesenchymal_stem_cell", "Liver.hepatocyte", "Spleen.T_cell", "Pancreas.type_B_pancreatic_cell"]
+
+
+############################################################################################################################
+################################################## CONSTANTS ###############################################################
+############################################################################################################################
+
+
+LDSC_CONST:
+  DATA_DIR:
+    data/ldsc
+  LDSC_DIR:
+    ldsc
+  NUMPY_CORES:
+    1

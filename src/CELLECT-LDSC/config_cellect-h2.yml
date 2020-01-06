@@ -1,0 +1,331 @@
+---
+
+############################################################################################################################
+################################################ INFORMATION ################################################################
+############################################################################################################################
+
+# All file paths accept absolute and relative paths
+# Environment variables (including ~) are not processed, so don't use them in this config.
+
+
+############################################################################################################################
+############################################ RUN SPECIFIC VARIABLES ########################################################
+############################################################################################################################
+
+BASE_OUTPUT_DIR: /scratch/timshel/BMIcelltypes/CELLECT-LDSC 
+
+SPECIFICITY_INPUT:
+  - id: mousebrain
+    path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/mousebrain.mu.csv.gz
+  #- id: tabula_muris
+  #  path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/tabula_muris.mu.csv.gz
+
+GWAS_SUMSTATS:
+  - id: BMI_UKBB_Loh2018
+    path: /projects/timshel/data/gwas_sumstats_ldsc/timshel-collection/BMI_UKBB_Loh2018.sumstats.gz
+
+
+ANALYSIS_TYPE:
+  prioritization: False
+  conditional: False
+  heritability: True
+  heritability_intervals: False
+
+
+WINDOW_DEFINITION: 
+  WINDOW_SIZE_KB:
+    100
+  WINDOW_LD_BASED:
+    False
+
+
+############################################################################################################################
+############################################## heritability analysis ########################################################
+############################################################################################################################
+
+
+HERITABILITY_INPUT:
+  - id: mousebrain
+    annotations: ["DEINH3",
+"MEGLU11",
+"MEINH2",
+"MEGLU10",
+"DEGLU5",
+"MEGLU1",
+"MEGLU3",
+"TEGLU23",
+"DEGLU4",
+"TEGLU19",
+"HBSER5",
+"HBGLU2",
+"MEGLU2",
+"TEGLU17",
+"MEGLU7",
+"MEINH3",
+"HBGLU5",
+"TEINH12",
+"TEINH1",
+"TEGLU4",
+"TEGLU21",
+"HBINH8",
+"DEINH5",
+"HBGLU3",
+"HBINH5",
+"MEINH13",
+"MEGLU8",
+"HBINH3",
+"HBINH9",
+"HBCHO2",
+"HBNOR",
+"HBINH4",
+"SCINH4",
+"MEINH4",
+"TEGLU6",
+"SCINH2",
+"MSN1",
+"MEINH7",
+"TEINH11",
+"TEGLU10",
+"TEINH15",
+"HBINH7",
+"MEINH9",
+"HBGLU9",
+"SCINH8",
+"TEGLU5",
+"TECHO",
+"HYPEP1",
+"TEGLU24",
+"TEGLU9",
+"MEGLU9",
+"OBNBL2",
+"DGGRC2",
+"TEGLU20",
+"DGGRC1",
+"HBINH2",
+"TEINH17",
+"CBGRC",
+"HBSER3",
+"HBCHO4",
+"TEGLU3",
+"TEINH4",
+"HBCHO3",
+"SCINH10",
+"TEGLU13",
+"DEGLU1",
+"MEGLU4",
+"TEGLU15",
+"TEINH3",
+"DEINH4",
+"OBINH5",
+"TEGLU12",
+"DECHO1",
+"SCGLU3",
+"DEINH6",
+"MEINH12",
+"MBDOP1",
+"TEGLU18",
+"TEGLU11",
+"DEGLU3",
+"HYPEP3",
+"MSN5",
+"MEGLU6",
+"HBGLU1",
+"TEGLU2",
+"HBGLU7",
+"MEGLU14",
+"TEINH5",
+"ENT8",
+"HBSER2",
+"MEINH6",
+"HBINH6",
+"MBCHO1",
+"HBGLU6",
+"OBNBL1",
+"ENT9",
+"SEPNBL",
+"TEINH18",
+"TEINH19",
+"MSN4",
+"MSN2",
+"TEGLU8",
+"TEINH13",
+"SCGLU1",
+"TEINH9",
+"MEGLU5",
+"MEINH11",
+"MEINH10",
+"TEINH16",
+"HBADR",
+"CBINH1",
+"PSPEP1",
+"HBSER4",
+"DEINH1",
+"TEGLU1",
+"TEGLU16",
+"HBGLU10",
+"PSPEP3",
+"DEINH2",
+"PSNF1",
+"HYPEP5",
+"TEINH2",
+"PSPEP2",
+"DEINH7",
+"SCGLU4",
+"SCGLU2",
+"SCINH3",
+"SCINH1",
+"SCINH5",
+"TEGLU7",
+"MEINH8",
+"TEGLU22",
+"HBCHO1",
+"SCINH9",
+"PSPEP5",
+"HYPEP2",
+"SCGLU6",
+"TEINH7",
+"HBGLU8",
+"TEINH8",
+"SCINH7",
+"DECHO2",
+"MSN3",
+"HBSER1",
+"PSNP5",
+"MEINH14",
+"MBDOP2",
+"TEINH20",
+"SCGLU10",
+"TEINH14",
+"OBINH4",
+"CBNBL1",
+"TEINH6",
+"ENT1",
+"DEGLU2",
+"PSPEP4",
+"HBGLU4",
+"CBINH2",
+"PSNF3",
+"PSNP6",
+"MEINH1",
+"TEINH10",
+"SCINH11",
+"SCGLU9",
+"TEINH21",
+"HYPEP4",
+"DEINH8",
+"HYPEP7",
+"TEGLU14",
+"SCGLU7",
+"OBINH1",
+"PSNF2",
+"PSPEP8",
+"MEINH5",
+"HBINH1",
+"OBDOP1",
+"OBNBL5",
+"SCINH6",
+"SCGLU8",
+"OBINH3",
+"OBNBL4",
+"MSN6",
+"HYPEP6",
+"ENT5",
+"OBINH2",
+"SCGLU5",
+"PSPEP6",
+"DGNBL2",
+"SYNOR2",
+"PSNP1",
+"NFOL2",
+"CBNBL2",
+"SYCHO2",
+"PSPEP7",
+"ENT6",
+"CR",
+"NFOL1",
+"PSNP2",
+"ENT3",
+"PSNP4",
+"SZNBL",
+"MOL1",
+"MFOL2",
+"MFOL1",
+"MOL2",
+"OBDOP2",
+"OPC",
+"OBNBL3",
+"ENT4",
+"ENT7",
+"DGNBL1",
+"ENT2",
+"COP2",
+"HYPEP8",
+"SYNOR5",
+"SYCHO1",
+"SYNOR1",
+"ACNT2",
+"CBPC",
+"PSNP3",
+"RGSZ",
+"EPEN",
+"MOL3",
+"ACOB",
+"MGL1",
+"ACNT1",
+"VSMCA",
+"DETPH",
+"ACTE1",
+"COP1",
+"MGL2",
+"SYNOR3",
+"ACMB",
+"SYNOR4",
+"ACTE2",
+"RGDG",
+"ACBG",
+"MGL3",
+"EPSC",
+"PVM2",
+"PVM1",
+"HYPEN",
+"OEC",
+"ENTG1",
+"ENTG4",
+"SCHW",
+"ENTG2",
+"ABC",
+"VECV",
+"EPMB",
+"ENTG3",
+"VECA",
+"SATG2",
+"ENTG6",
+"ENTG5",
+"VLMC1",
+"VECC",
+"ENTG7",
+"SATG1",
+"PER2",
+"CHOR",
+"VLMC2",
+"PER1",
+"PER3",
+"ENMFB"]
+ # - id: tabula_muris
+ #   annotations: ["Limb_Muscle.mesenchymal_stem_cell", "Liver.hepatocyte", "Spleen.T_cell", "Pancreas.type_B_pancreatic_cell"}
+
+# ---> add to tabula_muris ["Brain_Non-Myeloid.neuron", "Brain_Non-Myeloid.oligodendrocyte_precursor_cell"]
+
+
+############################################################################################################################
+################################################## CONSTANTS ###############################################################
+############################################################################################################################
+
+
+LDSC_CONST:
+  DATA_DIR:
+    data/ldsc
+  LDSC_DIR:
+    ldsc
+  NUMPY_CORES:
+    1

@@ -31,18 +31,12 @@ setwd(here("src/publication"))
 # ======================================================================= #
 
 ### Tabula muris
-# dataset_prefix <- "tabula_muris"
-# filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
+dataset_prefix <- "tabula_muris"
+filter.annotations <- get_prioritized_annotations_bmi(dataset="tabula_muris")
 
 ### Mousebrain
-dataset_prefix <- "mousebrain"
-filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
-
-### Campbell
-# dataset_prefix <- "campbell2017_lvl2"
-# filter.annotations <- get_prioritized_annotations_bmi(dataset="campbell2017_lvl2")
-
-
+# dataset_prefix <- "mousebrain"
+# filter.annotations <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 # ======================================================================= #
 # ======================== LOAD DATA AND PRE-PROCESS ===================== #

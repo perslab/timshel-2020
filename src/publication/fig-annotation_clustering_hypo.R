@@ -120,7 +120,7 @@ get_hypothalamus_integrated_dendrogram <- function(save_fig) {
   p.linear <- plot_es_dendrogram(dend, df.metadata.join, dataset_prefix="hypothalamus", label_only_prioritized=F, circular=FALSE, show_legend=F)
   if (save_fig) {
     file.out <- sprintf("figs/fig_clustering.%s.dendrogram.linear.pdf", dataset_prefix="hypothalamus")
-    ggsave(plot=p.linear, filename=file.out, width=16, height=8)
+    ggsave(plot=p.linear, filename=file.out, width=12, height=5)
   }
   
   

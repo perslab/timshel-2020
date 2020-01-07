@@ -34,16 +34,11 @@ setwd(here("src/publication"))
 ### TODO: BMI gene lists
 #  PLOT LOCKE2015 NEAREST Genes
 
-
-
 # ======================================================================= #
 # ================================ LOAD ES DATA ============================ #
 # ======================================================================= #
 
-load(here("out/es/mousebrain.es_obj.RData"))
-# es_obj.mb <- es_obj
-# load(here("out/es/tabula_muris.es_obj.RData"))
-# es_obj.tm <- es_obj
+load(here("out/es/mousebrain.es_obj.RData")) # es_obj
 
 # ======================================================================= #
 # ============================= LOAD GENE LISTS ========================= #

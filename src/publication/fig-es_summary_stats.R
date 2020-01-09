@@ -39,29 +39,38 @@ setwd(here("src/publication"))
 # dataset_prefix <- "tabula_muris"
 # var_color_by <- sym("tissue")
 
-dataset_prefix <- "mousebrain"
-var_color_by <- sym("Class")
+# dataset_prefix <- "mousebrain"
+# var_color_by <- sym("Class")
 
-# dataset_prefix <- "campbell2017_lvl2"
-# var_color_by <- sym("taxonomy_lvl2")
+dataset_prefix <- "hypothalamus"
+var_color_by <- sym("taxonomy_lvl1")
 
 
 # ======================================================================= #
 # ================================ LOAD DATA ============================ #
 # ======================================================================= #
 
-### Read
-file.data <- sprintf("tables/table-annotation_summary.%s.csv", dataset_prefix)
+### Read ES summary - old way [does not work for hypothalamus because file does not exist]
+# file.data <- sprintf("tables/table-annotation_summary.%s.csv", dataset_prefix)
+# df.n_es <- read_csv(file.data)
+# df.metadata <- get_metadata(dataset_prefix)
+# df.violin <- df.n_es %>% left_join(df.metadata, by="annotation")
+
+### Read ES summary
+file.data <- sprintf("tables/table-metadata_combined.%s.csv", dataset_prefix)
 df.n_es <- read_csv(file.data)
 
+if (dataset_prefix == "hypothalamus") {
+  df.n_es <- df.n_es %>% mutate(annotation=annotation_fmt)
+}
+
+### Make dfs for plotting
+df.violin <- df.n_es
+df.barplot <- df.n_es
 
 # ======================================================================= #
 # ============================ VIOLIN PLOT ============================== #
 # ======================================================================= #
-
-### Add meta-data
-df.metadata <- get_metadata(dataset_prefix)
-df.violin <- df.n_es %>% left_join(df.metadata, by="annotation")
 
 ### order *var_color_by* by var_color_by (mutate it to make it an ordered factor)
 df.violin <- df.violin %>% mutate(!!var_color_by:=factor(!!var_color_by, levels=sort(unique(!!var_color_by)))) # this is not really needed now, but we use it later
@@ -92,9 +101,6 @@ ggsave(plot=p.violin, filename=file.out, width=10, height=5)
 # =============================== BAR PLOT ================================== #
 # ======================================================================= #
 
-### Add meta-data
-df.metadata <- get_metadata(dataset_prefix)
-df.barplot <- df.n_es %>% left_join(df.metadata, by="annotation")
 
 ### order annotations by var_color_by
 df.barplot <- df.barplot %>% mutate(!!var_color_by:=factor(!!var_color_by, levels=sort(unique(!!var_color_by)))) # this is not really needed now, but we use it later

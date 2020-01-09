@@ -30,10 +30,11 @@ setwd(here("src/publication"))
 # ========================== CELL-TYPE BMI ENRICHMENT =================== #
 # ======================================================================= #
 
-
-### READ: all MB + Campbell cell-types
-file.enrich <- here("results/es_enrichment--bmi_gene_lists.pvals.csv")
+# ### READ: enrichment results for MB+hypothalamus cell-types
+file.enrich <- here("src/publication/tables/table-es_enrichment.combined.csv") # con
 df.enrich <- read_csv(file.enrich)
+df.enrich <- df.enrich %>% filter(dataset=="MSN") # *IMPORTANT* to filter to avoid join problems downstream
+
 
 # ======================================================================= #
 # ================================ MOUSEBRAIN LDSC ================================ #
@@ -46,11 +47,11 @@ var_color_by <- sym("TaxonomyRank4_reduced1")
 # ================== LOAD LDSC CTS RESULTS (multi GWAS) ================ #
 
 ### Read LDSC results
-file.results <- here("results/prioritization_celltypes--mousebrain.multi_gwas.csv.gz")
+file.results <- here("results/cellect_ldsc/prioritization.csv")
 df.ldsc_cts <- read_csv(file.results)
+df.ldsc_cts <- format_cellect_ldsc_results(df.ldsc_cts)
+df.ldsc_cts <- df.ldsc_cts %>% filter(specificity_id == "mousebrain", gwas =="BMI_UKBB_Loh2018")
 
-# =========================== FILTER GWAS =========================== #
-df.ldsc_cts <- df.ldsc_cts %>% filter(gwas == filter.gwas)
 
 # =========================== ADD METADATA =========================== #
 
@@ -73,7 +74,7 @@ df.plot <- df.ldsc_cts
 ### Add pvalue
 df.plot <- df.plot %>% mutate(p.value.mlog10 = -log10(p.value))
 ### Add enrichment data
-df.plot <- df.plot %>% left_join(df.enrich %>% select(annotation, combined_rare_mendelian_obesity), by="annotation")
+df.plot <- df.plot %>% left_join(df.enrich %>% select(annotation, p.value.enrich=p.value), by="annotation")
 
 ### Order annotation
 df.plot <- df.plot %>% mutate(annotation=factor(annotation, levels=unique(annotation[order(tax_order_idx_mb_fig1c, as.character(annotation))]))) # order annotations by their taxonomy (from MB Fig1c), and secondary order by their annotation name
@@ -81,7 +82,8 @@ df.plot <- df.plot %>% mutate(annotation=factor(annotation, levels=unique(annota
 
 ### Colormap
 factor_levels <- sort(unique(df.plot %>% pull(!!var_color_by)))
-colormap <- colorspace::qualitative_hcl(n=length(factor_levels), palette = "Dark 3")
+colormap <- colorspace::qualitative_hcl(n=length(factor_levels), palette = "Dark 3") # Used for thesis, nice colors. But they are different from ggplot standard colors
+# colormap <- colorspace::qualitative_hcl(n=length(factor_levels), palette = "Set 2") # Tried in 2020, bit
 names(colormap) <- factor_levels
 
 
@@ -92,15 +94,15 @@ df.tax_text_position <- get_celltype_taxonomy_text_position.mb(df.metadata, df.p
 fdr_threshold <- 0.05/nrow(df.plot)
 p.main <- get_celltype_priori_base_tax_plot.mb(df.plot, df.tax_text_position)
 ### points
-p.main <- p.main + geom_point(data=df.plot, aes(x=annotation, y=p.value.mlog10, fill=!!var_color_by, size=-log10(combined_rare_mendelian_obesity), color=!!var_color_by), shape=21, stroke=0.1)
+p.main <- p.main + geom_point(data=df.plot, aes(x=annotation, y=p.value.mlog10, fill=!!var_color_by, size=-log10(p.value.enrich), color=!!var_color_by), shape=21, stroke=0.1)
 # ^ shapes 21-24 have both stroke colour and a fill. The size of the filled part is controlled by size, the size of the stroke is controlled by stroke.
-p.main <- p.main + geom_point(data=df.plot %>% filter(combined_rare_mendelian_obesity<fdr_threshold), aes(annotation, y=p.value.mlog10, size=-log10(combined_rare_mendelian_obesity), fill=!!var_color_by), stroke=0.8, color="black", shape=21, show.legend=F)
+p.main <- p.main + geom_point(data=df.plot %>% filter(p.value.enrich<fdr_threshold), aes(annotation, y=p.value.mlog10, size=-log10(p.value.enrich), fill=!!var_color_by), stroke=0.8, color="black", shape=21, show.legend=F)
 ### text/description
-p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(combined_rare_mendelian_obesity<fdr_threshold), 
+p.main <- p.main + ggrepel::geom_text_repel(data=df.plot %>% filter(p.value.enrich<fdr_threshold), 
                                             aes(x=annotation, y=p.value.mlog10, label=text), 
                                             size=rel(2.5), show.legend=F, 
                                             min.segment.length=0.1)# vjust=-2, hjust=1 #  box.padding=0
-# p.main <- p.main + geom_text(data=df.plot %>% filter(combined_rare_mendelian_obesity<fdr_threshold), aes(x=annotation, y=p.value.mlog10, label=text), size=rel(2), hjust=0, nudge_y=0.08, show.legend=F)
+# p.main <- p.main + geom_text(data=df.plot %>% filter(p.value.enrich<fdr_threshold), aes(x=annotation, y=p.value.mlog10, label=text), size=rel(2), hjust=0, nudge_y=0.08, show.legend=F)
 # ^ no repel: works esi-ok
 ### axes
 p.main <- p.main + labs(x="", y=expression(-log[10](P[S-LDSC])), size=expression(-log[10](P[enrichment])))
@@ -126,7 +128,7 @@ ggsave(p.main, filename=file.out, width=11, height=10)
 
 fdr_threshold <- 0.05/nrow(df.plot)
 p.enrich <- ggplot() +
-  geom_col(data=df.plot, aes(x=annotation, y=-log10(combined_rare_mendelian_obesity), fill=!!var_color_by)) +
+  geom_col(data=df.plot, aes(x=annotation, y=-log10(p.value.enrich), fill=!!var_color_by)) +
   ### extra
   geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
   ### axes
@@ -160,7 +162,7 @@ filter.annotations_bmi <- get_prioritized_annotations_bmi(dataset="mousebrain")
 
 p.enrich.bmi <- ggplot() +
   geom_col(data=df.plot %>% filter(annotation %in% filter.annotations_bmi), 
-           aes(x=annotation, y=-log10(combined_rare_mendelian_obesity), fill=!!var_color_by),
+           aes(x=annotation, y=-log10(p.value.enrich), fill=!!var_color_by),
            width=0.8) +
   geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 
   labs(x="", y=expression(-log[10](P[enrichment]))) +

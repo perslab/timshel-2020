@@ -84,10 +84,10 @@ p <- ggplot(df.plot, aes(x=ldsc, y=magma)) +
   geom_hline(yintercept=fdr_threshold.mlog10, linetype="dashed", color="gray") +
   geom_vline(xintercept=fdr_threshold.mlog10, linetype="dashed", color="gray") +
   ### MAGMA FDR
-  geom_point(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), color="black", size=3) +
+  geom_point(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), color="black", size=2) +
   geom_text_repel(data=df.plot %>% filter((magma > fdr_threshold.mlog10) & (ldsc < fdr_threshold.mlog10)), aes(label=annotation), color="black", size=2) + 
   # LDSC FDR
-  geom_point(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(color=annotation), size=3) +
+  geom_point(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(color=annotation), size=2) +
   geom_text_repel(data=df.plot %>% filter(annotation %in%  filter.annotations), aes(label=annotation, color=annotation), size=2) + 
   labs(x=expression(-log[10](P[S-LDSC])), y=expression(-log[10](P[MAGMA]))) + 
   scale_color_manual(values=colormap.annotations) + 

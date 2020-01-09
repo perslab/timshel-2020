@@ -31,7 +31,10 @@ source(here("src/publication/lib-load_pub_lib_functions.R"))
 # ======================================================================= #
 
 
-get_hypothalamus_integrated_dendrogram <- function(save_fig) {
+get_hypothalamus_integrated_dendrogram <- function(save_fig, clustering_method=c("correlation", "wards")) {
+  clustering_method <- match.arg(clustering_method)
+  # wards: bool param. If True, then Wards-Eucledian cluster will be used. Else Average_linkage-Correalation_dist will be used
+  
   setwd(here("src/publication"))
   # ======================================================================= #
   # ================================== LOAD DATA ========================= #
@@ -73,16 +76,18 @@ get_hypothalamus_integrated_dendrogram <- function(save_fig) {
   # ======================== CALCULATE CORR/DENDROGRAM ===================== #
   # ======================================================================= #
   
-  # ============================ Calculate correlation =============================== #
-  cormat.es <- cor(df.es %>% select(-gene), method="pearson") 
-  
-  # ========================= [base] Calculate dendrogram ============================= #
-  
   ### Compute distances and hierarchical clustering
-  # dd.eucledian <- dist(t(df.es %>% select(-gene)), method = "euclidean") # computes distances between the rows of a data matrix
-  dd.corr <- as.dist(1-cormat.es)
-  hc <- hclust(dd.corr, method = "average") # Hierarchical clustering 
-  # hc <- hclust(dd.eucledian, method = "ward.D2") # Hierarchical clustering 
+  if (clustering_method=="correlation") {
+    cormat.es <- cor(df.es %>% select(-gene), method="pearson") 
+    dd.corr <- as.dist(1-cormat.es)
+    hc <- hclust(dd.corr, method = "average") # Hierarchical clustering 
+  } else if (clustering_method=="wards") { 
+    dd.eucledian <- dist(t(df.es %>% select(-gene)), method = "euclidean") # computes distances between the rows of a data matrix
+    hc <- hclust(dd.eucledian, method = "ward.D2") # Hierarchical clustering 
+  } else {
+    stop("error")
+  }
+  
   # single linkage = nearest neighbour. 
   # complete linkage = farthest neighbour
   # ward distance does not have easy interpretable dedrogram 'height' for correlation distances.
@@ -105,11 +110,11 @@ get_hypothalamus_integrated_dendrogram <- function(save_fig) {
   ### 'Linear' - Cor dist
   if (save_fig) {
     p.linear <- plot_es_dendrogram.multi_dataset(dend, df.metadata.join, circular=FALSE, var_aes="taxonomy_lvl1")
-    ggsave(filename=sprintf("figs/fig_clustering.hypothalamus.dendrogram.cor_tax1.linear.pdf"), width=16, height=8)
+    ggsave(filename=sprintf("figs/fig_clustering.hypothalamus.dendrogram.%s.tax1.linear.pdf", clustering_method), width=16, height=8)
     p.linear <- plot_es_dendrogram.multi_dataset(dend, df.metadata.join, circular=FALSE, var_aes="taxonomy_lvl2")
-    ggsave(filename=sprintf("figs/fig_clustering.hypothalamus.dendrogram.cor_tax2.linear.pdf"), width=16, height=8)
+    ggsave(filename=sprintf("figs/fig_clustering.hypothalamus.dendrogram.%s.tax2.linear.pdf", clustering_method), width=16, height=8)
     p.linear <- plot_es_dendrogram.multi_dataset(dend, df.metadata.join, circular=FALSE, var_aes="dataset")
-    ggsave(filename=sprintf("figs/fig_clustering.hypothalamus.dendrogram.cor_dataset.linear.pdf"), width=16, height=8)
+    ggsave(filename=sprintf("figs/fig_clustering.hypothalamus.dendrogram.%s.dataset.linear.pdf", clustering_method), width=16, height=8)
   }
   # ======================================================================= #
   # =============== plot dendrogram: plot_es_dendrogram() ================= #
@@ -119,7 +124,7 @@ get_hypothalamus_integrated_dendrogram <- function(save_fig) {
   # p.linear <- plot_es_dendrogram(dend, df.metadata.join, dataset_prefix="hypothalamus", label_only_prioritized=F, circular=FALSE, show_legend=T)
   p.linear <- plot_es_dendrogram(dend, df.metadata.join, dataset_prefix="hypothalamus", label_only_prioritized=F, circular=FALSE, show_legend=F)
   if (save_fig) {
-    file.out <- sprintf("figs/fig_clustering.%s.dendrogram.linear.pdf", dataset_prefix="hypothalamus")
+    file.out <- sprintf("figs/fig_clustering.hypothalamus.dendrogram.%s.linear.pdf", clustering_method)
     ggsave(plot=p.linear, filename=file.out, width=12, height=5)
   }
   
@@ -132,7 +137,7 @@ get_hypothalamus_integrated_dendrogram <- function(save_fig) {
 # REF: https://stackoverflow.com/a/2968404/6639640
 if (!interactive()) { # function will run if script is sourced when running non-interactively (e.g. called via Rscript)
   setwd(here("src/publication"))
-  get_hypothalamus_integrated_dendrogram(save_fig=TRUE)
+  get_hypothalamus_integrated_dendrogram(save_fig=TRUE, clustering_method="correlation")
 }
 
 

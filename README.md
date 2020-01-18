@@ -4,6 +4,7 @@ This repository contains code to reproduce analysis and figures in presented in:
 
 **[Timshel (bioRxiv, 2019)](https://www.biorxiv.org/XXXX): _Mapping heritability of obesity by cell types_.**
 
+![image](https://user-images.githubusercontent.com/5487016/72666147-aecfdd00-3a0f-11ea-8609-12c157ee24f3.png)
 
 ### Steps to reproduce analysis
 1. Download and prepare single-cell expression datasets: `src/prep-expr_datasets/<dataset>-preprocessing.R`
@@ -25,3 +26,5 @@ This repository contains code to reproduce analysis and figures in presented in:
 Code to reproduce cell-type co-expression networks can be found here: https://github.com/perslab/19-BMI-brain-wgcna
 
 Code to reproduce 'obesity geneset' enrichment tests can be found here: https://github.com/perslab/19-BMI-brain-genesettests
+
+![image](https://user-images.githubusercontent.com/5487016/72666162-d9219a80-3a0f-11ea-94c2-669125fd588a.png)

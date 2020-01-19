@@ -1,5 +1,5 @@
 ############### SYNOPSIS ###################
-### AIM: XXX top ESmu genes for selected annotations
+### AIM: Make table for top ESmu genes for selected annotations
 
 ### OUTPUT: 
 # ....
@@ -27,7 +27,7 @@ setwd(here("src/publication"))
 # ================================ LOAD DATA ============================ #
 # ======================================================================= #
 
-dataset_prefix <- "campbell2017_lvl2"
+dataset_prefix <- "mousebrain"
 
 ### Get ES data
 load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
@@ -39,6 +39,7 @@ load(here(sprintf("out/es/%s.es_obj.RData", dataset_prefix)))
 # ======================================================================= #
 
 # filter.annotations <- es_obj[["annotations"]]
+filter.annotations <- get_prioritized_annotations_bmi("mousebrain")
 
 ### ES table for all genes (SOM)
 df.all_table <- get_annotation_es.table(es_obj, annotations=filter.annotations, es_metric="es_mu")

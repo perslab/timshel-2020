@@ -159,7 +159,7 @@ p.main <- ggplot() +
   geom_text(data=df.tax_text_position, aes(x=pos_mid, y=-3, label=tissue_display_name, group=tissue), hjust="right", size=rel(3)) + # group=tissue solves gganimate problem with 'jumps' in the position. It is not needed for a static ggplot
   geom_rect(data=df.tax_text_position %>% filter(flag_draw_rect), aes(xmin=pos_start, xmax=pos_end, ymin=-5, ymax=Inf, fill=tissue), color="gray", alpha=0.1) +
   ### cell-types
-  geom_point(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), color=tissue)) +
+  geom_point(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value)), color="black") +
   ggrepel::geom_text_repel(data=df.plot.tax_order %>% filter(fdr_significant), aes(x=annotation, y=-log10(p.value), label=annotation_label_fmt, group=tissue), color="black", hjust = 0, nudge_x = 1.5, show.legend=F) + # group is to try to improve gganimate
   ### extra
   geom_hline(yintercept=-log10(fdr_threshold), linetype="dashed", color="darkgray") + 

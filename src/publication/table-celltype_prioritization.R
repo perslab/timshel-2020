@@ -29,8 +29,11 @@ setwd(here("src/publication"))
 
 
 dataset_prefixes <- c("tabula_muris", "mousebrain", "hypothalamus")
+# dataset_prefix <- "tabula_muris"
 filter.gwas_bmi <- "BMI_UKBB_Loh2018"
 filter.gwas <- utils.get_gwas_ids_for_meta_analysis()
+
+
 
 for (dataset_prefix in dataset_prefixes) {
   print(dataset_prefix)
@@ -98,6 +101,7 @@ for (dataset_prefix in dataset_prefixes) {
     df.other_gwas.spread <- df.other_gwas.spread %>% mutate(annotation = utils.rename_annotations.hypothalamus(annotation, specificity_id, check_all_matches=T))
   } else if (dataset_prefix == "tabula_muris") {
     df.join <- df.bmi %>% mutate(annotation_fmt = utils.rename_annotations.tabula_muris(annotation, style="tissue - celltype", check_all_matches=T))
+    df.other_gwas.spread <- df.other_gwas.spread %>% mutate(annotation = utils.rename_annotations.tabula_muris(annotation, style="tissue - celltype", check_all_matches=T))
   } else {
     stop("Internal error")
   }

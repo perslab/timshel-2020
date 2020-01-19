@@ -101,6 +101,11 @@ df.plot %>% count(significance_group) %>% arrange(n)
 # 4 ns                                  232
 df.plot
 
+### Cor test # [on log pvalues]
+stopifnot(nrow(df.plot)==265)
+ct <- cor.test(log10(df.plot$p.value.ldsc), log10(df.plot$p.value.enrich))
+ct$p.value # 1.710144e-25
+
 p <- ggplot(df.plot, aes(x=-log10(p.value.ldsc), y=-log10(p.value.enrich)))
 p <- p + geom_point(color="gray")
 p <- p + geom_point(data=df.plot %>% filter(significance_group != "ns"), aes(color=significance_group))

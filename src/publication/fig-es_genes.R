@@ -126,7 +126,7 @@ es_obj <- es_obj.mb
 
 
 ### MAIN PLOT: ESmu [2019 rev]
-genes_select <- c("HTR2C", "LEPR")
+genes_select <- c("LEPR", "HTR2C")
 df.es.gene <- get_es.gene_centric.single_es_metric(es_obj, genes_select=genes_select, es_metric="es_mu")
 p <- plot_es.gene_centric.single_es_metric(df.es.gene, 
                                            annotations_highlight=annotations_highlight,

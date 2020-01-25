@@ -41,8 +41,8 @@ df.ldsc_cts <- df.ldsc_cts %>% select(annotation, pval=p.value)
 # ================================ MAGMA ================================ #
 # ======================================================================= #
 file.magma <- here("results/cellect_magma/out.CELLECT_MAGMA.mousebrain.BMI_UKBB_Loh2018_no_mhc.es_mu.csv")
-df.magma <- read_csv(file.magma)
-df.magma <- df.magma %>% select(annotation, pval=p.value)
+df.magma.raw <- read_csv(file.magma)
+df.magma <- df.magma.raw %>% select(annotation, pval=p.value)
 df.magma
 
 

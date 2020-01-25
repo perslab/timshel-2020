@@ -57,10 +57,10 @@ df <- df %>% mutate(annotation_fmt = utils.rename_annotations.hypothalamus(annot
 # ======================================================================= #
 # ================================= EXPORT ============================== #
 # ======================================================================= #
-  
+
 
 # df.export <- df %>% select(Dataset=dataset, Annotation=annotation_fmt, `Enrichment P-value`=p.value)
-df.export <- df %>% select(dataset, annotation, annotation_fmt, p.value)
+df.export <- df %>% select(dataset, annotation, annotation_fmt, p.value, `Mann U statistic`=statistic)
 
 file.out <- here("src/publication/tables/table-es_enrichment.combined.csv")
 df.export %>% write_csv(file.out)

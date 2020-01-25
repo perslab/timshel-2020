@@ -111,7 +111,7 @@ ggsave(plot=p.linear, filename=file.out, width=12, height=5)
 #   p <- p + theme(plot.margin = unit(c(1,1,4,1), "cm")) # (t, r, b, l) widen bottom margin
 # }
 
-p
+
 # ======================================================================= #
 # ====================== [corrplot] Correlation plots ==================== #
 # ======================================================================= #

@@ -37,6 +37,7 @@ if (dataset_prefix != "hypothalamus") {
   df.es <- read_csv(here(sprintf("out/es/%s.mu.csv.gz", dataset_prefix)))
 } else {
   df.es <- get_combined_hypo_es(merge="full")
+  df.es[is.na(df.es)] <- 0 # replace NA from merge with zero
 }
 
 ### Add gene symbols

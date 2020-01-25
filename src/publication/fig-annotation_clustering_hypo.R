@@ -40,26 +40,9 @@ get_hypothalamus_integrated_dendrogram <- function(save_fig, clustering_method=c
   # ================================== LOAD DATA ========================= #
   # ======================================================================= #
   
-  ### Meta-data
   df.metadata <- get_metadata("hypothalamus")
-  df.metadata <- df.metadata %>% mutate(annotation_uniq = paste0(specificity_id, "__", annotation)) # needed because some hyp annotations are duplicated across datasets
   
-  ### ESmu matrix
-  file.es <- here("out/es", paste0(get_scrna_seq_dataset_prefixes("hypo"), ".mu.csv.gz"))
-  list.df.es <- map(file.es, read_csv) # genes x cell-types
-  ### Rename ESmu annotations to avoid problem with duplicates during merge 
-  names(list.df.es) <- get_scrna_seq_dataset_prefixes("hypo") # names is garantueed to be in same order as above
-  list.df.es.prefixed <- list.df.es %>% imap(.f=function(df,specificity_id){colnames(df)[-1] <- paste0(specificity_id, "__", colnames(df)[-1]); df}) # genes x cell-types.
-  # ^ x[-1]: first column is "gene"
-
-  ### Merge (*inner*: only overlapping genes will be used for clustering)
-  df.es <- plyr::join_all(list.df.es.prefixed, by="gene", type="inner", match="first") %>% as.tibble() # REF: https://stackoverflow.com/a/32066419/6639640. match argument should not matter (only speed)
-  
-  ### Map hypothalamus annotations to annotation_fmt
-  annotation_uniq <- colnames(df.es)[-1] # exclude 'gene' column
-  annotation_fmt <- df.metadata$annotation_fmt[match(annotation_uniq, df.metadata$annotation_uniq)]
-  # df.tmp <- tibble(x=annotation_fmt, y=annotation_uniq) # test to show that the matching works
-  colnames(df.es)[-1] <- annotation_fmt # ALTERNATIVE: use deframe() and rename(!!!x)
+  df.es <- get_combined_hypo_es(merge="inner") # *inner*: only overlapping genes will be used for clustering
   
   # ======================================================================= #
   # ================================== MAKE META-DATA ========================= #

@@ -260,3 +260,41 @@ get_annotations.mousebrain.hypothalamus <- function() {
   return(annotations.hypo)
 }
 
+
+
+# ======================================================================= #
+# ================ HYPOTHALAMUS: load combined ESmu matrix ============== #
+# ======================================================================= #
+### OUTPUT: df.es
+# A tibble: 6 x 348
+# gene  `ARCME-NEURO1` `ARCME-NEURO2` `ARCME-NEURO3` `ARCME-NEURO4` `ARCME-NEURO5` `ARCME-NEURO6` `ARCME-NEURO7` `ARCME-NEURO8`
+# ENSG…          0              0             0              0.0306          0.157         0             0.119            0    
+# ENSG…          0              0             0              0               0             0             0.185            0    
+# ENSG…          0.155          0.174         0.0614         0.187           0             0.0702        0.200   
+
+get_combined_hypo_es <- function(merge=c("inner", "full")) {
+  ### Meta-data
+  df.metadata <- get_metadata("hypothalamus")
+  df.metadata <- df.metadata %>% mutate(annotation_uniq = paste0(specificity_id, "__", annotation)) # needed because some hyp annotations are duplicated across datasets
+  
+  ### ESmu matrix
+  file.es <- here("out/es", paste0(get_scrna_seq_dataset_prefixes("hypo"), ".mu.csv.gz"))
+  list.df.es <- map(file.es, read_csv) # genes x cell-types
+  ### Rename ESmu annotations to avoid problem with duplicates during merge 
+  names(list.df.es) <- get_scrna_seq_dataset_prefixes("hypo") # names is garantueed to be in same order as above
+  list.df.es.prefixed <- list.df.es %>% imap(.f=function(df,specificity_id){colnames(df)[-1] <- paste0(specificity_id, "__", colnames(df)[-1]); df}) # genes x cell-types.
+  # ^ x[-1]: first column is "gene"
+  
+  ### Merge
+  df.es <- plyr::join_all(list.df.es.prefixed, by="gene", type=merge, match="first") %>% as.tibble() # REF: https://stackoverflow.com/a/32066419/6639640. match argument should not matter (only speed)
+  # plyr::join_all type: left, right, inner or full
+  # *inner*: only overlapping genes will be used for clustering
+  # *full*: used for exporting combined ESmu matrix
+  
+  ### Map hypothalamus annotations to annotation_fmt
+  annotation_uniq <- colnames(df.es)[-1] # exclude 'gene' column
+  annotation_fmt <- df.metadata$annotation_fmt[match(annotation_uniq, df.metadata$annotation_uniq)]
+  # df.tmp <- tibble(x=annotation_fmt, y=annotation_uniq) # test to show that the matching works
+  colnames(df.es)[-1] <- annotation_fmt # ALTERNATIVE: use deframe() and rename(!!!x)
+  return(df.es)
+}

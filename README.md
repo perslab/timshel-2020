@@ -2,7 +2,7 @@
 
 This repository contains code to reproduce analysis and figures in presented in:  
 
-**[Timshel (bioRxiv, 2020)](https://www.biorxiv.org/XXXX): _Mapping heritability of obesity by cell types_.**
+**[Timshel (bioRxiv, 2020): _Mapping heritability of obesity by cell types_](https://www.biorxiv.org/content/10.1101/2020.01.27.920033v1)**
 
 ![image](https://user-images.githubusercontent.com/5487016/72666147-aecfdd00-3a0f-11ea-8609-12c157ee24f3.png)
 

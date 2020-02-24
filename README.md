@@ -21,7 +21,14 @@ This repository contains code to reproduce analysis and figures in presented in:
 
 \*Since finishing the manuscript, we have implemented CELLEX in Python available [here](https://github.com/perslab/CELLEX). We recommend using Python CELLEX as it is easier to use for new users.
 
-\*\*For cross-platform portability we used [renv](https://rstudio.github.io/renv/articles/renv.html) to create a reproducible environment for the R code used to produce the figures/tables. You can install the environment (i.e. CRAN packages) by running either `renv::init()` or `renv::restore(lockfile="./renv.lock")`. (See the renv.lock file [here](https://github.com/perslab/timshel-bmicelltypes/blob/master/renv.lock).)
+\*\*For cross-platform portability we used [renv](https://rstudio.github.io/renv/articles/renv.html) to create a reproducible environment for the R code used to produce the figures/tables. You can install the environment (i.e. CRAN packages) by running
+
+```
+renv::restore(repos = c(CRAN = "https://cloud.r-project.org"),
+              lockfile="./renv.lock")
+```
+
+(See the renv.lock file [here](https://github.com/perslab/timshel-bmicelltypes/blob/master/renv.lock).)
 
 
 ## Additional repositories to reproduce analysis

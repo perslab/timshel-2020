@@ -146,7 +146,7 @@ df.plot.pvals <- df.plot.pvals %>% mutate(annotation = factor(annotation, levels
 p.bar <- ggplot(df.plot.pvals, aes(x=annotation, y=value))
 p.bar <- p.bar + geom_col(aes(fill=method), position=position_dodge2())
 p.bar <- p.bar + coord_flip()
-p.bar <- p.bar + labs(x="", y="", fill="")
+p.bar <- p.bar + labs(y=expression(-log[10](P)), x="", fill="")
 p.bar <- p.bar + theme_classic()
 p.bar <- p.bar + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line.y=element_blank())
 p.bar <- p.bar + scale_fill_manual(values=c("Enrichment"="#6baed6", "S-LDSC"="#02818a"))
@@ -159,11 +159,13 @@ p.bar
 ### Patch
 p.patch <-(p.heat+theme(legend.position="top")) + (p.bar+theme(legend.position="top")) + plot_layout(nrow=1, widths=c(1, 0.2))
 p.patch
-# & theme(plot.margin = unit(c(3,1,1,1), "cm")) # (t, r, b, l) widen margin --> does not work for pathwork
+
+# SEE HERE FOR MARGIN ISSUES: https://github.com/thomasp85/patchwork/issues/94
+# plot_annotation(theme = theme(plot.margin = margin()))
 
 ### Save
-# file.out <- sprintf("figs/fig_es.heatmap.campbell2017_lvl2.patch.pdf")
-# ggsave(plot=p.patch, filename=file.out, width=10, height=5)
+file.out <- sprintf("figs/fig_es.heatmap.campbell2017_lvl2.patch.pdf")
+ggsave(plot=p.patch, filename=file.out, width=10, height=5)
 
 # ======================================================================= #
 # ================================ XXXXXXXXX ============================ #

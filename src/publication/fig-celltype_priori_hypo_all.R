@@ -73,9 +73,11 @@ df.join <- df.join %>% mutate(annotation_fmt = utils.rename_annotations.hypothal
 df.metadata <- get_metadata("hypothalamus")
 df.join <- df.join %>% left_join(df.metadata %>% select(-annotation, -specificity_id), by="annotation_fmt")
 
+
 ### Add extra columns
 df.join <- df.join %>% mutate(
-  category=taxonomy_lvl1, # *DETERMINES WHAT IS COLORED BY*
+  #category=taxonomy_lvl1, # *DETERMINES WHAT IS COLORED BY*
+  category=annotation_prefix, # *DETERMINES WHAT IS COLORED BY*
   text=annotation_fmt
   # text=annotation_marker
   
@@ -99,7 +101,10 @@ df.join <- df.join %>% mutate(
 df.plot <- df.join
 
 ### Order annotations by tax1
-df.plot <- df.plot %>% arrange(taxonomy_lvl1, annotation_fmt) %>% mutate(annotation_fmt = factor(annotation_fmt, levels=annotation_fmt))
+# df.plot <- df.plot %>% arrange(taxonomy_lvl1, annotation_fmt) %>% mutate(annotation_fmt = factor(annotation_fmt, levels=annotation_fmt))
+### Order annotations by annotation_prefix
+df.plot <- df.plot %>% arrange(annotation_prefix, annotation_fmt) %>% mutate(annotation_fmt = factor(annotation_fmt, levels=annotation_fmt))
+
 
 ### Order annotations by dendrogram
 # order.annotations <- labels(dend) # labels(dend) returns ordered labels | order.dendrogram(dend) returns ordered index.
@@ -150,7 +155,7 @@ p.priori <- ggplot() +
 p.priori <- p.priori + theme(plot.margin = unit(c(1,3,1,1), "cm")) # (t, r, b, l) widen margin
 p.priori
 
-file.out <- "figs/fig_celltypepriori.hypothalamus.priori.pdf"
+file.out <- "figs/fig_celltypepriori.hypothalamus.priori.by_study.pdf"
 ggsave(plot=p.priori, filename=file.out, width=8, height=8)
 
 

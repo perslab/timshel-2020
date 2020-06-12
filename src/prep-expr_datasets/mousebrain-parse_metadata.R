@@ -41,7 +41,7 @@ cols_metadata_keep <- c("ClusterName",
                         )
 
 ### Read
-file.metadata <- here("data/expression/mousebrain/mousebrain-agg_L5.metadata_full.csv")
+file.metadata <- here("data/expression/mousebrain/mousebrain_agg_L5.metadata_full.csv") # exported via loompy from "L5_All.agg.loom"
 df.metadata <- read_csv(file.metadata)
 
 ### Select metadata
@@ -240,5 +240,5 @@ df.metadata <- df.metadata %>% left_join(df.metadata.select %>% select(annotatio
 df.metadata <- df.metadata %>% left_join(df.nt.spread, by="annotation") # add nt.* columns
 
 ### Write file
-file.metadata_out <- here("data/expression/mousebrain/mousebrain-agg_L5.metadata.csv")
+file.metadata_out <- here("data/expression/mousebrain/mousebrain.metadata.csv")
 df.metadata %>% write_csv(file.metadata_out)

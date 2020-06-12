@@ -48,6 +48,9 @@ file.geneset <- here("data/genes_obesity/combined_gene_list.rare_and_mendelian_o
 df.geneset <- read_tsv(file.geneset)
 df.geneset
 
+df.geneset <- df.geneset %>% filter(category %in% c("Monogenic obesity", "Extreme obesity", "Protein-altering", "Early onset"))
+# ---> 23 genes [non-symdromic]
+
 # ======================================================================= #
 # ================================ GET ES DF ============================ #
 # ======================================================================= #

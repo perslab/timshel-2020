@@ -30,7 +30,7 @@ setwd(here("src/publication"))
 data_prefixes <- get_scrna_seq_dataset_prefixes("brain")
 
 ### Get ES data
-dir.data <- here("out/es_enrichment_test")
+dir.data <- here("out/es_enrichment_test/per_geneset/")
 files_all <- list.files(dir.data, pattern="*.csv.gz")
 files_all
 files_keep <- sapply(data_prefixes, function(prefix){files_all[base::startsWith(files_all, prefix)]}) # returns named char vec. names==data_prefixes
@@ -40,12 +40,19 @@ list.dfs <- lapply(file.path(dir.data, files_keep), read_csv)
 names(list.dfs) <- names(files_keep)
 df <- bind_rows(list.dfs, .id="specificity_id")
 
-### Rename 'cell-type' to annotation
-df <- df %>% rename(annotation = cell_type)
 
 # ======================================================================= #
 # ================================= PROCESS ============================= #
 # ======================================================================= #
+
+### Rename 'cell-type' to annotation
+# df <- df %>% rename(annotation = cell_type) # JUNE 2020 OUTCOMEMNTED
+
+### Keep only protein_monogenic_extreme
+df <- df %>% filter(geneset_name == "protein_monogenic_extreme")
+
+### clean-up statistic
+df$statistic = as.numeric(str_match(df$statistic, "W = (.*)\\)")[,2])
 
 ### add dataset
 df <- df %>% mutate(dataset = case_when(

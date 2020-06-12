@@ -1,51 +1,51 @@
-gene_symbol	ensembl_gene_id	category
-Alms1	ENSG00000116127	mendelian
-Arl6	ENSG00000113966	mendelian
-Bbs1	ENSG00000174483	mendelian
-Bbs10	ENSG00000179941	mendelian
-Bbs12	ENSG00000181004	mendelian
-Bbs2	ENSG00000125124	mendelian
-Bbs4	ENSG00000140463	mendelian
-Bbs5	ENSG00000163093	mendelian
-Bbs7	ENSG00000138686	mendelian
-Bbs9	ENSG00000122507	mendelian
-Bdnf	ENSG00000176697	mendelian
-Cep19	ENSG00000174007	mendelian
-Cep290	ENSG00000198707	mendelian
-Gnas	ENSG00000087460	mendelian
-Gpc3	ENSG00000147257	mendelian
-Ksr2	ENSG00000171435	mendelian/rare
-Lep	ENSG00000174697	mendelian
-Lepr	ENSG00000116678	mendelian
-Lztfl1	ENSG00000163818	mendelian
-Mc4r	ENSG00000166603	mendelian/rare
-Mkks	ENSG00000125863	mendelian
-Mks1	ENSG00000011143	mendelian
-Ntrk2	ENSG00000148053	mendelian
-Ofd1	ENSG00000046651	mendelian
-Pcsk1	ENSG00000175426	mendelian
-Phf6	ENSG00000156531	mendelian
-Pomc	ENSG00000115138	mendelian
-Prkar1a	ENSG00000108946	mendelian
-Rab23	ENSG00000112210	mendelian
-Rai1	ENSG00000108557	mendelian
-Sdccag8	ENSG00000054282	mendelian
-Sh2b1	ENSG00000178188	mendelian
-Sim1	ENSG00000112246	mendelian
-Tbx3	ENSG00000135111	mendelian
-Trim32	ENSG00000119401	mendelian
-Ttc8	ENSG00000165533	mendelian
-Vps13b	ENSG00000132549	mendelian
-Wdpcp	ENSG00000143951	mendelian
-Wnt10b	ENSG00000169884	mendelian
-Zbtb7b	ENSG00000160685	rare
-Ache	ENSG00000087085	rare
-Rapgef3	ENSG00000079337	rare
-Prkag1	ENSG00000181929	rare
-Rab21	ENSG00000080371	rare
-Hip1r	ENSG00000130787	rare
-Zfhx3	ENSG00000140836	rare
-Gipr	ENSG00000010310	rare
-Entpd6	ENSG00000197586	rare
-Zfr2	ENSG00000105278	rare
-Znf169	ENSG00000175787	rare
+gene_symbol	ensembl_gene_ID	category
+Alms1	ENSG00000116127	Syndromic obesity
+Arl6	ENSG00000113966	Syndromic obesity
+Bbs1	ENSG00000174483	Syndromic obesity
+Bbs10	ENSG00000179941	Syndromic obesity
+Bbs12	ENSG00000181004	Syndromic obesity
+Bbs2	ENSG00000125124	Syndromic obesity
+Bbs4	ENSG00000140463	Syndromic obesity
+Bbs5	ENSG00000163093	Syndromic obesity
+Bbs7	ENSG00000138686	Syndromic obesity
+Bbs9	ENSG00000122507	Syndromic obesity
+Bdnf	ENSG00000176697	Monogenic obesity
+Cep19	ENSG00000174007	Monogenic obesity
+Cep290	ENSG00000198707	Syndromic obesity
+Gnas	ENSG00000087460	Syndromic obesity
+Gpc3	ENSG00000147257	Syndromic obesity
+Ksr2	ENSG00000171435	Extreme obesity
+Lep	ENSG00000174697	Monogenic obesity
+Lepr	ENSG00000116678	Monogenic obesity
+Lztfl1	ENSG00000163818	Syndromic obesity
+Mc4r	ENSG00000166603	Monogenic obesity
+Mkks	ENSG00000125863	Syndromic obesity
+Mks1	ENSG00000011143	Syndromic obesity
+Ntrk2	ENSG00000148053	Monogenic obesity
+Ofd1	ENSG00000046651	Syndromic obesity
+Pcsk1	ENSG00000175426	Monogenic obesity
+Phf6	ENSG00000156531	Syndromic obesity
+Pomc	ENSG00000115138	Monogenic obesity
+Prkar1a	ENSG00000108946	Syndromic obesity
+Rab23	ENSG00000112210	Syndromic obesity
+Rai1	ENSG00000108557	Syndromic obesity
+Sdccag8	ENSG00000054282	Syndromic obesity
+Sh2b1	ENSG00000178188	Extreme obesity
+Sim1	ENSG00000112246	Monogenic obesity
+Tbx3	ENSG00000135111	Syndromic obesity
+Trim32	ENSG00000119401	Syndromic obesity
+Ttc8	ENSG00000165533	Syndromic obesity
+Vps13b	ENSG00000132549	Syndromic obesity
+Wdpcp	ENSG00000143951	Syndromic obesity
+Wnt10b	ENSG00000169884	Extreme obesity
+Zbtb7b	ENSG00000160685	Protein-altering
+Ache	ENSG00000087085	Protein-altering
+Rapgef3	ENSG00000079337	Protein-altering
+Prkag1	ENSG00000181929	Protein-altering
+Rab21	ENSG00000080371	Protein-altering
+Hip1r	ENSG00000130787	Protein-altering
+Zfhx3	ENSG00000140836	Protein-altering
+Gipr	ENSG00000010310	Protein-altering
+Entpd6	ENSG00000197586	Protein-altering
+Zfr2	ENSG00000105278	Protein-altering
+Znf169	ENSG00000175787	Protein-altering

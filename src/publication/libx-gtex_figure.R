@@ -123,6 +123,7 @@ function.plot.barplot <- function(df.tissue_enrichment, xlabel="MISSING X-LABEL"
   p <- p + geom_bar(aes(x=order.numeric, y=-log10(Nominal.P.value), fill=FDR.significant), stat="identity")
   p <- p + geom_hline(yintercept=-log10(0.05/54), linetype="dashed", color="darkgray") # *********HACK****************
   p <- p + geom_text(data=df.tissue_enrichment.spaced %>% filter(False.discovery.rate=="<0.01"), aes(x=order.numeric, y=-log10(Nominal.P.value), label=Label), angle=25, nudge_y=0.05, size=rel(2), hjust=0, show.legend=F)
+  p <- p + geom_text(data=df.tissue_enrichment.spaced %>% filter(Name=="Brain - Hypothalamus"), aes(x=order.numeric, y=-log10(Nominal.P.value), label=Label), angle=25, nudge_y=0.05, size=rel(2), hjust=0, show.legend=F)
   p <- p + scale_fill_manual(name="", values=c("TRUE"="#de2d26","FALSE"="#606060",guide='legend')) # set colors for FDR significant bars
   p <- p + scale_x_continuous(breaks=df.breaks_and_labels$break_position, labels=df.breaks_and_labels$group) # add x-axis labels
   p <- p + labs(y=expression(-log[10](P[S-LDSC]))) # add axis titles

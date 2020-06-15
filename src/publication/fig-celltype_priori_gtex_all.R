@@ -92,7 +92,6 @@ str(df.tissue_enrichment)
 ### Plot
 p.gtex <- function.plot.barplot(df.tissue_enrichment, xlabel="Tissues")
 p.gtex
-# p.gtex <- p.gtex %>% dplyr::arrange(Name, Nominal.P.value) # NEW 2020
 
 ### Adjust
 p.gtex <- p.gtex + theme(plot.margin = unit(c(2,1,1,1), "cm")) # (t, r, b, l) widen margin

@@ -29,11 +29,22 @@ source(here("src/publication/lib-load_pub_lib_functions.R"))
 setwd(here("src/publication"))
 
 # ======================================================================= #
+# ================================ TODO TO JON [DELTE ME LATER] ============================ #
+# ======================================================================= #
+### TMP DELETE
+# get_metadata("campbell2017_lvl2")
+# mutate(annotation = utils.rename_annotations.hypothalamus(annotation, "campbell2017_lvl2", check_all_matches=T))
+
+
+get_metadata("hypothalamus") %>% select(annotation_fmt, annotation_marker)
+
+# ======================================================================= #
 # ================================ LOAD ES DATA ============================ #
 # ======================================================================= #
 
 load(here("out/es/campbell2017_lvl2.es_obj.RData")) # es_obj
 #df.es = read_csv(here("out","es","campbell2017_lvl2.mu.csv.gz"))
+
 # ======================================================================= #
 # ================================ LOAD PVAL DATA ============================ #
 # ======================================================================= #
@@ -223,7 +234,6 @@ p.heat
 
 # file.out <- sprintf("figs/fig_es.heatmap.campbell2017_lvl2.pdf")
 # ggsave(p.heat, filename=file.out, width=10, height=4)
-
 
 # ======================================================================= #
 # ================================ BARPLOT ============================ #

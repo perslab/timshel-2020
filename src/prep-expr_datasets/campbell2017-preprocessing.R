@@ -205,6 +205,14 @@ seurat_obj@meta.data %>% count(cell_type_all_lvl2)
 # s35.b1_tanycytes	1933
 # s36.a2_tanycytes	1169
 
+
+# ======================================================================= #
+# =========================== Subset neurons =========================== #
+# ======================================================================= #
+seurat_obj <- SetAllIdent(object=seurat_obj, id="cell_type_all_lvl2")
+seurat_obj_n = SubsetData(seurat_obj, 
+                          ident.use=grep("^n\\d+", seurat_obj@meta.data$cell_type_all_lvl2, value=T), 
+                          subset.raw=T)
 # ======================================================================= #
 # ========================= EXPORT Seurat object ======================== #
 # ======================================================================= #
@@ -220,6 +228,8 @@ seurat_obj@meta.data %>% count(taxonomy_lvl1, taxonomy_lvl2, cell_type_all_lvl1)
   write_csv(here("data/expression/campbell2017/campbell2017_lvl1.cell_type_metadata.csv"))
 seurat_obj@meta.data %>% count(taxonomy_lvl1, taxonomy_lvl2, cell_type_all_lvl2) %>%
   write_csv(here("data/expression/campbell2017/campbell2017_lvl2.cell_type_metadata.csv"))
+seurat_obj_n@meta.data %>% count(taxonomy_lvl1, taxonomy_lvl2, cell_type_all_lvl2) %>%
+  write_csv(here("data/expression/campbell2017/campbell2017_lvl2_neurons.cell_type_metadata.csv"))
 
 # ======================================================================= #
 # ================================ EXPORT TO CSV ============================= #
@@ -242,6 +252,21 @@ data.table::fwrite(df.metadata, file=file.out.meta,  # fwrite cannot write gzipe
 
 
 
+### NEURONS 
+### Get expression data
+df_n <- as.data.frame(as.matrix(seurat_obj_n@raw.data))
+dim(df_n) # 26774 20921
+df_n <- df_n %>% rownames_to_column(var="gene") %>% select(gene, everything()) %>% as.tibble() # set rownames as column
+file.out.data_n <- here("tmp-data/expression/campbell2017_neur.umi.csv")
+data.table::fwrite(df_n, file=file.out.data_n,  # fwrite cannot write gziped files
+                   nThread=24, verbose=T) # write file ---> write to scratch 
+R.utils::gzip(file.out.data_n, overwrite=TRUE) # gzip
+
+### Write cell meta-data
+df.metadata_n <- seurat_obj_n@meta.data %>% as.tibble()
+file.out.meta_n <- here("tmp-data/expression/campbell2017_neur.metadata.csv")
+data.table::fwrite(df.metadata_n, file=file.out.meta_n,  # fwrite cannot write gziped files
+                   nThread=24, verbose=T) # write file ---> write to scratch 
 
 
 

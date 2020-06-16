@@ -1,0 +1,56 @@
+annotation,tissue,tissue_sub
+whole_blood,Blood,Whole Blood
+brain_frontal_cortex_ba9,Brain,Brain - Frontal Cortex (BA9)
+adipose_subcutaneous,Adipose Tissue,Adipose - Subcutaneous
+muscle_skeletal,Muscle,Muscle - Skeletal
+artery_tibial,Blood Vessel,Artery - Tibial
+artery_coronary,Blood Vessel,Artery - Coronary
+heart_atrial_appendage,Heart,Heart - Atrial Appendage
+adipose_visceral_omentum,Adipose Tissue,Adipose - Visceral (Omentum)
+ovary,Ovary,Ovary
+uterus,Uterus,Uterus
+vagina,Vagina,Vagina
+breast_mammary_tissue,Breast,Breast - Mammary Tissue
+skin_not_sun_exposed_suprapubic,Skin,Skin - Not Sun Exposed (Suprapubic)
+minor_salivary_gland,Salivary Gland,Minor Salivary Gland
+brain_cortex,Brain,Brain - Cortex
+adrenal_gland,Adrenal Gland,Adrenal Gland
+thyroid,Thyroid,Thyroid
+lung,Lung,Lung
+spleen,Spleen,Spleen
+pancreas,Pancreas,Pancreas
+esophagus_muscularis,Esophagus,Esophagus - Muscularis
+esophagus_mucosa,Esophagus,Esophagus - Mucosa
+esophagus_gastroesophageal_junction,Esophagus,Esophagus - Gastroesophageal Junction
+stomach,Stomach,Stomach
+colon_sigmoid,Colon,Colon - Sigmoid
+small_intestine_terminal_ileum,Small Intestine,Small Intestine - Terminal Ileum
+colon_transverse,Colon,Colon - Transverse
+prostate,Prostate,Prostate
+testis,Testis,Testis
+skin_sun_exposed_lower_leg,Skin,Skin - Sun Exposed (Lower leg)
+nerve_tibial,Nerve,Nerve - Tibial
+heart_left_ventricle,Heart,Heart - Left Ventricle
+pituitary,Pituitary,Pituitary
+brain_cerebellum,Brain,Brain - Cerebellum
+cells_cultured_fibroblasts,Skin,Cells - Cultured fibroblasts
+artery_aorta,Blood Vessel,Artery - Aorta
+cells_ebv_transformed_lymphocytes,Blood,Cells - EBV-transformed lymphocytes
+brain_cerebellar_hemisphere,Brain,Brain - Cerebellar Hemisphere
+brain_caudate_basal_ganglia,Brain,Brain - Caudate (basal ganglia)
+brain_nucleus_accumbens_basal_ganglia,Brain,Brain - Nucleus accumbens (basal ganglia)
+brain_putamen_basal_ganglia,Brain,Brain - Putamen (basal ganglia)
+brain_hypothalamus,Brain,Brain - Hypothalamus
+brain_spinal_cord_cervical_c_1,Brain,Brain - Spinal cord (cervical c-1)
+liver,Liver,Liver
+brain_hippocampus,Brain,Brain - Hippocampus
+brain_anterior_cingulate_cortex_ba24,Brain,Brain - Anterior cingulate cortex (BA24)
+brain_substantia_nigra,Brain,Brain - Substantia nigra
+kidney_cortex,Kidney,Kidney - Cortex
+brain_amygdala,Brain,Brain - Amygdala
+cervix_ectocervix,Cervix Uteri,Cervix - Ectocervix
+fallopian_tube,Fallopian Tube,Fallopian Tube
+cervix_endocervix,Cervix Uteri,Cervix - Endocervix
+bladder,Bladder,Bladder
+kidney_medulla,Kidney,Kidney - Medulla
+cells_leukemia_cell_line_cml,Bone Marrow,Cells - Leukemia cell line (CML)

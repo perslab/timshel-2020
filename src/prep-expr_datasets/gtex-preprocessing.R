@@ -211,25 +211,34 @@ rownames(mat_gene_counts_filtOutliers_normLog)[duplicated(substr(x=rownames(mat_
 # [1] character(0)
 rownames(mat_gene_counts_filtOutliers_normLog) = substr(x=rownames(mat_gene_counts_filtOutliers_normLog),1,15)
 
-# write out annotatations
-dt_sample_attrs_RNASEQ_filtOutliers <- dt_sample_attrs_RNASEQ_filtOutliers[,c("sample_id", "tissue", "tissue_sub", "RIN"):=.(SAMPID,SMTS,SMTSD,SMRIN)]
+# ======================================================================= #
+# =============== EXPORT CELL-TYPE/ANNOTATION METADATA TO CSV =========== #
+# ======================================================================= #
 
-### Make meta data
+
+df.metadata <- dt_sample_attrs_RNASEQ_filtOutliers[,c("sample_id", "tissue", "tissue_sub", "RIN"):=.(SAMPID,SMTS,SMTSD,SMRIN)]
 df.metadata <- dt_sample_attrs_RNASEQ_filtOutliers %>% as_tibble %>% distinct(tissue, tissue_sub)
 df.metadata <- df.metadata %>% mutate(annotation=str_replace_all(tolower(make.names(tissue_sub)), "(\\.)+", "_"))
 df.metadata <- df.metadata %>% mutate(annotation=str_replace_all(annotation, "_$", ""))
 df.metadata <- df.metadata %>% select(annotation, everything())
 
 ### Export
-df.metadata %>% write_csv(here("tmp-data","expression","gtex-metadata.csv"))
+df.metadata %>% write_csv(here("data/expression/gtex/gtex-metadata.csv"))
 
-# convert to data.table and write to disk
+# ======================================================================= #
+# ===================== EXPORT DATA AND ANNOTATIONS TO TMP ===================== #
+# ======================================================================= #
 
 dt_gene_counts_filtOutliers_normLog = data.table("gene"=rownames(mat_gene_counts_filtOutliers_normLog),mat_gene_counts_filtOutliers_normLog)
 
 file.out.data = here("tmp-data","expression","gtex.lognorm.csv")
 fwrite(x =  dt_gene_counts_filtOutliers_normLog, file = file.out.data)
 R.utils::gzip(file.out.data, overwrite=TRUE) # gzip
+
+# write cell metadata to tmp
+file.out.meta <- here("tmp-data","expression","gtex.lognorm.metadata.csv")
+data.table::fwrite(dt_sample_attrs_RNASEQ_filtOutliers, file=file.out.meta,  # fwrite cannot write gziped files
+                   nThread=24, verbose=T) # write file ---> write to scratch
 
 # file.out.meta = here("tmp-data", "expression", paste0(dirOut,prefixData,"_annotations_",params$date,".csv"))
 # fwrite(dt_attrs_combined_RNASEQ_sub_filtOutliers, file = file.out.meta)

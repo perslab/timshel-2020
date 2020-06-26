@@ -23,6 +23,7 @@ library(patchwork)
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 source(here("src/publication/lib-load_pub_lib_functions.R"))
 
+
 setwd(here("src/publication"))
 
 # ======================================================================= #
@@ -225,11 +226,11 @@ p.heat <- p.heat + scale_fill_stepsn(colors=c("#edf8fb", "#b2e2e2", "#66c2a4", "
 ) 
 p.heat <- p.heat + theme_classic()
 p.heat <- p.heat + theme(
-  axis.text.x=element_text(angle=35, hjust=1), 
-  axis.text.y=element_text(face="italic")
+  axis.text.y=element_text(angle=35), 
+  axis.text.x=element_text(angle=90, hjust=1, face="italic")#,face="italic")
 )
 #p.heat <- p.heat + theme(axis.text.y=element_text(size=10))
-#p.heat <- p.heat + coord_flip()
+p.heat <- p.heat + coord_flip()
 p.heat
 
 
@@ -254,10 +255,11 @@ df.plot.pvals <- df.plot.pvals %>% mutate(annotation_marker = factor(annotation_
 p.bar <- ggplot(df.plot.pvals, aes(x=annotation_marker, y=value))
 p.bar <- p.bar + geom_col(aes(fill=method), position=position_dodge2())
 p.bar <- p.bar + labs(y=expression(-log[10](P)), x="", fill="")
-#p.bar <- p.bar + coord_flip()
+p.bar <- p.bar + coord_flip()
 
 p.bar <- p.bar + theme_classic()
-p.bar <- p.bar + theme(axis.text.x=element_blank())  #element_text(angle=45, hjust=1))
+p.bar <- p.bar + theme(axis.text.y=element_blank())  #element_text(angle=45, hjust=1))
+#p.bar <- p.bar + theme(axis.text.x=element_blank())  #element_text(angle=45, hjust=1))
 #p.bar <- p.bar + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line.y=element_blank())
 p.bar <- p.bar + scale_fill_manual(values=c("Enrichment"="#6baed6", "S-LDSC"="#02818a"))
 p.bar <- p.bar + geom_hline(yintercept = -log10(0.05/nrow(df.pvals)), linetype="dashed", color="gray") 
@@ -270,17 +272,17 @@ p.bar
 ### Patch
 
 #vertically
-p.patch <- (p.bar+theme(legend.position="right")) / (p.heat+theme(legend.position="right")) + plot_layout(nrow=2)#, widths=c(1, 0.2))
-p.patch <- p.patch + plot_annotation(theme = theme(plot.margin = margin(l=75,r=30)))
+# p.patch <- (p.bar+theme(legend.position="right")) / (p.heat+theme(legend.position="right")) + plot_layout(nrow=2)#, widths=c(1, 0.2))
+# p.patch <- p.patch + plot_annotation(theme = theme(plot.margin = margin(l=75,r=30)))
 
-# p.patch <-(p.heat+theme(legend.position="top")) + 
-#   (p.bar+theme(legend.position="top")) + 
-#   plot_layout(nrow=1, widths=c(1, 0.2))
-# p.patch <- p.patch + plot_annotation(theme = theme(plot.margin = margin(r=30)))
+p.patch <-(p.heat+theme(legend.position="top")) +
+  (p.bar+theme(legend.position="top")) +
+  plot_layout(nrow=1, widths=c(1, 0.2))
+p.patch <- p.patch + plot_annotation(theme = theme(plot.margin = margin(r=50, l=50, b=50)))
 
 ### Save
 file.out1 <- sprintf("figs/fig_es.heatmap.campbell2017_lvl2_allcells.patch.pdf")
-ggsave(plot=p.patch, filename=file.out1, width=18, height=8)
+ggsave(plot=p.patch, filename=file.out1, width=9, height=17)
 
 # ======================================================================= #
 # ======================= PLOT HEATMAP, NEURONS ONLY =====================#

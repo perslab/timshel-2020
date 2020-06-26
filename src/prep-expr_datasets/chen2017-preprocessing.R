@@ -1,5 +1,6 @@
 ############### SYNOPSIS ###################
 # Download and pre=process chen-cellreports-2017 hypothalamus gene expression data
+# NB: requires Seurat 3!
 
 ### OUTPUT:
 # ....
@@ -127,7 +128,7 @@ seurat_obj_sub@meta.data %>% count(SVM_clusterID) %>%
 
 ### Write raw counts to temp
 df <- as.data.frame(as.matrix(GetAssayData(seurat_obj_sub, slot="counts")))
-dim(df) # 23284  2269
+dim(df) # 23284  12055
 df <- df %>% rownames_to_column(var="gene") %>% select(gene, everything()) %>% as_tibble() # set rownames as column
 file.out.data <- here("tmp-data","expression","chen2017.umi.csv")
 data.table::fwrite(df, file=file.out.data,  # fwrite cannot write gziped files

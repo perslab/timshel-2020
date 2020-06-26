@@ -109,7 +109,7 @@ if (dataset_prefix == "mousebrain") {
   type_mouse_gene_ids <- "ensembl"
 } else if (dataset_prefix == "tabula_muris") {
   type_mouse_gene_ids <- "mgi"
-} else if (dataset_prefix %in% c("campbell2017_lvl1", "campbell2017_lvl2")) {
+} else if (dataset_prefix %in% c("campbell2017_lvl1", "campbell2017_lvl2", "campbell2017_lvl1_neur", "campbell2017_lvl2_neur")) {
   type_mouse_gene_ids <- "mgi"
 } else if (dataset_prefix == "chen2017") {
     type_mouse_gene_ids <- "mgi"
@@ -119,6 +119,10 @@ if (dataset_prefix == "mousebrain") {
     type_mouse_gene_ids <- "ensembl" 
 } else if (dataset_prefix == "mikkelsen2019") {
   type_mouse_gene_ids <- "ensembl" 
+} else if (dataset_prefix == "kimVMH2019_10x") {
+  type_mouse_gene_ids <- "mgi" 
+} else if (dataset_prefix == "kimVMH2019_smartseq") {
+  type_mouse_gene_ids <- "mgi"  
 } else {
   stop(sprintf("Got wrong dataset_prefix %s", dataset_prefix))
 }

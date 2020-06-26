@@ -14,11 +14,6 @@
 # ======================================================================= #
 # =============================== SETUP ================================= #
 # ======================================================================= #
-
-.libPaths(c(.libPaths(),"~/R/x86_64-pc-linux-gnu-library/"))
-library(here)
-library("vctrs", lib.loc = "~/R/x86_64-pc-linux-gnu-library/")
-library("rlang", lib.loc = "~/R/x86_64-pc-linux-gnu-library/")
 library("tidyverse")
 library("pbkrtest", lib.loc = "/raid5/home/cbmr/wzx816/R/x86_64-redhat-linux-gnu-library/3.5")
 library("ggpubr")
@@ -26,6 +21,7 @@ library("ggrepel")
 library("patchwork")
 library("data.table")
 
+library(here)
 source(here("src/lib/load_functions.R")) # load sc-genetics library
 source(here("src/publication/lib-load_pub_lib_functions.R"))
 
@@ -33,19 +29,18 @@ setwd(here("src/publication"))
 
 
 # ======================================================================= #
-# ================== LOAD LDSC CTS RESULTS (multi GWAS) ================ #
+# ================== LOAD LDSC CTS RESULTS (null GWAS) ================ #
 # ======================================================================= #
 
-# TODO: Move results to timshelcelltypes dir (concat)
-file.prior_results <- "/scratch/rkm916/CELLECT/results/prioritization.csv"
+file.prior_results <- here("out", "post_enrichment_analysis", "prioritization.csv")
 #file.prior_results <- here("results","cellect_ldsc", "prioritization.csv")
 # Read confounder results
-file.confounder_stats <- here("out", "qc_checks", "tabula_muris_cell_type_confounderstats.csv")
+file.confounder_stats <- here("out", "post_enrichment_analysis", "tabula_muris_cell_type_confounderstats.csv")
 # Read esmu 
 file.esmu.tabula_muris <- here("out", "es", "tabula_muris.mu.csv.gz")
 
 df_ldsc_results = read_csv(file.prior_results)
-dt_esmu = fread(file.esmu.tabula_muris)
+dt_esmu = read_csv(file.esmu.tabula_muris)
 df_confounder_stats = read_csv(file.confounder_stats)
 
 #df.metadata <- read_csv(file.metadata)
@@ -92,7 +87,7 @@ all.equal(df.plot$annotation, colnames(dt_esmu)[2:ncol(dt_esmu)])
 vec_n.esmu = colSums(dt_esmu[,2:ncol(dt_esmu)]>0)
 
 # compute correlation between no. cells and no. esmu genes
-cor(vec_n.esmu, df_confounder_stats$NCells)
+cor.test(vec_n.esmu, df_confounder_stats$NCells)
 # [1] 0.3631044
 
 # regress out no. esmu genes from no. cells
@@ -119,7 +114,7 @@ mat_cor_gwas_ncells_n.esmu <- t(sapply(gsub("^1KG", "thousandG", filter.gwas), f
   return(c("estimate"=testout$estimate, "p-value"=testout$p.value))
 }))
 
-t.test(mat_cor_gwas_ncells_n.esmu)
+t.test(mat_cor_gwas_ncells_n.esmu[,"estimate.cor"])
 # p-value = 0.002145
 
 df.plot = add_column(.data = df.plot, 
@@ -129,7 +124,7 @@ df.plot = add_column(.data = df.plot,
                      "n_esmu_genes" = vec_n.esmu,
                      "n_cells_residuals" = df_confounder_stats$n_cells_residuals)
 
-# compute correlation matrix
+# compute correlation matrix between three main confoudnders and S-LDSC p-value
 list_cor_gwas_confounder <- lapply(gsub("^1KG", "thousandG", filter.gwas), function(gwas) {
   mat_out = t(sapply(c("NCells", "nCount_RNA_median","nCount_gene_median"), function(confounder) {
     testout = cor.test(df.plot[[gwas]], df.plot[[confounder]])
@@ -139,6 +134,22 @@ list_cor_gwas_confounder <- lapply(gsub("^1KG", "thousandG", filter.gwas), funct
 
 mat_cor_gwas_confounder = Reduce(x=list_cor_gwas_confounder, f=rbind) 
 dt_cor_gwas_confounder <- data.table(mat_cor_gwas_confounder)
+
+# compute correlation between ncells and S-LDSC p-value after removing clusters with < 50 cells.
+df.plot_50plus = df.plot %>% filter(NCells>=50)
+dim(df.plot_50plus)
+#[1]   90 1006
+dim(df.plot)
+# [1]  115 1006
+
+mat_cor_gwas_confounder_NCells_50plus <- sapply(gsub("^1KG", "thousandG", filter.gwas), function(gwas) {
+  testout = cor.test(df.plot_50plus[[gwas]], df.plot_50plus[["NCells"]])
+  c("gwas" = gwas, "confounder"="NCells", "estimate"=testout$estimate, "p-value"=testout$p.value)
+}) %>% t 
+
+dt.cor_gwas_confounder_NCells_50plus = data.table(mat_cor_gwas_confounder_NCells_50plus)
+dt.cor_gwas_confounder_NCells_50plus$estimate.cor <- as.numeric(dt.cor_gwas_confounder_NCells_50plus$estimate.cor)
+t.test(dt.cor_gwas_confounder_NCells_50plus[confounder=="NCells", estimate.cor])
 
 # file.out <- ("/projects/jonatan/pub-perslab/20-BMI-brain/output/null_gwas_confounder_analysis_tabula_muris.csv")
 # fwrite(dt_cor_gwas_confounder, file.out)
@@ -153,7 +164,7 @@ dt_cor_gwas_confounder <- data.table(mat_cor_gwas_confounder)
 df_ldsc_results %>% 
   filter(gwas %in% filter.gwas) 
 
-phisto_pvalue <- ggplot(df_ldsc_results, aes(x=pvalue)) + geom_histogram(breaks=seq(0, 1, by = 0.01), 
+phisto_pvalue <- ggplot(df_ldsc_results, aes(x=pvalue)) + geom_histogram(breaks=seq(0, 1, by = 0.1), 
                                                             fill="grey") + 
   labs(x=expression(atop(P[S-LDSC]),"1KG phase3 EUR null GWAS"),
        y="count") +
@@ -166,55 +177,91 @@ phisto_pvalue <- ggplot(df_ldsc_results, aes(x=pvalue)) + geom_histogram(breaks=
 dt_cor_gwas_confounder$confounder <- factor(dt_cor_gwas_confounder$confounder)
 dt_cor_gwas_confounder$estimate.cor <- as.numeric(dt_cor_gwas_confounder$estimate.cor)
 
+# reorder factor
+dt_cor_gwas_confounder$confounder = factor(x = dt_cor_gwas_confounder$confounder, 
+                                            levels=c("NCells","nCount_RNA_median","nCount_gene_median"))
+# make p-value annotations
 anno1 = paste0("*** P=",format(t.test(dt_cor_gwas_confounder[confounder=="NCells", estimate.cor])$p.value, digits=1))
-anno2 = paste0("P=",format(t.test(dt_cor_gwas_confounder[confounder=="nCount_gene_median", estimate.cor])$p.value, digits=1))
-anno3 = paste0("P=",format(t.test(dt_cor_gwas_confounder[confounder=="nCount_RNA_median", estimate.cor])$p.value, digits=1))
+anno2 = paste0("P=",format(t.test(dt_cor_gwas_confounder[confounder=="nCount_RNA_median", estimate.cor])$p.value, digits=1))
+anno3 = paste0("P=",format(t.test(dt_cor_gwas_confounder[confounder=="nCount_gene_median", estimate.cor])$p.value, digits=1))
 
-pbox_rho <- ggplot(data=dt_cor_gwas_confounder, aes(x=confounder,y=estimate.cor)) +
+# 
+# # make mean rho annotation
+# dt_cor_gwas_confounder_rho_mean <- dt_cor_gwas_confounder %>% 
+#   group_by(confounder) %>% 
+#   summarise(rho_mean = list(mean(estimate.cor))) %>% 
+#   tidyr::unnest(cols= c(rho_mean))
+# 
+
+pbox_rho_1 <- ggplot(data=dt_cor_gwas_confounder, aes(x=confounder,y=estimate.cor)) +
   geom_boxplot() + 
-  scale_x_discrete(labels=c("no. cells", "median no. genes", "median no. UMI")) +
+  scale_x_discrete(labels=c("no. cells", "median no. UMIs", "median no. genes")) +
   labs(
     y=expression(atop("Pearson correlation with",-log[10](P[S-LDSC])))) +
   theme_classic() +
   theme(strip.background=element_blank(), 
         strip.text=element_text(face="bold"),
         axis.title.x=element_blank()) + 
+  stat_summary(geom="text", fun=mean,
+               aes(label=sprintf("%1.2f", ..y..)),
+               position=position_nudge(x=0.5), size=3.5)+
+  # annotate(geom="text", x=c(1.48,2.48,3.48), y = 0,
+  #          label=as.character(format(dt_cor_gwas_confounder_rho_mean$rho_mean, digits=1))) +
   geom_signif(stat="signif", 
               test="t.test",
               #map_signif_level = c("***"=0.001, "**"=0.01, "*"=0.05))#, 
               annotations = c(anno1, anno2, anno3),
-              y_position=c(0.6,0.6,0.6), 
-              xmin=c(1,2,3), xmax = c(1,2,3))
+              y_position=c(0.62,0.62,0.62), 
+              xmin=c(1,2,3), xmax = c(1,2,3))+
+  ylim(-.65,0.65)
   
 
 # now plot the esmu correlation with P-LDSC
 dt_cor_gwas_confounder2 = data.table("confounder"="n_esmu_genes", mat_cor_gwas_ncells_n.esmu)
 dt_cor_gwas_confounder2 = rbind(dt_cor_gwas_confounder2, data.table("confounder"="n_cells_residuals", mat_cor_gwas_ncells_residuals))
 
+dt_cor_gwas_confounder2$confounder = factor(x = dt_cor_gwas_confounder2$confounder, 
+                                           levels=c("n_esmu_genes","n_cells_residuals"))
+
+# make p-value annotations
 anno4 = paste0("** P=",format(t.test(dt_cor_gwas_confounder2[confounder=="n_esmu_genes", estimate.cor])$p.value, digits=1))
 anno5 = paste0("P=",format(t.test(dt_cor_gwas_confounder2[confounder=="n_cells_residuals", estimate.cor])$p.value, digits=1))
 
-pbox_rho_n.esmu <- ggplot(data=dt_cor_gwas_confounder2, aes(x=confounder,y=estimate.cor)) +
+# # make mean rho annotation
+# dt_cor_gwas_confounder2_rho_mean <- dt_cor_gwas_confounder2 %>% 
+#   group_by(confounder) %>% 
+#   summarise(rho_mean = list(mean(estimate.cor))) %>% 
+#   tidyr::unnest(cols= c(rho_mean))
+# 
+# dt_cor_gwas_confounder2_rho_mean <- dt_cor_gwas_confounder2_rho_mean[c(2,1),]
+
+pbox_rho_2 <- ggplot(data=dt_cor_gwas_confounder2, aes(x=confounder,y=estimate.cor)) +
   geom_boxplot() + 
-  scale_x_discrete(labels=c("no. esmu genes", "no. cells (regression residuals)")) +
+  scale_x_discrete(labels=c(bquote(no~ES[mu]~genes),#"no. ES genes", 
+             bquote(no~cells~adj.~"for"~no.~ES[mu]~genes))) +
   labs(
     y=expression(atop("Pearson correlation with",-log[10](P[S-LDSC])))) +
   theme_classic() +
   theme(strip.background=element_blank(), 
         strip.text=element_text(face="bold"),
         axis.title.x=element_blank()) +
+  stat_summary(geom="text", fun=mean,
+               aes(label=sprintf("%1.2f", ..y..)),
+               position=position_nudge(x=0.48), size=3.5)+
+  # annotate(geom="text", x=c(1,2), y = c(0.03,0.03),
+  #          label=as.character(format(dt_cor_gwas_confounder2_rho_mean$rho_mean, digits=1))) +
   geom_signif(stat="signif", 
               test="t.test",
               #map_signif_level = c("***"=0.001, "**"=0.01, "*"=0.05))#, 
               annotations = c(anno4, anno5),
-              y_position=c(0.6,0.6), 
-              xmin=c(1,2), xmax = c(1,2)) 
-  
+              y_position=c(0.62,0.62), 
+              xmin=c(1,2), xmax = c(1,2)) +
+  ylim(-.65,0.65)
 
-pout = phisto_pvalue + pbox_rho + pbox_rho_n.esmu
+pout = phisto_pvalue + pbox_rho_1 + pbox_rho_2
 
-file.out <- here("src", "publication","figs","tabula_muris_nullgwas_confounders_panel.pdf")
-ggsave(plot=pout, filename=file.out, width=14, height=6)
+file.out <- here("src", "publication","figs","fig-prior_confounders_tabula_muris.pdf")
+ggsave(plot=pout, filename=file.out, width=15, height=6)
 
 
 
@@ -293,7 +340,7 @@ if (F) {
   
   
   p <- p1+p2+p3
-  file.out <- here("src", "publication","figs","tabula_muris_tissue_celltype_confounderstats.pdf")
+  file.out <- here("src", "publication","figs","fig-prior_confounders_scatter_tabula_muris.pdf")
   ggsave(plot=p, filename=file.out, width=18, height=6)
   
   

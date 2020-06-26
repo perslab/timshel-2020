@@ -216,7 +216,7 @@ rownames(mat_gene_counts_filtOutliers_normLog) = substr(x=rownames(mat_gene_coun
 # ======================================================================= #
 
 
-df.metadata <- dt_sample_attrs_RNASEQ_filtOutliers[,c("sample_id", "tissue", "tissue_sub", "RIN"):=.(SAMPID,SMTS,SMTSD,SMRIN)]
+df.metadata <- dt_sample_attrs[,c("sample_id", "tissue", "tissue_sub", "RIN"):=.(SAMPID,SMTS,SMTSD,SMRIN)]
 df.metadata <- dt_sample_attrs_RNASEQ_filtOutliers %>% as_tibble %>% distinct(tissue, tissue_sub)
 df.metadata <- df.metadata %>% mutate(annotation=str_replace_all(tolower(make.names(tissue_sub)), "(\\.)+", "_"))
 df.metadata <- df.metadata %>% mutate(annotation=str_replace_all(annotation, "_$", ""))
@@ -231,12 +231,12 @@ df.metadata %>% write_csv(here("data/expression/gtex/gtex-metadata.csv"))
 
 dt_gene_counts_filtOutliers_normLog = data.table("gene"=rownames(mat_gene_counts_filtOutliers_normLog),mat_gene_counts_filtOutliers_normLog)
 
-file.out.data = here("tmp-data","expression","gtex.lognorm.csv")
+file.out.data = here("tmp-data","expression","gtex_v8_filtered_normLog_all.csv")
 fwrite(x =  dt_gene_counts_filtOutliers_normLog, file = file.out.data)
 R.utils::gzip(file.out.data, overwrite=TRUE) # gzip
 
 # write cell metadata to tmp
-file.out.meta <- here("tmp-data","expression","gtex.lognorm.metadata.csv")
+file.out.meta <- here("tmp-data","expression","gtex_v8_filtered_normLog.metadata_all.csv")
 data.table::fwrite(dt_sample_attrs_RNASEQ_filtOutliers, file=file.out.meta,  # fwrite cannot write gziped files
                    nThread=24, verbose=T) # write file ---> write to scratch
 

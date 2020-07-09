@@ -169,6 +169,11 @@ p.priori
 file.out <- "figs/fig_celltypepriori.hypothalamus.priori.by_study.jitter.pdf"
 ggsave(plot=p.priori, filename=file.out, width=7, height=4)
 
+file.out <- "figs/fig_celltypepriori.hypothalamus.priori.by_study.jitter_alt1.pdf"
+ggsave(plot=p.priori, filename=file.out, width=5, height=4)
+
+file.out <- "figs/fig_celltypepriori.hypothalamus.priori.by_study.jitter_alt2.pdf"
+ggsave(plot=p.priori, filename=file.out, width=4, height=6) # ---> this is used for publication
 
 # ======================================================================= #
 # ============================ XXXXXXXXX =============================== #

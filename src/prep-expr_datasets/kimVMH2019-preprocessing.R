@@ -16,7 +16,6 @@
 
 library("here")
 library("tidyverse")
-library("Seurat")
 library("data.table")
 
 # ======================================================================= #

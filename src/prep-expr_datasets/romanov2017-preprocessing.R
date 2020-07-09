@@ -1,6 +1,6 @@
 ############### SYNOPSIS ###################
 # Download and prepare  romanov-natureneuroscience-2017 hypothalamus gene expression data
-
+# requires Seurat 3
 ### OUTPUT:
 # ....
 
@@ -191,7 +191,7 @@ seurat_obj_sub@meta.data %>% count(cell_type) %>%
 
 ### Get expression data
 df <- as.data.frame(as.matrix(GetAssayData(seurat_obj_sub, slot="counts")))
-dim(df) # 26774 20921
+dim(df) # 13364  2733
 df <- df %>% rownames_to_column(var="gene") %>% select(gene, everything()) %>% as_tibble() # set rownames as column
 file.out.data <- here("tmp-data","expression", "romanov2017.umi.csv")
 data.table::fwrite(df, file=file.out.data,  # fwrite cannot write gziped files

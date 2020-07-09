@@ -104,6 +104,10 @@ get_metadata <- function(dataset_prefix) {
     df.metadata <- df.metadata %>% mutate(annotation = tissue_celltype)
     df.metadata <- df.metadata %>% mutate(color_by_variable = tissue)
     df.metadata <- df.metadata %>% mutate(annotation = stringr::str_replace_all(annotation, pattern="\\s+", replacement="_"))
+  } else if (dataset_prefix == "gtex_all") {
+    file.metadata <- here("data/expression/gtex/gtex-metadata.csv")
+    df.metadata <- suppressMessages(read_csv(file.metadata))
+    df.metadata <- df.metadata %>% mutate(color_by_variable = tissue)
   } else {
     stop("wrong dataset_prefix")
   }

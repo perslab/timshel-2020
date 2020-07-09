@@ -24,7 +24,10 @@ SPECIFICITY_INPUT:
     path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/kimVMH2019_smartseq.mu.csv.gz
   - id: mikkelsen2019
     path: /projects/timshel/sc-genetics/timshel-bmicelltypes2019/out/es/mikkelsen2019.mu.csv.gz
-
+  - id: gtex_v8_filtered_normLog_brain
+    path: /projects/jonatan/pub-perslab/timshel-bmicelltypes2019/out/es/GTEx_v8_genecounts_SMTSD_brain.esmu.csv.gz
+  - id: gtex_v8_filtered_normLog_all
+    path: /projects/jonatan/pub-perslab/timshel-bmicelltypes2019/out/es/GTEx_v8_genecounts_SMTSD_brain.esmu.csv.gz
 
 GWAS_SUMSTATS:
   - id: AD_Jansen2019

@@ -22,7 +22,7 @@
 library("tidyverse")
 library("openxlsx")
 library("here")
-library("Seurat")
+#library("Seurat")
 library("data.table")
 
 # ======================================================================= #

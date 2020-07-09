@@ -1,6 +1,6 @@
 ############### SYNOPSIS ###################
 # Download and prepare moffitt-science-2018 hypothalamus gene expression data
-
+# requires Seurat 3
 ### OUTPUT:
 # ....
 

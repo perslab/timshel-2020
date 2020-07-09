@@ -1,0 +1,24 @@
+gene_symbol,ensembl_gene_ID,category
+Bdnf,ENSG00000176697,Monogenic obesity
+Cep19,ENSG00000174007,Monogenic obesity
+Ksr2,ENSG00000171435,Extreme obesity
+Lep,ENSG00000174697,Monogenic obesity
+Lepr,ENSG00000116678,Monogenic obesity
+Mc4r,ENSG00000166603,Monogenic obesity
+Ntrk2,ENSG00000148053,Monogenic obesity
+Pcsk1,ENSG00000175426,Monogenic obesity
+Pomc,ENSG00000115138,Monogenic obesity
+Sh2b1,ENSG00000178188,Extreme obesity
+Sim1,ENSG00000112246,Monogenic obesity
+Wnt10b,ENSG00000169884,Extreme obesity
+Zbtb7b,ENSG00000160685,Protein-altering
+Ache,ENSG00000087085,Protein-altering
+Rapgef3,ENSG00000079337,Protein-altering
+Prkag1,ENSG00000181929,Protein-altering
+Rab21,ENSG00000080371,Protein-altering
+Hip1r,ENSG00000130787,Protein-altering
+Zfhx3,ENSG00000140836,Protein-altering
+Gipr,ENSG00000010310,Protein-altering
+Entpd6,ENSG00000197586,Protein-altering
+Zfr2,ENSG00000105278,Protein-altering
+Znf169,ENSG00000175787,Protein-altering

@@ -1,4 +1,4 @@
-# Mapping heritability of obesity by cell types
+# Genetic mapping of etiologic brain cell types for obesity
 
 This repository contains code to reproduce analysis and figures in presented in:  
 

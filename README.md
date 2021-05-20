@@ -2,7 +2,8 @@
 
 This repository contains code to reproduce analysis and figures in presented in:  
 
-**[Timshel (bioRxiv, 2020): _Mapping heritability of obesity by cell types_](https://www.biorxiv.org/content/10.1101/2020.01.27.920033v1)**
+**[Timshel (eLife, 2020): _Genetic mapping of etiologic brain cell types for obesity_](https://elifesciences.org/articles/55851)**
+
 
 ![image](https://user-images.githubusercontent.com/5487016/72666147-aecfdd00-3a0f-11ea-8609-12c157ee24f3.png)
 
